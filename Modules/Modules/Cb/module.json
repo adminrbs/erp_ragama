@@ -1,0 +1,11 @@
+{
+    "name": "Cb",
+    "alias": "cb",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Cb\\Providers\\CbServiceProvider"
+    ],
+    "files": []
+}

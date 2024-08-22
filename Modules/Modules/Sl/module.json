@@ -1,0 +1,11 @@
+{
+    "name": "Sl",
+    "alias": "sl",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Sl\\Providers\\SlServiceProvider"
+    ],
+    "files": []
+}
