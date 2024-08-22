@@ -1,0 +1,305 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Cheque Collected By Branch Cashier",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "18",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "<table style='height:30px;'><tr><td style='border:0px solid black;width:1000px;height:15px;'></td><td style='border:1px solid black;width:100px;height:15px;text-align:center;'>Part1</td><td style='border:1px solid black;width:100px;height:15px;text-align:center;'>Part2</td></tr><tr><td style='border:0px solid black;width:1000px;height:25px;'></td><td style='border:1px solid black;width:100px;height:25px;'></td><td style='border:1px solid black;width:100px;height:25px;'></td></tr></table>",
+                "align": "right",
+                "height": "50",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "330",
+                "y": "30",
+                "font": {
+                    "style": "Bold",
+                    "size": "11",
+                    "name": "Tahoma"
+                }
+            }
+        },
+       
+        {
+            "group": {
+                "header": [
+      
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "white",
+                                "color": "black",
+                                "x": "5",
+                                "y": "10",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "customer_receipt_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "customer_id",
+                                        "align": "center",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "receipt_status",
+                                        "align": "right",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "App RC Number",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Customer Name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 120
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Receipt Date",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Banking Date",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Cheque Number",
+                                        "align": "center",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Invoice Number",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Age",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "visible": false,
+                                        "width": 60
+                                    }
+                                ]
+                            ],
+                            "body": "@_$branchCashier_tabaledata",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "margin-top": "-10",
+                            "sum": [
+                                "Paid Amount"
+                            ],
+                            "group-sum": "@_$route_total",
+                            "layout": "fixed"
+                        }
+                    }
+                ],
+                "footer": [
+                    {
+                        "visible": false,
+                        "number": {
+                            "value": "",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "2",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "red",
+                            "x": "5",
+                            "y": "0",
+                            "format": "0.00",
+                            "font": {
+                                "style": "Bold",
+                                "size": "18",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "label": {
+                "text": "",
+                "align": "right",
+                "height": "50",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "500",
+                "y": "900",
+                "font": {
+                    "style": "Bold",
+                    "size": "15",
+                    "name": "Tahoma"
+                }
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+    ]
+}

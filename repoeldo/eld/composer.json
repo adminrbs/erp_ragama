@@ -1,0 +1,7 @@
+{
+    "name": "repoeldo/eld",
+    "description": "This is reporting tool",
+    "type": "library",
+    "license": "MIT",
+    "require": {}
+}

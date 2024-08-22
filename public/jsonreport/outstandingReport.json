@@ -1,0 +1,255 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "30%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$report_title",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-90",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "group": {
+                "header": [
+                    {
+                        "label": {
+                            "text": "",
+                            "align": "left",
+                            "height": "5",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "black",
+                            "x": "5",
+                            "y": "0",
+                            "padding-top": "0"
+                        }
+                    }
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "#ffffff",
+                                "color": "black",
+                                "x": "5",
+                                "y": "0",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "Invoice No",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 110,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Manual",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80,
+                                        "font-size": 13,
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Sales Rep",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Over Due",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 57,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Date",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 68,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Original Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "PD Cheques",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100,
+                                        "font-size": 13
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Net Total",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 90,
+                                        "font-size": 13
+                                    }
+                                ]
+                            ],
+                            "body": "@_$tabale_data",
+                            "height": "40",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "size": "5",
+                            "margin-top": "0",
+                            "sum": [
+                                "Original Amount",
+                                "Paid Amount",
+                                "PD Cheques",
+                                "Net Total"
+                            ],
+                            "font-size": 13,
+                            "group-sum": "@_$route_total",
+                            "layout": ""
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 690,
+                "text": "NO 14,1 ST CROSS STREET,NEGOMBO",
+                "position": "fixed",
+                "align": "center",
+                "bg-color": "white",
+                "height": 32,
+                "font": {
+                    "size": 14,
+                    "name": "Tahoma",
+                    "style": "bold"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 0
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 20
+        }
+    ]
+}

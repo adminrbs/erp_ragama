@@ -1,0 +1,175 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$title",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-50",
+                "font": {
+                    "style": "Bold",
+                    "size": "18",
+                    "name": "Tahoma"
+                }
+            }
+        },
+		{
+			"table": {
+				
+
+                "header": [
+                    [
+                        {
+                            "text": "Employee Code",
+                            "align": "left",
+                            "format": "text",
+                            "width" : 100
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Employee Name",
+                            "align": "left",
+                            "format": "text",
+                            "width" : 110
+                        }
+                    ],
+                   
+                    
+                    [
+                        {
+                            "text": "Gross",
+                            "align": "right",
+                            "format": "number",
+                            "width" : 100
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Discount",
+                            "align": "right",
+                            "format": "number",
+                            "width" : 180
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Sales Return",
+                            "align": "right",
+                            "format": "number",
+                            "width" : 100
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Net Sale",
+                            "align": "Right",
+                            "format": "number",
+                            "width" : 100
+                        }
+                    ]
+                   
+                   
+                   
+                ],
+
+				"body": "@_$sales_summery_data",
+				"height": "",
+				"width": "100%",
+				"x": 5,
+				"y": 0,
+				"margin-bottom": "5",
+                "margin-top": "5",
+                "margin-left": "100",
+                "margin-right": "100",
+               
+				"sum": ["Gross","Discount","Sales Return","Net Sale"],
+				"font": {
+					"style": "lite",
+					"size": "10",
+					"name": "Tahoma"
+				}
+			}
+
+            
+		}
+      
+	],
+
+    
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+        
+    ]
+}

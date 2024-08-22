@@ -1,0 +1,264 @@
+label {
+   
+}
+.compulsory-field:after {
+  content: '*';
+  color: red;
+}
+
+
+.form-btn {
+    min-width: 100px;
+}
+
+/** RBS Custom Tab*/
+
+.rbs-nav-item a:active {
+    background-color: #e6eeff;
+}
+
+
+.rbs-nav-item {
+    border-radius: 10px 10px 0 0;
+    background: #0d6efd;
+    color: white;
+}
+
+.rbs-nav-item a {
+    float: left;
+    padding: 5px 40px;
+    border-radius: 10px 10px 0 0;
+    color: white;
+}
+
+.tab-content {
+
+    padding: 20px;
+    border: 1px solid #e2e3e5;
+    border-radius: 10px 10px 10px 10px;
+}
+
+
+.content-wrapper {
+    margin-top: 120px;
+}
+
+.transaction-lbl {
+
+    color: black;
+    font-size: medium;
+    
+}
+
+.form-controlx {
+    height: 35px;
+}
+
+.col-form-label {
+    height: 35px;
+}
+
+/* .select2-selection {
+    height: 35px;
+}
+
+select {
+    height: 35px;
+} */
+
+.even-row {
+    background-color: #e0f2f2;
+}
+
+input,
+select {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 1em !important;
+}
+
+
+/* remove increase button of textboxes ( numbers) */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* swiping confirmation icon */
+.swipe-question {
+    animation: swipeQuestion 1s linear;
+  }
+  
+  @keyframes swipeQuestion {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .toast {
+    right: 15px;
+    z-index: 999;
+    color: white;
+}
+
+.toast-body {
+    color: #fff;
+}
+
+.selected {
+  background-color:hwb(170 0% 15%)!important;
+  /* Add any other styles to visually highlight the selected row */
+}
+
+
+  /* center model in screen */
+  .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+
+  table {
+    font-size: 1em !important;
+  }
+
+  .form-control {
+    font-size: 1em !important;
+  }
+
+
+
+  table td input[type="text"] {
+    font-size: 0.95em !important;
+
+  }
+
+  table td input[type="text"]:focus {
+    font-size: 0.95em !important;
+    border: 0px !important;
+
+  }
+
+  input[type="text"] {
+    max-height: 35px;
+    background-color: #EBFFFF;
+  }
+
+  input[type="number"] {
+    max-height: 35px;
+    background-color: #EBFFFF;
+  }
+
+  input[type="date"] {
+    max-height: 35px;
+    background-color: #EBFFFF;
+  }
+
+  input[type="tel"] {
+    max-height: 35px;
+    background-color: #EBFFFF;
+  }
+
+  input[type="email"] {
+    max-height: 35px;
+    background-color: #EBFFFF;
+  }
+
+
+
+  textarea {
+    background-color: #EBFFFF !important;
+  }
+  .transaction-inputs{
+    max-height:30px;
+    margin-right:10px;
+    border:1px solid #E7E7E7;
+    padding:5px;
+    background-color:#EBFFFF;
+    
+  }
+
+  /* th, td { white-space: nowrap; }
+  .datatable-fixed-both {
+      width: 800px;
+      margin: 0 auto;
+  }
+
+  tr { height: 50px; } */
+
+  .classLimit{
+    max-width: 330px;
+  }
+ 
+
+  #batchModalBody {
+    max-height: 450px; 
+    overflow-y: auto;
+    
+}
+
+#batchTableData{
+  max-height: 450px; 
+  overflow-y: auto;
+}
+
+/* #invoiceTableModelBody{
+  max-height: 450px; 
+  overflow-y: auto;
+} */
+  
+#si_pickOrders_itemtable{
+  max-height: 750px; 
+  overflow-x: auto;
+}
+  
+#gettableItems{
+  max-height: 700px;
+  max-width: 500px; 
+  overflow-y: auto;
+  overflow-x: auto;
+
+}
+
+/* #gettable{
+  max-height: 1000px;
+ 
+  overflow-y: visible;
+  overflow-x: visible;
+
+} */
+
+#get_table{
+  max-height: 200px;
+  max-width: 500px; 
+  overflow-y: auto;
+  overflow-x: auto;
+
+}
+
+.custom-text-right {
+  text-align: right !important; 
+}
+
+.dt-body-right{
+  text-align: right;
+}
+
+
+

@@ -1,0 +1,51 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "footer": [
+        {"height": 30},
+        {"label": {
+            "color": "black",
+            "x": 0,
+            "width": "100%",
+            "y": 1090,
+            "text": "Page",
+            "position": "",
+            "align": "center",
+            "bg-color": "white",
+            "height": 30,
+            "font": {
+                "size": 12,
+                "name": "Tahoma",
+                "style": "plain"
+            }
+        }}
+    ],
+    "name": "sample_report",
+    "header": [{
+        "no-repeate": true,
+        "height": 100
+    }],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 100
+        },
+        {"label": {
+            "color": "black",
+            "x": 0,
+            "width": 790,
+            "y": 0,
+            "text": "Sample Report",
+            "position": "fixed",
+            "align": "center",
+            "bg-color": "yellow",
+            "height": 32,
+            "font": {
+                "size": 17,
+                "name": "Tahoma",
+                "style": "bold"
+            }
+        }}
+    ]
+}

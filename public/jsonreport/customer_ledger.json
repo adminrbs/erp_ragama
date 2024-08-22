@@ -1,0 +1,253 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Customer's Ledger",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-70",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "group": {
+                "header": [
+                    {
+                        "label": {
+                            "text": "",
+                            "align": "center",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "blue",
+                            "x": "5",
+                            "y": "0",
+                            "padding-top": "0"
+                        }
+                    }
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "#ffffff",
+                                "color": "black",
+                                "x": "5",
+                                "y": "0",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "Date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 70
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "External Number",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 110
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Description",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 250
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Debit",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 110
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Credit",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 110
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Balance",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 110
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "privi",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100,
+                                        "visible": false
+                                    }
+                                ]
+                            ],
+                            "body": "@_$Customerledger_tabaledata",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "margin-top": "0",
+                            "sum": [
+                                "Debit",
+                                "Credit"
+                            ],
+                            "layout": "fixed"
+                        }
+                    }
+                ],
+                "footer": [
+                    {
+                        "visible": false,
+                        "label": {
+                            "text": "@_$total_difference",
+                            "align": "right",
+                            "height": "35",
+                            "width": "100%",
+                            "border-top": "1",
+                            "border-bottom": "1",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "black",
+                            "x": "0",
+                            "y": "0",
+                            "padding-top": "10",
+                            "padding-right": "10",
+                            "format": "number",
+                            "font": {
+                                "style": "Bold",
+                                "size": "11",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "img": {
+                "url": "@_$companylogo",
+                "width": "120",
+                "height": "120",
+                "x": 0,
+                "y": -160,
+                "position": "fixed"
+            }
+        },
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+    ]
+}

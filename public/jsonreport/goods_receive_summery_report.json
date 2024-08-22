@@ -1,0 +1,206 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Goods Recieved Summery",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-50",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$Date",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-50",
+                "font": {
+                    "style": "Bold",
+                    "size": "19",
+                    "name": "Tahoma"
+                }
+            }
+        },
+{
+            
+        },
+		{
+			"table": {
+				
+
+                "header": [
+                    [
+                        {
+                            "text": "Our Invoice Number",
+                            "align": "left",
+                            "format": "text",
+                            "width":120
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Date",
+                            "align": "center",
+                            "format": "text",
+                            "width":80
+
+                        }
+                    ],
+                    
+                    [
+                        {
+                            "text": "Sup INV Number",
+                            "align": "left",
+                            "format": "text",
+                            "width":110
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Sup Code",
+                            "align": "left",
+                            "format": "text",
+                            "width":80
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Supplier Name",
+                            "align": "left",
+                            "format": "text",
+                            "width":200
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Amount",
+                            "align": "right",
+                            "format": "number",
+                            "width":100
+                        }
+                    ]
+                    
+                    
+                ],
+
+				"body": "@_$goods_receive_data_summery_table",
+				"height": "",
+				"width": "100%",
+				"x": 5,
+				"y": 0,
+				"margin-bottom": "5",
+                "margin-top": "5",
+                "margin-left": "100",
+                "margin-right": "100",
+               
+				"sum": ["Amount"],
+				"font": {
+					"style": "lite",
+					"size": "10",
+					"name": "Tahoma"
+				}
+			}
+
+            
+		}
+	],
+
+    
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "img": {
+                "url": "@_$companylogo",
+                "width": "120",
+                "height": "120",
+                "x": 0,
+                "y": -160,
+                "position": "fixed"
+            }
+        },
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+        
+    ]
+}

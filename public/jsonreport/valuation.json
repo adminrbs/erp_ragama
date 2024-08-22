@@ -1,0 +1,281 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "160",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$nameandcurrontDate",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-50",
+                "font": {
+                    "style": "Bold",
+                    "size": "18",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "group": {
+                "header": [
+                    {
+                        "label": {
+                            "text": "",
+                            "align": "left",
+                            "height": "5",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "black",
+                            "x": "5",
+                            "y": "0",
+                            "padding-top": "0"
+                        }
+                    }
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "#ffffff",
+                                "color": "black",
+                                "x": "5",
+                                "y": "0",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "item id",
+                                        "align": "center",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Code",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width" : 400
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Package Size",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width" : 110
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "In Hand",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Wh.Price",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Value",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Category",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width" : 100,
+                                        "visible" :false
+                                    }
+                                ]
+                            ],
+                            "body": "@_$valuation_tabaledata",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "size": "5",
+                            "margin-top": "0",
+                            "sum": [
+                                "Value"
+                            ],
+                            "layout": "fixed"
+                        }
+                    }
+                ],
+                "footer": [
+                    {
+                        "visible": "false",
+                        "number": {
+                            "value": "123",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "2",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "black",
+                            "color": "red",
+                            "x": "5",
+                            "y": "0",
+                            "format": "0.00",
+                            "font": {
+                                "style": "Bold",
+                                "size": "18",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "label": {
+                "text": "",
+                "align": "right",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "100",
+                "y": "200",
+                "font": {
+                    "style": "Bold",
+                    "size": "15",
+                    "name": "Tahoma"
+                }
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 690,
+                "text": "NO 14,1 ST CROSS STREET,NEGOMBO",
+                "position": "fixed",
+                "align": "center",
+                "bg-color": "white",
+                "height": 32,
+                "font": {
+                    "size": 14,
+                    "name": "Tahoma",
+                    "style": "bold"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+     
+    ]
+}

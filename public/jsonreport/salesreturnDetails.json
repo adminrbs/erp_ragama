@@ -1,0 +1,240 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+		{
+			"table": {
+				
+                "header": [
+                    [
+                        {
+                            "text": "Customer Code",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Customer Name",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Invoice Date",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Invoice Number",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Invoice Amount",
+                            "align": "right",
+                            "format": "number"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Balance Amount",
+                            "align": "right",
+                            "format": "number"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Age",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ]
+                ],
+                
+				"body": "@_$SalesReturn_tabaledata",
+				"height": "30",
+				"width": "650",
+				"x": 5,
+				"y": 10,
+				"margin-bottom": "20",
+                "margin-top": 25,
+                "margin-left": "100",
+                "margin-right": "100",
+				"sum": "Balance Amount",
+				"font": {
+					"style": "lite",
+					"size": "14",
+					"name": "Tahoma"
+				}
+			}
+
+            
+		}
+      
+	],
+
+    
+
+
+    "footer": [
+        {"height": 30},
+        
+        {"label": {
+            "color": "black",
+            "x": 0,
+            "width": "100%",
+            "y": 1090,
+            "text": "Page",
+            "position": "",
+            "align": "center",
+            "bg-color": "white",
+            "height": 30,
+            "font": {
+                "size": 12,
+                "name": "Tahoma",
+                "style": "plain"
+            }
+        }},
+        
+        {
+            "label": {
+                "color": "black",
+        "x": 0,
+        "width": "100%",
+        "y": 690,
+        "text": "NO 14,1 ST CROSS STREET,NEGOMBO",
+        "position": "fixed",
+        "align": "center",
+        "bg-color": "white",
+        "height": 32,
+        "font": {
+            "size": 14,
+            "name": "Tahoma",
+            "style": "bold"
+        
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [{
+        "no-repeate": true,
+        "height": 100
+    }],
+    "oriantation": "PORTRAIT",
+    "title": [
+
+
+		{
+			"img": {
+				"url": "@_$companylogo",
+				"width": "120",
+				"height": "120",
+				"x": 80,
+				"y": 30,
+				"position": "fixed"
+               
+                
+			}
+		},
+       
+
+        {
+            "no-repeate": true,
+            "height": 100
+        },
+        {"label": {
+            "color": "black",
+            "x": 190,
+            "width": 650,
+            "y": 60,
+            "text": "@_$companyName",
+            "position": "fixed",
+            "align": "left",
+            "bg-color": "white",
+            "height": 32,
+            "font": {
+                "size": 24,
+                "name": "Tahoma",
+                "style": "bold"
+            }
+        }},
+        
+        
+			{
+                "label": {
+                    "color": "black",
+            "x": 250,
+            "width": 300,
+            "y": 90,
+            "text": "@_$companyAddress",
+            "position": "fixed",
+            "align": "center",
+            "bg-color": "white",
+            "height": 32,
+            "font": {
+                "size": 14,
+                "name": "Tahoma",
+                "style": "bold"
+            
+                    }
+                }
+            },
+            {
+                "label": {
+                    "color": "black",
+            "x": 250,
+            "width": 300,
+            "y": 110,
+            "text": "@_$companyNumber",
+            "position": "fixed",
+            "align": "center",
+            "bg-color": "white",
+            "height": 32,
+            "font": {
+                "size": 14,
+                "name": "Tahoma",
+                "style": "bold"
+            
+                    }
+                }
+            },
+
+            {
+                "label": {
+                    "color": "black",
+            "x": 250,
+            "width": 300,
+            "y": 170,
+            "text": "Customer Outstanding Report",
+            "position": "fixed",
+            "align": "center",
+            "bg-color": "white",
+            "height": 32,
+            "font": {
+                "size": 22,
+                "name": "Tahoma",
+                "style": "bold"
+            
+                    }
+                }
+            }
+          
+           
+		
+		
+		
+    ]
+    
+}

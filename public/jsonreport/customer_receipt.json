@@ -1,0 +1,117 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+
+		{
+			"table": {
+				
+                "header": [
+                    [
+                        {
+                            "text": "Item Code",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Item Name",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "QTY",
+                            "align": "right",
+                            "format": "text"
+                        }
+                    ],
+                    [
+                        {
+                            "text": "U.O.M",
+                            "align": "center",
+                            "format": "text"
+                        }
+                    ]
+                    
+                ],
+
+				"body": "@_$CustomerReceipt_tabel",
+				"height": "10",
+				"width": "100%",
+				"x": 5,
+				"y": 5,
+				"margin-bottom": "20",
+                "margin-top": 5,
+                "margin-left": "100",
+                "margin-right": "100",
+				"sum": "",
+				"font": {
+					"style": "lite",
+					"size": "14",
+					"name": "Tahoma"
+				}
+			}
+
+            
+		}
+      
+	],
+
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+       
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "img": {
+                "url": "@_$companylogo",
+                "width": "120",
+                "height": "120",
+                "x": 0,
+                "y": -160,
+                "position": "fixed"
+            }
+        },
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+        
+    ]
+}

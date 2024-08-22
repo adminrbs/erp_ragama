@@ -1,0 +1,238 @@
+label {
+   
+}
+
+.form-btn {
+    min-width: 100px;
+}
+
+/** RBS Custom Tab*/
+
+.rbs-nav-item a:active {
+    background-color: #e6eeff;
+}
+
+
+.rbs-nav-item {
+    border-radius: 10px 10px 0 0;
+    background: #0d6efd;
+    color: white;
+}
+
+.rbs-nav-item a {
+    float: left;
+    padding: 5px 40px;
+    border-radius: 10px 10px 0 0;
+    color: white;
+}
+
+.tab-content {
+
+    padding: 20px;
+    border: 1px solid #e2e3e5;
+    border-radius: 10px 10px 10px 10px;
+}
+
+
+.content-wrapper {
+    margin-top: 120px;
+}
+
+.transaction-lbl {
+
+    color: black;
+    font-size: medium;
+    
+}
+
+.form-controlx {
+    height: 35px;
+}
+
+.col-form-label {
+    height: 35px;
+}
+
+/* .select2-selection {
+    height: 44px;
+}
+
+select {
+    height: 44px;
+} */
+
+.even-row {
+    background-color: #e0f2f2;
+}
+
+input,
+select {
+
+    font-size: medium !important;
+}
+
+
+/* remove increase button of textboxes ( numbers) */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* swiping confirmation icon */
+.swipe-question {
+    animation: swipeQuestion 1s linear;
+  }
+  
+  @keyframes swipeQuestion {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .toast {
+    right: 15px;
+    z-index: 999;
+    color: white;
+}
+
+.toast-body {
+    color: #fff;
+}
+
+.selected {
+    background-color:hwb(170 0% 15%);
+    /* Add any other styles to visually highlight the selected row */
+  }
+
+
+  /* center model in screen */
+  .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+
+  table {
+    font-size: 1em !important;
+  }
+
+  .form-control {
+    font-size: 1em !important;
+  }
+
+
+
+  table td input[type="text"] {
+    font-size: 0.85em !important;
+
+  }
+
+  table td input[type="text"]:focus {
+    font-size: 0.85em !important;
+    border: 0px !important;
+
+  }
+
+  input[type="text"] {
+    background-color: #EBFFFF;
+  }
+
+  input[type="number"] {
+    background-color: #EBFFFF;
+  }
+
+  input[type="date"] {
+    background-color: #EBFFFF;
+  }
+
+  input[type="tel"] {
+    background-color: #EBFFFF;
+  }
+
+  input[type="email"] {
+    background-color: #EBFFFF;
+  }
+
+
+
+  textarea {
+    background-color: #EBFFFF !important;
+  }
+  .transaction-inputs{
+    max-height:30px;
+    margin-right:10px;
+    border:1px solid #E7E7E7;
+    padding:5px;
+    background-color:#EBFFFF;
+  }
+
+  /* th, td { white-space: nowrap; }
+  .datatable-fixed-both {
+      width: 800px;
+      margin: 0 auto;
+  }
+
+  tr { height: 50px; } */
+
+
+
+
+
+
+  .table-editable {
+  position: relative;
+  
+  .glyphicon {
+    font-size: 20px;
+  }
+}
+
+.table-remove {
+  color: #700;
+  cursor: pointer;
+  
+  &:hover {
+    color: #f00;
+  }
+}
+
+.table-up, .table-down {
+  color: #007;
+  cursor: pointer;
+  
+  &:hover {
+    color: #00f;
+  }
+}
+
+.table-add {
+  color: #070;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 0;
+  
+  &:hover {
+    color: #0b0;
+  }
+}
+
+ 
+  
+  

@@ -1,0 +1,300 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$rep_name",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        
+        {
+            "group": {
+                "header": [
+   
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "white",
+                                "color": "black",
+                                "x": "5",
+                                "y": "10",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "customerrecipt_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "InvoiceNo",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 70,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "customer id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "status",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "ledger_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "setoff_data_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Reference No",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Invoice No",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "INV Date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 60
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Customer Name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 100,
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Gap",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Town Name",
+                                        "align": "left",
+                                        "width": 250,
+                                        "format": "text"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Amount",
+                                        "align": "right",
+                                        "width": 70,
+                                        "format": "number"
+                                    }
+                                ]
+                            ],
+                            "body": "@_$sfareceipt_tabaledata",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "margin-top": "-10",
+                            "sum": [
+                                "Amount"
+                            ]
+                        }
+                    }
+                    
+                ],
+                "footer": [
+                    {
+                        "visible":true,
+                        "number": {
+                            "value": "@_$total",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "2",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "red",
+                            "x": "5",
+                            "y": "0",
+                            "format": "0.00",
+                            "font": {
+                                "style": "Bold",
+                                "size": "18",
+                                "name": "Tahoma"
+                            }
+                        }
+                    },
+                    {
+                        "label": {
+                            "text": "@_$total",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "red",
+                            "position": "fixed",
+                            "color": "#000000",
+                            "x": "5",
+                            "y": "10",
+                            "font": {
+                                "style": "Bold",
+                                "size": "15",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+    ]
+}

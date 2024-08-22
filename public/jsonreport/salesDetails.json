@@ -1,0 +1,379 @@
+
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "160",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Sales details ( Supply group wise )",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-50",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$filter",
+                "align": "center",
+                "height": "@_$hight",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-5",
+                "font": {
+                    "style": "Bold",
+                    "size": "15",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        
+        {
+            "group": {
+                "header": [
+                    {
+                        "label": {
+                            "text": "",
+                            "align": "left",
+                            "height": "5",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "black",
+                            "x": "5",
+                            "y": "0",
+                            "padding-top": "0"
+                        }
+                    }
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "#ffffff",
+                                "color": "black",
+                                "x": "5",
+                                "y": "0",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "Supply Group",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 60,
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Supply Group id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 40
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Code",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 70
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 180
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Pack<br>Size",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Sales<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 60
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Rtn<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Net<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Foc<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Rtn Foc<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 65
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Net Foc<br>Qty",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 65
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Sales",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 80
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Return",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 70
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Net Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ]
+                            ],
+                            "body": "@_$tabale_data",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "size": "5",
+                            "margin-top": "0",
+                            "sum": [
+                                "Net Amount"
+                            ]
+                        }
+                        
+                    }
+                ],
+                "footer": [
+                    {
+                        "visible": "false",
+                        "number": {
+                            "value": "123",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "2",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "black",
+                            "color": "red",
+                            "x": "5",
+                            "y": "0",
+                            "format": "0.00",
+                            "font": {
+                                "style": "Bold",
+                                "size": "18",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "label": {
+                "text": "",
+                "align": "right",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "100",
+                "y": "200",
+                "font": {
+                    "style": "Bold",
+                    "size": "15",
+                    "name": "Tahoma"
+                }
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 690,
+                "text": "NO 14,1 ST CROSS STREET,NEGOMBO",
+                "position": "fixed",
+                "align": "center",
+                "bg-color": "white",
+                "height": 32,
+                "font": {
+                    "size": 14,
+                    "name": "Tahoma",
+                    "style": "bold"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+       
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

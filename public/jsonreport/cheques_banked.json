@@ -1,0 +1,184 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$abc",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-70",
+                "font": {
+                    "style": "Bold",
+                    "size": "18",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "table": {
+                "header": [
+                    [
+                        {
+                            "text": "Received<br>date",
+                            "align": "left",
+                            "format": "text",
+                            "width": 70
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Ref No",
+                            "align": "left",
+                            "format": "text",
+                            "width": 100
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Debtor Name",
+                            "align": "left",
+                            "format": "text",
+                            "width": 290
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Debtor Bank",
+                            "align": "left",
+                            "format": "text",
+                            "width": 190
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Branch",
+                            "align": "left",
+                            "format": "text",
+                            "width": 110
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Cheque<br>Number",
+                            "align": "left",
+                            "format": "text",
+                            "width": 50
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Amount",
+                            "align": "right",
+                            "format": "number",
+                            "width": 100
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Date to be<br>Deposited",
+                            "align": "right",
+                            "format": "text",
+                            "width": 80
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Banked Date",
+                            "align": "right",
+                            "format": "text",
+                            "width": 100
+                        }
+                    ]
+                ],
+                "body": "@_$cheques_tabaledata",
+                "height": "50",
+                "width": "100%",
+                "x": 5,
+                "y": 20,
+                "margin-bottom": "0",
+                "margin-top": 5,
+                "margin-left": "100",
+                "margin-right": "100",
+                "sum": [
+                    "Amount"
+                ],
+                "font": {
+                    "style": "lite",
+                    "size": "10",
+                    "name": "Tahoma"
+                },
+                "layout": "fixed"
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 80
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+    ]
+}
