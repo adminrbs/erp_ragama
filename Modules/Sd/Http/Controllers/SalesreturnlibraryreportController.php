@@ -76,7 +76,7 @@ class SalesreturnlibraryreportController extends Controller
                 } */
             }
             if ($nonNullCount > 1) {
-                $query = "SELECT DISTINCT SR.manual_number AS invoice_number ,
+                $query = "SELECT DISTINCT SR.external_number AS invoice_number ,
                 SR.order_date AS Date ,
                 C.customer_code , 
                 CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
@@ -178,7 +178,7 @@ class SalesreturnlibraryreportController extends Controller
 
 
 
-                $query = "SELECT DISTINCT SR.manual_number AS invoice_number ,
+                $query = "SELECT DISTINCT SR.external_number AS invoice_number ,
                 SR.order_date AS Date ,
                 C.customer_code , 
                 CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 

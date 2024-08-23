@@ -80,7 +80,7 @@ class SalesreturndetailsReportController extends Controller
                 $query = "SELECT 
                 SR.sales_return_Id,
                 SR.order_date AS Date ,
-                SR.manual_number AS invoice_number ,
+                SR.external_number AS invoice_number ,
                 LEFT(C.customer_name,100),
                 LEFT(L.location_name,100),
                 SR.external_number,
@@ -222,7 +222,7 @@ class SalesreturndetailsReportController extends Controller
                 $query = "SELECT 
                 SR.sales_return_Id,
                 SR.order_date AS Date ,
-                SR.manual_number AS invoice_number ,
+                SR.external_number AS invoice_number ,
                 LEFT(C.customer_name,100),
                 LEFT(L.location_name,100),
                 SR.external_number,
