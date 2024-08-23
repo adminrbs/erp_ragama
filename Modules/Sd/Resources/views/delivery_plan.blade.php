@@ -88,6 +88,7 @@
 @include('sd::delivery_plan_postpone_modal')
 @include('sd::deliver_plan_non_allocated_list_model')
 @include('sd::deliveryplan_postpond_list_model')
+@include('sd::blockCustomerInfoModel')
 @endsection
 @section('center-scripts')
 <!-- Javascript -->
