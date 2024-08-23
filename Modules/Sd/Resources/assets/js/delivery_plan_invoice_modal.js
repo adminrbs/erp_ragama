@@ -257,12 +257,13 @@ function loadNonAllocatedInvoice(delivery_plan_id) {
     });
 }
 
-function showInfoModel(id,cus) {
+function showInfoModel(cus,id) {
     $('#block_id_hidden_lbl').val(id);
     $('#hidden_cus_lbl').val(cus);
     $('#block_customer_model_info').modal('show');
     $('#tabs a[href="#general"]').parent().hide();
     $('#general').hide();
+    $('#cmbBranch').hide();
    // load_block_info(id);
     loadOutstandingDataToTable(cus,$('#cmbBranch').val());
    
@@ -291,13 +292,18 @@ function loadOutstandingDataToTable(id,br){
         }, success: function (response) {
             console.log(response);
             var dt = response.data;
+            console.log(dt);
+            
             $.each(dt, function (index, item) {
+                
+                
                 var row = $('<tr>');
                 row.append($('<td>').text(item.trans_date));
                 row.append($('<td>').text(item.external_number));
                 row.append($('<td>').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
-                row.append($('<td>').text(item.age));      
-                table.append(row);
+                row.append($('<td>').text(item.age));    
+                console.log(row);  
+                tableBody.append(row);
             });
             $('body').css('cursor', 'default');
 

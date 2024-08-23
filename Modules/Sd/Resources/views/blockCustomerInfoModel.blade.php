@@ -41,7 +41,7 @@
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="general">
+                        <div class="tab-pane fade show" id="general">
                             <div class="row">
 
                             </div>
@@ -260,7 +260,7 @@
                         <!-- End of general tab -->
 
                         <!-- Outstanding tab -->
-                        <div class="tab-pane fade show " id="outstanding">
+                        <div class="tab-pane fade show active" id="outstanding">
                             <div class="col-md-3 mb-4">
                                 <select name="cmbBranch" id="cmbBranch" class="form-select">
 
