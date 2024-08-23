@@ -261,6 +261,7 @@ function showInfoModel(id,cus) {
     $('#block_id_hidden_lbl').val(id);
     $('#hidden_cus_lbl').val(cus);
     $('#block_customer_model_info').modal('show');
+    $('#tabs a[href="#general"]').parent().hide();
     $('#general').hide();
    // load_block_info(id);
     loadOutstandingDataToTable(cus,$('#cmbBranch').val());

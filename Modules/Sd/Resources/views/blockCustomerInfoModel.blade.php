@@ -20,7 +20,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Info - <label class="form values" id="lbl_cus_name"></label></h5>
+                <h5 class="modal-title" id="exampleModalLabel">Info <label class="form values" id="lbl_cus_name"></label></h5>
                 <input type="hidden" id="block_id_hidden_lbl">
                 <input type="hidden" id="hidden_cus_lbl">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -31,10 +31,10 @@
                     <!--tabs -->
                     <ul class="nav nav-tabs mb-0" id="tabs">
                         <li class="nav-item rbs-nav-item">
-                            <a href="#general" class="nav-link active" aria-selected="true">General</a>
+                            <a href="#general" class="nav-link" aria-selected="true">General</a>
                         </li>
                         <li class="nav-item rbs-nav-item">
-                            <a href="#outstanding" class="nav-link" aria-selected="false">Outstanding</a>
+                            <a href="#outstanding" class="nav-link active" aria-selected="false">Outstanding</a>
                         </li>
 
 
