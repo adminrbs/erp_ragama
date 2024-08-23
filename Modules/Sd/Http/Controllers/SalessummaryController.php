@@ -86,7 +86,7 @@ class SalessummaryController extends Controller
                 }
             }
             if ($nonNullCount > 1) {
-                $query = "SELECT DISTINCT SI.manual_number AS invoice_number ,
+                $query = "SELECT DISTINCT SI.external_number AS invoice_number ,
                 SI.order_date_time AS Date ,
                 C.customer_code , 
                 CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
@@ -188,7 +188,7 @@ class SalessummaryController extends Controller
 
 
 
-                $query = "SELECT DISTINCT SI.manual_number AS invoice_number ,
+                $query = "SELECT DISTINCT SI.external_number AS invoice_number ,
                 SI.order_date_time AS Date ,
                 C.customer_code , 
                 CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
