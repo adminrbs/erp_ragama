@@ -256,7 +256,7 @@ function getSalesInvoiceData(){
                     "customer": shortenString(dt[i].customer_name,20),
                     "route": shortenString(dt[i].route_name,15),
                     "sales_rep": shortenString(dt[i].employee_name,15),
-                    "Amount": parseFloat(dt[i].total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    "Amount": parseFloat(dt[i].total_amount).aleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                    
                     "status":label,
                     /* "approvalStatus": label_approval, */

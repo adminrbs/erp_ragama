@@ -81,7 +81,7 @@
                             "text": "<label style='font-size:13px;'>Customer<br>Code</label>",
                             "align": "left",
                             "format": "text",
-                            "width":80,
+                            "width":100,
                             "font-size" : 20
                         }
                     ],
@@ -99,7 +99,7 @@
                             "text": "<label style='font-size:13px;'>Invoice No</label>",
                             "align": "left",
                             "format": "text",
-                            "width":120,
+                            "width":160,
                             "font-size" : 18
                         }
                     ],

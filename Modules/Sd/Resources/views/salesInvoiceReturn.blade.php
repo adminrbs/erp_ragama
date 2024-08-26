@@ -227,6 +227,7 @@
                                                         <th>Balance</th>
                                                         <th>Select</th>
                                                         <th>Set off</th>
+                                                        <th>Remaining Balance</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

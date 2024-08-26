@@ -1855,7 +1855,7 @@ function load_setoff_data_(id) {
                 row.append(
                     $('<td>').css({
                         'width': '150px',
-                        'height': '20px',// Adjust the height value as needed
+                        'height': '20px',
 
                     }).append(
                         $('<input style="text-align:right">').attr({
@@ -1868,6 +1868,7 @@ function load_setoff_data_(id) {
                         })
                     )
                 );
+                row.append($('<td>').text(item.balance));
 
 
                 table.append(row);
@@ -1905,9 +1906,11 @@ function load_setoff_data_invoice(id) {
                 var checked = false;
                 var textBox_val = '';
                 var netTotalText = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
+                var remainBal = item.balance;
                 if (item.sales_invoice_Id == primary_id && netTotalText >= parseFloat(item.balance)) {
                     checked = true;
                     textBox_val = item.balance;
+                    remainBal = "0.00";
                 }
                 var row = $('<tr>').css('height', '15px');
                 row.append($('<td>').append($('<label>').attr('data-id', item.debtors_ledger_id).text(item.trans_date)));
@@ -1941,6 +1944,7 @@ function load_setoff_data_invoice(id) {
                         })
                     )
                 );
+                row.append($('<td style="text-align:right">').text(remainBal));
 
 
                 table.append(row);
@@ -1959,6 +1963,7 @@ function set_off(event) {
     var textboxID = textbox.attr('id');
     var balance = checkbox.closest('tr').find('td:eq(3)').text().replace(/,/g, '');
     var net_total_ = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
+    var remainTd = checkbox.closest('tr').find('td:eq(6)');
 
     if (checkbox.prop('checked')) {
         console.log(textboxID);
@@ -1982,10 +1987,12 @@ function set_off(event) {
         if (parseFloat(sum) < parseFloat(net_total_)) {
             if ((parseFloat(net_total_) - parseFloat(sum)) > parseFloat(balance)) {
                 $('#' + textboxID).val(balance);
+                remainTd.text('0.00');
 
             } else {
                 var net_balance = parseFloat(net_total_) - parseFloat(sum)
                 $('#' + textboxID).val(net_balance);
+                remainTd.text(parseFloat(parseFloat(balance) - parseFloat(net_balance)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
             }
 
@@ -1995,6 +2002,8 @@ function set_off(event) {
     } else {
         $('#' + textboxID).val('');
         $('#' + textboxID).prop('disabled', true);
+        remainTd.text(parseFloat(balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
     }
 
 }
@@ -2034,6 +2043,7 @@ function set_off(event) {
     
             var input_val = $this.val();
             var formatted_input_val = parseFloat(input_val);
+            var remainTd = $(event).closest('tr').find('td:eq(6)');
     
             if (formatted_balance_val < formatted_input_val) {
                 $this.val('');
@@ -2057,6 +2067,7 @@ function set_off(event) {
     
                 if (new_val !== input_val) {
                     $this.val(new_val);
+                    remainTd.text(parseFloat(balance_val) - parseFloat(new_val))
                 }
             }
         });

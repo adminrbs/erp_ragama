@@ -89,7 +89,9 @@ class DeliveryconfirmationController extends Controller
                 $delivery_confrimation->noSeal = $request->input('noSeal');
                 $delivery_confrimation->cancel = $request->input('cancel');
                 $delivery_confrimation->created_by = Auth::user()->id;
+                $delivery_confrimation->received = $request->input('received');
                 $delivery_confrimation->save();
+
             } else if ($existingCount > 0) {
 
                 $record = deliveryconfirmation::where("sales_invoice_Id", "=", $id)->get();
@@ -104,6 +106,7 @@ class DeliveryconfirmationController extends Controller
                 $delivery_confrimation->noSeal = $request->input('noSeal');
                 $delivery_confrimation->cancel = $request->input('cancel');
                 $delivery_confrimation->created_by = Auth::user()->id;
+                $delivery_confrimation->received = $request->input('received');
                 $delivery_confrimation->update();
             }
 
@@ -154,5 +157,17 @@ class DeliveryconfirmationController extends Controller
             return response()->json(['status' => false, 'error' => $ex->getMessage()]);
         }
     }
+
+   public function deleteDeliveryConfirmationRecord($id){
+    try {
+        deliveryconfirmation::where("sales_invoice_Id", "=", $id)->delete();
+        return response()->json(['status' => true]);
+
+    } catch (Exception $ex) {
+       
+        return response()->json(['status' => false, 'error' => $ex->getMessage()]);
+    }
+
+   } 
     
 }

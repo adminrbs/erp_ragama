@@ -54,6 +54,10 @@ const DatatableFixedColumns = function () {
                     targets: 15
                 },
                 {
+                    orderable: false,
+                    targets: 16
+                },
+                {
                     width:150,
                     targets: 0
                 },
@@ -80,6 +84,7 @@ const DatatableFixedColumns = function () {
                 rightColumns: 6,
                 rightColumns: 7,
                 rightColumns: 8,
+                rightColumns: 9,
             },
             "pageLength": 100,
             "paging": false,
@@ -96,14 +101,16 @@ const DatatableFixedColumns = function () {
                 { "data": "loading_added_user" },              
                 { "data": "employee_name" },
                 { "data": "route" },   
-                { "data": "delivered" },
+                { "data": "received" },
                 { "data": "seal" },
                 { "data": "signature" },
                 { "data": "cash" },
                 { "data": "cheque" },
                 { "data": "no_seal" },
                 { "data": "cancel" },
-                { "data": "picking" }
+                { "data": "delivered" },
+                { "data": "picking" },
+               
             ],
             "stripeClasses": [ 'odd-row', 'even-row' ],
 
@@ -194,34 +201,14 @@ function getDeliveryConfirmationData(id){
 
             var data = [];
             for (var i = 0; i < dt.length; i++) {
-                var delivered_checked = '<input class="form-check-input" type="checkbox" id="delivered' +"_"+dt[i].sales_invoice_Id + '" onchange="addDeliveryConfirmation(this)">';
-                var signature_checked = '<input class="form-check-input" type="checkbox" id="signature'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)">';
-                var seal_checked = '<input class="form-check-input" type="checkbox" id="seal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)">';
-                var cash_checked = '<input class="form-check-input" type="checkbox" id="cash'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" >';
-                var check_checked = '<input class="form-check-input" type="checkbox" id="cheque'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" >';
-                var noSeal_checked = '<input class="form-check-input" type="checkbox" id="noSeal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)">';
-                var cancel = '<input class="form-check-input" type="checkbox" id="cancel'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)">';
-                /* if(dt[i].delivered == 1){
-                    delivered_checked = '<input class="form-check-input" type="checkbox" id="delivered' +"_"+dt[i].sales_invoice_Id + '" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].Seal == 1){
-                    seal_checked = '<input class="form-check-input" type="checkbox" id="seal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].Signature == 1){
-                    signature_checked = '<input class="form-check-input" type="checkbox" id="signature'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].Cash == 1){
-                    cash_checked = '<input class="form-check-input" type="checkbox" id="cash'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].Cheque == 1){
-                    check_checked = '<input class="form-check-input" type="checkbox" id="cheque'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].noSeal == 1){
-                    noSeal_checked = '<input class="form-check-input" type="checkbox" id="noSeal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                }
-                if(dt[i].cancel == 1){
-                    var cancel = '<input class="form-check-input" type="checkbox" id="cancel'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" checked>';
-                } */
+                var delivered_checked = '<input class="form-check-input" type="checkbox" id="delivered' +"_"+dt[i].sales_invoice_Id + '" onchange="addDeliveryConfirmation(this)" disabled>';
+                var signature_checked = '<input class="form-check-input" type="checkbox" id="signature'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled>';
+                var seal_checked = '<input class="form-check-input" type="checkbox" id="seal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled>';
+                var cash_checked = '<input class="form-check-input" type="checkbox" id="cash'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled >';
+                var check_checked = '<input class="form-check-input" type="checkbox" id="cheque'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled >';
+                var noSeal_checked = '<input class="form-check-input" type="checkbox" id="noSeal'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled>';
+                var cancel = '<input class="form-check-input" type="checkbox" id="cancel'+"_"+dt[i].sales_invoice_Id+'" onchange="addDeliveryConfirmation(this)" disabled>';
+                var received = '<input class="form-check-input" type="checkbox" id="received'+"_"+dt[i].sales_invoice_Id+'" onchange="enableCheckboxes(this);">';
 
                 var pick = dt[i].picking_list_id;
                 if(dt[i].picking_list_id == '' || dt[i].picking_list_id == null){
@@ -250,7 +237,8 @@ function getDeliveryConfirmationData(id){
                     "cheque":check_checked,
                     "no_seal":noSeal_checked,
                     "cancel":cancel,
-                    "picking":pick
+                    "picking":pick,
+                    "received":received
                 });  
                 
               
@@ -283,8 +271,9 @@ function addDeliveryConfirmation(event){
     var $div = $firstCell.find('div');
     var invoice_id = $div.data('id');
     console.log(invoice_id);
+    
     //delivered value
-    var delivered_cell = $row.find('td:eq(11) input[type="checkbox"]');
+    var delivered_cell = $row.find('td:eq(18) input[type="checkbox"]');
     var delivered_value = delivered_cell.is(':checked') ? 1:0;
     
     //seal value
@@ -310,6 +299,9 @@ function addDeliveryConfirmation(event){
       var cancel_cell = $row.find('td:eq(17) input[type="checkbox"]');
       var cancel_value = cancel_cell.is(':checked') ? 1:0;
 
+      var received_cell = $row.find('td:eq(11) input[type="checkbox"]');
+      var received_value = received_cell.is(':checked') ? 1:0;
+
    
     var formData = new FormData();
     formData.append('deliver',delivered_value);
@@ -319,8 +311,9 @@ function addDeliveryConfirmation(event){
     formData.append('signature',signature_value);
     formData.append('noSeal',noSeal_value);
     formData.append('cancel',cancel_value);
+    formData.append('received',received_value);
     
-      console.log(formData);
+    console.log(formData);
       
 
     $.ajax({
@@ -400,9 +393,7 @@ console.log(confirm_data_array);
     }else{
         showWarningMessage('No selected record to update');
     }
-
-    
-    
+   
     
 }
 
@@ -436,4 +427,51 @@ function shortenString(inputString, maxLength) {
     } else {
         return inputString.substring(0, maxLength) + '...';
     }
+}
+
+
+function enableCheckboxes(event){
+    var $row = $(event).closest('tr');
+    if($(event).prop('checked')){
+        $row.find('input[type="checkbox"]').not(event).removeAttr('disabled');
+        addDeliveryConfirmation(event);
+    }else{
+        $row.find('input[type="checkbox"]').not(event).prop('checked', false).attr('disabled', 'disabled');
+        deleteDeliveryConfirmationRecord(event);
+    }
+}
+
+function deleteDeliveryConfirmationRecord(event){
+   
+    var $row = $(event).closest('tr');
+    //invoice id
+    var $firstCell = $row.find('td:eq(1)');
+    var $div = $firstCell.find('div');
+    var invoice_id = $div.data('id');
+
+    $.ajax({
+        url: '/sd/deleteDeliveryConfirmationRecord/'+invoice_id,
+        method: 'DELETE',
+        data: formData,
+        cache: false,
+        async: false,
+        timeout: 800000,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function () {
+            
+        }, success: function (response) {
+          if(response.status){
+            showSuccessMessage("Record Deleted");
+          }else{
+            showWarningMessage("Unable to delete");
+          }
+        }, error: function (data) {
+            console.log(data.responseText)
+        }, complete: function () {
+
+        }
+    })
+
 }

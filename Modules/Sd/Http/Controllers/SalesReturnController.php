@@ -399,7 +399,7 @@ class SalesReturnController extends Controller
 
 
     //get returns to the list
-    public function getSalesInvoiceReturnData(Request $request)
+    public function getSalesInvoiceReturnData(Request $request,$id)
     {
         try {
             $pageNumber = ($request->start / $request->length) + 1;
@@ -424,8 +424,11 @@ class SalesReturnController extends Controller
         ->join('customers', 'sales_returns.customer_id', '=', 'customers.customer_id')
         ->leftJoin('sales_invoices', 'sales_returns.sales_invoice_id', '=', 'sales_invoices.sales_invoice_id')
         ->where('sales_returns.document_number', '=', 220)
-        ->orderByDesc('external_number');
+        ->orderByDesc('sales_invoice_Id');
 
+        if ($id > 0) {
+            $query->where('sales_returns.branch_id', '=', $id);
+        }
            
         if (!empty($searchValue)) {
   

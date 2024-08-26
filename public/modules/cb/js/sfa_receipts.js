@@ -140,7 +140,7 @@ $(document).ready(function () {
 
     $('#cmbBranch').on('change', function () {
         global_branch_id_ = $(this).val();
-        load_sfa_receipts($(this).val(),global_collector_id);
+        load_sfa_receipts(global_branch_id_,global_collector_id);
         $('#sum_label').text('0.00').addClass('h4');
         $('#row_count').text('0');
     }); 
@@ -148,7 +148,7 @@ $(document).ready(function () {
     $('#cmbEmp').on('change', function () {
         
         global_collector_id = $(this).val();
-        load_sfa_receipts(global_branch_id_,$(this).val());
+        load_sfa_receipts(global_branch_id_,global_collector_id);
         $('#sum_label').text('0.00').addClass('h4');
         $('#row_count').text('0');
     });
@@ -159,6 +159,10 @@ $(document).ready(function () {
 
     $('#cmbBank').on('change', function () {
         getBankBranch($(this).val());
+    });
+
+    $('#receipt_modal').on('hidden.bs.modal', function () {
+        reseetData();
     });
 
 
@@ -285,7 +289,7 @@ function showModel(event){
     $("#receipt_modal").modal("show");
     $('#hiddenItem').val($(event).attr('id'));
     load_sfa_reciepts_for_change($(event).attr('id'))
-    
+    getServerTime();
 }
 
 function load_sfa_reciepts_for_change(id) {
@@ -312,11 +316,24 @@ function load_sfa_reciepts_for_change(id) {
 
                 var banks = $('<select id="cmbBank" class="form-select" onchange="getBankBranch(this)" style="width: 200px;"></select>');
                 var branches = $('<select id="cmbBankBranch" class="form-select" style="width: 200px;"></select>');
-                var textBox_chq_no = $('<input class="form-control" style="width: 70px;">', { type: 'text', class: 'form-control' }); 
+                var textBox_chq_no = $('<input>', { 
+                    type: 'text', 
+                    class: 'form-control', 
+                    id: 'txtChqNo', 
+                    style: 'width: 70px;' 
+                });
+                
                 if(item.change_to == "Cash"){
                     banks = $('<select id="cmbBank" class="form-select" onchange="getBankBranch(this)" style="width: 200px;" disabled></select>');
                     branches = $('<select id="cmbBankBranch" class="form-select" style="width: 200px;" disabled></select>');
-                    textBox_chq_no = $('<input class="form-control" style="width: 70px;" disabled>', { type: 'text', class: 'form-control' }); 
+                    textBox_chq_no = $('<input>', { 
+                        type: 'text', 
+                        class: 'form-control', 
+                        id: 'txtChqNo', 
+                        style: 'width: 70px;', 
+                        disabled: true 
+                    });
+                    
                 }
                 
                 row.append($('<td>').append(banks));
@@ -432,7 +449,7 @@ function getBankBranch(event) {
 
 function changeType(){
     var rcpt_id = $('#hiddenItem').val();
-    var formData = new FormData(); // Ensure this is a valid FormData object
+    var formData = new FormData(); 
  
     var firstRow = $('#receipts_table tbody tr:first');
     var cellText = firstRow.find('td').eq(4).text();
@@ -442,20 +459,34 @@ function changeType(){
          formData.append('bank_id', $('#cmbBank').val());
          formData.append('bank_branch_id', $('#cmbBankBranch').val());
          formData.append('cheque_no', $('#txtChqNo').val());
+         formData.append('banking_Date', $('#dtBankingDate').val());
         
     }
     formData.append('remark', $('#txtRemark').val());
+
     $.ajax({
          url: '/cb/changeType/' + rcpt_id,
          type: 'POST',
          data: formData,
-         processData: false,  // Prevent jQuery from processing the data
-         contentType: false,  // Prevent jQuery from overriding the content type
+         processData: false,  
+         contentType: false,  
          cache: false,
          timeout: 800000,
+         headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
          beforeSend: function () { },
          success: function (response) {
-             console.log('Success:', response);
+             
+             var status = response.status
+             if(status){
+               
+                showSuccessMessage("Receipt Changed");
+             }else{
+                showWarningMessage("Unable to change the receipt");
+             }
+             load_sfa_receipts($('#cmbBranch').val(),$('#cmbEmp').val());
+             reseetData();
          },
          error: function (error) {
              console.log('Error:', error);
@@ -464,6 +495,38 @@ function changeType(){
      });
  }
  
+ function cancelReceipt(){
+    var rcpt_id = $('#hiddenItem').val();
+    
+    $.ajax({
+         url: '/cb/cancelReceipt/' + rcpt_id,
+         type: 'POST',
+         data: formData,
+         processData: false,  
+         contentType: false,  
+         cache: false,
+         timeout: 800000,
+         headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+         beforeSend: function () { },
+         success: function (response) {
+            var status = response.status
+            if(status){
+               
+                showSuccessMessage("Receipt Canceled");
+             }else{
+                showWarningMessage("Unable to cancel the receipt");
+             }
+             load_sfa_receipts($('#cmbBranch').val(),$('#cmbEmp').val());
+             reseetData();
+         },
+         error: function (error) {
+             console.log('Error:', error);
+         },
+         complete: function () { }
+     });
+ }
 
  function getServerTime() {
     $.ajax({
@@ -486,5 +549,8 @@ function changeType(){
 }
 
 
-
+function reseetData(){
+    $('#txtRemark').val("");
+    $('#txtChqNo').val("");
+}
 

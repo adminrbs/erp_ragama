@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('Cash');
             $table->boolean('Cheque');
             $table->boolean('cancel');
+            $table->boolean('received');
             $table->boolean('status')->default(0);
             $table->integer('created_by')->nullable();
             $table->timestamps();

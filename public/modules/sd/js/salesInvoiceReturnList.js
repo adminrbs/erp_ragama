@@ -2,9 +2,14 @@ const DatatableFixedColumns = function () {
 
     // Basic Datatable examples
     const _componentDatatableFixedColumns = function () {
+        let table;
         if (!$().DataTable) {
             console.warn('Warning - datatables.min.js is not loaded.');
             return;
+        }
+
+        if ($.fn.DataTable.isDataTable('.datatable-fixed-both')) {
+            table.destroy();
         }
 
         // Setting datatable defaults
@@ -25,13 +30,13 @@ const DatatableFixedColumns = function () {
 
 
         // Left and right fixed columns
-        var table = $('.datatable-fixed-both').DataTable({
+         table = $('.datatable-fixed-both').DataTable({
             search: {
                 return: true
             },
             serverSide: true,
             ajax: {
-                url : '/sd/getSalesInvoiceReturnData',
+                url : '/sd/getSalesInvoiceReturnData/'+$('cmbBranch').val(),
                
             },
             columnDefs: [
@@ -103,10 +108,16 @@ const DatatableFixedColumns = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     DatatableFixedColumns.init();
+   
 });
 
 $(document).ready(function(){
    // getSalesInvoiceReturnData();
+
+   getBranches();
+   $('#cmbBranch').on('change',function(){
+        DatatableFixedColumns.init();
+   });
 
 });
 function _delete(id, status) {
@@ -315,5 +326,22 @@ function loadReturnSetoffData(return_id){
             console.log(error);
         },
         complete: function () { }
+    })
+}
+
+
+function getBranches() {
+    $.ajax({
+        url: '/getBranches',
+        type: 'get',
+        async: false,
+        success: function (data) {
+           
+            $.each(data, function (index, value) {
+                $('#cmbBranch').append('<option value="' + value.branch_id + '">' + value.branch_name + '</option>');
+
+            })
+
+        },
     })
 }

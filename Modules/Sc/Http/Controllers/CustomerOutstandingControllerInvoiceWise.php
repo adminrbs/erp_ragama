@@ -77,7 +77,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
             if ($nonNullCount > 1) {
                 $style = 'font-size:15px;';
-                $query = "SELECT
+               /*  $query = "SELECT
                 CONCAT('<label style=".$style.">',C.customer_code,'</label>') AS customer_code,  
                 CONCAT('<label style=".$style.">',C.customer_name,'</label>') AS customer_name,
                 CONCAT('<label style=".$style.">',D.external_number,'</label>') AS external_number,
@@ -94,7 +94,68 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                 LEFT JOIN town_non_administratives T ON T.town_id=C.town 
                 LEFT JOIN branches ON D.branch_id = branches.branch_id
                 LEFT JOIN routes RT ON C.route_id = RT.route_id
-                WHERE (D.amount - D.paidamount > 0) AND (D.document_number = 1600 OR D.document_number = 210)";
+                WHERE (D.amount - D.paidamount > 0) AND (D.document_number = 1600 OR D.document_number = 210)"; */
+
+                $query = "SELECT
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.customer_code, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS customer_code,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.customer_name, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS customer_name,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', D.external_number, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS external_number,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', E.employee_name, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS employee_name,  
+                
+                  CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">',  D.trans_date, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS trans_date,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS age,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.credit_amount_hold_limit, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS credit_limit,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.credit_period_hold_limit, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS credit_period,  
+                
+                SUM(D.amount - D.paidamount) AS total_outstanding  
+                 
+            FROM debtors_ledgers D 
+            LEFT JOIN customers C ON D.customer_id = C.customer_id 
+            LEFT JOIN employees E ON D.employee_id = E.employee_id
+            LEFT JOIN town_non_administratives T ON T.town_id = C.town 
+            LEFT JOIN branches ON D.branch_id = branches.branch_id
+            LEFT JOIN routes RT ON C.route_id = RT.route_id
+            WHERE (D.amount - D.paidamount > 0) 
+            AND (D.document_number = 1600 OR D.document_number = 210)";
+            
 
                 $quryModify = "";
                 if ($selecteBranch != null) {
@@ -190,7 +251,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
 
                 $style = 'font-size:15px;';
-                $query = "SELECT
+               /*  $query = "SELECT
                 CONCAT('<label style=".$style.">',C.customer_code,'</label>') AS customer_code,  
                 CONCAT('<label style=".$style.">',C.customer_name,'</label>') AS customer_name,
                 CONCAT('<label style=".$style.">',D.external_number,'</label>') AS external_number,
@@ -207,7 +268,68 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                 INNER JOIN customers C ON D.customer_id=C.customer_id 
                 INNER JOIN branches ON D.branch_id = branches.branch_id
                 INNER JOIN town_non_administratives T ON T.town_id=C.town
-                INNER JOIN routes RT ON C.route_id = RT.route_id";
+                INNER JOIN routes RT ON C.route_id = RT.route_id"; */
+
+                $query = "SELECT
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.customer_code, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS customer_code,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.customer_name, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS customer_name,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', D.external_number, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS external_number,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', E.employee_name, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS employee_name,  
+                
+                  CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">',  D.trans_date, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS trans_date,  
+               
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS age,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.credit_amount_hold_limit, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS credit_limit,  
+                
+                CONCAT(
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '<b>', ''), 
+                    '<label style=\"".$style."\">', C.credit_period_hold_limit, '</label>',
+                    IF(DATEDIFF(CURDATE(), D.trans_date) > 60, '</b>', '')
+                ) AS credit_period,  
+                
+                SUM(D.amount - D.paidamount) AS total_outstanding  
+                 
+            FROM debtors_ledgers D 
+            LEFT JOIN customers C ON D.customer_id = C.customer_id 
+            LEFT JOIN employees E ON D.employee_id = E.employee_id
+            LEFT JOIN town_non_administratives T ON T.town_id = C.town 
+            LEFT JOIN branches ON D.branch_id = branches.branch_id
+            LEFT JOIN routes RT ON C.route_id = RT.route_id
+            WHERE (D.amount - D.paidamount > 0) 
+            AND (D.document_number = 1600 OR D.document_number = 210)";
 
 
                 $quryModify = "";

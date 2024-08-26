@@ -19,38 +19,48 @@
     <!-- Multiple fixed columns -->
     <div class="card mt-2">
         <div class="card">
-        <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-            <h5 class="mb-0">Sales Return List</h5>
-        </div>
-        <div class="col-md-3" style="margin-left: 10px;margin-top:5px">
-                <a href="/sd/salesReturn" class="btn btn-primary">
-                    <i class="fa fa-plus">&nbsp;Create New</i>
-                </a>
+            <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
+                <h5 class="mb-0">Sales Return List</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-2" style="margin-left: 10px;margin-top:5px">
+                    <a href="/sd/salesReturn" class="btn btn-primary">
+                        <i class="fa fa-plus">&nbsp;Create New</i>
+                    </a>
+
+                </div>
+
+                <div class="col-md-2" style="margin-left: 10px;margin-top:5px">
+                    <select class="form-select" id="cmbBranch">
+                        <option>Select Branch</option>
+                    </select>
+
+                </div>
             </div>
 
-        <div class="row">
-            <div class="col-md-12">
-            <table class="table datatable-fixed-both table-striped" id="sales_return_table">
-                <thead>
-                    <tr>  
-                        <th>Reference #</th>
-                        <th>Date</th>
-                        <th>Invoice</th>
-                        <th>Customer</th>
-                        <th>Sales Rep</th>
-                        <th>Amount</th>
-                        <th>Your Ref number</th>
-                        <th>Status</th>
-                        <th>Action</th> 
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table datatable-fixed-both table-striped" id="sales_return_table">
+                        <thead>
+                            <tr>
+                                <th>Reference #</th>
+                                <th>Date</th>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Sales Rep</th>
+                                <th>Amount</th>
+                                <th>Your Ref number</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- /multiple fixed columns -->
 

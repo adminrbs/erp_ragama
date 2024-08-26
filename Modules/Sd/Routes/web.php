@@ -349,7 +349,7 @@ Route::prefix('sd')->middleware(['is.logged'])->group(function () {
     });
     Route::post('/addSalesReturn/{id}', [SalesReturnController::class, 'addSalesReturn']);
     Route::post('/addSalesReturnDraft', [SalesReturnController::class, 'addSalesReturnDraft']);
-    Route::get('/getSalesInvoiceReturnData', [SalesReturnController::class, 'getSalesInvoiceReturnData']);
+    Route::get('/getSalesInvoiceReturnData/{id}', [SalesReturnController::class, 'getSalesInvoiceReturnData']);
     Route::get('/salesReturnList', function () {
         return view('sd::salesInvoiceReturnList');
     })->middleware(['is.logged','can:sd_sales_return']);
@@ -511,6 +511,7 @@ Route::post('/finish_plan/{id}',[DeliveryPlanController::class,'finish_plan']);
     Route::post('/addDeliveryConfirmation/{id}',[DeliveryconfirmationController::class,'addDeliveryConfirmation']);
     Route::get('/loadDeliveryPlans',[DeliveryconfirmationController::class,'loadDeliveryPlans']);
     Route::post('/confirm_all',[DeliveryconfirmationController::class,'confirm_all']);
+    Route::delete('/deleteDeliveryConfirmationRecord/{id}',[DeliveryconfirmationController::class,'deleteDeliveryConfirmationRecord']);
     /**End of Delivery confirmation */
    
 

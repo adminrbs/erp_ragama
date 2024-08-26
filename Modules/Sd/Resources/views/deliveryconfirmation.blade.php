@@ -38,7 +38,7 @@
                     <table class="table datatable-fixed-both table-striped" id="delivery_confirmation_table">
                         <thead>
                             <tr>
-                            <th>Invoice Date</th>
+                                <th>Invoice Date</th>
                                 <th>Sales Invoice</th>
                                 <th>Customer</th>
                                 <th>Invoice Amount</th>
@@ -52,7 +52,7 @@
                                 
                                 <th>Sales Rep</th>
                                 <th>Route</th>   
-                                <th>Delivered</th>
+                                <th>Received</th>
                                 <th>Seal</th>
                                 <th>Signature</th>
                                 <!--  <th>No Seal</th> -->
@@ -60,6 +60,7 @@
                                 <th>Cheque</th>
                                 <th>No Seal</th>
                                 <th>Cancel</th>
+                                <th>Delivered</th>
                                 <th>PL No</th>
                                 
                             </tr>

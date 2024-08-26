@@ -21,6 +21,7 @@ function loadDatatoDashboard() {
         async: false,
         success: function(response) {
             console.log(response.cash_with_rep);
+            //cash with rep - all cash
             $.each(response.cash_with_rep, function(index, value) {
                 var total_cash = value.total_cash ? parseFloat(value.total_cash).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
                 var total_late = value.total_late ? parseFloat(value.total_late).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
@@ -167,7 +168,7 @@ function loadDataAccordingToRep(id){
                 var total_cash = value.total_cash ? parseFloat(value.total_cash).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
                 var total_late_cash = value.total_late ? parseFloat(value.total_late).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
                 var total_cheque = value.total_cheque ? parseFloat(value.total_cheque).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
-                var total_late_cheque = value.total_late ? parseFloat(value.total_late).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                var total_late_cheque = value.total_cheque_late ? parseFloat(value.total_cheque_late).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
                 
                 var row = `
                     <tr>

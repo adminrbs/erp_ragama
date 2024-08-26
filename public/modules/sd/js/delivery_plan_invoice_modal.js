@@ -257,16 +257,67 @@ function loadNonAllocatedInvoice(delivery_plan_id) {
     });
 }
 
-function showInfoModel(id,cus) {
+function showInfoModel(cus,id) {
     $('#block_id_hidden_lbl').val(id);
     $('#hidden_cus_lbl').val(cus);
     $('#block_customer_model_info').modal('show');
-    load_block_info(id);
+    $('#tabs a[href="#general"]').parent().hide();
+    $('#general').hide();
+    $('#cmbBranch').hide();
+   // load_block_info(id);
     loadOutstandingDataToTable(cus,$('#cmbBranch').val());
    
 }
 
+function loadOutstandingDataToTable(id,br){
+    var table = $('#outstandingTable');
+    var tableBody = $('#outstandingTable tbody');
+    tableBody.empty();
+    if(br == undefined){
+        br = 0;
+    }
+    $.ajax({
+        url: '/sd/loadOutstandingDataToTable/' + id +'/' + br,
+        method: 'get',
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        timeout: 800000,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function () {
 
+        }, success: function (response) {
+            console.log(response);
+            var dt = response.data;
+            console.log(dt);
+            
+            $.each(dt, function (index, item) {
+                
+                
+                var row = $('<tr>');
+                row.append($('<td>').text(item.trans_date));
+                row.append($('<td>').text(item.external_number));
+                row.append($('<td>').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td>').text(item.age));    
+                console.log(row);  
+                tableBody.append(row);
+            });
+            $('body').css('cursor', 'default');
+
+
+
+        }, error: function (data) {
+            console.log(data.responseText)
+        }, complete: function () {
+
+        }
+
+    })
+
+}
 
 function loadAllocatedInvoice(delivery_plan_id) {
     $.ajax({
