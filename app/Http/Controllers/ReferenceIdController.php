@@ -1187,4 +1187,8 @@ LIMIT 1";  */
             return $ex;
         }
     }
+
+    public function newReferenceNumber_sales_invoice_copy_issued(Request $request, $table, $doc_number){
+        
+    }
 }

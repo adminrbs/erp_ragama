@@ -108,28 +108,10 @@ document.addEventListener('DOMContentLoaded', function () {
 var m_number = undefined;
 $(document).ready(function () {
     $('.select2').select2();
-    $('.daterange-single').daterangepicker({
-        parentEl: '.content-inner',
-        singleDatePicker: true,
-        locale: {
-            format: 'YYYY-MM-DD',
-        }
-    });
+   
 
-    $('.modal').each(function () {
-        $(this).find('.select2').select2({
-            dropdownParent: $(this)
-        });
-    });
-
-    getCusrrentMonthDates();
-    loadCustomerToCMB();
-    loademployeesInModel();
-    //tabs navigation
-    $('#tabs a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    });
+    loadEmp();
+   
 
     load_inv();
 
@@ -152,7 +134,7 @@ $(document).ready(function () {
         if ($('#txtInv').val().length < 10) {
             showWarningMessage("Please enter a invoice number");
         } else {
-            load_invoice_details($('#txtInv').val());
+            load_invoice_details_for_invoie_copy($('#txtInv').val());
         }
 
     });
@@ -221,7 +203,7 @@ function load_inv() {
     var result = [];
 
     $.ajax({
-        url: '/sd/load_inv',
+        url: '/sd/load_inv_for_copy_issued',
         method: 'GET',
         cache: false,
         timeout: 800000,
@@ -261,13 +243,13 @@ function showPickingReport(delivery_plan_packing_list_id) {
 
 
 //load invoice details
-function load_invoice_details(number) {
+function load_invoice_details_for_invoie_copy(number) {
 
     $(".val_table tbody").empty();
     $('.val_lbl').text('');
 
     $.ajax({
-        url: '/sd/load_invoice_details/' + number,
+        url: '/sd/load_invoice_details_for_invoie_copy/' + number,
         method: 'GET',
         cache: false,
         timeout: 800000,
@@ -278,31 +260,33 @@ function load_invoice_details(number) {
 
 
                 var header = data.header;
-                var item_data = data.item;
-                var return_data = data.return_data;
-                var customer_receipt_data = data.customer_receipt;
-                var sfa_data = data.sfa;
-                var delivery_plan = data.delivery_plan;
-                var picking_list = data.picking_list;
-                var delivery_confirmation_data = data.delivery_confirmation_data;
-                console.log(delivery_confirmation_data);
-                //header
+               
+                
 
                 $.each(header, function (index, value) {
-                    $('#LblexternalNumber').text(number);
+                    /* $('#LblexternalNumber').text(number);
                     $('#invoice_date_time').text(value.order_date_time);
-                    $('#txtBranch').text(value.branch_name);
-                    $('#txtlocation').text(value.location_name);
+                    
                     $('#txtEmp').text(value.employee_name);
                     $('#txtCustomerID').text(value.customer_name);
-                    if (value.so_number) {
-                        $('#lblSalesOrder').text(value.so_number);
-                        $('#txtGap').text(value.date_gap);
-                        $('#dt_order').text(value.s_order_date);
-                    }
                     $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
                     $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
-                    $('#txtBalance').text(parseFloat(value.balance).toLocaleString());
+                    $('#txtBalance').text(parseFloat(value.balance).toLocaleString()); */
+
+
+                    var newRow = $("<tr>");
+
+                    
+                    newRow.append("<td>" + number + "</td>");
+                    newRow.append("<td>" + value.employee_name + "</td>");
+                    newRow.append("<td>" + value.customer_name + "</td>");
+                    newRow.append("<td>" + value.order_date_time + "</td>");
+                    newRow.append("<td style='text-align: right;'>" + parseInt(value.amount) + "</td>");
+                    newRow.append("<td style='text-align: right;'>" + parseInt(value.paidamount) + "</td>");
+                    newRow.append("<td style='text-align: right;'>" + parseInt(value.balance) + "</td>");
+                   
+    
+                    $("#invoiceDataTable tbody").append(newRow);
 
 
                 });
@@ -426,13 +410,15 @@ function loadCustomerToCMB() {
 
 }
 
-function loademployeesInModel() {
+function loadEmp() {
     $.ajax({
-        url: '/sd/loademployeesInModel',
+        url: '/sd/loadEmpforsalesInvoicecopyIssued',
         type: 'get',
         dataType: 'json',
         async: false,
         success: function (data) {
+            console.log(data);
+            
             $.each(data, function (index, value) {
                 $('#cmbEmp').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
             })

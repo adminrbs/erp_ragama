@@ -54,6 +54,7 @@ use Modules\Sd\Http\Controllers\MergeOrdersController;
 use Modules\Sd\Http\Controllers\MonthendSalesSummeryReportController;
 use Modules\Sd\Http\Controllers\OrdersController;
 use Modules\Sd\Http\Controllers\PendingOrderController;
+use Modules\Sd\Http\Controllers\SalesInvoiceCoppyIssuedController;
 
 Route::prefix('sd')->middleware(['is.logged'])->group(function () {
 
@@ -671,6 +672,7 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   Route::get('/sales_invoice_copy_issued',function(){
     return view('sd::sales_invoice_copy_issued');
   })->middleware(['is.logged']);
-
-  
+  Route::get('/loadEmpforsalesInvoicecopyIssued',[SalesInvoiceCoppyIssuedController::class,'loadEmpforsalesInvoicecopyIssued']);
+  Route::get('/load_invoice_details_for_invoie_copy/{id}',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy']);
+  Route::get('/load_inv_for_copy_issued',[SalesInvoiceCoppyIssuedController::class,'load_inv_for_copy_issued']);
 });

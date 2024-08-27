@@ -5,9 +5,8 @@ var referanceID = undefined;
 function newID(urlx, table, doc_number) {
     var formData = new FormData();
    var branch_id = $('#cmbBranch').val();
-   console.log(branch_id);
-  // return false;
-   //formData.append('branch_id',branch_id);
+   
+  
    console.log(formData);
     var new_id = undefined;
     $.ajax({

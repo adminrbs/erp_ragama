@@ -10,7 +10,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     .highlight {
-        background-color: #a0d3f1;
+        background-color: #ffff00;
     }
 
     .custom-header-style {
@@ -19,6 +19,7 @@
         text-align: center;
         /* You can set the text color as needed */
     }
+
 </style>
 @endsection
 
@@ -77,9 +78,7 @@
 
                                                         </select>
                                                     </div>
-                                                    <div class="col-2">
-                                                        <input type="button" id="btnSave" class="btn btn-primary" value="Save">
-                                                    </div>
+                                                    
 
                                                     <div class="col-1">
 
@@ -140,8 +139,11 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-2">
+                                    <div class="col-4">
                                         <input type="text" name="" id="txtRemark" class="form-control" placeholder="Remark">
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="button" id="btnSave" class="btn btn-primary" value="Save">
                                     </div>
                                 </div>
                             </div>

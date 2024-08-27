@@ -81,7 +81,7 @@ Auth::routes();
  Route::get('/newReferenceNumber_BonusClaim_referenceId/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_BonusClaim_referenceId']);
  Route::get('/newReferenceNumber_direct_cash_bundles/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_direct_cash_bundles']);
  Route::get('/newReferenceNumber_direct_cheque_bundles/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_direct_cheque_bundles']);
-
+ Route::get('/newReferenceNumber_sales_invoice_copy_issued/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_sales_invoice_copy_issued']);
 
  
 
