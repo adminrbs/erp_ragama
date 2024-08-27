@@ -11,7 +11,7 @@ use Modules\Sc\Entities\branch;
 use Modules\Sc\Entities\location;
 use Modules\Sc\Entities\supply_group;
 
-class ViewStockBlanceController extends Controller
+class ViewStockBlanceController1 extends Controller
 {
     public function getStockBlance(Request $request)
     {
@@ -31,28 +31,16 @@ class ViewStockBlanceController extends Controller
             $loction = $request->input('cmbLocation');
 
             $query= '';
-            /* if($loction != 0){
-                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, IF(ISNULL(SUM(quantity-setoff_quantity)), 0, SUM(quantity-setoff_quantity)) AS quantity, items.unit_of_measure
-                FROM item_history_set_offs
-                LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
-                LEFT JOIN items ON item_history_set_offs.item_id = items.item_id WHERE item_history_set_offs.location_id = '.$loction.' AND';
-            }else{
-                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, IF(ISNULL(SUM(quantity-setoff_quantity)), 0, SUM(quantity-setoff_quantity)) AS quantity, items.unit_of_measure
-                FROM item_history_set_offs
-                LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
-                LEFT JOIN items ON item_history_set_offs.item_id = items.item_id WHERE';
-            } */
-
             if($loction != 0){
-                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, SUM(quantity) AS quantity, items.unit_of_measure
-                FROM item_history_set_offs
-                LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
-                LEFT JOIN items ON item_history_set_offs.item_id = items.item_id WHERE item_history_set_offs.location_id = '.$loction.' AND';
+                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, SUM(item_historys.quantity) AS quantity, items.unit_of_measure
+                FROM item_historys
+                LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
+                LEFT JOIN items ON item_historys.item_id = items.item_id WHERE item_historys.location_id = '.$loction.' AND';
             }else{
-                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, SUM(quantity) AS quantity, items.unit_of_measure
-                FROM item_history_set_offs
-                LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
-                LEFT JOIN items ON item_history_set_offs.item_id = items.item_id WHERE';
+                $query = 'SELECT items.Item_code, items.item_Name,items.reorder_level, SUM(item_historys.quantity) AS quantity, items.unit_of_measure
+                FROM item_historys
+                LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
+                LEFT JOIN items ON item_historys.item_id = items.item_id WHERE';
             }
            
 
@@ -62,7 +50,7 @@ class ViewStockBlanceController extends Controller
                
                 $conditions = array();
                 if (!empty($Branch) && $Branch !== 'null') {
-                    $conditions[] = "item_history_set_offs.branch_id = '" . $Branch . "'";
+                    $conditions[] = "item_historys.branch_id = '" . $Branch . "'";
                 }
                
                 if (!empty($supplyGroup) && $supplyGroup !== 'null') {
@@ -70,7 +58,7 @@ class ViewStockBlanceController extends Controller
                 }
 
                 if (!empty($cmbproduct) && $cmbproduct !== 'null') {
-                    $conditions[] = "item_history_set_offs.item_id = '" . $cmbproduct . "'";
+                    $conditions[] = "item_historys.item_id = '" . $cmbproduct . "'";
                 }
 
                 if (!empty($category1) && $category1 !== 'null') {
@@ -92,17 +80,17 @@ class ViewStockBlanceController extends Controller
             }else{
                 $conditions = array();
                 if (!empty($Branch) && $Branch !== 'null') {
-                    $conditions[] = "item_history_set_offs.branch_id = '" . $Branch . "'";
+                    $conditions[] = "item_historys.branch_id = '" . $Branch . "'";
                 }
                 if (!empty($DateofTo && $DateofTo !== 'null')) {
-                    $conditions[] = "item_history_set_offs.transaction_date <= '" . $DateofTo . "'";
+                    $conditions[] = "item_historys.transaction_date <= '" . $DateofTo . "'";
                 }
                 if (!empty($supplyGroup) && $supplyGroup !== 'null') {
                     $conditions[] = "items.supply_group_id = '" . $supplyGroup . "'";
                 }
 
                 if (!empty($cmbproduct) && $cmbproduct !== 'null') {
-                    $conditions[] = "item_history_set_offs.item_id = '" . $cmbproduct . "'";
+                    $conditions[] = "item_historys.item_id = '" . $cmbproduct . "'";
                 }
 
                 if (!empty($category1) && $category1 !== 'null') {
@@ -123,7 +111,7 @@ class ViewStockBlanceController extends Controller
                 }
             }
             
-            $query .= ' GROUP BY items.Item_code,item_history_set_offs.location_id,item_history_set_offs.branch_id';
+            $query .= ' GROUP BY items.Item_code';
             //$query = $query . ' GROUP BY items.Item_code';
            // dd($query);
             $result = DB::select($query);

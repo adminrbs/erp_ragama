@@ -666,4 +666,11 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
 
   //Monthend sales summery report
   Route::get('/salessummeryreport/{search_data}', [MonthendSalesSummeryReportController::class, 'salessummeryreport']);
+
+  //sales invoice copy issued
+  Route::get('/sales_invoice_copy_issued',function(){
+    return view('sd::sales_invoice_copy_issued');
+  })->middleware(['is.logged']);
+
+  
 });

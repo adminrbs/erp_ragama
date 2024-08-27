@@ -36,7 +36,7 @@ const DatatableFixedColumns = function () {
             },
             serverSide: true,
             ajax: {
-                url : '/sd/getSalesInvoiceReturnData/'+$('cmbBranch').val(),
+                url : '/sd/getSalesInvoiceReturnData/'+0,
                
             },
             columnDefs: [
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $(document).ready(function(){
    // getSalesInvoiceReturnData();
-
+   $('#cmbBranch').hide();
    getBranches();
    $('#cmbBranch').on('change',function(){
         DatatableFixedColumns.init();

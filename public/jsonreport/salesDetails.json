@@ -238,7 +238,7 @@
                             "size": "5",
                             "margin-top": "0",
                             "sum": [
-                                "Net Amount"
+                                "Sales","Return","Net Amount"
                             ]
                         }
                         
