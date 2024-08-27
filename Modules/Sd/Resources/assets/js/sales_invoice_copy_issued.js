@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
     AutocompleteInputs.init();
 });
 var m_number = undefined;
-$(document).ready(function(){
+$(document).ready(function () {
     $('.select2').select2();
     $('.daterange-single').daterangepicker({
         parentEl: '.content-inner',
@@ -124,7 +124,7 @@ $(document).ready(function(){
 
     getCusrrentMonthDates();
     loadCustomerToCMB();
-    loademployeesInModel();
+    loadEmp();
     //tabs navigation
     $('#tabs a').click(function (e) {
         e.preventDefault();
@@ -141,94 +141,75 @@ $(document).ready(function(){
 
 
     //calling inv data loading function
-    $('#txtInv').on('input',function(){
-       
-       
-       $(".val_table tbody").empty();
-       $('.val_lbl').text('');
-       
+    $('#txtInv').on('input', function () {
+
+
+        $(".val_table tbody").empty();
+        $('.val_lbl').text('');
+
     })
-    $('#btnSearch').on('click',function(){
-        if($('#txtInv').val().length < 10){
+    $('#btnSearch').on('click', function () {
+        if ($('#txtInv').val().length < 10) {
             showWarningMessage("Please enter a invoice number");
-        }else{
+        } else {
             load_invoice_details($('#txtInv').val());
         }
-       
+
     });
 
     //tr click event
     $('#return_table').on('click', 'tr', function (e) {
         $("#return__item_table tbody").empty();
-        
+
         $('#return_table tr').removeClass('highlight');
-   
-      $(this).addClass('highlight');
+
+        $(this).addClass('highlight');
         var dataIdValue = $(this).find('td:eq(0)').attr('data-id');
         load_return_items(dataIdValue);
 
     });
 
-    
+
 
 
     if (window.location.search.length > 0) {
         var urlParams = new URLSearchParams(window.location.search);
-    
-    
+
+
         var decodedManualNumber = base64Decode(urlParams.get('manual_number'));
-      //  var action = urlParams.get('action');
+        //  var action = urlParams.get('action');
         load_invoice_details(decodedManualNumber);
         $('#txtInv').val(decodedManualNumber);
-        
-        
+
+
     }
 
 
     getInvoices_inv_info();
 
-    $('#cmbBranch').on('change',function(){
-        branch_id = $(this).val();
-    })
-    
-    $('#from_date').on('change', function () {
-        getInvoices_inv_info();
-       
-    });
 
-    $('#to_date').on('change', function () {
-        getInvoices_inv_info();
-    });
 
-    $('#cmbCustomer').on('change', function () {
-        getInvoices_inv_info();
-    });
-
-    $('#cmbSalesRep').on('change', function () {
-        getInvoices_inv_info();
-    });
-
-     //tr click event on sales invoice table
-     $('#getInvoicetable').on('click', 'tr', function (e) {
+    //tr click event on sales invoice table
+    $('#getInvoicetable').on('click', 'tr', function (e) {
 
         $('#getInvoicetable tr').removeClass('selected');
         $(this).addClass('selected');
-      
-         m_number = $(this).find('td:eq(1)').text();
-        
-        
-      
+
+        m_number = $(this).find('td:eq(1)').text();
+
+
+
 
     });
 
-    $('#bntLoadData').on('click',function(){
+    $('#bntLoadData').on('click', function () {
         $('#txtInv').val(m_number);
         load_invoice_details(m_number);
         $('#inv_info_search_modal').modal('hide');
-        
+
     });
 
-    
+
 });
 
 function base64Decode(str) {
@@ -260,128 +241,128 @@ function load_inv() {
 
 //delivery report
 function print(id) {
-    
-   
+
+
     const newWindow = window.open("/sd/delivery_report/" + id);
-  newWindow.onload = function() {
-    newWindow.print();
-  }
+    newWindow.onload = function () {
+        newWindow.print();
+    }
 }
 
 //show picking list report
 function showPickingReport(delivery_plan_packing_list_id) {
     /* location.href= "/sd/pickinglist/"+delivery_plan_packing_list_id; */
-    const newWindow = window.open("/sd/pickinglist/"+delivery_plan_packing_list_id);
-    newWindow.onload = function() {
+    const newWindow = window.open("/sd/pickinglist/" + delivery_plan_packing_list_id);
+    newWindow.onload = function () {
         newWindow.print();
-      }
-           
+    }
+
 }
 
 
 //load invoice details
-function load_invoice_details(number){
+function load_invoice_details(number) {
 
     $(".val_table tbody").empty();
-       $('.val_lbl').text('');
+    $('.val_lbl').text('');
 
     $.ajax({
-        url: '/sd/load_invoice_details/'+number,
+        url: '/sd/load_invoice_details/' + number,
         method: 'GET',
         cache: false,
         timeout: 800000,
         success: function (data) {
-            if(data.header.length < 1){
+            if (data.header.length < 1) {
                 showWarningMessage('Please enter a correct invoice number')
-            }else{
-
-            
-            var header = data.header;
-            var item_data = data.item;
-            var return_data = data.return_data;
-            var customer_receipt_data = data.customer_receipt;
-            var sfa_data = data.sfa;
-            var delivery_plan = data.delivery_plan;
-            var picking_list = data.picking_list;
-            var delivery_confirmation_data = data.delivery_confirmation_data;
-            console.log(delivery_confirmation_data);
-            //header
-
-            $.each(header, function (index, value) {
-                $('#LblexternalNumber').text(number);
-                $('#invoice_date_time').text(value.order_date_time);
-                $('#txtBranch').text(value.branch_name);
-                $('#txtlocation').text(value.location_name);
-                $('#txtEmp').text(value.employee_name);
-                $('#txtCustomerID').text(value.customer_name);
-                if(value.so_number){
-                    $('#lblSalesOrder').text(value.so_number);
-                    $('#txtGap').text(value.date_gap);
-                    $('#dt_order').text(value.s_order_date);
-                }
-                $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
-                $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
-                $('#txtBalance').text(parseFloat(value.balance).toLocaleString());
-
-                
-            });
-           
-
-            
+            } else {
 
 
-        }
+                var header = data.header;
+                var item_data = data.item;
+                var return_data = data.return_data;
+                var customer_receipt_data = data.customer_receipt;
+                var sfa_data = data.sfa;
+                var delivery_plan = data.delivery_plan;
+                var picking_list = data.picking_list;
+                var delivery_confirmation_data = data.delivery_confirmation_data;
+                console.log(delivery_confirmation_data);
+                //header
+
+                $.each(header, function (index, value) {
+                    $('#LblexternalNumber').text(number);
+                    $('#invoice_date_time').text(value.order_date_time);
+                    $('#txtBranch').text(value.branch_name);
+                    $('#txtlocation').text(value.location_name);
+                    $('#txtEmp').text(value.employee_name);
+                    $('#txtCustomerID').text(value.customer_name);
+                    if (value.so_number) {
+                        $('#lblSalesOrder').text(value.so_number);
+                        $('#txtGap').text(value.date_gap);
+                        $('#dt_order').text(value.s_order_date);
+                    }
+                    $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
+                    $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
+                    $('#txtBalance').text(parseFloat(value.balance).toLocaleString());
+
+
+                });
+
+
+
+
+
+            }
 
         }
 
     });
- 
-   
+
+
 
 
 }
 
 //sales return items
-function load_return_items(id){
+function load_return_items(id) {
     $("#return__item_table tbody").empty();
-    
-    
+
+
     $.ajax({
-        url: '/sd/load_return_items/'+id,
+        url: '/sd/load_return_items/' + id,
         method: 'GET',
         cache: false,
         timeout: 800000,
-        async:false,
+        async: false,
         success: function (data) {
             var items = data.items;
-           
+
             //header
             $.each(items, function (index, value) {
 
                 var newRow = $("<tr>");
 
-            var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) /100));
-            newRow.append("<td>" + value.Item_code + "</td>");
-            newRow.append("<td>" + value.item_name + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseInt(value.quantity) + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseInt(value.free_quantity) + "</td>");
-            newRow.append("<td>" + value.unit_of_measure + "</td>");
-            newRow.append("<td>" + value.package_unit + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
-            newRow.append("<td style='text-align: right;'>" + value.discount_percentage + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value_).toLocaleString()+ "</td>");
-           
-            $("#return__item_table tbody").append(newRow);
-                
-                
-                
+                var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) / 100));
+                newRow.append("<td>" + value.Item_code + "</td>");
+                newRow.append("<td>" + value.item_name + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseInt(value.quantity) + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseInt(value.free_quantity) + "</td>");
+                newRow.append("<td>" + value.unit_of_measure + "</td>");
+                newRow.append("<td>" + value.package_unit + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
+                newRow.append("<td style='text-align: right;'>" + value.discount_percentage + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseFloat(value_).toLocaleString() + "</td>");
+
+                $("#return__item_table tbody").append(newRow);
+
+
+
             });
-            
+
 
         }
 
     });
-    
+
 
 
 }
@@ -445,15 +426,15 @@ function loadCustomerToCMB() {
 
 }
 
-function loademployeesInModel() {
+function loadEmp() {
     $.ajax({
-        url: '/sd/loademployeesInModel',
+        url: '/sd/loadEmpforsalesInvoicecopyIssued',
         type: 'get',
         dataType: 'json',
         async: false,
         success: function (data) {
             $.each(data, function (index, value) {
-                $('#cmbSalesRep').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
+                $('#cmbEmp').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
             })
 
         },

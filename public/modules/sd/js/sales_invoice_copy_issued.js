@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
     AutocompleteInputs.init();
 });
 var m_number = undefined;
-$(document).ready(function(){
+$(document).ready(function () {
     $('.select2').select2();
     $('.daterange-single').daterangepicker({
         parentEl: '.content-inner',
@@ -141,94 +141,75 @@ $(document).ready(function(){
 
 
     //calling inv data loading function
-    $('#txtInv').on('input',function(){
-       
-       
-       $(".val_table tbody").empty();
-       $('.val_lbl').text('');
-       
+    $('#txtInv').on('input', function () {
+
+
+        $(".val_table tbody").empty();
+        $('.val_lbl').text('');
+
     })
-    $('#btnSearch').on('click',function(){
-        if($('#txtInv').val().length < 10){
+    $('#btnSearch').on('click', function () {
+        if ($('#txtInv').val().length < 10) {
             showWarningMessage("Please enter a invoice number");
-        }else{
+        } else {
             load_invoice_details($('#txtInv').val());
         }
-       
+
     });
 
     //tr click event
     $('#return_table').on('click', 'tr', function (e) {
         $("#return__item_table tbody").empty();
-        
+
         $('#return_table tr').removeClass('highlight');
-   
-      $(this).addClass('highlight');
+
+        $(this).addClass('highlight');
         var dataIdValue = $(this).find('td:eq(0)').attr('data-id');
         load_return_items(dataIdValue);
 
     });
 
-    
+
 
 
     if (window.location.search.length > 0) {
         var urlParams = new URLSearchParams(window.location.search);
-    
-    
+
+
         var decodedManualNumber = base64Decode(urlParams.get('manual_number'));
-      //  var action = urlParams.get('action');
+        //  var action = urlParams.get('action');
         load_invoice_details(decodedManualNumber);
         $('#txtInv').val(decodedManualNumber);
-        
-        
+
+
     }
 
 
     getInvoices_inv_info();
 
-    $('#cmbBranch').on('change',function(){
-        branch_id = $(this).val();
-    })
-    
-    $('#from_date').on('change', function () {
-        getInvoices_inv_info();
-       
-    });
 
-    $('#to_date').on('change', function () {
-        getInvoices_inv_info();
-    });
 
-    $('#cmbCustomer').on('change', function () {
-        getInvoices_inv_info();
-    });
-
-    $('#cmbSalesRep').on('change', function () {
-        getInvoices_inv_info();
-    });
-
-     //tr click event on sales invoice table
-     $('#getInvoicetable').on('click', 'tr', function (e) {
+    //tr click event on sales invoice table
+    $('#getInvoicetable').on('click', 'tr', function (e) {
 
         $('#getInvoicetable tr').removeClass('selected');
         $(this).addClass('selected');
-      
-         m_number = $(this).find('td:eq(1)').text();
-        
-        
-      
+
+        m_number = $(this).find('td:eq(1)').text();
+
+
+
 
     });
 
-    $('#bntLoadData').on('click',function(){
+    $('#bntLoadData').on('click', function () {
         $('#txtInv').val(m_number);
         load_invoice_details(m_number);
         $('#inv_info_search_modal').modal('hide');
-        
+
     });
 
-    
+
 });
 
 function base64Decode(str) {
@@ -260,287 +241,128 @@ function load_inv() {
 
 //delivery report
 function print(id) {
-    
-   
+
+
     const newWindow = window.open("/sd/delivery_report/" + id);
-  newWindow.onload = function() {
-    newWindow.print();
-  }
+    newWindow.onload = function () {
+        newWindow.print();
+    }
 }
 
 //show picking list report
 function showPickingReport(delivery_plan_packing_list_id) {
     /* location.href= "/sd/pickinglist/"+delivery_plan_packing_list_id; */
-    const newWindow = window.open("/sd/pickinglist/"+delivery_plan_packing_list_id);
-    newWindow.onload = function() {
+    const newWindow = window.open("/sd/pickinglist/" + delivery_plan_packing_list_id);
+    newWindow.onload = function () {
         newWindow.print();
-      }
-           
+    }
+
 }
 
 
 //load invoice details
-function load_invoice_details(number){
+function load_invoice_details(number) {
 
     $(".val_table tbody").empty();
-       $('.val_lbl').text('');
+    $('.val_lbl').text('');
 
     $.ajax({
-        url: '/sd/load_invoice_details/'+number,
+        url: '/sd/load_invoice_details/' + number,
         method: 'GET',
         cache: false,
         timeout: 800000,
         success: function (data) {
-            if(data.header.length < 1){
+            if (data.header.length < 1) {
                 showWarningMessage('Please enter a correct invoice number')
-            }else{
-
-            
-            var header = data.header;
-            var item_data = data.item;
-            var return_data = data.return_data;
-            var customer_receipt_data = data.customer_receipt;
-            var sfa_data = data.sfa;
-            var delivery_plan = data.delivery_plan;
-            var picking_list = data.picking_list;
-            var delivery_confirmation_data = data.delivery_confirmation_data;
-            console.log(delivery_confirmation_data);
-            //header
-
-            $.each(header, function (index, value) {
-                $('#LblexternalNumber').text(number);
-                $('#invoice_date_time').text(value.order_date_time);
-                $('#txtBranch').text(value.branch_name);
-                $('#txtlocation').text(value.location_name);
-                $('#txtEmp').text(value.employee_name);
-                $('#txtCustomerID').text(value.customer_name);
-                if(value.so_number){
-                    $('#lblSalesOrder').text(value.so_number);
-                    $('#txtGap').text(value.date_gap);
-                    $('#dt_order').text(value.s_order_date);
-                }
-                $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
-                $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
-                $('#txtBalance').text(parseFloat(value.balance).toLocaleString());
-
-                
-            });
-            //appending invoice items
-            $.each(item_data, function (index, value) {
-                var newRow = $("<tr>");
-
-            var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) /100));
-            newRow.append("<td>" + value.Item_code + "</td>");
-            newRow.append("<td>" + value.item_name + "</td>");
-            newRow.append("<td style='text-align: right;'>" + Math.abs(value.quantity) + "</td>");
-            newRow.append("<td style='text-align: right;'>" + Math.abs(value.free_quantity) + "</td>");
-            newRow.append("<td>" + value.unit_of_measure + "</td>");
-            newRow.append("<td>" + value.package_size + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
-            newRow.append("<td>" + value.discount_percentage + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(Math.abs(value_)).toLocaleString() + "</td>");
-            $("#item_table tbody").append(newRow);
-                
-                
-            });
-
-            //appending returns
-            $.each(return_data, function (index, value) {
-                var newRow = $("<tr>");
-
-           
-            newRow.append("<td data-id= '"+value.sales_return_Id+"'>" + value.external_number + "</td>");
-            newRow.append("<td>" + value.order_date + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.total_amount).toLocaleString() + "</td>");
-            newRow.append("<td>"+value.name+"</td>");
-            $("#return_table tbody").append(newRow);
-                
-                
-            });
-
-            //appending customer receipts
-            $.each(customer_receipt_data, function (index, value) {
-                var newRow = $("<tr>");
-
-                var cheque_num= undefined;
-                if(value.cheque_number){
-                     cheque_num = value.cheque_number;
-                }else{
-                    cheque_num = "Cash"
-                }
-           
-            newRow.append("<td>" + value.receipt_date + "</td>");
-            newRow.append("<td>" + value.external_number + "</td>");
-            newRow.append("<td>" + value.employee_name + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.set_off_amount).toLocaleString() + "</td>");
-            newRow.append("<td>" + cheque_num + "</td>");
-            newRow.append("<td style='text-align: right;'>" + Math.abs(value.Gap) + "</td>");
-           
-            $("#receipts_table tbody").append(newRow);
-                
-                
-            });
+            } else {
 
 
-            //appending sfa receipts
-            $.each(sfa_data, function (index, value) {
-                var newRow = $("<tr>");
+                var header = data.header;
+                var item_data = data.item;
+                var return_data = data.return_data;
+                var customer_receipt_data = data.customer_receipt;
+                var sfa_data = data.sfa;
+                var delivery_plan = data.delivery_plan;
+                var picking_list = data.picking_list;
+                var delivery_confirmation_data = data.delivery_confirmation_data;
+                console.log(delivery_confirmation_data);
+                //header
 
-                var cheque_num= undefined;
-                if(value.cheque_number){
-                     cheque_num = value.cheque_number;
-                }else{
-                    cheque_num = "Cash"
-                }
-           
-            newRow.append("<td>" + value.receipt_date + "</td>");
-            newRow.append("<td>" + value.external_number + "</td>");
-            newRow.append("<td>" + value.employee_name + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.set_off_amount).toLocaleString() + "</td>");
-            newRow.append("<td style='text-align: right;'>" + cheque_num + "</td>");
-            newRow.append("<td style='text-align: right;'>" + Math.abs(value.Gap) + "</td>");
-           
-            $("#sfa_receipts_table tbody").append(newRow);
-                
-                
-            });
-
-            //appending delivery plan
-            $.each(delivery_plan, function (index, value) {
-                var newRow = $("<tr>");
-
-                newRow.append("<td data-id= '"+value.delivery_plan_id+"'>" + value.external_number + "</td>");
-                newRow.append("<td>" + value.vehicle_no + "</td>");
-                newRow.append("<td>" + value.driver_name + "</td>");
-                newRow.append("<td>" + value.helper_name + "</td>");
-                newRow.append("<td>"+value.name+"</td>");
-                newRow.append("<td style='display:none;'><a href='#' onclick='print("+value.delivery_plan_id+")' title='Delivery Report'>View</a></td>");
-                
-                $("#delivery_plan_table tbody").append(newRow);
-                    
-                
-                
-            });
-
-            //appending picking list
-            $.each(picking_list, function (index, value) {
-                
-                var newRow = $("<tr>");
-                newRow.append("<td>" + value.created_date + "</td>");
-                newRow.append("<td data-id= '"+value.delivery_plan_packing_list_id+"'>" + value.delivery_plan_packing_list_id + "</td>");
-                
-                newRow.append("<td style='display:none;'><a href='#' onclick='showPickingReport("+value.picking_list_id+")' title='Picking list Report'>View</a></td>");
-               
-                $("#picking_list_table tbody").append(newRow);
-                    
-                
-                
-            });
-
-            //dlivery confirmation
-            $.each(delivery_confirmation_data,function(index,value){
-                var delivered_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var signature_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var seal_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var cash_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var check_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var noSeal_checked = '<input class="form-check-input" type="checkbox" disabled>';
-                var cancel = '<input class="form-check-input" type="checkbox">';
-
-                if(value.delivered == 1){
-                    delivered_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                if(value.Signature == 1){
-                    signature_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                if(value.Seal == 1){
-                    seal_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-            
-                if(value.Cheque == 1){
-                    check_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                if(value.Cash == 1){
-                    cash_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                if(value.cancel == 1){
-                    cancel = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                if(value.noSeal == 1){
-                    noSeal_checked = '<input class="form-check-input" type="checkbox" checked disabled>'; 
-                }
-                var name = value.name;
-                if(name == null){
-                    name = "";
-                }
-
-                var newRow = $("<tr>");
-                newRow.append("<td>" + delivered_checked + "</td>");
-                newRow.append("<td>" + signature_checked + "</td>");
-                newRow.append("<td>" + seal_checked + "</td>");
-                newRow.append("<td>" + cash_checked + "</td>");
-                newRow.append("<td>" + check_checked + "</td>");
-                newRow.append("<td>" + noSeal_checked + "</td>");
-                newRow.append("<td>" + cancel + "</td>");
-                newRow.append("<td>"+name+"</td>");
-                $('#delivery_confirmation_table tbody').append(newRow);
-            });
-
-            
+                $.each(header, function (index, value) {
+                    $('#LblexternalNumber').text(number);
+                    $('#invoice_date_time').text(value.order_date_time);
+                    $('#txtBranch').text(value.branch_name);
+                    $('#txtlocation').text(value.location_name);
+                    $('#txtEmp').text(value.employee_name);
+                    $('#txtCustomerID').text(value.customer_name);
+                    if (value.so_number) {
+                        $('#lblSalesOrder').text(value.so_number);
+                        $('#txtGap').text(value.date_gap);
+                        $('#dt_order').text(value.s_order_date);
+                    }
+                    $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
+                    $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
+                    $('#txtBalance').text(parseFloat(value.balance).toLocaleString());
 
 
-        }
+                });
+
+
+
+
+
+            }
 
         }
 
     });
- 
-   
+
+
 
 
 }
 
 //sales return items
-function load_return_items(id){
+function load_return_items(id) {
     $("#return__item_table tbody").empty();
-    
-    
+
+
     $.ajax({
-        url: '/sd/load_return_items/'+id,
+        url: '/sd/load_return_items/' + id,
         method: 'GET',
         cache: false,
         timeout: 800000,
-        async:false,
+        async: false,
         success: function (data) {
             var items = data.items;
-           
+
             //header
             $.each(items, function (index, value) {
 
                 var newRow = $("<tr>");
 
-            var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) /100));
-            newRow.append("<td>" + value.Item_code + "</td>");
-            newRow.append("<td>" + value.item_name + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseInt(value.quantity) + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseInt(value.free_quantity) + "</td>");
-            newRow.append("<td>" + value.unit_of_measure + "</td>");
-            newRow.append("<td>" + value.package_unit + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
-            newRow.append("<td style='text-align: right;'>" + value.discount_percentage + "</td>");
-            newRow.append("<td style='text-align: right;'>" + parseFloat(value_).toLocaleString()+ "</td>");
-           
-            $("#return__item_table tbody").append(newRow);
-                
-                
-                
+                var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) / 100));
+                newRow.append("<td>" + value.Item_code + "</td>");
+                newRow.append("<td>" + value.item_name + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseInt(value.quantity) + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseInt(value.free_quantity) + "</td>");
+                newRow.append("<td>" + value.unit_of_measure + "</td>");
+                newRow.append("<td>" + value.package_unit + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
+                newRow.append("<td style='text-align: right;'>" + value.discount_percentage + "</td>");
+                newRow.append("<td style='text-align: right;'>" + parseFloat(value_).toLocaleString() + "</td>");
+
+                $("#return__item_table tbody").append(newRow);
+
+
+
             });
-            
+
 
         }
 
     });
-    
+
 
 
 }
@@ -612,7 +434,7 @@ function loademployeesInModel() {
         async: false,
         success: function (data) {
             $.each(data, function (index, value) {
-                $('#cmbSalesRep').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
+                $('#cmbEmp').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
             })
 
         },
