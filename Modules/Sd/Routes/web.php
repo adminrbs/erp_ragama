@@ -675,4 +675,10 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   Route::get('/loadEmpforsalesInvoicecopyIssued',[SalesInvoiceCoppyIssuedController::class,'loadEmpforsalesInvoicecopyIssued']);
   Route::get('/load_invoice_details_for_invoie_copy/{id}',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy']);
   Route::get('/load_inv_for_copy_issued',[SalesInvoiceCoppyIssuedController::class,'load_inv_for_copy_issued']);
+  Route::post('/saveInvoiceCopyIssued',[SalesInvoiceCoppyIssuedController::class,'saveInvoiceCopyIssued']);
+
+  Route::get('/sales_invoice_copy_received',function(){
+    return view('sd::sales_invoice_copy_received');
+  })->middleware(['is.logged']);
+  Route::get('/load_invoice_details_for_invoie_copy_received',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy_received']);
 });

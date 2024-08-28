@@ -136,7 +136,7 @@ $(document).ready(function () {
         var collection = [];
         $("#invoiceDataTable tbody tr").each(function () {
              existingSalesInvoiceId = $(this).find("td:first").data("id");
-             collection.append(existingSalesInvoiceId);
+             collection.push(existingSalesInvoiceId);
         });
         bootbox.confirm({
             title: 'Save confirmation',
@@ -154,7 +154,7 @@ $(document).ready(function () {
             callback: function (result) {
                 //console.log('Confirmation result:', result);
                 if (result) {
-                    newReferanceID('sales_invoice_copy_issueds', '2750');
+                    //newReferanceID('sales_invoice_copy_issueds', '2750');
                     saveInvoiceCopyIssued(collection);
                   
                 } else {
@@ -337,12 +337,12 @@ function saveInvoiceCopyIssued(collection) {
         showWarningMessage('Please select select invoice');
     }else{
         var formData = new FormData();
-        formData.append('LblexternalNumber', referanceID);
+        //formData.append('LblexternalNumber', referanceID);
         formData.append('collection', JSON.stringify(collection));
         formData.append('txtRemark',$('#txtRemark').val());
         formData.append('emp',$('#cmbEmp').val());
         $.ajax({
-            url: '/sd/saveInvoiceCopyIssued/' + id,
+            url: '/sd/saveInvoiceCopyIssued',
             method: 'post',
             enctype: 'multipart/form-data',
             data: formData,
@@ -358,7 +358,14 @@ function saveInvoiceCopyIssued(collection) {
                 
             }, success: function (response) {
     
-    
+                if(response.status){
+                    showSuccessMessage('Record Saved');
+                    $('#txtRemark').val('');
+                    $('#txtInv').val('');
+                    $('#invoiceDataTable tbody').empty();
+                }else{
+                    showWarningMessage('Unable to save');
+                }
     
     
             }, error: function (data) {
@@ -370,9 +377,6 @@ function saveInvoiceCopyIssued(collection) {
     }
 
     
-   
-
-
 }
 
 function newReferanceID(table, doc_number) {

@@ -424,7 +424,7 @@ class SalesReturnController extends Controller
         ->join('customers', 'sales_returns.customer_id', '=', 'customers.customer_id')
         ->leftJoin('sales_invoices', 'sales_returns.sales_invoice_id', '=', 'sales_invoices.sales_invoice_id')
         ->where('sales_returns.document_number', '=', 220)
-        ->orderByDesc('sales_invoice_Id');
+        ->orderByDesc('sales_return_Id');
 
         if ($id > 0) {
             $query->where('sales_returns.branch_id', '=', $id);

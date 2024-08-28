@@ -14,7 +14,7 @@ class SalesInvoiceCopyIssued extends Model
 {
     use HasFactory, LogsActivity;
     protected $table = "sales_invoice_copy_issueds";
-    protected $primaryKey =  'sales_return_Id';
+    protected $primaryKey =  'sales_invoice_copy_issued_id';
     protected $fillable = [];
    
     protected static $logOnlyDirty = true;
