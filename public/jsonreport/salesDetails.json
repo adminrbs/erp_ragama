@@ -115,24 +115,7 @@
                         },
                         "table": {
                             "header": [
-                                [
-                                    {
-                                        "text": "Supply Group",
-                                        "align": "left",
-                                        "format": "text",
-                                        "width": 60,
-                                        "visible":false
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Supply Group id",
-                                        "align": "left",
-                                        "format": "text",
-                                        "visible": false,
-                                        "width": 40
-                                    }
-                                ],
+                                
                                 [
                                     {
                                         "text": "Item Code",

@@ -110,4 +110,18 @@ class SalesInvoiceCoppyIssuedController extends Controller
             return $ex;
         }
     }
+
+    public function saveInvoiceCopyReceived(Request $request){
+        try{
+            $collection = json_decode($request->input('collection'));
+            foreach($collection as $id){
+                $copyIssued = SalesInvoiceCopyIssued::find($id);
+                $copyIssued->status = 1;
+                $copyIssued->update();
+            }
+            return response()->json(["status" => true]);
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
 }

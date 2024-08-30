@@ -567,16 +567,16 @@ class RDStockWithoutReportController extends Controller
                 sales.rd_quantity,
                 sales.rd_value,
                 stock.stock_quantity,
-                stock.stock_value,
+                (stock.stock_quantity * I.whole_sale_price ) AS stock_value,
                 ICL.item_category_level_1_id,
                 I.category_level_2_id
             FROM 
                 items I
-            INNER JOIN (
+            LEFT JOIN (
                 SELECT 
                     IH.item_id,
                     SUM(IH.quantity) AS stock_quantity,
-                    ABS(SUM((IH.quantity) * IH.cost_price)) AS stock_value
+                    
                 FROM  
                 item_historys IH
                 WHERE 

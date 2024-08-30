@@ -23,7 +23,7 @@ use Modules\Sc\Entities\route;
 use Modules\Sc\Entities\supply_group;
 use RepoEldo\ELD\ReportViewer;
 
-class RDStockWithoutReportController extends Controller
+class RDStockWithoutReportControllercopy extends Controller
 {
     public function rdStockreport($search)
     {

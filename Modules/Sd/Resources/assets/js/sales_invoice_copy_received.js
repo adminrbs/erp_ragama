@@ -110,8 +110,11 @@ $(document).ready(function () {
     $('#btnSave').on('click',function(){
         var collection = [];
         $("#invoiceDataTable tbody tr").each(function () {
-             existingSalesInvoiceId = $(this).find("td:first").data("id");
-             collection.push(existingSalesInvoiceId);
+            var checkbox = $(this).find("input.row_checkbox"); // Find the checkbox in the current row
+            if (checkbox.length && checkbox.prop('checked')) { // Check if the checkbox exists and is checked
+                var checkboxId = checkbox.attr('id'); // Get the ID of the checked checkbox
+                collection.push(checkboxId); // Push the checkbox ID to the collection array
+            }
         });
         bootbox.confirm({
             title: 'Save confirmation',
@@ -130,7 +133,7 @@ $(document).ready(function () {
                 //console.log('Confirmation result:', result);
                 if (result) {
                     //newReferanceID('sales_invoice_copy_issueds', '2750');
-                    saveInvoiceCopyIssued(collection);
+                    saveInvoiceCopyReceived(collection);
                   
                 } else {
 
@@ -270,28 +273,32 @@ function selectUnselect(){
 
 
 function SelectAll(event) {
-    var isChecked = $(event).prop('checked');
 
-    $('#invoiceDataTable tbody input.row_checkbox').each(function () {
-        $(this).prop('checked', isChecked);
-    });
+    if ($(event).prop('checked')) {
+        $('#invoiceDataTable tbody').each(function () {
+            var checkbox = $(this).find('.row_checkbox');
+            checkbox.prop('checked', true);
+        });
+    } else {
+        $('#invoiceDataTable tbody').each(function () {
+            var checkbox = $(this).find('.row_checkbox');
+            checkbox.prop('checked', false);
+        });
+    }
 }
 
 
 
-function saveInvoiceCopyIssued(collection) {
-    if($('#txtRemark').val().length < 1){
-        showWarningMessage('Please add remark');
-    }else if(collection.length === 0){
+function saveInvoiceCopyReceived(collection) {
+    if(collection.length === 0){
         showWarningMessage('Please select select invoice');
     }else{
         var formData = new FormData();
-        //formData.append('LblexternalNumber', referanceID);
+    
         formData.append('collection', JSON.stringify(collection));
-        formData.append('txtRemark',$('#txtRemark').val());
-        formData.append('emp',$('#cmbEmp').val());
+       
         $.ajax({
-            url: '/sd/saveInvoiceCopyIssued',
+            url: '/sd/saveInvoiceCopyReceived',
             method: 'post',
             enctype: 'multipart/form-data',
             data: formData,
@@ -308,12 +315,12 @@ function saveInvoiceCopyIssued(collection) {
             }, success: function (response) {
     
                 if(response.status){
-                    showSuccessMessage('Record Saved');
+                    showSuccessMessage('Record updated');
                     $('#txtRemark').val('');
                     $('#txtInv').val('');
                     $('#invoiceDataTable tbody').empty();
                 }else{
-                    showWarningMessage('Unable to save');
+                    showWarningMessage('Unable to update');
                 }
     
     

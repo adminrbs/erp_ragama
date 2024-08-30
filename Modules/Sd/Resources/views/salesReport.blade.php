@@ -92,7 +92,7 @@
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="salesdetailsReport" id="salesdetailsReport" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Sales details ( Supply group wise )
+                                        Sales details ( Category Wise )
                                     </label>
                                 </li>
                                 <li class="list-group-item">
@@ -269,6 +269,17 @@
                                             </div>
                                             <div class="col-md-1 mt-0">
                                                 <input id="chkSupplyGroup" type="checkbox" style="margin-top: 30px;">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-11 mb-0 ">
+                                                <label style="font-weight: bold;">Item Category Level 01</label>
+                                                <!--<select class="form-control validate select2" id="cmbRoute"></select>-->
+                                                <select multiple="multiple" class="form-select select " id="cmbitemCategory1" data-placeholder="Select Routs"></select>
+
+                                            </div>
+                                            <div class="col-md-1 mt-0">
+                                                <input id="chkitemCategory1" type="checkbox" style="margin-top: 30px;">
                                             </div>
                                         </div>
                                         <div class="row">

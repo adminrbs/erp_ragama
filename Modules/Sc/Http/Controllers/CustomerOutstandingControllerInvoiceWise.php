@@ -25,9 +25,6 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
 
              //dd($searchOption );
-           
-           
-           
             $selecteCustomer = $searchOption[0]->selecteCustomer;
             $selecteRoute = $searchOption[1]->selecteRoute;
             $selectSalesrep = $searchOption[2]->selectSalesrep;
@@ -205,7 +202,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                 IF(IPT.payment_term_id = 20, '</b>', '')
             ) AS credit_period,  
             
-            SUM(D.amount - D.paidamount) AS total_outstanding  
+        D.amount - D.paidamount AS total_outstanding  
              
         FROM debtors_ledgers D 
         LEFT JOIN customers C ON D.customer_id = C.customer_id 
@@ -381,7 +378,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                     IF(IPT.payment_term_id = 20, '</b>', '')
                 ) AS credit_period,  
                 
-                SUM(D.amount - D.paidamount) AS total_outstanding  
+            D.amount - D.paidamount AS total_outstanding  
                  
             FROM debtors_ledgers D 
             LEFT JOIN customers C ON D.customer_id = C.customer_id 

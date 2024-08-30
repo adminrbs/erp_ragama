@@ -14,7 +14,7 @@ var cmbgreaterthan = null;
 var cmbMarketingRoute = null;
 var cmbSupplyGroup = null;
 var cmbProduct = null;
-
+var selectecategory1 = null;
 
 
 var length;
@@ -171,6 +171,7 @@ $(document).ready(function () {
     getMarketingRoute();
     getSupplyGroup();
     getproduct();
+    getItemCategory1();
 
     $('#btn-collapse-search').on('click', function () {
 
@@ -193,19 +194,16 @@ $(document).ready(function () {
             selecteBranch = $('#cmbBranch').val();
             $('#cmbBranch').change(function () {
 
-                //$('#chkBranch').prop('checked', false);
+               
                 selecteBranch = $('#cmbBranch').val();
 
             })
 
 
-            // getproductdata()
-
-            //getselectproduct(selecteCustomer);
+           
         } else {
 
-            /* $('#cmbselect1').val("0");
-             selected1 = 0;*/
+          
 
             selecteBranch = null
             selected6 = null
@@ -379,6 +377,22 @@ $(document).ready(function () {
 
     });
 
+    $('#chkitemCategory1').on('change', function () {
+
+        if (this.checked) {
+            selectecategory1 = $('#cmbitemCategory1').val();
+            $('#cmbitemCategory1').on('input', function () {
+                selectecategory1 = $(this).val();
+            });
+        } else {
+            selectecategory1 = null
+
+        }
+
+    });
+
+
+    
 
     var report;
     let jsonData = {};
@@ -429,6 +443,7 @@ $(document).ready(function () {
             toage: "10",
             salesrep: "11",
             item: "12",
+            category_level_1: "13"
 
         };
         console.log(jsonData);
@@ -658,6 +673,7 @@ $(document).ready(function () {
                 { cmbMarketingRoute: cmbMarketingRoute },
                 { cmbSupplyGroup: cmbSupplyGroup },
                 { cmbProduct: cmbProduct },
+                { selectecategory1:selectecategory1 }
 
 
             ];
@@ -1344,6 +1360,29 @@ function reportBody(result) {
     return body;
 }
 
+function getItemCategory1() {
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/sc/getItemCategory1",
+
+        success: function (data) {
+
+
+            $.each(data, function (key, value) {
+
+                data = data + "<option id='' value='" + value.item_category_level_1_id + "'>" + value.category_level_1 + "<input type='checkbox'></option>";
+
+
+            })
+
+            $('#cmbitemCategory1').html(data);
+
+        }
+
+    });
+
+}
 
 
 

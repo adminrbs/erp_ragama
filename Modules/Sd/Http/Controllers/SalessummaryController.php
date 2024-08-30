@@ -89,19 +89,18 @@ class SalessummaryController extends Controller
                 $query = "SELECT DISTINCT SI.external_number AS invoice_number ,
                 SI.order_date_time AS Date ,
                 C.customer_code , 
-                CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
+                CONCAT(C.customer_name, ' ', COALESCE(T.townName, '')) AS customer_name,
                 E.employee_name as sales_rep,
                 SI.total_amount as amount 
                  
               
                FROM sales_invoices  SI 
-              INNER JOIN sales_invoice_items SII  ON SI.sales_invoice_Id=SII.sales_invoice_Id 
-              INNER JOIN items I ON SII.item_id=I.item_id 
-              INNER JOIN customers C ON C.customer_id=SI.customer_id 
-              INNER JOIN town_non_administratives T ON T.town_id=C.town 
-              INNER JOIN employees E ON E.employee_id=SI.employee_id
-              INNER JOIN branches D ON D.branch_id = SI.branch_id
-";
+              LEFT JOIN sales_invoice_items SII  ON SI.sales_invoice_Id=SII.sales_invoice_Id 
+              LEFT JOIN items I ON SII.item_id=I.item_id 
+              LEFT JOIN customers C ON C.customer_id=SI.customer_id 
+              LEFT JOIN town_non_administratives T ON T.town_id=C.town 
+              LEFT JOIN employees E ON E.employee_id=SI.employee_id
+              LEFT JOIN branches D ON D.branch_id = SI.branch_id";
 
 
                 $quryModify = "";
@@ -173,6 +172,7 @@ class SalessummaryController extends Controller
                     $query = $query . " where " . $quryModify;
                 }
 
+                $query .= " GROUP BY SI.external_number";
 
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
@@ -184,24 +184,20 @@ class SalessummaryController extends Controller
                 $reportViwer->addParameter("sales_summary_tabaledata", $result);
             } else {
 
-
-
-
-
                 $query = "SELECT DISTINCT SI.external_number AS invoice_number ,
                 SI.order_date_time AS Date ,
                 C.customer_code , 
-                CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
+                CONCAT(C.customer_name, ' ', COALESCE(T.townName, '')) AS customer_name
                 E.employee_name as sales_rep,
-                SI.total_amount as amount  
+                SI.total_amount as amount 
               
                FROM sales_invoices  SI 
-              INNER JOIN sales_invoice_items SII  ON SI.sales_invoice_Id=SII.sales_invoice_Id 
-              INNER JOIN items I ON SII.item_id=I.item_id 
-              INNER JOIN customers C ON C.customer_id=SI.customer_id 
-              INNER JOIN town_non_administratives T ON T.town_id=C.town 
-              INNER JOIN employees E ON E.employee_id=SI.employee_id
-              INNER JOIN branches D ON D.branch_id = SI.branch_id";
+              LEFT JOIN sales_invoice_items SII  ON SI.sales_invoice_Id=SII.sales_invoice_Id 
+              LEFT JOIN items I ON SII.item_id=I.item_id 
+              LEFT JOIN customers C ON C.customer_id=SI.customer_id 
+              LEFT JOIN town_non_administratives T ON T.town_id=C.town 
+              LEFT JOIN employees E ON E.employee_id=SI.employee_id
+              LEFT JOIN branches D ON D.branch_id = SI.branch_id";
 
 
                 $quryModify = "";
@@ -274,7 +270,7 @@ class SalessummaryController extends Controller
                     $query = $query;
                 }
 
-
+                $query .= " GROUP BY SI.external_number";
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
                 //dd($query);

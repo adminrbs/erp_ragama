@@ -681,4 +681,5 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
     return view('sd::sales_invoice_copy_received');
   })->middleware(['is.logged']);
   Route::get('/load_invoice_details_for_invoie_copy_received',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy_received']);
+  Route::post('/saveInvoiceCopyReceived',[SalesInvoiceCoppyIssuedController::class,'saveInvoiceCopyReceived']);
 });

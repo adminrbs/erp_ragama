@@ -16,7 +16,7 @@ use Modules\Sd\Entities\employee;
 use Modules\Sd\Entities\route;
 use RepoEldo\ELD\ReportViewer;
 
-class SalesdetailsReportController extends Controller
+class SalesdetailsReportControllerTRN extends Controller
 {
     public function salesdetailsReport($search)
     {
@@ -26,7 +26,7 @@ class SalesdetailsReportController extends Controller
             $searchOption = json_decode($search);
 
 
-
+            //dd($searchOption);
 
 
 
@@ -38,10 +38,9 @@ class SalesdetailsReportController extends Controller
             $fromdate = $searchOption[5]->fromdate;
             $todate = $searchOption[6]->todate;
             $selectSalesrep = $searchOption[7]->selectSalesrep;
-            $selectSupGroup = $searchOption[9]->cmbSupplyGroup;
+            $cmbSupplyGroup = $searchOption[9]->cmbSupplyGroup;
             $selectItem = $searchOption[10]->cmbProduct;
-            $selectcategoryone = $searchOption[11]->selectecategory1;
-
+            //dd($selectItem);
 
 
 
@@ -80,129 +79,239 @@ class SalesdetailsReportController extends Controller
                 if ($searchOption[10]->cmbProduct !== null) {
                     $nonNullCount++;
                 }
-                if ($searchOption[11]->selectecategory1 !== null) {
-                    $nonNullCount++;
-                }
             }
             if ($nonNullCount > 1) {
 
-                $quryModify1 = " ";
-
+                $quryModify1 = " WHERE ";
+                $quryModify2 = "  ";
+              
                 if ($selecteBranch != null) {
                     if (is_array($selecteBranch)) {
-                        $quryModify1 .= " B.branch_id IN ('" . implode("','", $selecteBranch) . "') AND";
+                        $quryModify1 .= " S.branch_id IN ('" . implode("','", $selecteBranch) . "') AND";
+                       
+                    } else {
+                        $quryModify1 .= " S.branch_id = '" . $selecteBranch . "' AND";
+                       
                     }
                 }
 
                 if ($selectSalesrep != null) {
                     if (is_array($selectSalesrep)) {
-                        $quryModify1 .= " E.employee_id IN ('" . implode("','", $selectSalesrep) . "') AND";
+                        $quryModify1 .= " S.employee_id IN ('" . implode("','", $selectSalesrep) . "') AND";
+                      
+                    } else {
+                        $quryModify1 .= " S.employee_id = '" . $selectSalesrep . "' AND";
+                       
                     }
                 }
                 if ($selecteCustomer != null) {
                     if (is_array($selecteCustomer)) {
-                        $quryModify1 .= " C.customer_id IN ('" . implode("','", $selecteCustomer) . "') AND";
+                        $quryModify1 .= " S.customer_id IN ('" . implode("','", $selecteCustomer) . "') AND";
+                       // $quryModify2 .= " C.customer_id IN ('" . implode("','", $selecteCustomer) . "') AND";
+                    } else {
+                        $quryModify1 .= " S.customer_id = '" . $selecteCustomer . "' AND";
+                       // $quryModify2 .= " C.customer_id = '" . $selecteCustomer . "' AND";
                     }
                 }
 
                 if ($selectecustomergroup != null) {
                     if (is_array($selectecustomergroup)) {
                         $quryModify1 .= " C.customer_group_id IN ('" . implode("','", $selectecustomergroup) . "') AND";
+                       // $quryModify2 .= " C.customer_group_id IN ('" . implode("','", $selectecustomergroup) . "') AND";
+                    } else {
+                       $quryModify1 .= " C.customer_group_id = '" . $selectecustomergroup . "' AND";
+                      // $quryModify2 .= " C.customer_group_id = '" . $selectecustomergroup . "' AND";
+                    }
+                }
+                if ($selecteCustomerGrade != null) {
+                    if (is_array($selecteCustomerGrade)) {
+                       // $quryModify1 .= " C.customer_grade_id IN ('" . implode("','", $selecteCustomerGrade) . "') AND";
+                        //$quryModify2 .= " C.customer_grade_id IN ('" . implode("','", $selecteCustomerGrade) . "') AND";
+                    } else {
+                       // $quryModify1 .= " C.customer_grade_id = '" . $selecteCustomerGrade . "' AND";
+                       // $quryModify2 .= " C.customer_grade_id = '" . $selecteCustomerGrade . "' AND";
                     }
                 }
 
-
                 if ($selecteRoute != null) {
                     if (is_array($selecteRoute)) {
-                        $quryModify1 .= " C.route_id IN ('" . implode("','", $selecteRoute) . "') AND";
+                       // $quryModify1 .= " C.route_id IN ('" . implode("','", $selecteRoute) . "') AND";
+                       // $quryModify2 .= " C.route_id IN ('" . implode("','", $selecteRoute) . "') AND";
+                    } else {
+                       // $quryModify1 .= " C.route_id = '" . $selecteRoute . "' AND";
+                        //$quryModify2 .= " C.route_id = '" . $selecteRoute . "' AND";
                     }
                 }
 
                 if ($fromdate != null && $todate != null) {
                     if (is_string($fromdate) && is_string($todate)) {
-                        $quryModify1 .= " SWSR.transaction_date BETWEEN '" . $fromdate . "' AND '" . $todate . "' AND ";
+                        $quryModify1 .= " S.transaction_date BETWEEN '" . $fromdate . "' AND '" . $todate . "' AND ";
+                       // $quryModify2 .= " SR.order_date BETWEEN '" . $fromdate . "' AND '" . $todate . "' AND ";
                     }
                 }
                 if ($selectItem != null) {
                     if (is_array($selectItem)) {
-                        $quryModify1 .= " I.item_id  IN ('" . implode("','", $selectItem) . "') AND";
+                        $quryModify1 .= " S.item_id  IN ('" . implode("','", $selectItem) . "') AND";
+                       // $quryModify2 .= " I.item_id  IN ('" . implode("','", $selectItem) . "') AND";
+                    } else {
+                        $quryModify1 .= " S.item_id  = '" . $selectItem . "' AND";
+                       // $quryModify2 .= " I.item_id  = '" . $selectItem . "' AND";
                     }
                 }
-
-                if ($selectSupGroup != null) {
-                    if (is_array($selectSupGroup)) {
-                        $quryModify1 .= " SG.supply_group_id  IN ('" . implode("','", $selectSupGroup) . "') AND";
+                if ($cmbSupplyGroup != null) {
+                    if (is_array($cmbSupplyGroup)) {
+                        $quryModify2 .= " WHERE  SG.supply_group_id  IN ('" . implode("','", $cmbSupplyGroup) . "') ";
+                       // $quryModify2 .= "  SG.supply_group_id IN ('" . implode("','", $cmbSupplyGroup) . "') AND";
+                    } else {
+                        $quryModify2 .= " WHERE SG.supply_group_id  = '" . $cmbSupplyGroup . "' ";
+                       // $quryModify2 .= " SG.supply_group_id  = '" . $cmbSupplyGroup . "' AND";
                     }
                 }
+                $quryModify1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $quryModify1);
+               // $quryModify2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $quryModify2);
+                // $query = "SELECT  
+                // SD.supply_group ,
+                // SD.supply_group_id , 
+                // SD.Item_code ,
+                // SD.item_Name , 
+                // SD.pack_size , 
+                // SUM(ABS(IF(SD.document_number = 210, CAST(SD.quantity AS SIGNED), 0))) as sales_qty, 
+                // SUM(ABS(IF(SD.document_number = 220, CAST(SD.quantity AS SIGNED), 0))) as rtn_qty,
+                // SUM((CAST((SD.quantity * -1) AS SIGNED))) as net_qty, 
 
-                if ($selectcategoryone != null) {
-                    if (is_array($selectcategoryone)) {
-                        $quryModify1 .= " I.category_level_1_id  IN ('" . implode("','", $selectcategoryone) . "') AND";
-                    }
-                }
+                // SUM(ABS(IF(SD.document_number = 210, CAST(SD.free_quantity AS SIGNED), 0))) as foc_qty, 
+                // SUM(ABS(IF(SD.document_number = 220, CAST(SD.free_quantity AS SIGNED), 0))) as rtn_foc_qty,
+                // SUM((CAST((SD.free_quantity * -1) AS SIGNED))) as net_foc_qty , 
+                // ABS(SUM( IF(SD.document_number=210,SD.Amount,0  ))) as sales , 
+                // ABS(SUM( IF(SD.document_number=220,SD.Amount,0  )) *-1) as returns ,
+                // ABS(SUM(SD.Amount)) as net_amount  
 
-                  $quryModify1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $quryModify1);
-               /*  $quryModify2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $quryModify2);
- */
-                $query = "SELECT 
-    I.Item_code,
-    I.item_Name,
-    I.package_unit,
-    SUM(CASE WHEN SWSR.transaction_type = 'Sales' THEN (quantity * -1) ELSE 0 END) AS salesQty,
-    SUM(CASE WHEN SWSR.transaction_type = 'Sales Return' THEN quantity ELSE 0 END) AS rtnQty,
-    SUM(CASE WHEN SWSR.transaction_type = 'Sales' THEN (quantity * -1) ELSE 0 END) -
-    SUM(CASE WHEN SWSR.transaction_type = 'Sales Return' THEN quantity ELSE 0 END) AS netQty,
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales' THEN (free_quantity * -1) ELSE 0 END) AS focQty,
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales Return' THEN (free_quantity) ELSE 0 END) AS RtnfocQty,
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales' THEN (free_quantity * -1) ELSE 0 END)  -
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales Return' THEN (free_quantity) ELSE 0 END) AS netFocQty,
-		SUM(ABS(IF(SWSR.transaction_type = 'Sales', (CAST(SWSR.quantity AS SIGNED) * SWSR.price) + item_discount_amount, 0))) AS sales, 
-        SUM(ABS(IF(SWSR.transaction_type = 'Sales Return', (CAST(SWSR.quantity AS SIGNED) * SWSR.price) - item_discount_amount, 0))) AS returns,
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales' THEN ((quantity * -1) * SWSR.price) ELSE 0 END) -
-		SUM(CASE WHEN SWSR.transaction_type = 'Sales Return' THEN (quantity * SWSR.price) ELSE 0 END) AS netSales,
-    I.category_level_1_id
-FROM 
-    sales_with_sales_returns SWSR
-INNER JOIN 
-    items I ON SWSR.item_id = I.item_id
-LEFT JOIN customers C ON SWSR.customer_id = C.customer_id
-LEFT JOIN customer_groups CG ON C.customer_group_id = CG.customer_group_id
-LEFT JOIN employees E ON  SWSR.employee_id = E.employee_id
-LEFT JOIN routes R ON C.route_id = R.route_id
-LEFT JOIN supply_groups SG ON I.supply_group_id = SG.supply_group_id
-LEFT JOIN item_category_level_1s ICL ON I.category_level_1_id = ICL.item_category_level_1_id
-LEFT JOIN branches B ON SWSR.branch_id = B.branch_id
 
-WHERE ";
-   
+                //  FROM 
+                // ( SELECT  SI.order_date_time  AS Date ,
+                //   SI.manual_number AS invoice_number ,
+                //   C.customer_code , 
+                //   CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
+                //   E.employee_name as sales_rep , 
+                //   I.Item_code , 
+                //   I.item_Name , 
+                //   I.package_unit as pack_size , 
+                //   SII.quantity , 
+                //   SII.free_quantity , 
+                //   SII.price - ((SII.price/100)*(SI.discount_percentage+SII.discount_percentage)) AS Price  , 
+                //   SII.quantity * IF((SI.discount_percentage+SII.discount_percentage) > 0,(SII.price - ((SII.price/100)*(SI.discount_percentage+SII.discount_percentage))),SII.price) AS Amount , 
+                //   SI.document_number , 
+                //   SG.supply_group_id , 
+                //   SG.supply_group  
 
-                if ($nonNullCount > 0) {
-                    $query .= $quryModify1;
-                }
-               // $query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
 
-                $query .= "GROUP BY SWSR.item_id";
+                //  FROM sales_invoices  SI 
+                // INNER JOIN sales_invoice_items SII  ON SI.sales_invoice_Id=SII.sales_invoice_Id 
+                // INNER JOIN items I ON SII.item_id=I.item_id 
+                // INNER JOIN supply_groups SG ON SG.supply_group_id=I.supply_group_id
+                // INNER JOIN customers C ON C.customer_id=SI.customer_id 
+                // INNER JOIN town_non_administratives T ON T.town_id=C.town 
+                // INNER JOIN employees E ON E.employee_id=SI.employee_id
+                // INNER JOIN branches B ON B.branch_id = SI.branch_id
 
+
+                // UNION ALL 
+
+                // SELECT  SR.order_date AS Date ,
+                //   SR.manual_number AS invoice_number ,
+                //   C.customer_code , 
+                //   CONCAT(C.customer_name ,' ', T.townName ) AS customer_name  , 
+                //   E.employee_name as sales_rep , 
+                //   I.Item_code , 
+                //   I.item_Name , 
+                //   I.package_unit as pack_size ,
+                //   SRI.quantity , 
+                //   SRI.free_quantity , 
+                //   SRI.price - ((SRI.price/100)*(SR.discount_percentage+SRI.discount_percentage)) AS Price  , 
+                //   SRI.quantity *IF((SR.discount_percentage+SRI.discount_percentage) > 0,(SRI.price - ((SRI.price/100)*(SR.discount_percentage+SRI.discount_percentage))),SRI.price) AS Amount ,
+                //   SR.document_number , 
+                //   SG.supply_group_id , 
+                //   SG.supply_group  
+
+
+                // FROM sales_returns  SR
+                // INNER JOIN sales_return_items SRI  ON SR.sales_return_Id=SRI.sales_return_Id 
+                // INNER JOIN items I ON SRI.item_id=I.item_id 
+                // INNER JOIN supply_groups SG ON SG.supply_group_id=I.supply_group_id
+                // INNER JOIN customers C ON C.customer_id=SR.customer_id 
+                // INNER JOIN town_non_administratives T ON T.town_id=C.town 
+                // INNER JOIN employees E ON E.employee_id=SR.employee_id
+                // INNER JOIN branches B ON B.branch_id= SR.branch_id
+                // WHERE " . $quryModify2 . "  ) AS SD  
+                // GROUP BY SD.supply_group_id , SD.Item_code";
+
+                $query = "SELECT
+                            SG.supply_group, 
+                            I.supply_group_id, 
+                            I.Item_code,
+                            I.item_Name, 
+                            IFNULL(sales.package_unit,0) AS package_unit,
+                            IFNULL(sales.sales_qty,0)AS sales_qty,
+                            IFNULL(sales.rtn_qty,0)AS rtn_qty,
+                            IFNULL(sales.net_qty,0)AS net_qty,
+                            IFNULL(sales.foc_qty,0)AS foc_qty,
+                           IFNULL(sales.rtn_foc_qty,0)AS rtn_foc_qty,
+                            IFNULL(sales.net_foc_qty,0)AS net_foc_qty,
+                            IFNULL(sales.sales,0)AS sales,
+                            IFNULL(sales.returns,0)AS returns,
+                            IFNULL(sales.net_amount,0)AS net_amount,
+                            ICL.item_category_level_1_id,
+                            I.category_level_2_id
+                        FROM items I
+                        LEFT JOIN (
+                            SELECT 
+                                S.item_id,
+                                SUM(ABS(IF(S.transaction_type = 'Sales', CAST(S.quantity AS SIGNED), 0))) AS sales_qty, 
+                                SUM(ABS(IF(S.transaction_type = 'Sales Return', CAST(S.quantity AS SIGNED), 0))) AS rtn_qty,
+                                SUM((CAST((S.quantity * -1) AS SIGNED))) AS net_qty, 
+                                SUM(ABS(IF(S.transaction_type = 'Sales', CAST(S.free_quantity AS SIGNED), 0))) AS foc_qty, 
+                                SUM(ABS(IF(S.transaction_type = 'Sales Return', CAST(S.free_quantity AS SIGNED), 0))) AS rtn_foc_qty,
+                                SUM((CAST((S.free_quantity * -1) AS SIGNED))) AS net_foc_qty,
+                                SUM(ABS(IF(S.transaction_type = 'Sales', CAST(S.quantity AS SIGNED), 0) * S.price)) AS sales, 
+                                SUM(ABS(IF(S.transaction_type = 'Sales Return', CAST(S.quantity AS SIGNED), 0) * S.price)) AS returns, 
+                                SUM(ABS(IF(S.transaction_type = 'Sales', CAST(S.quantity AS SIGNED), 0) * S.price)) -
+                                SUM(ABS(IF(S.transaction_type = 'Sales Return', CAST(S.quantity AS SIGNED), 0) * S.price)) AS net_amount,
+                                        S.package_unit 
+                            FROM sales_with_sales_returns S
+                            LEFT JOIN customers C ON C.customer_id=S.customer_id
+                            " . $quryModify1 . "
+                            GROUP BY S.item_id
+                        ) sales ON I.item_id = sales.item_id
+                        LEFT JOIN supply_groups SG ON SG.supply_group_id = I.supply_group_id
+                        LEFT JOIN item_category_level_1s ICL ON ICL.item_category_level_1_id = I.category_level_1_id
+                        LEFT JOIN item_category_level_2s ICLL ON ICLL.Item_category_level_2_id = I.category_level_2_id
+                       
+                      " . $quryModify2 . "
+                        ";
                 //dd($query);
                 $result = DB::select($query);
-               
 
-                $reportViwer = new ReportViewer();
-               // $resulsupplygroup = DB::select('select supply_groups.supply_group_id ,supply_groups.supply_group from supply_groups');
-               $resulsupplygroup = DB::select('select item_category_level_1s.item_category_level_1_id ,item_category_level_1s.category_level_1 from item_category_level_1s');
+
+                $category_levels = DB::select('SELECT ICL2.item_category_level_1_id,ICL2.item_category_level_2_id,ICL1.category_level_1,ICL2.category_level_2 FROM item_category_level_2s ICL2
+                LEFT JOIN item_category_level_1s ICL1 ON ICL2.Item_category_level_1_id = ICL1.item_category_level_1_id');
+
                 $supplygrouparray = [];
                 $table = [];
                 $titel = [];
                 $reportViwer = new ReportViewer();
-                foreach ($resulsupplygroup as $supplygroupid) {
+                $EXISTING_CATEGORY_LEVEL1 = "";
+                $BOOL_CHANGE_TITLE = false;
+                foreach ($category_levels as $category_level) {
+
                     $table = [];
 
 
+
+
                     foreach ($result as $supplygroupdata) {
-                        //dd($result);
-                        if ($supplygroupdata->category_level_1_id == $supplygroupid->item_category_level_1_id) {
 
 
+                        if ($supplygroupdata->item_category_level_1_id == $category_level->item_category_level_1_id && $supplygroupdata->category_level_2_id == $category_level->item_category_level_2_id) {
                             array_push($table, $supplygroupdata);
                         }
                     }
@@ -213,18 +322,25 @@ WHERE ";
 
                         array_push($supplygrouparray, $table);
 
-
-                        array_push($titel, $supplygroupid->category_level_1);
-
+                        if ($EXISTING_CATEGORY_LEVEL1 == "" && !$BOOL_CHANGE_TITLE) {
+                            $EXISTING_CATEGORY_LEVEL1 = $category_level->category_level_1;
+                            array_push($titel, '<strong>' . $EXISTING_CATEGORY_LEVEL1 . '</strong><br><strong>' . $category_level->category_level_2 . '</strong>');
+                        } else {
+                            if ($EXISTING_CATEGORY_LEVEL1 != $category_level->category_level_1) {
+                                $EXISTING_CATEGORY_LEVEL1 = $category_level->category_level_1;
+                                array_push($titel, '<strong>' . $EXISTING_CATEGORY_LEVEL1 . '</strong><br><strong>' . $category_level->category_level_2 . '</strong>');
+                            } else {
+                                array_push($titel, '<strong>' . $category_level->category_level_2 . '</strong>');
+                            }
+                        }
 
                         $reportViwer->addParameter('abc', $titel);
                     }
                 }
-                //dd($supplygrouparray);
+
+
 
                 $reportViwer->addParameter("tabale_data", [$supplygrouparray]);
-
-                //$reportViwer->addParameter("tabale_data", $result);
             } 
             if ($searchOption !== null) {
 
@@ -396,7 +512,7 @@ WHERE ";
             }
             $total = 0;
             foreach ($result as $row) {
-                $total += $row->netSales;
+                $total += $row->net_amount;
             }
             if ($total == 0) {
                 $formattedTotal = number_format($total, 2, '.', ',');
@@ -420,11 +536,11 @@ WHERE ";
                 $i2++;
             }
             $label_height = (($i + $i2) * 20);
-
+            //dd($reportViwer);
             //dd($length . " " . (strlen($filterLabel)));
             $reportViwer->addParameter('hight', $label_height);
 
-            //dd($reportViwer);
+
             return $reportViwer->viewReport('salesDetails.json');
         } catch (Exception $ex) {
             return $ex;
