@@ -21,7 +21,7 @@ class free_offer extends Model
     {
         $activity->log_name = "free_offers";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -274,7 +274,7 @@ function selectUnselect(){
 
 function SelectAll(event) {
 
-    if ($(event).prop('checked')) {
+    /* if ($(event).prop('checked')) {
         $('#invoiceDataTable tbody').each(function () {
             var checkbox = $(this).find('.row_checkbox');
             checkbox.prop('checked', true);
@@ -284,7 +284,14 @@ function SelectAll(event) {
             var checkbox = $(this).find('.row_checkbox');
             checkbox.prop('checked', false);
         });
-    }
+    } */
+
+        if ($(event).prop('checked')) {
+            $('#invoiceDataTable tbody input[type="checkbox"]').prop('checked', true);
+        } else {
+            $('#invoiceDataTable tbody input[type="checkbox"]').prop('checked', false);
+        }
+        
 }
 
 
@@ -322,7 +329,7 @@ function saveInvoiceCopyReceived(collection) {
                 }else{
                     showWarningMessage('Unable to update');
                 }
-    
+                load_invoice_details_for_invoie_copy_received();
     
             }, error: function (data) {
                 console.log(data.responseText)

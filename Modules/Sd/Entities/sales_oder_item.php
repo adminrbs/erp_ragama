@@ -23,7 +23,7 @@ class sales_oder_item extends Model
     {
         $activity->log_name = "sales_order_item";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -24,7 +24,7 @@ class paymentTerm extends Model
     {
         $activity->log_name = "payment_terms";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

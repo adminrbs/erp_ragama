@@ -22,7 +22,7 @@ class item_history extends Model
     {
         $activity->log_name = "item_historys";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

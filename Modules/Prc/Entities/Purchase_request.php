@@ -22,7 +22,7 @@ class purchase_request extends Model
     {
         $activity->log_name = "purchase_requests";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

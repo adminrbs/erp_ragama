@@ -26,7 +26,7 @@ class District extends Model
     {
         $activity->log_name = "districts";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

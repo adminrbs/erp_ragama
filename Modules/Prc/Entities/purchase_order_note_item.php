@@ -22,7 +22,7 @@ class purchase_order_note_item extends Model
     {
         $activity->log_name = "purchase_order_note_items";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

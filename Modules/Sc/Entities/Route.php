@@ -18,7 +18,7 @@ class route extends Model
     {
         $activity->log_name = "routes";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

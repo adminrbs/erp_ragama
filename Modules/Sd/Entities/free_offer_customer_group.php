@@ -18,7 +18,7 @@ class free_offer_customer_group extends Model
     {
         $activity->log_name = "free_offer_customer_group";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -407,24 +407,35 @@ class CustomerReceiptController extends Controller
 
         try {
             $customer_receipt = CustomerReceipt::find($id);
+            //dd($customer_receipt);
             $cashier_id = $customer_receipt->cashier_id;
-            $cashier_user_id_qry = DB::select('SELECT user_id FROM users WHERE id ='.$cashier_id);
-            $cashier_user_id = $cashier_user_id_qry[0]->user_id;
+            //dd($cashier_id);
+            //$cashier_user_id_qry = DB::select('SELECT user_id FROM users WHERE id ='.$cashier_id);
+            //dd($cashier_user_id_qry);
+            $cashier_user_id = $cashier_id;
+           /*  if(count($cashier_user_id_qry) > 0){
+                $cashier_user_id = $cashier_user_id_qry[0]->user_id;
 
+            } */
+           
             if ($customer_receipt) {
                 $customer_receipt->receipt_cheque = CustomerReceiptCheque::where('customer_receipt_id', '=', $id)->get();
+               
                 $customer_receipt->receipt_data = $this->getCustomerReceiptSetoffData($customer_receipt->customer_id, $id);
+                //dd($customer_receipt);
                 $customer_receipt->customer_name = "";
                 $customer_receipt->customer_code = "";
-                $customer_receipt->cashier_user_id = $cashier_user_id;
+                $customer_receipt->cashier_user_id = $cashier_user_id; 
                 $customer = Customer::find($customer_receipt->customer_id);
                 if ($customer) {
                     $customer_receipt->customer_code = $customer->customer_code;
                     $customer_receipt->customer_name = $customer->customer_name;
                 }
             }
+            //dd($customer_receipt);
             return response()->json(["status" => true, "data" => $customer_receipt]);
         } catch (Exception $ex) {
+            //dd($ex);
             return response()->json(["status" => false, "exception" => $ex]);
         }
     }

@@ -29,7 +29,7 @@ class category_level_2 extends Model
     {
         $activity->log_name = "item_category_level_2s";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

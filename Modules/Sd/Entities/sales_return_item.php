@@ -20,7 +20,7 @@ class sales_return_item extends Model
   {
       $activity->log_name = "sales_return_item_id";
       $activity->description = $eventName;
-      $activity->causer_id = 1;
+      $activity->causer_id = Auth::user()->id;
   }
   public function getActivitylogOptions(): LogOptions
   {

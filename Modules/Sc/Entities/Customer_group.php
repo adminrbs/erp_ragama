@@ -26,7 +26,7 @@ class Customer_group extends Model
     {
         $activity->log_name = "customer_groups";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

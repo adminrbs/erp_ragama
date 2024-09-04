@@ -21,7 +21,7 @@ class delivery_type extends Model
     {
         $activity->log_name = "delivery_types";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

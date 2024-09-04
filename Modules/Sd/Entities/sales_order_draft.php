@@ -21,7 +21,7 @@ class sales_order_draft extends Model
     {
         $activity->log_name = "sales_order_drafts";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -22,7 +22,7 @@ class item_history_setOff extends Model
     {
         $activity->log_name = "item_history_set_offs";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

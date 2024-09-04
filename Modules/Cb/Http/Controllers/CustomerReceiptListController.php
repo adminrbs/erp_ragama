@@ -21,8 +21,9 @@ class CustomerReceiptListController extends Controller
             customer_receipt_cheques.cheque_number,
             customers.customer_name,
             CASE
-        WHEN customer_receipts.receipt_method_id = 1 THEN 'cash'
-        ELSE 'cheque'
+        WHEN customer_receipts.receipt_method_id = 1 THEN 'Cash'
+        WHEN customer_receipts.receipt_method_id = 2 THEN 'Cheque'
+        ELSE 'Bank Slip'
     END AS payment_mode FROM customer_receipts
             LEFT JOIN customer_receipt_cheques ON customer_receipts.customer_receipt_id = customer_receipt_cheques.customer_receipt_id
             INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id ORDER BY customer_receipts.external_number DESC";

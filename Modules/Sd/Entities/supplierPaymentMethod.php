@@ -27,7 +27,7 @@ class supplierPaymentMethod extends Model
     {
         $activity->log_name = "supplier_payment_methods";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

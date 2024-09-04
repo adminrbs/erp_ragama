@@ -29,7 +29,7 @@ class customer_app_user extends Model
     {
         $activity->log_name = "customer_app_users";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {

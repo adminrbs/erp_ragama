@@ -20,7 +20,7 @@ class creditor_debit_note extends Model
     {
         $activity->log_name = "creditor_debit_note";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
 
     public function getActivitylogOptions(): LogOptions

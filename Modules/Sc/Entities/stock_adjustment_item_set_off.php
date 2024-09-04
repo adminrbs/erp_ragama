@@ -19,7 +19,7 @@ class stock_adjustment_item_set_off extends Model
     {
         $activity->log_name = "stock_adjustment_item_set_offs";
         $activity->description = $eventName;
-        $activity->causer_id = 1;
+        $activity->causer_id = Auth::user()->id;
     }
     public function getActivitylogOptions(): LogOptions
     {
