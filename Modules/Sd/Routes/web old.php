@@ -36,7 +36,6 @@ use Modules\Sd\Http\Controllers\SalesorderReportController;
 use Modules\Sd\Http\Controllers\SalesReturnController;
 use Modules\Sd\Http\Controllers\SalesReturnReportController;
 use Modules\Sd\Http\Controllers\DeliveryreporController;
-use Modules\Sd\Http\Controllers\FreeissuedReportController;
 use Modules\Sd\Http\Controllers\freeOfferController_latest;
 use Modules\Sd\Http\Controllers\InvoiceInfoController;
 use Modules\Sd\Http\Controllers\InvoiceInqueryController;
@@ -615,9 +614,6 @@ Route::post('/finish_plan/{id}',[DeliveryPlanController::class,'finish_plan']);
 
   //Free Summary Report
   Route::get('/freeSummaryReport/{search_data}', [FreeSummaryReportController::class, 'freeSummaryReport']);
-
-  //Free Issued Report
-  Route::get('/free_issuedReport/{search}',[FreeissuedReportController::class,'freeissuedreport']);
 
   /**merge order */
   Route::get('/merge_order',function(){

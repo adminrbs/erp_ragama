@@ -817,10 +817,12 @@ $(document).ready(function () {
                 { cmbMarketingRoute: cmbMarketingRoute },
                 { cmbSupplyGroup: cmbSupplyGroup },
                 { cmbProduct: cmbProduct },
+                { selectecategory1:selectecategory1 }
 
             ];
 
-            $('#pdfContainer').attr('src', '/sd/freeSummaryReport/' + JSON.stringify(requestData));
+            //$('#pdfContainer').attr('src', '/sd/freeSummaryReport/' + JSON.stringify(requestData));
+            $('#pdfContainer').attr('src', '/sd/free_issuedReport/' + JSON.stringify(requestData));
         }
         if (report == "supplierWiseFreeIssueDetailsReport") {
 

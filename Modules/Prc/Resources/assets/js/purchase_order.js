@@ -856,7 +856,7 @@ function calValueandCostPrice(event) {
     var cell = row.find('td');
 
     var qty = $($(cell[2]).children()[0]);
-    var price = $($(cell[8]).children()[0]);
+    var price = $($(cell[9]).children()[0]);
     var discount_percentage = $($(cell[10]).children()[0]);
     var discount_amount = $($(cell[11]).children()[0]);
 
