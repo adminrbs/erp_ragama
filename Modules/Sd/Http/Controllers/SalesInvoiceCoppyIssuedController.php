@@ -42,13 +42,16 @@ class SalesInvoiceCoppyIssuedController extends Controller
     LEFT JOIN debtors_ledgers DL ON SI.external_number = DL.external_number
     LEFT JOIN sales_invoice_copy_issueds SII ON SI.sales_invoice_Id = SII.sales_invoice_Id
     WHERE SI.external_number = \'' . $number . '\'
-    AND (SII.sales_invoice_Id IS NULL OR SII.status = 0)
-';
+    AND SII.sales_invoice_Id IS NULL';
 
     //dd($inv_data_header_qry);
             $result = DB::select($inv_data_header_qry);
 
-            return response()->json(["header" => $result]);
+            if($result){
+                return response()->json(["header" => $result , "status"=>true]);
+            }else{
+                return response()->json(["status" => false]);
+            }
     }
 
     public function load_inv_for_copy_issued(){
