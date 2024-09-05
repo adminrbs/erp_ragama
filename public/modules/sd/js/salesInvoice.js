@@ -501,7 +501,7 @@ $(document).ready(function () {
     });
 
 
-    var hiddem_col_array = [5, 9,15];
+    var hiddem_col_array = [5, 9,16];
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
         var param = sPageURL.split('?');
@@ -543,7 +543,7 @@ $(document).ready(function () {
             $('#btnReject').hide();
             $('#btnBack').show();
             $('#si_model_btn').hide();
-            hiddem_col_array = [5, 9, 14, 13, 12, 11,15];
+            hiddem_col_array = [5, 9, 14, 13, 12, 11,16];
             disableComponents();
 
         }
@@ -568,6 +568,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:60px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "button", "class": "btn btn-primary batchBtn", "value": "Batch&nbsp<span class='badge bg-yellow text-black translate-middle-middle  rounded-pill'style='padding:4px;'>" + whole_sale_count + "</span>", "style": "max-height:30px;max-width:70px;margin:0px;", "event": "setOffbybuton(this)", "width": "70px" },
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;", "event": "removeRow(this);removeHashMapIndex(this);calculation()", "width": "*" },

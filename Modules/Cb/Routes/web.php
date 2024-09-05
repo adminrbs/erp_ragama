@@ -4,6 +4,7 @@ use App\Http\Controllers\ReferenceIdController;
 use Illuminate\Support\Facades\Route;
 use Modules\Cb\Http\Controllers\AuditController;
 use Modules\Cb\Http\Controllers\BanktransferController;
+use Modules\Cb\Http\Controllers\CardPaymentController;
 use Modules\Cb\Http\Controllers\CashAuditReportController;
 use Modules\Cb\Http\Controllers\CashBundleController;
 use Modules\Cb\Http\Controllers\CashCollectionController;
@@ -198,6 +199,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::get('/chequeRegister/{filters}',[ChequeRegisterController::class,'chequeRegister']);
     Route::get('/getSalesrepandcollectors',[ChequeRegisterController::class,'getSalesrepandcollectors']);
     Route::get('/bankTransfer/{filters}',[BanktransferController::class,'bankTransfer']);
+    Route::get('/cardPayment/{filters}',[CardPaymentController::class,'cardPayment']);
 
     //cheque return
     Route::get('/cheque_return',function(){

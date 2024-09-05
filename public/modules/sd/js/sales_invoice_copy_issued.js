@@ -108,10 +108,10 @@ document.addEventListener('DOMContentLoaded', function () {
 var m_number = undefined;
 $(document).ready(function () {
     $('.select2').select2();
-   
+
 
     loadEmp();
-   
+
 
     load_inv();
 
@@ -122,37 +122,55 @@ $(document).ready(function () {
     });
 
 
-    //calling inv data loading function
-    $('#txtInv').on('input', function () {
-
-
-        $(".val_table tbody").empty();
-        $('.val_lbl').text('');
-
-    })
     $('#btnSearch').on('click', function () {
         if ($('#txtInv').val().length < 10) {
             showWarningMessage("Please enter a invoice number");
         } else {
+
             load_invoice_details_for_invoie_copy($('#txtInv').val());
         }
 
     });
 
-    //tr click event
-    $('#return_table').on('click', 'tr', function (e) {
-        $("#return__item_table tbody").empty();
+    $('#btnSave').on('click',function(){
+        var collection = [];
+        $("#invoiceDataTable tbody tr").each(function () {
+             existingSalesInvoiceId = $(this).find("td:first").data("id");
+             collection.push(existingSalesInvoiceId);
+        });
+        bootbox.confirm({
+            title: 'Save confirmation',
+            message: '<div class="d-flex justify-content-center align-items-center mb-3"><i id="question-icon" class="fa fa-question fa-5x text-warning animate-question"></i></div><div class="d-flex justify-content-center align-items-center"><p class="h2">Are you sure?</p></div>',
+            buttons: {
+                confirm: {
+                    label: '<i class="fa fa-check"></i>&nbsp;Yes',
+                    className: 'btn-warning'
+                },
+                cancel: {
+                    label: '<i class="fa fa-times"></i>&nbsp;No',
+                    className: 'btn-link'
+                }
+            },
+            callback: function (result) {
+                //console.log('Confirmation result:', result);
+                if (result) {
+                    //newReferanceID('sales_invoice_copy_issueds', '2750');
+                    saveInvoiceCopyIssued(collection);
+                  
+                } else {
 
-        $('#return_table tr').removeClass('highlight');
+                }
+            },
+            onShow: function () {
+                $('#question-icon').addClass('swipe-question');
+            },
+            onHide: function () {
+                $('#question-icon').removeClass('swipe-question');
+            }
+        });
 
-        $(this).addClass('highlight');
-        var dataIdValue = $(this).find('td:eq(0)').attr('data-id');
-        load_return_items(dataIdValue);
-
+        $('.bootbox').find('.modal-header').addClass('bg-warning text-white');
     });
-
-
-
 
     if (window.location.search.length > 0) {
         var urlParams = new URLSearchParams(window.location.search);
@@ -167,29 +185,12 @@ $(document).ready(function () {
     }
 
 
-    getInvoices_inv_info();
-
-
-
-    //tr click event on sales invoice table
-    $('#getInvoicetable').on('click', 'tr', function (e) {
-
-        $('#getInvoicetable tr').removeClass('selected');
-        $(this).addClass('selected');
-
-        m_number = $(this).find('td:eq(1)').text();
 
 
 
 
-    });
 
-    $('#bntLoadData').on('click', function () {
-        $('#txtInv').val(m_number);
-        load_invoice_details(m_number);
-        $('#inv_info_search_modal').modal('hide');
 
-    });
 
 
 });
@@ -244,10 +245,7 @@ function showPickingReport(delivery_plan_packing_list_id) {
 
 //load invoice details
 function load_invoice_details_for_invoie_copy(number) {
-
-    $(".val_table tbody").empty();
-    $('.val_lbl').text('');
-
+    $("#invoiceDataTable tbody tr").removeClass("highlight");
     $.ajax({
         url: '/sd/load_invoice_details_for_invoie_copy/' + number,
         method: 'GET',
@@ -255,160 +253,60 @@ function load_invoice_details_for_invoie_copy(number) {
         timeout: 800000,
         success: function (data) {
             if (data.header.length < 1) {
-                showWarningMessage('Please enter a correct invoice number')
+                showWarningMessage('Please enter a correct invoice number');
             } else {
-
-
                 var header = data.header;
-               
-                
-
                 $.each(header, function (index, value) {
-                    /* $('#LblexternalNumber').text(number);
-                    $('#invoice_date_time').text(value.order_date_time);
-                    
-                    $('#txtEmp').text(value.employee_name);
-                    $('#txtCustomerID').text(value.customer_name);
-                    $('#txtTotal').text(parseFloat(value.amount).toLocaleString());
-                    $('#txtPaid').text(parseFloat(value.paidamount).toLocaleString());
-                    $('#txtBalance').text(parseFloat(value.balance).toLocaleString()); */
+                    var salesInvoiceIdExists = false;
 
+                    // Check if sales_invoice_Id already exists in the table
+                    $("#invoiceDataTable tbody tr").each(function () {
+                        var existingSalesInvoiceId = $(this).find("td:first").data("id");
+                        if (existingSalesInvoiceId == value.sales_invoice_Id) {
+                            salesInvoiceIdExists = true;
+                            showWarningMessage("Duplicate Record");
+                            $(this).addClass("highlight");
+                            return false; // Exit the loop early if found
+                        }
+                    });
 
-                    var newRow = $("<tr>");
+                    // If sales_invoice_Id does not exist, add the new row
+                    if (!salesInvoiceIdExists) {
+                        var newRow = $("<tr>");
+                        newRow.append("<td data-id=" + value.sales_invoice_Id + ">" + number + "</td>");
+                        newRow.append("<td>" + value.employee_name + "</td>");
+                        newRow.append("<td data-id=" + value.customer_id + ">" + value.customer_name + "</td>");
+                        newRow.append("<td>" + value.order_date_time + "</td>");
+                        newRow.append("<td style='text-align: right;'>" + parseInt(value.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>");
+                        newRow.append("<td style='text-align: right;'>" + parseInt(value.paidamount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>");
+                        newRow.append("<td style='text-align: right;'>" + parseInt(value.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>");
+                        newRow.append(
+                            $('<button type="button" style="border: none; background-color: transparent;">')
+                                .append('<i class="fa fa-times" aria-hidden="true" style="color: red !important;"></i>')
+                                .on('click', function () {
+                                    remove_custom_line(this);
+                                })
+                        );
 
-                    
-                    newRow.append("<td>" + number + "</td>");
-                    newRow.append("<td>" + value.employee_name + "</td>");
-                    newRow.append("<td>" + value.customer_name + "</td>");
-                    newRow.append("<td>" + value.order_date_time + "</td>");
-                    newRow.append("<td style='text-align: right;'>" + parseInt(value.amount) + "</td>");
-                    newRow.append("<td style='text-align: right;'>" + parseInt(value.paidamount) + "</td>");
-                    newRow.append("<td style='text-align: right;'>" + parseInt(value.balance) + "</td>");
-                   
-    
-                    $("#invoiceDataTable tbody").append(newRow);
-
-
+                        $("#invoiceDataTable tbody").append(newRow);
+                    }
                 });
-
-
-
-
-
             }
-
-        }
-
-    });
-
-
-
-
-}
-
-//sales return items
-function load_return_items(id) {
-    $("#return__item_table tbody").empty();
-
-
-    $.ajax({
-        url: '/sd/load_return_items/' + id,
-        method: 'GET',
-        cache: false,
-        timeout: 800000,
-        async: false,
-        success: function (data) {
-            var items = data.items;
-
-            //header
-            $.each(items, function (index, value) {
-
-                var newRow = $("<tr>");
-
-                var value_ = (parseFloat(value.quantity) * parseFloat(value.price)) - ((parseFloat(value.quantity) * parseFloat(value.price)) * (parseFloat(value.discount_percentage) / 100));
-                newRow.append("<td>" + value.Item_code + "</td>");
-                newRow.append("<td>" + value.item_name + "</td>");
-                newRow.append("<td style='text-align: right;'>" + parseInt(value.quantity) + "</td>");
-                newRow.append("<td style='text-align: right;'>" + parseInt(value.free_quantity) + "</td>");
-                newRow.append("<td>" + value.unit_of_measure + "</td>");
-                newRow.append("<td>" + value.package_unit + "</td>");
-                newRow.append("<td style='text-align: right;'>" + parseFloat(value.price).toLocaleString() + "</td>");
-                newRow.append("<td style='text-align: right;'>" + value.discount_percentage + "</td>");
-                newRow.append("<td style='text-align: right;'>" + parseFloat(value_).toLocaleString() + "</td>");
-
-                $("#return__item_table tbody").append(newRow);
-
-
-
-            });
-
-
-        }
-
-    });
-
-
-
-}
-
-
-function getCusrrentMonthDates() {
-
-    $.ajax({
-        url: '/sd/getMonthDates',
-        type: 'get',
-        dataType: 'json',
-        success: function (response) {
-            var firstDate = response.first;
-            var lastDate = response.last;
-
-            /*  var parts = serverDate.split('/');
-            var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-            $('#invoice_date_time').val(formattedDate); */
-
-            var parts_first = firstDate.split('/');
-            var First_Date = parts_first[2] + '-' + parts_first[1] + '-' + parts_first[0];
-
-            $('#from_date').val(First_Date);
-
-            var parts_last = lastDate.split('/');
-            var Last_Date = parts_last[2] + '-' + parts_last[1] + '-' + parts_last[0];
-
-            $('#to_date').val(Last_Date);
-
-
-        },
-        error: function (error) {
-            console.log(error);
         }
     });
 }
 
 
-//load customer to cmb
-function loadCustomerToCMB() {
+function remove_custom_line(button) {
 
-    $.ajax({
-        url: '/sd/loadCustomers',
-        type: 'get',
-        dataType: 'json',
-        async: false,
-        success: function (response) {
-            var dt = response.data
-            console.log(dt)
-            $.each(dt, function (index, value) {
-
-                $('#cmbCustomer').append('<option value="' + value.customer_id + '">' + value.customer_name + '</option>');
-
-            })
-        },
-        error: function (error) {
-            console.log(error);
-        },
-
-    })
+    var row = button.closest('tr');
+    row.remove();
 
 }
+
+
+
+
 
 function loadEmp() {
     $.ajax({
@@ -418,7 +316,7 @@ function loadEmp() {
         async: false,
         success: function (data) {
             console.log(data);
-            
+
             $.each(data, function (index, value) {
                 $('#cmbEmp').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
             })
@@ -432,49 +330,56 @@ function loadEmp() {
 }
 
 
-function getInvoices_inv_info() {
-    formData.append('from_date', $('#from_date').val());
-    formData.append('to_date', $('#to_date').val());
-    formData.append('cmbCustomer', $('#cmbCustomer').val());
-    formData.append('cmbSalesRep', $('#cmbSalesRep').val());
+function saveInvoiceCopyIssued(collection) {
+    if($('#txtRemark').val().length < 1){
+        showWarningMessage('Please add remark');
+    }else if(collection.length === 0){
+        showWarningMessage('Please select select invoice');
+    }else{
+        var formData = new FormData();
+        //formData.append('LblexternalNumber', referanceID);
+        formData.append('collection', JSON.stringify(collection));
+        formData.append('txtRemark',$('#txtRemark').val());
+        formData.append('emp',$('#cmbEmp').val());
+        $.ajax({
+            url: '/sd/saveInvoiceCopyIssued',
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            timeout: 800000,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+                
+            }, success: function (response) {
+    
+                if(response.status){
+                    showSuccessMessage('Record Saved');
+                    $('#txtRemark').val('');
+                    $('#txtInv').val('');
+                    $('#invoiceDataTable tbody').empty();
+                }else{
+                    showWarningMessage('Unable to save');
+                }
+    
+    
+            }, error: function (data) {
+                console.log(data.responseText)
+            }, complete: function () {
+    
+            }
+        })
+    }
 
-    var table = $('#getInvoicetable');
-    var tableBody = $('#getInvoicetable tbody');
-    tableBody.empty();
-
-    $.ajax({
-        url: "/sd/getInvoices_inv_info",
-        method: 'POST',
-        enctype: 'multipart/form-data',
-        data: formData,
-        processData: false,
-        contentType: false,
-        cache: false,
-        async: false,
-        timeout: 800000,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        beforeSend: function () { },
-        success: function (data) {
-            var dt = data.data
-            console.log(dt);
-            $.each(dt, function (index, item) {
-                console.log(item.sales_invoice_Id);
-                var row = $('<tr>');
-                row.append($('<td>').append($('<label>').attr('data-id', item.sales_invoice_Id).text(item.order_date_time)));
-                row.append($('<td>').text(item.external_number));
-                row.append($('<td>').text(item.customer_name));
-                row.append($('<td>').text(item.employee_name));
-                row.append($('<td>').text(parseFloat(item.total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
-                $(table).append(row);
-            });
-
-        },
-        error: function (error) {
-            console.log(error);
-        },
-        complete: function () { }
-    });
+    
 }
 
+function newReferanceID(table, doc_number) {
+    referanceID = newID("../newReferenceNumber_sales_invoice_copy_issued", table, doc_number);
+   
+}

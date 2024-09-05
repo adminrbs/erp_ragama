@@ -206,6 +206,7 @@
                                                         <th>Value</th>
                                                         <th>Avl. Qty</th>
                                                         <th>Set Off Qty</th>
+                                                        <th>Retail Price</th>
                                                         <th style="width: 120px;">Set Off</th>
                                                         <th style="width: 120px;">Button</th>
                                                         <th>foc_</th>

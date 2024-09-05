@@ -19,9 +19,9 @@ $(document).ready(function () {
         CUSTOMER_RECEIPT_ID = id;
         var action = param[0].split('=')[2].split('&')[0];
         if (action == 'view') {
+           // getCollectors_and_Cashiers();
             $('#btnAction').hide();
             $('#btnAutomaticSetoff').hide();
-
             $('#txtRefNo').prop('disabled',true);
             $('#txtDate').prop('disabled',true);
             $('#txtCustomerID').prop('disabled',true);
@@ -31,13 +31,12 @@ $(document).ready(function () {
             $('#cmbCashier').prop('disabled',true);
             $('#cmbGLAccount').prop('disabled',true);
             $('#cmbReceiptMethod').prop('disabled',true);
-
             $('#txtAmount').prop('disabled',true);
             $('#txtDiscount').prop('disabled',true);
             $('#txtRound_up').prop('disabled',true);
             $('#cmbBranch').prop('disabled',true);
             $('#checkAdvancePayment').prop('disabled',true);
-            $('.hide_col').hide();
+            //$('.hide_col').hide();
            
         } else if (action == 'edit') {
             hidden_columns = "";
@@ -405,6 +404,8 @@ function getCollectors_and_Cashiers() {
         success: function (response) {
             if (response.status) {
                 var collectors = response.data;
+                console.log(collectors);
+                
                 $('#cmbCollector').empty();
                 $('#cmbCashier').empty();
                 for (var i = 0; i < collectors.length; i++) {
@@ -909,8 +910,9 @@ function saveReceipt() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-
+            $('#btnAction').prop('disabled',true);
         }, success: function (response) {
+            $('#btnAction').prop('disabled',false);
             console.log(response);
             if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
                 showSuccessMessage('Receipt has been saved');
@@ -1499,7 +1501,7 @@ function getCustomerReceipt(id) {
             $('#txtCustomerName').val(result.customer_name);
             $('#txtCustomerID').attr('data-id', result.customer_id);
             $('#cmbCollector').val(result.collector_id);
-         //   $('#cmbCashier').val(result.cashier_user_id);
+            $('#cmbCashier').val(result.cashier_id);
             $('#cmbGLAccount').val(result.gl_account_id);
             $('#cmbReceiptMethod').val(result.receipt_method_id);
 
@@ -1513,7 +1515,7 @@ function getCustomerReceipt(id) {
             }
             var cashier_user = result.cashier_user_id;
             console.log(cashier_user);
-            $('#cmbCashier').val(result.cashier_user_id);
+            //$('#cmbCashier').val(result.cashier_user_id);
 
             var receipt_cheque = result.receipt_cheque;
             for (var i = 0; i < receipt_cheque.length; i++) {

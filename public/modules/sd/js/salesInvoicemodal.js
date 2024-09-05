@@ -647,6 +647,7 @@ function setItems(collection) {
                 { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                 { "type": "text", "class": "transaction-inputs", "value": balance, "style": "max-height:30px;text-align:right;width:60px;margin-right:10px;", "event": "", "disabled": "disabled" },
                 { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                 { "type": "button", "class": "btn btn-primary", "value": "Batch&nbsp<span class='badge bg-yellow text-black translate-middle-middle  rounded-pill'style='padding:4px;'>"+whole_sale_count+"</span>", "style": "max-height:30px;margin:0px;", "event": "setOffbybuton(this)", "width": "*" },
                 { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;", "event": "removeRow(this);calculation()", "width": "*" },
                 { "type": "text", "class": "transaction-inputs", "value": foc_qty, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },

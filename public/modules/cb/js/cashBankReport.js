@@ -306,6 +306,13 @@ $(document).ready(function () {
 
 
         }
+        if(report == "creditCard"){
+            $('#pdfContainer').attr('src', '/cb/cardPayment/' + JSON.stringify(filters));
+        }
+
+        if(report == "bankTransfer"){
+            $('#pdfContainer').attr('src', '/cb/bankTransfer/' + JSON.stringify(filters));
+        }
         
 
         if (report == null || report == undefined) {

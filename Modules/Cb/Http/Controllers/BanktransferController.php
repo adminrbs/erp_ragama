@@ -78,7 +78,7 @@ class BanktransferController extends Controller
         $customerablearray = [];
         $titel = [];
         $reportViwer = new ReportViewer();
-        $title = "Cash Audit";
+        $title = "Bank Transfers";
         if ($fromDate && $toDate) {
             $title .= " From : " . $fromDate . " To : " . $toDate;
         }

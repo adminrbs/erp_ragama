@@ -78,7 +78,7 @@ class CardPaymentController extends Controller
         $customerablearray = [];
         $titel = [];
         $reportViwer = new ReportViewer();
-        $title = "Cash Audit";
+        $title = "Card payments";
         if ($fromDate && $toDate) {
             $title .= " From : " . $fromDate . " To : " . $toDate;
         }

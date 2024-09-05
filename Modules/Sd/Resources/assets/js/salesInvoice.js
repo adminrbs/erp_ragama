@@ -103,12 +103,14 @@ function setOff() {
                 var setoff_quantity = 0;
                 var setWholesalePrice = 0;
                 var setWholesalePrice_temp = 0;
+                var setRetailPrice = 0;
                 var avl_qty = 0;
                 for (var i2 = 0; i2 < array.length; i2++) {
                     var setoffObject = array[i2][1];
                     setoff_quantity += parseFloat(setoffObject.getSetoffQuantity());
                     if (setoffObject.getSetoffQuantity() > 0) {
                         setWholesalePrice = parseFloat(setoffObject.getWholesalePrice());
+                        setRetailPrice = parseFloat(setoffObject.getRetailPrice());
                     }
                     setWholesalePrice_temp = parseFloat(setoffObject.getWholesalePrice());  // use when user enter 0 set off qty
 
@@ -127,6 +129,7 @@ function setOff() {
                     // alert(setWholesalePrice_temp);
                     /*  setoffObject.setSetoffQuantity(parseFloat(total_qty)); */
                     setWholesalePrice = parseFloat(setWholesalePrice_temp);
+                    
 
                 }
 
@@ -147,6 +150,7 @@ function setOff() {
                     rowObjects[i][12].val(setoff_quantity);
                     rowObjects[i][7].val(parseFloat(setWholesalePrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     rowObjects[i][10].val(parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    rowObjects[i][13].val(parseFloat(setRetailPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
                 }
             }
         }
@@ -183,7 +187,7 @@ function setOffAutoMatically(collection) {
                 //console.log(response);
                 var itemobj = new Item();
                 $.each(dt, function (index, item) {
-                    //console.log(item);
+                    console.log(item);
 
                     //   alert();
                     var itemSetOff = new ItemSetoff();
@@ -501,7 +505,7 @@ $(document).ready(function () {
     });
 
 
-    var hiddem_col_array = [5, 9,15];
+    var hiddem_col_array = [5, 9,16];
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
         var param = sPageURL.split('?');
@@ -543,7 +547,7 @@ $(document).ready(function () {
             $('#btnReject').hide();
             $('#btnBack').show();
             $('#si_model_btn').hide();
-            hiddem_col_array = [5, 9, 14, 13, 12, 11,15];
+            hiddem_col_array = [5, 9, 14, 13, 12, 11,16];
             disableComponents();
 
         }
@@ -568,6 +572,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:60px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "button", "class": "btn btn-primary batchBtn", "value": "Batch&nbsp<span class='badge bg-yellow text-black translate-middle-middle  rounded-pill'style='padding:4px;'>" + whole_sale_count + "</span>", "style": "max-height:30px;max-width:70px;margin:0px;", "event": "setOffbybuton(this)", "width": "70px" },
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;", "event": "removeRow(this);removeHashMapIndex(this);calculation()", "width": "*" },
