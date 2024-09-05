@@ -426,15 +426,8 @@ function update_status_calculation_cheque_branch(event){
             showWarningMessage('Please select a reocrd');
             return;
         }
-        else if(text == "Select Book"){
-          showWarningMessage('Please select a book');
-          return;
-        }
-        else if($('#cmbNumber').val().length < 1){
-          showWarningMessage('Please enter page number');
-          return;
-          
-        }else if(parseFloat(isNaN($('#cmbBranch').val()))){
+       
+        else if(parseFloat(isNaN($('#cmbBranch').val()))){
             showWarningMessage('Please select a branch');
           return;
         }else{

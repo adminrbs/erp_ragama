@@ -50,7 +50,7 @@ class ChequeAuditReportController2 extends Controller
             //$query_modify .= ' GROUP BY customer_receipt_cheques.cheque_number';
 
 
-            $qry = 'SELECT DISTINCT
+            $qry = 'SELECT
         customer_receipts.customer_receipt_id,
         customers.customer_id,
         customer_receipts.receipt_status,
@@ -60,8 +60,8 @@ class ChequeAuditReportController2 extends Controller
         customer_receipt_cheques.banking_date,
         customer_receipt_cheques.cheque_number,
         IfNull(sales_invoices.external_number , debtors_ledgers.external_number ) AS InvoiceNo ,
-         E.employee_name,
-        customer_receipt_setoff_data.set_off_amount As Invoice_amont ,
+        E.employee_name,
+        customer_receipt_setoff_data.set_off_amount As Invoice_amont,
         CAST(DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date)AS SIGNED) AS Age,
         customer_receipt_cheques.amount,
         banks.bank_name,

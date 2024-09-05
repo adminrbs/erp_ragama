@@ -910,8 +910,9 @@ function saveReceipt() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-
+            $('#btnAction').prop('disabled',true);
         }, success: function (response) {
+            $('#btnAction').prop('disabled',false);
             console.log(response);
             if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
                 showSuccessMessage('Receipt has been saved');

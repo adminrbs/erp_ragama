@@ -90,6 +90,20 @@
                                 </li>
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" name="bankTransfer" value="bankTransfer" id="bankTransfer" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Bank Transfer
+                                    </label>
+                                </li>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" name="creditCard" value="creditCard" id="creditCard" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Credit Cards
+                                    </label>
+                                </li>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" name="chequeToBeBanked" value="chequeToBeBanked" id="chequeToBeBanked" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
                                         Cheques to be banked
