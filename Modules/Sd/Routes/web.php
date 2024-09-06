@@ -680,6 +680,7 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   Route::get('/load_invoice_details_for_invoie_copy/{id}',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy']);
   Route::get('/load_inv_for_copy_issued',[SalesInvoiceCoppyIssuedController::class,'load_inv_for_copy_issued']);
   Route::post('/saveInvoiceCopyIssued',[SalesInvoiceCoppyIssuedController::class,'saveInvoiceCopyIssued']);
+  Route::get('/sales_invoice_copy_issued_report/{collection}/{collector}',[SalesInvoiceCoppyIssuedController::class,'sales_invoice_copy_issued_report']);
 
   Route::get('/sales_invoice_copy_received',function(){
     return view('sd::sales_invoice_copy_received');
@@ -687,4 +688,5 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   Route::get('/load_invoice_details_for_invoie_copy_received/{id}',[SalesInvoiceCoppyIssuedController::class,'load_invoice_details_for_invoie_copy_received']);
   Route::post('/saveInvoiceCopyReceived',[SalesInvoiceCoppyIssuedController::class,'saveInvoiceCopyReceived']);
   Route::get('/loadEmpforsalesInvoiceRecieved',[SalesInvoiceCoppyIssuedController::class,'loadEmpforsalesInvoiceRecieved']);
+  Route::get('/sales_invoice_copy_received_report/{collection}/{collector}',[SalesInvoiceCoppyIssuedController::class,'sales_invoice_copy_received_report']);
 });

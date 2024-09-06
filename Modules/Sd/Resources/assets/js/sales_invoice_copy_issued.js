@@ -363,6 +363,14 @@ function saveInvoiceCopyIssued(collection) {
                     $('#txtRemark').val('');
                     $('#txtInv').val('');
                     $('#invoiceDataTable tbody').empty();
+
+                   
+                    var collector_id = $('#cmbEmp').val();
+                    const newWindow = window.open('/sd/sales_invoice_copy_issued_report/'+JSON.stringify(collection)+'/'+ collector_id);
+                    newWindow.onload = function() {
+                        newWindow.print();
+                    }
+
                 }else{
                     showWarningMessage('Unable to save');
                 }
@@ -378,6 +386,10 @@ function saveInvoiceCopyIssued(collection) {
 
     
 }
+
+
+
+
 
 function newReferanceID(table, doc_number) {
     referanceID = newID("../newReferenceNumber_sales_invoice_copy_issued", table, doc_number);

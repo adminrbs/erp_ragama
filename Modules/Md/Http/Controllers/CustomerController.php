@@ -226,7 +226,7 @@ class CustomerController extends Controller
             routes.route_name
           FROM
             customers
-            INNER JOIN customer_groups ON customers.customer_group_id = customer_groups.customer_group_id
+            LEFT JOIN customer_groups ON customers.customer_group_id = customer_groups.customer_group_id
             LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
             LEFT JOIN routes ON customers.route_id = routes.route_id';
              $customerDteails = DB::select($query);
