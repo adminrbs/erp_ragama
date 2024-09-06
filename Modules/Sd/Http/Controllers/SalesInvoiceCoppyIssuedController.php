@@ -71,7 +71,7 @@ class SalesInvoiceCoppyIssuedController extends Controller
                 $copyIssued = new SalesInvoiceCopyIssued();
                 $copyIssued->sales_invoice_Id = $id;
                 $copyIssued->user_id = Auth::user()->id;
-                $copyIssued->empoyee_id = $empId;
+                $copyIssued->employee_id = $empId;
                 $copyIssued->status = 0;
                 $copyIssued->remark = $request->input('txtRemark');
                 $copyIssued->save();
@@ -83,7 +83,7 @@ class SalesInvoiceCoppyIssuedController extends Controller
         }
     }
 
-    public function load_invoice_details_for_invoie_copy_received(){
+    public function load_invoice_details_for_invoie_copy_received($id){
         try{
             $inv_data_header_qry = '
             SELECT
@@ -103,8 +103,7 @@ class SalesInvoiceCoppyIssuedController extends Controller
             LEFT JOIN employees E ON SI.employee_id = E.employee_id
             LEFT JOIN debtors_ledgers DL ON SI.external_number = DL.external_number
             LEFT JOIN sales_invoice_copy_issueds SII ON SI.sales_invoice_Id = SII.sales_invoice_Id
-            WHERE SII.status = 0
-        ';
+            WHERE SII.status = 0 AND SII.employee_id = '.$id;
 
         $result = DB::select($inv_data_header_qry);
 
@@ -123,6 +122,21 @@ class SalesInvoiceCoppyIssuedController extends Controller
                 $copyIssued->update();
             }
             return response()->json(["status" => true]);
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function loadEmpforsalesInvoiceRecieved(){
+        try{
+            $qry = "SELECT DISTINCT E.employee_name,E.employee_id FROM employees E INNER JOIN sales_invoice_copy_issueds SICI ON E.employee_id = SICI.employee_id";
+            $result = DB::select($qry);
+
+            if($result){
+                return response()->json(["status" => true,"data"=>$result]);
+            }else{
+                return response()->json(["status" => false,"data"=>[]]);
+            }
         }catch(Exception $ex){
             return $ex;
         }

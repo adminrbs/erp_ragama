@@ -47,6 +47,23 @@
 
                                     <div class="col-12">
                                         <div class="row">
+                                        <div class="col-4">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <label class="transaction-lbl" style="width: 100%;text-align: left;"><span>Employe</span></label>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select id="cmbEmp" class="select2 form-control validate" data-live-search="true">
+
+                                                        </select>
+                                                    </div>
+
+
+
+
+                                                </div>
+
+                                            </div>
                                             <div class="col-4">
                                                 <div class="row" style="display:none;">
                                                     <div class="col-3">
@@ -67,23 +84,7 @@
 
                                             </div>
 
-                                            <div class="col-4">
-                                                <div class="row" style="display:none;">
-                                                    <div class="col-3">
-                                                        <label class="transaction-lbl" style="width: 100%;text-align: left;"><span>Employe</span></label>
-                                                    </div>
-                                                    <div class="col-6" >
-                                                        <select id="cmbEmp" class="select2 form-control validate" data-live-search="true">
-
-                                                        </select>
-                                                    </div>
-
-
-                                                   
-
-                                                </div>
-
-                                            </div>
+                                            
                                         </div>
 
                                         <br>

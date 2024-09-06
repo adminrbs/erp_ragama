@@ -12,7 +12,7 @@ use Spatie\Activitylog\LogOptions;
 
 class ItemHistorySetOff extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
     protected $table = "item_history_set_offs";
     protected $primaryKey =  'item_history_setoff_id';
     protected $fillable = [];
