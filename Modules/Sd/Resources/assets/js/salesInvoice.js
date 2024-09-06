@@ -2223,7 +2223,8 @@ function loadOutstandingDataToTable(id){
                 var row = $('<tr>');
                 row.append($('<td>').text(item.trans_date));
                 row.append($('<td>').text(item.external_number));
-                row.append($('<td>').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td style="text-align:right">').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td style="text-align:right">').text(parseFloat(item.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
                 row.append($('<td>').text(item.age));      
                 table.append(row);
             });

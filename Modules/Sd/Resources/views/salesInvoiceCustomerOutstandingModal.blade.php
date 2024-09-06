@@ -267,6 +267,7 @@
                                                 <th>Date</th>
                                                 <th>Invoice Number</th>
                                                 <th>Amount</th>
+                                                <th>Balance</th>
                                                 <th>Age</th>
                                             </thead>
                                         </tr>

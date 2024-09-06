@@ -305,13 +305,13 @@ class CustomerBlockController extends Controller
       //load oustanding data to customer block release and SI customer select.
       public function loadOutstandingDataToTable($id,$br_id){
         try{
-            $qry = "SELECT DL.amount,DL.external_number,DL.trans_date,DATEDIFF(CURRENT_DATE,DL.trans_date) AS age 
+            $qry = "SELECT DL.amount,DL.external_number,DL.trans_date,DATEDIFF(CURRENT_DATE,DL.trans_date) AS age,(DL.amount - DL.paidamount) as balance  
             FROM debtors_ledgers DL WHERE ((DL.amount - DL.paidamount) > 0) AND DL.customer_id = $id";
             
             if($br_id > 0){
                 $qry .= " AND DL.branch_id = $br_id";
             }
-            
+           // dd($qry); 
             $result = DB::select($qry);
 
             if($result){

@@ -336,6 +336,14 @@
                                             <a href="/sd/retrun_trnasfer_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Return Transfer</a>
                                             @endif
 
+                                            
+                                            <a href="/sd/sales_invoice_copy_issued" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Sales Invoice Copy Issued</a>
+                                            
+
+                                           
+                                            <a href="/sd/sales_invoice_copy_received" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Sales Invoice Copy Recieved</a>
+                                            
+
                                         </div>
 
                                         <!-- <div class="col-lg-3 mb-3 mb-lg-0">
