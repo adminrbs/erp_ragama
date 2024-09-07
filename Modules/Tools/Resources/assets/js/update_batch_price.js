@@ -307,7 +307,7 @@ function getBatchData() {
 
                     data.push({
                         "referance": '<label data-id = "' + id + '">' + result[i].external_number + '</label>',
-                        "date": result[i].goods_received_date_time,
+                        "date": result[i].transaction_date,
                         "item": result[i].item_Name,
                         "batch": result[i].batch_number,
                         "qty":Math.abs(result[i].qty),

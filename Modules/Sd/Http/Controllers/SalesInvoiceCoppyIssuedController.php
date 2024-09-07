@@ -154,8 +154,8 @@ class SalesInvoiceCoppyIssuedController extends Controller
     public function sales_invoice_copy_issued_report($collection, $collector_id)
     {
 
-    
-
+        $col = json_decode($collection);
+        $col_list = implode(',', array_map('intval', $col));
         $qry = "
     SELECT
        
@@ -169,7 +169,7 @@ class SalesInvoiceCoppyIssuedController extends Controller
     LEFT JOIN customers C ON SI.customer_id = C.customer_id  
     LEFT JOIN debtors_ledgers DL ON SI.external_number = DL.external_number
     LEFT JOIN sales_invoice_copy_issueds SII ON SI.sales_invoice_Id = SII.sales_invoice_Id
-    WHERE SI.sales_invoice_Id IN (" . $collection . ");
+    WHERE SI.sales_invoice_Id IN (" . $col_list . ");
 ";
         //dd($qry);
         $result = DB::select($qry);
@@ -199,8 +199,8 @@ class SalesInvoiceCoppyIssuedController extends Controller
 
     public function sales_invoice_copy_received_report($collection, $collector_id)
     {
-
-    
+        $col = json_decode($collection);
+        $col_list = implode(',', array_map('intval', $col));
 
         $qry = "
     SELECT
@@ -215,8 +215,7 @@ class SalesInvoiceCoppyIssuedController extends Controller
     LEFT JOIN customers C ON SI.customer_id = C.customer_id  
     LEFT JOIN debtors_ledgers DL ON SI.external_number = DL.external_number
     LEFT JOIN sales_invoice_copy_issueds SII ON SI.sales_invoice_Id = SII.sales_invoice_Id
-    WHERE SI.sales_invoice_Id IN (" . $collection . ");
-";
+    WHERE SI.sales_invoice_Id IN (" . $col_list . ");";
         //dd($qry);
         $result = DB::select($qry);
 

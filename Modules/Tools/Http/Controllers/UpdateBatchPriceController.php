@@ -39,8 +39,8 @@ class UpdateBatchPriceController extends Controller
 
             $query = "SELECT DISTINCT
             ih.item_history_setoff_id,
-            goods_received_notes.external_number,
-            goods_received_notes.goods_received_date_time,
+            ih.external_number,
+            ih.transaction_date,
             items.item_Name,
             ih.batch_number,
             ih.cost_price,
@@ -48,16 +48,16 @@ class UpdateBatchPriceController extends Controller
             ih.retial_price,
             ih.quantity - ih.setoff_quantity as qty
             FROM item_history_set_offs AS ih
-            INNER JOIN goods_received_notes ON ih.external_number = goods_received_notes.external_number
-            INNER JOIN goods_received_note_items ON goods_received_notes.goods_received_Id = goods_received_note_items.goods_received_Id
-            INNER JOIN items ON ih.item_id = items.item_id
+            LEFT JOIN goods_received_notes ON ih.external_number = goods_received_notes.external_number
+            LEFT JOIN goods_received_note_items ON goods_received_notes.goods_received_Id = goods_received_note_items.goods_received_Id
+            LEFT JOIN items ON ih.item_id = items.item_id
             WHERE (ih.quantity - ih.setoff_quantity) > 0 AND ";
 
             if ($filters->supply_group != "any") {
                 $query .= "items.supply_group_id = '" . $filters->supply_group . "' AND ";
             }
             if ($filters->branch != "any") {
-                $query .= "goods_received_notes.branch_id = '" . $filters->branch . "' AND ";
+                $query .= "ih.branch_id = '" . $filters->branch . "' AND ";
             }
             if ($filters->item != "any") {
                 $query .= "ih.item_id = '" . $filters->item . "' AND ";
