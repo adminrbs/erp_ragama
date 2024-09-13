@@ -257,7 +257,7 @@ console.log(disAmount);
  
          {
              table: {
-                 widths: ['*', 110,'*', '*', 40, '*', "*", '*',60,5],
+                 widths: ['*', 90,'*', 20,20, 40, '*', "*", '*',60,5],
                  headerRows: 1,
                  body: reportitemBody(goodrecive_item),
              },
@@ -441,13 +441,13 @@ console.log(data);
      body.push([{ text: 'Item Code', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'Item Name', underline: true, fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'Pack Size', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
-        { text: 'Quantity', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
-       // { text: 'Free Qty', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+        { text: 'QTY', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+        { text: 'F.Qty', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'Pur.Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'Dis %', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
        // { text: 'Amount', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'WS price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
-        { text: 'Retial Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+        { text: 'Rt Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         { text: 'Amount', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
         //{ text: '', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
       
@@ -479,7 +479,7 @@ console.log(data);
         console.log(whole_sale_price);
         
         var formattedretial_price = retial_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      
+        var formatted_wh_price = whole_sale_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         var formattedfree_quantity = free_quantity.toLocaleString();
         var formattedquantity = quantity.toLocaleString();
         var new_qty = Math.abs(quantity);
@@ -491,11 +491,11 @@ console.log(data);
             { text: data[i].package_unit || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: new_qty || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
 
-          //  { text: formattedfree_quantity, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+            { text: formattedfree_quantity, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: formattedPrice || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: data[i].discount_percentage || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             //{ text: formattedAmount, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
-            { text: whole_sale_price || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+            { text: formatted_wh_price || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             //{ text: parseFloat(data[i].value).toFixed(2), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             //{ text: data[i].price, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: formattedretial_price || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },

@@ -22,13 +22,15 @@ class DirectReceiptController extends Controller
     CR.customer_receipt_id,
 	CR.receipt_date,
 	CR.external_number,
+    C.customer_name,
 	CR.amount,
 	B.branch_name,
-    U.name 
+    E.employee_name as name 
 FROM
 	customer_receipts CR
 	LEFT JOIN branches B ON CR.branch_id = B.branch_id
-	LEFT JOIN users U ON CR.cashier_id = U.user_id
+	LEFT JOIN employees E ON CR.cashier_id = E.employee_id
+    LEFT JOIN customers C ON CR.customer_id = C.customer_id
 WHERE
 	CR.receipt_method_id = 1 
 	AND CR.is_direct_receipt = 1 
@@ -172,7 +174,7 @@ WHERE
                 }
             }
             DB::commit();
-            return response()->json(["status"=>true]);
+            return response()->json(["status" => true]);
         } catch (Exception $ex) {
             DB::rollBack();
             return $ex;

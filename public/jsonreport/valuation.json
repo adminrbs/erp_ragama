@@ -143,6 +143,14 @@
                                 ],
                                 [
                                     {
+                                        "text": "Rt.Price",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width" : 100
+                                    }
+                                ],
+                                [
+                                    {
                                         "text": "Value",
                                         "align": "right",
                                         "format": "number",

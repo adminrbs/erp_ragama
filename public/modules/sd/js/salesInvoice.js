@@ -103,12 +103,14 @@ function setOff() {
                 var setoff_quantity = 0;
                 var setWholesalePrice = 0;
                 var setWholesalePrice_temp = 0;
+                var setRetailPrice = 0;
                 var avl_qty = 0;
                 for (var i2 = 0; i2 < array.length; i2++) {
                     var setoffObject = array[i2][1];
                     setoff_quantity += parseFloat(setoffObject.getSetoffQuantity());
                     if (setoffObject.getSetoffQuantity() > 0) {
                         setWholesalePrice = parseFloat(setoffObject.getWholesalePrice());
+                        setRetailPrice = parseFloat(setoffObject.getRetailPrice());
                     }
                     setWholesalePrice_temp = parseFloat(setoffObject.getWholesalePrice());  // use when user enter 0 set off qty
 
@@ -127,6 +129,7 @@ function setOff() {
                     // alert(setWholesalePrice_temp);
                     /*  setoffObject.setSetoffQuantity(parseFloat(total_qty)); */
                     setWholesalePrice = parseFloat(setWholesalePrice_temp);
+                    
 
                 }
 
@@ -147,6 +150,7 @@ function setOff() {
                     rowObjects[i][12].val(setoff_quantity);
                     rowObjects[i][7].val(parseFloat(setWholesalePrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     rowObjects[i][10].val(parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    rowObjects[i][13].val(parseFloat(setRetailPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
                 }
             }
         }
@@ -183,7 +187,7 @@ function setOffAutoMatically(collection) {
                 //console.log(response);
                 var itemobj = new Item();
                 $.each(dt, function (index, item) {
-                    //console.log(item);
+                    console.log(item);
 
                     //   alert();
                     var itemSetOff = new ItemSetoff();
@@ -2219,7 +2223,8 @@ function loadOutstandingDataToTable(id){
                 var row = $('<tr>');
                 row.append($('<td>').text(item.trans_date));
                 row.append($('<td>').text(item.external_number));
-                row.append($('<td>').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td style="text-align:right">').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td style="text-align:right">').text(parseFloat(item.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
                 row.append($('<td>').text(item.age));      
                 table.append(row);
             });

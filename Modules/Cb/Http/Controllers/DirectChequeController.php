@@ -24,7 +24,7 @@ class DirectChequeController extends Controller
 	CR.external_number,
 	CR.amount,
 	B.branch_name,
-	U.name,
+	E.employee_name AS name,
 	CRC.cheque_number,
 	BK.bank_name,
 	BK.bank_code,
@@ -32,8 +32,8 @@ class DirectChequeController extends Controller
 FROM
 	customer_receipts CR
 	INNER JOIN branches B ON CR.branch_id = B.branch_id
-	INNER JOIN users U ON CR.cashier_id = U.id
-	INNER JOIN customer_receipt_cheques CRC ON CR.customer_receipt_id = CRC.customer_receipt_id
+	INNER JOIN employees E ON CR.cashier_id = E.employee_id
+	LEFT JOIN customer_receipt_cheques CRC ON CR.customer_receipt_id = CRC.customer_receipt_id
 	LEFT JOIN banks BK ON CRC.bank_id = BK.bank_id
 	LEFT JOIN bank_branches BB ON CRC.bank_branch_id = BB.bank_branch_id
      

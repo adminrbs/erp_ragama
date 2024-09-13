@@ -33,6 +33,7 @@ use Modules\Md\Http\Controllers\salesOrderController;
 use Modules\Md\Http\Controllers\SfaAccessController;
 use Modules\Md\Http\Controllers\Suply_groupController;
 use Modules\Md\Http\Controllers\SupplierController;
+use Modules\Md\Http\Controllers\SupplierCustomerCodeController;
 use Modules\Md\Http\Controllers\supplierItemCodeController;
 use Modules\Md\Http\Controllers\TownNonadministrativeController;
 use Modules\Md\Http\Controllers\VehicleController;
@@ -538,6 +539,20 @@ Route::post('/updateMarketingRoute/{id}',[MarketingRouteController::class,'updat
 Route::get('/human_body_system',function(){
     return view('md::human_body_systems');
 });
+
+
+   /** Supplier's Customer code */
+   Route::get('/supplier_customer_code', function () {
+    return view('md::supplier_customer_code');
+})->middleware('is.logged');
+Route::get('/loadBranches', [SupplierCustomerCodeController::class, 'loadBranches']);
+Route::get('/loadCustomers', [SupplierCustomerCodeController::class, 'loadCustomers']);
+Route::get('/isExistingRecord/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'isExistingRecord']);
+Route::post('/saveSupplierCustomerCode', [SupplierCustomerCodeController::class, 'save']);
+Route::get('/viewAllData', [SupplierCustomerCodeController::class, 'viewAllData']);
+Route::get('/getSupplierCustomerData/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'getSupplierCustomerData']);
+Route::post('/updateSupplierCustomerCode', [SupplierCustomerCodeController::class, 'update']);
+Route::delete('/deleteSupplierCustomerCode/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'deleteSupplierCustomerCode']);
 });
 
 

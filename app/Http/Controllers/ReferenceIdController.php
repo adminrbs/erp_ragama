@@ -162,12 +162,25 @@ class ReferenceIdController extends Controller
     }
 
     //gr return
-    public function GRN_return_referenceId($table, $doc_number)
+    public function GRN_return_referenceId(Request $request,$table, $doc_number)
     {
 
         try {
             $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
-            $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' ORDER BY goods_received_return_Id  DESC LIMIT 1";
+           // $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' ORDER BY goods_received_return_Id  DESC LIMIT 1";
+           $branch_id = $request->input('id');
+            $query = "
+            SELECT 
+                IF(ISNULL(external_number), 0, external_number) AS id 
+            FROM 
+                " . $table . " 
+            WHERE 
+                document_number = '" . $doc_number . "' 
+                AND external_number LIKE '%" . $prefix . "%' 
+                AND branch_id = '" . $branch_id . "' 
+            ORDER BY 
+                goods_received_return_Id DESC 
+            LIMIT 1";
             $result = DB::select($query);
             $id = 1;
 

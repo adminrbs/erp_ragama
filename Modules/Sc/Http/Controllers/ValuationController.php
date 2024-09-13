@@ -81,9 +81,9 @@ class ValuationController extends Controller
             }
 
             if ($nonNullCount > 1) {
-                $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
+                $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,IH.retial_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
                 INNER JOIN 
-                ( SELECT  item_id  , branch_id,location_id,transaction_date, ABS(SUM(quantity-setoff_quantity)) AS in_hand  ,whole_sale_price, (SUM(quantity-setoff_quantity)*whole_sale_price) AS `value` 
+                ( SELECT  item_id  , branch_id,location_id,transaction_date, ABS(SUM(quantity-setoff_quantity)) AS in_hand  ,whole_sale_price,retial_price, (SUM(quantity-setoff_quantity)*whole_sale_price) AS `value` 
                  FROM item_history_set_offs WHERE  ((quantity - setoff_quantity) > 0) AND transaction_date <= CURDATE()  GROUP BY item_id,branch_id ) IH  ON IH.item_id=I.item_id';
 
 

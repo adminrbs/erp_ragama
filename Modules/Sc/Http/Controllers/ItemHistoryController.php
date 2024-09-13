@@ -104,10 +104,15 @@ class ItemHistoryController extends Controller
             }
 
             if ($nonNullCount > 1) {
-                $query = ' SELECT items.Item_code, items.item_Name, SUM(item_historys.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
+               /*  $query = ' SELECT items.Item_code, items.item_Name, SUM(item_historys.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
             FROM item_historys
             LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
             LEFT JOIN items ON item_historys.item_id = items.item_id
+            LEFT JOIN locations ON item_historys.location_id = locations.location_id'; */
+            $query = ' SELECT items.Item_code, items.item_Name, SUM(item_historys.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
+            FROM items
+            LEFT JOIN item_historys ON items.item_id = item_historys.item_id
+            LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
             LEFT JOIN locations ON item_historys.location_id = locations.location_id';
 
 

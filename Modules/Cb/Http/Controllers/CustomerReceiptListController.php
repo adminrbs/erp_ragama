@@ -26,7 +26,7 @@ class CustomerReceiptListController extends Controller
         ELSE 'Bank Slip'
     END AS payment_mode FROM customer_receipts
             LEFT JOIN customer_receipt_cheques ON customer_receipts.customer_receipt_id = customer_receipt_cheques.customer_receipt_id
-            INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id ORDER BY customer_receipts.external_number DESC";
+            INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id ORDER BY customer_receipts.customer_receipt_id DESC";
             $data = DB::select($query);
             return response()->json(["status" => true, "data" => $data]);
         } catch (Exception $ex) {

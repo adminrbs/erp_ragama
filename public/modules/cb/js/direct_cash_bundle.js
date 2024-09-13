@@ -78,6 +78,7 @@ const DatatableFixedColumns = function () {
 
                 { "data": "date" },
                 { "data": "ref_number" },
+                { "data": "customer" },
                 { "data": "Cashier" },
                 { "data": "amount" },
                 { "data": "branch" },
@@ -185,6 +186,7 @@ function load_direct_cash_create_to_bundle(br_id) {
                 data.push({
                     "date": '<div data-id="' + dt[i].customer_receipt_id + '">' + dt[i].receipt_date + '</div>',
                     "ref_number": '<div data-id="' + dt[i].customer_receipt_id + '">' + dt[i].external_number + '</div>',
+                    "customer":dt[i].customer_name,
                     "Cashier": dt[i].name,
                     "amount": parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     "branch": dt[i].branch_name,

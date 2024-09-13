@@ -65,7 +65,7 @@
                                 <th>Action</th> -->
                                 <th>Date</th>
                                 <th>Reference #</th>
-                        
+                                <th>Customer Name</th>
                                 <th>Cashier</th>
                                 <th>Amount</th>
                                 <th>Branch</th>

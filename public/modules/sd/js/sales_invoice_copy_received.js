@@ -104,8 +104,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 $(document).ready(function () {
-
-    load_invoice_details_for_invoie_copy_received();
+    
+    $('#cmbEmp').on('change', function() {
+        
+        var id = $(this).val();
+        load_invoice_details_for_invoie_copy_received(id);
+    });
+    
+    loadEmp();
 
     $('#btnSave').on('click',function(){
         var collection = [];
@@ -232,10 +238,10 @@ $(document).ready(function () {
         }
     });
 } */
-    function load_invoice_details_for_invoie_copy_received() {
+    function load_invoice_details_for_invoie_copy_received(id) {
         $("#invoiceDataTable tbody tr").removeClass("highlight");
         $.ajax({
-            url: '/sd/load_invoice_details_for_invoie_copy_received/',
+            url: '/sd/load_invoice_details_for_invoie_copy_received/'+id,
             method: 'GET',
             cache: false,
             timeout: 800000,
@@ -326,6 +332,12 @@ function saveInvoiceCopyReceived(collection) {
                     $('#txtRemark').val('');
                     $('#txtInv').val('');
                     $('#invoiceDataTable tbody').empty();
+
+                    var collector_id = $('#cmbEmp').val();
+                    const newWindow = window.open('/sd/sales_invoice_copy_received_report/'+JSON.stringify(collection)+'/'+ collector_id);
+                    newWindow.onload = function() {
+                        newWindow.print();
+                    }
                 }else{
                     showWarningMessage('Unable to update');
                 }
@@ -342,3 +354,25 @@ function saveInvoiceCopyReceived(collection) {
     
 }
 
+function loadEmp() {
+    $.ajax({
+        url: '/sd/loadEmpforsalesInvoiceRecieved',
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            console.log(data);
+                $('#cmbEmp').append('<option value="0">Select Employee</option>');
+            $.each(data.data, function (index, value) {
+                $('#cmbEmp').append('<option value="' + value.employee_id + '">' + value.employee_name + '</option>');
+            });
+
+
+            $('#cmbEmp').trigger('change');
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+}
