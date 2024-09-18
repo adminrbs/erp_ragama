@@ -89,6 +89,18 @@ class DebtorReportsController extends Controller
         }
     }
 
+    public function getCollectorsfor_report()
+    {
+        try {
+
+            $data = DB::select("SELECT employees.employee_name,employees.employee_id FROM employees WHERE employees.desgination_id = 7  OR  employees.desgination_id = 8;");
+
+            return response()->json($data);
+        } catch (Exception $ex) {
+            return $ex;
+        }
+    }
+
 
 
     public function debtor_reports($search)

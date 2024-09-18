@@ -92,6 +92,7 @@ Route::prefix('sc')->middleware(['is.logged'])->group(function () {
     Route::get('/getcustomergrade', [DebtorReportsController::class, 'getcustomergrade']);
     Route::get('/getRoute', [DebtorReportsController::class, 'getRoute']);
     Route::get('/getSalesrepfor_report', [DebtorReportsController::class, 'getSalesrepfor_report']);
+    Route::get('/getCollectorsfor_report',[DebtorReportsController::class,'getCollectorsfor_report']);
     // Customer_Ledger_reports
     Route::get('/Customer_Ledger_reports/{search}', [CustomerLegerReportController::class, 'Customer_Ledger_reports']);
 

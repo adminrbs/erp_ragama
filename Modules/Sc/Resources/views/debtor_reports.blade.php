@@ -162,6 +162,16 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-11 mb-0 mt-0">
+                                                <label style="font-weight: bold;">Collector</label>
+                                                <!-- <select class="form-control validate select2" id="cmbCustomer"></select>-->
+                                                <select multiple="multiple" class="form-select select" id="cmbCollector" data-placeholder="Select collector" style="height: 100%"></select>
+                                            </div>
+                                            <div class="col-md-1 mt-0">
+                                                <input id="chkCollector" type="checkbox" style="margin-top: 30px;">
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Customer Group</label>
                                                 <!--<select class="form-control validate select2" id="cmbcustomergroup"></select>-->

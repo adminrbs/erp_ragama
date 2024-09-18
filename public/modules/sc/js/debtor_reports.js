@@ -269,6 +269,7 @@ $(document).ready(function () {
     getRoute();
     getSalesrep();
     getSupplyGroup();
+    getCollectors();
 
 
 
@@ -1095,12 +1096,39 @@ function getSalesrep() {
             })
 
             $('#cmbSalesrep').html(data);
+            
 
         }
 
     });
 
 }
+
+function getCollectors() {
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/sc/getCollectorsfor_report",
+
+        success: function (data) {
+
+
+            $.each(data, function (key, value) {
+
+                data = data + "<option id='' value='" + value.employee_id + "'>" + value.employee_name + "<input type='checkbox'></option>";
+
+
+            })
+
+            $('#cmbCollector').html(data);
+            
+
+        }
+
+    });
+
+}
+
 
 
 

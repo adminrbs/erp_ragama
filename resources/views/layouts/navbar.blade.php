@@ -833,6 +833,7 @@
                                             @if(Auth::user()->can('sd_assign_customer_to_sales_rep') && Auth::user()->hasModulePermission('Sales And Distribution'))
                                             <a href="/sd/employeeCustomerView" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Assign Customer to Sales Rep</a>
                                             @endif
+                                            
 
                                         </div>
 
@@ -842,6 +843,9 @@
                                             @if(Auth::user()->can('st_assign_customer_to_sales_rep') && Auth::user()->hasModulePermission('Setting'))
                                             <a href="/sd/employeeCustomerView" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Assign Customer to Sales Rep</a>
                                             @endif
+
+                                            <a href="/st/collectorCustomerView" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Assign Customer to Collector</a>
+                                            
                                             @if(Auth::user()->can('st_assign_employee_to_branch') && Auth::user()->hasModulePermission('Setting'))
                                             <a href="/sd/employeBranchView" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Assign Employee to Branch</a>
                                             @endif

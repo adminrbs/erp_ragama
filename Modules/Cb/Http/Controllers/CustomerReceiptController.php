@@ -214,6 +214,23 @@ class CustomerReceiptController extends Controller
     //dd($request->input('receipt_data'));
 
         try {
+            if($request->get('receipt_method_id') == 2){
+                $single_cheque = json_decode($request->get('single_cheque'));
+                $cheque_number = $single_cheque->cheque_number;
+                $bank_id = $single_cheque->bank_id;
+
+                $qry = DB::select("SELECT COUNT(*) as count 
+                        FROM customer_receipt_cheques CRC 
+                        WHERE CRC.bank_id = $bank_id 
+                        AND CRC.cheque_number = $cheque_number
+                        AND DATE(CRC.created_at) >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH);");
+
+                if($qry[0]->count > 0){
+                    return response()->json(["duplicate" => "duplicate" ]);
+                }
+            }
+            
+
             $referencenumber = $request->input('external_number');
                 // dd($referencenumber);
                 $bR_id = $request->get('branch_id');

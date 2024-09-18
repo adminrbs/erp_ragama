@@ -112,6 +112,15 @@
                             "font-size" : 18
                         }
                     ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Collector</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":150,
+                            "font-size" : 18
+                        }
+                    ],
                     
                     [
                         {

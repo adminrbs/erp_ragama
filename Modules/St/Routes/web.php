@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\St\Http\Controllers\CollectorToCustomerController;
 use Modules\St\Http\Controllers\AssinusertoBranchController;
 use Modules\St\Http\Controllers\PermissionController;
 use Modules\St\Http\Controllers\roleController;
@@ -90,4 +91,18 @@ Route::prefix('st')->middleware(['is.logged'])->group(function () {
 
     Route::post('/selectdeletuserBranch',[AssinusertoBranchController::class,'selectdeletuserBranch']);
 
+      /** Assign cusotmer to collector */
+      Route::get('/collectorCustomerView', function () {
+        return view('st::Assign_Customer_to_collector');
+    })->middleware(['is.logged']);
+    Route::get('/getEmployeeAssign', [CollectorToCustomerController::class, 'getEmployees']);
+    Route::post('/getCustomerDataTOlistbox/{id}', [CollectorToCustomerController::class, 'getFilterData']); // same for employee cystomer
+    Route::get('/getEmployeeCustomerDetails', [CollectorToCustomerController::class, 'getEmployeeCustomerDetails']);
+    Route::post('/addEmployeeCustomer', [CollectorToCustomerController::class, 'addEmployeeCustomer']);
+    Route::delete('/deleteEmployeeCustomer', [CollectorToCustomerController::class, 'deleteEmployeeCustomer']);
+    Route::get('/getselectemployee/{id}', [CollectorToCustomerController::class, 'getselectuser']);
+    Route::post('/selectdeletuserBranch', [CollectorToCustomerController::class, 'selectdeletuserBranch']);
+    Route::Get('/getRoute_customers/{id}', [CollectorToCustomerController::class, 'getRoute_customers']);
+    Route::Get('/getDeliveryRoutesTofilter', [CollectorToCustomerController::class, 'getRoutes']);
+    /**End of assign customer to employees */
 });
