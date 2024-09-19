@@ -76,78 +76,82 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
             if ($nonNullCount > 1) {
                 $style = 'font-size:15px;';
-               
 
-            $query = "SELECT
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.customer_code, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS customer_code,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.customer_name, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS customer_name,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', D.external_number, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS external_number,  
-            
-           CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', IFNULL(E.nick_name, ''), '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS employee_name,
-
-            (SELECT IFNULL(CE.nick_name, '') 
-             FROM customer_collectors CC 
-             LEFT JOIN employees CE ON CC.employee_id = CE.employee_id 
-             WHERE CC.customer_id = D.customer_id 
-             LIMIT 1) AS collector_nickname,
-            
-              CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">',  D.trans_date, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS trans_date,  
-            
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS age,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.credit_amount_hold_limit, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS credit_limit,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.credit_period_hold_limit, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS credit_period,  
-            
-            D.amount - D.paidamount AS total_outstanding  
-             
-        FROM debtors_ledgers D 
-        LEFT JOIN customers C ON D.customer_id = C.customer_id 
-        LEFT JOIN employees E ON D.employee_id = E.employee_id
-        LEFT JOIN customer_collectors CC ON C.customer_id = CC.customer_id
-         
-        LEFT JOIN town_non_administratives T ON T.town_id = C.town 
-        LEFT JOIN branches ON D.branch_id = branches.branch_id
-        LEFT JOIN routes RT ON C.route_id = RT.route_id
-        LEFT JOIN sales_invoice_items SII ON D.external_number = SII.external_number
-        LEFT JOIN item_payment_terms IPT ON SII.item_id = IPT.item_id
-       
-        WHERE (D.amount - D.paidamount > 0) 
-        AND (D.document_number = 1600 OR D.document_number = 210)";
+                $query = "SELECT
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.customer_code, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS customer_code,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.customer_name, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS customer_name,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', D.external_number, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS external_number,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', IFNULL(E.nick_name, ''), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS employee_name,
+                
+                    (SELECT CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', IFNULL(CE.nick_name, ''), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) 
+                    FROM customer_collectors CC 
+                    LEFT JOIN employees CE ON CC.employee_id = CE.employee_id 
+                    WHERE CC.customer_id = D.customer_id 
+                    LIMIT 1
+                    ) AS collector_nickname,
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">',  D.trans_date, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS trans_date,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS age,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.credit_amount_hold_limit, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS credit_limit,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.credit_period_hold_limit, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS credit_period,  
+                    
+                    D.amount - D.paidamount AS total_outstanding  
+                    
+                FROM debtors_ledgers D 
+                LEFT JOIN customers C ON D.customer_id = C.customer_id 
+                LEFT JOIN employees E ON D.employee_id = E.employee_id
+                LEFT JOIN customer_collectors CC ON C.customer_id = CC.customer_id
+                LEFT JOIN town_non_administratives T ON T.town_id = C.town 
+                LEFT JOIN branches ON D.branch_id = branches.branch_id
+                LEFT JOIN routes RT ON C.route_id = RT.route_id
+                LEFT JOIN sales_invoice_items SII ON D.external_number = SII.external_number
+                LEFT JOIN item_payment_terms IPT ON SII.item_id = IPT.item_id
+                
+                WHERE (D.amount - D.paidamount > 0) 
+                AND (D.document_number = 1600 OR D.document_number = 210)";
+                
 
 
 
@@ -226,7 +230,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
                 $query .=  $quryModify . ' GROUP BY D.external_number ORDER BY DATEDIFF(CURDATE(), D.trans_date) DESC';
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-                //dd($query);
+               // dd($query);
                 $result = DB::select($query);
 
                 $reportViwer = new ReportViewer();
@@ -241,75 +245,79 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                
 
                 $query = "SELECT
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.customer_code, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS customer_code,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.customer_name, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS customer_name,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', D.external_number, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS external_number,  
-            
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', IFNULL(E.nick_name, ''), '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS employee_name, 
-
-             (SELECT IFNULL(CE.nick_name, '') 
-             FROM customer_collectors CC 
-             LEFT JOIN employees CE ON CC.employee_id = CE.employee_id 
-             WHERE CC.customer_id = D.customer_id 
-             LIMIT 1) AS collector_nickname,
-            
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">',  D.trans_date, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS trans_date,  
-            
-            CONCAT(
-                IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS age,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.credit_amount_hold_limit, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS credit_limit,  
-            
-            CONCAT(
-               IF(IPT.payment_term_id = 20, '<b>', ''), 
-                '<label style=\"" . $style . "\">', C.credit_period_hold_limit, '</label>',
-                IF(IPT.payment_term_id = 20, '</b>', '')
-            ) AS credit_period,  
-            
-            D.amount - D.paidamount AS total_outstanding  
-             
-        FROM debtors_ledgers D 
-           LEFT JOIN customers C ON D.customer_id = C.customer_id 
-        LEFT JOIN employees E ON D.employee_id = E.employee_id
-        left JOIN customer_collectors CC ON C.customer_id = CC.customer_id
-         
-        LEFT JOIN town_non_administratives T ON T.town_id = C.town 
-        LEFT JOIN branches ON D.branch_id = branches.branch_id
-        LEFT JOIN routes RT ON C.route_id = RT.route_id
-        LEFT JOIN sales_invoice_items SII ON D.external_number = SII.external_number
-        LEFT JOIN item_payment_terms IPT ON SII.item_id = IPT.item_id
-       
-        WHERE (D.amount - D.paidamount > 0) 
-        AND (D.document_number = 1600 OR D.document_number = 210)";
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.customer_code, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS customer_code,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.customer_name, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS customer_name,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', D.external_number, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS external_number,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', IFNULL(E.nick_name, ''), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS employee_name,
+                
+                    (SELECT CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', IFNULL(CE.nick_name, ''), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) 
+                    FROM customer_collectors CC 
+                    LEFT JOIN employees CE ON CC.employee_id = CE.employee_id 
+                    WHERE CC.customer_id = D.customer_id 
+                    LIMIT 1
+                    ) AS collector_nickname,
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">',  D.trans_date, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS trans_date,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS age,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.credit_amount_hold_limit, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS credit_limit,  
+                    
+                    CONCAT(
+                        IF(IPT.payment_term_id = 20, '<b>', ''), 
+                        '<label style=\"" . $style . "\">', C.credit_period_hold_limit, '</label>',
+                        IF(IPT.payment_term_id = 20, '</b>', '')
+                    ) AS credit_period,  
+                    
+                    D.amount - D.paidamount AS total_outstanding  
+                    
+                FROM debtors_ledgers D 
+                LEFT JOIN customers C ON D.customer_id = C.customer_id 
+                LEFT JOIN employees E ON D.employee_id = E.employee_id
+                LEFT JOIN customer_collectors CC ON C.customer_id = CC.customer_id
+                LEFT JOIN town_non_administratives T ON T.town_id = C.town 
+                LEFT JOIN branches ON D.branch_id = branches.branch_id
+                LEFT JOIN routes RT ON C.route_id = RT.route_id
+                LEFT JOIN sales_invoice_items SII ON D.external_number = SII.external_number
+                LEFT JOIN item_payment_terms IPT ON SII.item_id = IPT.item_id
+                
+                WHERE (D.amount - D.paidamount > 0) 
+                AND (D.document_number = 1600 OR D.document_number = 210)";
 
 
                 $quryModify = "";
