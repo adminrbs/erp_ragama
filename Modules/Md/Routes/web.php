@@ -556,9 +556,10 @@ Route::post('/updateSupplierCustomerCode', [SupplierCustomerCodeController::clas
 Route::delete('/deleteSupplierCustomerCode/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'deleteSupplierCustomerCode']);
 
 /**Account group level 01 */
+Route::middleware(['is.logged'])->group(function () {
 Route::get('/account_group_level', function () {
     return view('md::account_group_level');
-})->middleware('is.logged');
+});
 Route::post('/saveAccountLevelOne',[AccountGroupLevelController::class,'saveAccountLevelOne']);
 Route::get('/loadAccountGroupLevelOne',[AccountGroupLevelController::class,'loadAccountGroupLevelOne']);
 Route::get('/loadEachAccountGroupLevelOne/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelOne']);
@@ -585,7 +586,7 @@ Route::get('/loadAccountGroupLevelFour',[AccountGroupLevelController::class,'loa
 Route::get('/loadEachAccountGroupLevelFour/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelFour']);
 Route::post('/updateAccountGroupLevelFour/{id}',[AccountGroupLevelController::class,'updateAccountGroupLevelFour']);
 Route::delete('/deleteLevelFour/{id}',[AccountGroupLevelController::class,'deleteLevelFour']);
-
+});
 
 
 });

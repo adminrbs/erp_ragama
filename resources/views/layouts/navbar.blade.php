@@ -194,6 +194,7 @@
                                             @if(Auth::user()->can('md_common_settings') && Auth::user()->hasModulePermission('Master Data'))
                                             <a href="/md/commonSetting" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Common Setting</a>
                                             @endif
+                                            <a href="/md/account_group_level" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Account Level</a>
                                         </div>
                                     </div>
                                 </div>
