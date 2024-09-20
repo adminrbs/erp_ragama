@@ -14,6 +14,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Md\Entities\location;
+use Modules\Md\Http\Controllers\AccountGroupLevelController;
 use Modules\Md\Http\Controllers\BankController;
 use Modules\Md\Http\Controllers\BookController;
 use Modules\Md\Http\Controllers\branchController;
@@ -553,6 +554,40 @@ Route::get('/viewAllData', [SupplierCustomerCodeController::class, 'viewAllData'
 Route::get('/getSupplierCustomerData/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'getSupplierCustomerData']);
 Route::post('/updateSupplierCustomerCode', [SupplierCustomerCodeController::class, 'update']);
 Route::delete('/deleteSupplierCustomerCode/{customer_id}/{branch_id}', [SupplierCustomerCodeController::class, 'deleteSupplierCustomerCode']);
+
+/**Account group level 01 */
+Route::get('/account_group_level', function () {
+    return view('md::account_group_level');
+})->middleware('is.logged');
+Route::post('/saveAccountLevelOne',[AccountGroupLevelController::class,'saveAccountLevelOne']);
+Route::get('/loadAccountGroupLevelOne',[AccountGroupLevelController::class,'loadAccountGroupLevelOne']);
+Route::get('/loadEachAccountGroupLevelOne/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelOne']);
+Route::post('/updateAccountGroupLevelOne/{id}',[AccountGroupLevelController::class,'updateAccountGroupLevelOne']);
+Route::delete('/deleteLevelOne/{id}',[AccountGroupLevelController::class,'deleteLevelOne']);
+
+/**Account group level 02 */
+Route::post('/saveAccountLevelTwo',[AccountGroupLevelController::class,'saveAccountLevelTwo']);
+Route::get('/loadAccountGroupLevelTwo',[AccountGroupLevelController::class,'loadAccountGroupLevelTwo']);
+Route::get('/loadEachAccountGroupLevelTwo/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelTwo']);
+Route::post('/updateAccountGroupLevelTwo/{id}',[AccountGroupLevelController::class,'updateAccountGroupLevelTwo']);
+Route::delete('/deleteLevelTwo/{id}',[AccountGroupLevelController::class,'deleteLevelTwo']);
+
+/**Account group level 03 */
+Route::post('/saveAccountLevelThree',[AccountGroupLevelController::class,'saveAccountLevelThree']);
+Route::get('/loadAccountGroupLevelThree',[AccountGroupLevelController::class,'loadAccountGroupLevelThree']);
+Route::get('/loadEachAccountGroupLevelThree/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelThree']);
+Route::post('/updateAccountGroupLevelThree/{id}',[AccountGroupLevelController::class,'updateAccountGroupLevelThree']);
+Route::delete('/deleteLevelThree/{id}',[AccountGroupLevelController::class,'deleteLevelThree']);
+
+/**Account group level 04 */
+Route::post('/saveAccountLevelFour',[AccountGroupLevelController::class,'saveAccountLevelFour']);
+Route::get('/loadAccountGroupLevelFour',[AccountGroupLevelController::class,'loadAccountGroupLevelFour']);
+Route::get('/loadEachAccountGroupLevelFour/{id}',[AccountGroupLevelController::class,'loadEachAccountGroupLevelFour']);
+Route::post('/updateAccountGroupLevelFour/{id}',[AccountGroupLevelController::class,'updateAccountGroupLevelFour']);
+Route::delete('/deleteLevelFour/{id}',[AccountGroupLevelController::class,'deleteLevelFour']);
+
+
+
 });
 
 

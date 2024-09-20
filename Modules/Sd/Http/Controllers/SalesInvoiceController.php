@@ -1418,11 +1418,27 @@ return response()->json([
                      WHERE it.is_active = 1 AND SG.supply_group_id = " . $sup_id); */
 
                 /* $items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name FROM items it"); */
-                $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
+              /*   $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
                 (SELECT COALESCE(quantity, 0) AS stock_balance FROM stock_balances WHERE branch_id = ? AND location_id = ? AND item_id = it.item_id) AS stock_balance
                 FROM items it 
                 LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
-                WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_id]);
+                WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_id]); */
+
+$items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
+(SELECT 
+    GREATEST(SUM(COALESCE(quantity, 0)), 0) AS stock_balance 
+FROM 
+    stock_balances 
+WHERE 
+    branch_id = ? 
+    AND location_id = ? 
+    AND item_id = it.item_id 
+GROUP BY 
+    branch_id, location_id, item_id
+) AS stock_balance
+FROM items it 
+LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
+WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_id]);
 
             } else {
                 //$items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name,sd_item_stock_balance(it.item_id, ".$branch_.", ".$location_.") AS stock_balance FROM items it WHERE is_active = 1");

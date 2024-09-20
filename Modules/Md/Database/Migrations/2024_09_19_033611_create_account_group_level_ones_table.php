@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('assign_customer_to_collectors', function (Blueprint $table) {
-            $table->id('assign_customer_to_collector_id')->index();
-            $table->integer('customer_id')->index();
-            $table->integer('employee_id')->index();
+        Schema::create('account_group_level_ones', function (Blueprint $table) {
+            $table->id('account_group_level_one_id');
+            $table->string('account_group_level_one_name');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assign_customer_to_collectors');
+        Schema::dropIfExists('account_group_level_ones');
     }
 };

@@ -20,6 +20,7 @@ var toAge = null;
 var selecteBranch = null;
 var cmbgreaterthan = null;
 var selectSupplyGroup = null;
+var selectCollector = null;
 //var cmbSalesrep = null;
 
 
@@ -460,6 +461,32 @@ $(document).ready(function () {
 
 
     });
+
+    
+    $('#chkCollector').on('change', function () {
+
+        if (this.checked) {
+            selectCollector = $('#cmbCollector').val();
+            
+
+            $('#cmbCollector').change(function () {
+
+                selectCollector = $('#cmbCollector').val();
+
+            })
+          
+        } else {
+            /* $('#cmbselect').val("0");
+                 selected = 0;*/
+           
+                 selectCollector = null
+        }
+
+
+    });
+
+
+    
 
     $('#chkcustomergroup').on('change', function () {
 
@@ -918,6 +945,7 @@ $(document).ready(function () {
                 { fromAge: fromAge },
                 { toAge: toAge },
                 { cmbgreaterthan: cmbgreaterthan },
+                { selectCollector: selectCollector }
 
             ];
 

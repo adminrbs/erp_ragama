@@ -2,6 +2,7 @@
 
 namespace Modules\Prc\Entities;
 
+use App\Traits\LedgerActionListener;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ use Spatie\Activitylog\LogOptions;
 
 class purchase_order_note extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity,LedgerActionListener;
 
     protected $table = "purchase_order_notes";
     protected $primaryKey =  'purchase_order_Id';
