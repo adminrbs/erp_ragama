@@ -1,6 +1,7 @@
 $(document).ready(function(){
+    loadPayee();
     $('#btnSavePayee').on('click',function(){
-        alert();
+        
         if($(this).text() == 'Save'){
             savePayee();
         }else{
@@ -16,8 +17,8 @@ function savePayee(){
     }else{
         formData.append('payeeName',$('#txtPayee').val());
         $.ajax({
-            method:'POST',
-            URL:'/md/savePayee',
+            method:'post',
+            url:'/md/savePayee',
             data:formData,
             enctype: 'multipart/form-data',
             data: formData,
@@ -27,11 +28,14 @@ function savePayee(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function () {
-                $('#btnSave').prop('disabled', true);
+                $('#btnSavePayee').prop('disabled', true);
             },
             success: function (response) {
+                $('#btnSavePayee').prop('disabled', false);
                 if(response.status){
                     showSuccessMessage('Record saved successfuly');
+                    $('#modelPayee').hide();
+                    loadPayee();
                 }else{
                     showWarningMessage('Unable to save');
                 }
@@ -39,4 +43,39 @@ function savePayee(){
         })
 
     }
+}
+
+
+
+
+function loadPayee() {
+    $('#payeeTable tbody').empty();
+    $.ajax({
+        url: '/md/loadPayee',
+        method: 'get',
+        cache: false,
+        timeout: 800000,
+        beforeSend: function () {
+
+        },
+        success: function (response) {
+            let data = response.data;
+            $.each(data, function (key, value) {
+                let btnEdit = '<button class="btn btn-primary btn-sm" onclick="edit(' + value.payee_id + ')" ><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
+                let btnView = '<button class="btn btn-success btn-sm" onclick="view(' + value.payee_id + ')" ><i class="fa fa-eye" aria-hidden="true" ></i></button>';
+                let btnDelete = '<button class="btn btn-danger btn-sm" onclick="deleteRecord(' + value.payee_id + ')" ><i class="fa fa-trash" aria-hidden="true" ></i></button>';
+                var row = '<tr>' +
+                    '<td>' + value.payee_name + '</td>' +
+                    '<td>' + btnEdit + '</td>' +
+                    '<td>' + btnView + '</td>' +
+                    '<td>' + btnDelete + '</td>' +
+
+                    '</tr>';
+
+                $('#payeeTable tbody').append(row);
+
+            });
+
+        }
+    })
 }

@@ -26,7 +26,7 @@ Dashboard
         <div class="card-body">
             <div>
 
-                <button id="btnTown" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelPayee">
+                <button id="btnPayee" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelPayee">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
 
@@ -37,8 +37,10 @@ Dashboard
                 <table class="table datatable-fixed-both- table-striped" id="payeeTable">
                     <thead>
                         <tr>
-                            <th class="id">ID#</th>
                             <th>Payee Name</th>
+                            <th>View</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                            
                         </tr>
                     </thead>

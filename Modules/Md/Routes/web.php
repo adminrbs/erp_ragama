@@ -595,6 +595,8 @@ Route::get('/payee',function(){
     return view('md::payee');
 });
 Route::post('/savePayee',[PayeeController::class,'savePayee']);
+Route::get('/loadPayee',[PayeeController::class,'loadPayee']);
+Route::get('/loadEachPayee',[PayeeController::class,'loadEachPayee']);
 });
 
 

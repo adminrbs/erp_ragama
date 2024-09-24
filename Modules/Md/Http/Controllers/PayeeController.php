@@ -30,4 +30,22 @@ class PayeeController extends Controller
             return $ex;
         }
     }
+
+    public function loadPayee(){
+        $Payee = Payee::all();
+        if($Payee){
+            return response()->json((['status' => true,'data'=>$Payee]));
+        }else{
+            return response()->json((['status' => true,'data'=>[]]));
+        }
+    }
+
+    public function loadEachPayee($id){
+        $Payee = Payee::find($id);
+        if($Payee){
+            return response()->json((['status' => true,'data'=>$Payee]));
+        }else{
+            return response()->json((['status' => true,'data'=>[]]));
+        }
+    }
 }
