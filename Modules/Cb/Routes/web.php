@@ -284,4 +284,9 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    Route::get('/load_sfa_reciepts_for_change/{id}',[SfaReceiptsManageController::class,'load_sfa_reciepts_for_change']);
    Route::post('/changeType/{id}',[SfaReceiptsManageController::class,'changeType']);
    Route::post('/cancelReceipt/{id}',[SfaReceiptsManageController::class,'cancelReceipt']);
+
+   /**Payment vouchers */
+   Route::get('/payment_voucher',function(){
+        return view("cb::payment_vouchers");
+   });
 });

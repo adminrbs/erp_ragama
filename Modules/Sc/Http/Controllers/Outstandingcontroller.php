@@ -213,7 +213,7 @@ class Outstandingcontroller extends Controller
 
                             LEFT JOIN employees E ON D.employee_id = E.employee_id
 
-                            WHERE (D.document_number = 210 OR D.document_number = 1600 OR D.document_number = 1900) AND
+                            WHERE 
                                 (D.amount - D.paidamount) > 0";
 
 
@@ -441,7 +441,7 @@ class Outstandingcontroller extends Controller
 
                             LEFT JOIN employees E ON D.employee_id = E.employee_id
 
-                            WHERE (D.document_number = 210 OR D.document_number = 1600 OR D.document_number = 1900) AND
+                            WHERE 
                                 (D.amount - D.paidamount) > 0";
 
 

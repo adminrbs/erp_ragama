@@ -191,7 +191,29 @@ class supplierPaymentController extends Controller
 
         DB::beginTransaction();
         try {
+            $receipt_data = json_decode($request->get('receipt_data'), true); // Decode as array
+            if ($request->get('advance') == 0) {
+                $sumSetOffAmount = 0;
+                $amount = $request->get('amount');
+                $amountFloat = floatval(str_replace(',', '', $amount));
+                $setOffAmountSum = 0;
+                foreach ($receipt_data as $receiptJson) {
+                    
+                    $receipt = json_decode($receiptJson, true);
+                    
+                        $cleanedAmount = preg_replace('/[^0-9.]/', '', $receipt['set_off_amount']);
+                       
+                        $setOffAmountSum += floatval($cleanedAmount);
+                    
+                }
 
+             
+
+                if ($setOffAmountSum < $amountFloat) {
+                   
+                    return response()->json(["msg" => "advanceError"]);
+                }
+            }
             $referencenumber = $request->input('external_number');
             $bR_id = $request->input('branch_id');
 
@@ -204,7 +226,7 @@ class supplierPaymentController extends Controller
                 $documentPrefix = $data[0]->prefix;
                 $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
             }
-
+            $supplierObj = supplier::find($request->get('supplier_id'));
             $receipt = new supplier_payments();
             $receipt->internal_number = IntenelNumberController::getNextID();
             $receipt->external_number = $externalNumber;
@@ -222,7 +244,8 @@ class supplierPaymentController extends Controller
             $receipt->document_number = 2500;
             if ($receipt->save()) {
                 $receipt_data = json_decode($request->get('receipt_data'));
-                $this->saveSupplierReceiptData($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->supplier_id, $request->get('supplier_code'), $receipt_data);
+                $this->save_update_creditor_ledger($receipt,$supplierObj, $receipt_data );
+                //$this->saveSupplierReceiptData($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->supplier_id, $request->get('supplier_code'), $receipt_data);
                 //  dd($request->get('single_cheque'));
                 $single_cheque = json_decode($request->get('single_cheque'));
                 //dd($single_cheque);
@@ -245,7 +268,7 @@ class supplierPaymentController extends Controller
 
 
 
-    public function saveSupplierReceiptData($receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $receiptData)
+    public function saveSupplierReceiptData($cl,$receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $receiptData)
     {
 
 
@@ -270,7 +293,10 @@ class supplierPaymentController extends Controller
                 $setoff->date = $setoff_data->date;
                 if ($setoff_data->set_off_amount > 0) {
                     if ($setoff->save()) {
-                        $this->saveCreditorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount);
+                        $this->saveCreditorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount,$setoff->creditors_ledger_id);
+                        $new_ledger_obj = creditors_ledger::find($cl->creditors_ledger);
+                        $new_ledger_obj->paidamount = $new_ledger_obj->paidamount + $setoff->set_off_amount;
+                        $new_ledger_obj->update();
                         array_push($this->response_data, true);
                     }
                 }
@@ -313,7 +339,7 @@ class supplierPaymentController extends Controller
 
 
 
-    public function saveCreditorLedgerSetoff($internal_number, $external_number, $document_number, $reference_internal_number, $reference_external_number, $reference_document_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $amount, $paidamount)
+    public function saveCreditorLedgerSetoff($internal_number, $external_number, $document_number, $reference_internal_number, $reference_external_number, $reference_document_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $amount, $paidamount,$ledger_id)
     {
 
 
@@ -334,7 +360,13 @@ class supplierPaymentController extends Controller
                 $ledger->supplier_code = $supplier_code;
                 $ledger->amount = -$amount;
                 if ($ledger->save()) {
-                    $this->save_update_creditor_ledger($ledger, $paidamount);
+                    //$this->save_update_creditor_ledger($ledger, $paidamount);
+                    $ledger_update =  creditors_ledger::find( $ledger_id);
+                        if ($ledger_update) {
+                            $ledger_update->paidamount += $paidamount;
+                            $response2 =  $ledger_update->update();
+                array_push($this->response_data, $response2);
+            }
                     array_push($this->response_data, true);
                 }
             }
@@ -345,32 +377,33 @@ class supplierPaymentController extends Controller
 
 
 
-    public function save_update_creditor_ledger($ledger_setoff, $paidamount)
+    public function save_update_creditor_ledger($receipt, $sup_obj, $receipt_data)
     {
 
 
         try {
-            $sup = supplier::find($ledger_setoff->supplier_id);
+           // $sup = supplier::find($ledger_setoff->supplier_id);
             $ledger =  new creditors_ledger();
-            $ledger->internal_number = $ledger_setoff->internal_number;
-            $ledger->external_number = $ledger_setoff->external_number;
-            $ledger->document_number = $ledger_setoff->document_number;
-            $ledger->trans_date = $ledger_setoff->trans_date;
-            $ledger->description = "Supplier Payment" . $sup->supplier_name;
-            $ledger->branch_id = $ledger_setoff->branch_id;
-            $ledger->supplier_id = $ledger_setoff->supplier_id;
-            $ledger->supplier_code = $ledger_setoff->supplier_code;
-            $ledger->amount = -$ledger_setoff->amount;
-            $ledger->paidamount = $paidamount;
+            $ledger->internal_number = $receipt->internal_number;
+            $ledger->external_number = $receipt->external_number;
+            $ledger->document_number = $receipt->document_number;
+            $ledger->trans_date = $receipt->receipt_date;
+            $ledger->description = "Supplier Payment" . $sup_obj->supplier_name;
+            $ledger->branch_id = $receipt->branch_id;
+            $ledger->supplier_id = $receipt->supplier_id;
+            $ledger->supplier_code = $sup_obj->supplier_code;
+            $ledger->amount = -$receipt->amount;
+            //$ledger->paidamount = $paidamount;
             $response1 =  $ledger->save();
+            $this->saveSupplierReceiptData($ledger,$receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->supplier_id, $ledger->supplier_code, $receipt_data);
             array_push($this->response_data, $response1);
 
-            $ledger_update =  creditors_ledger::where('internal_number', '=', $ledger_setoff->reference_internal_number)->first();
+            /* $ledger_update =  creditors_ledger::where('internal_number', '=', $ledger_setoff->reference_internal_number)->first();
             if ($ledger_update) {
                 $ledger_update->paidamount += $paidamount;
                 $response2 =  $ledger_update->update();
                 array_push($this->response_data, $response2);
-            }
+            } */
         } catch (Exception $ex) {
             array_push($this->response_data, $ex);
         }

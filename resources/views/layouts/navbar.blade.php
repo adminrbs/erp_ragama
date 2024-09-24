@@ -204,7 +204,7 @@
                                     <div class="row">
                                         <div class="col-lg-3 mb-3 mb-lg-0">
                                         
-                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>List</div>
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Customer</div>
                                             @if(Auth::user()->can('cb_customer_receipt') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/customer_receipt_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Customer Receipt</a>
                                             @endif
@@ -259,8 +259,8 @@
 
                                         </div>
 
-                                        <div class="col-lg-3 mb-3 mb-lg-0">
-                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>List</div>
+                                        <div class="col-lg-2 mb-2 mb-lg-0">
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Customer</div>
 
                                             @if(Auth::user()->can('cb_cheque_deposit') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_deposit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Deposit</a>
@@ -283,26 +283,38 @@
                                             <a href="/cb/cheque_audit_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Audit List</a>
                                         </div>
 
-                                        <div class="col-lg-3 mb-3 mb-lg-0">
-                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Reports</div>
-                                            <a href="/cb/cash_bank_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Report</a>
-
+                                        <div class="col-lg-2 mb-2 mb-lg-0">
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Supplier</div>
+                                            
+                                            @if(Auth::user()->can('sl_supplier_payment') && Auth::user()->hasModulePermission('Supplier'))
+                                            <a href="/sl/supplier_payment_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Payment</a>
+                                            @endif
                                         </div>
+                                        <div class="col-lg-2 mb-2 mb-lg-0">
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Other</div>
+                                            <a href="#" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payment Voucher</a>
+                                            <a href="#" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Funds Transfer</a>
 
+                                          
+                                        </div>
                                         <div class="col-lg-3 mb-3 mb-lg-0">
-                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Dashboard Data</div>
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Reports - Dashboard</div>
+                                           
+                                            
+                                           
+                                            <a href="/cb/cashDashBoard" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Dashboard</a>    
+                                            <a href="/cb/cash_bank_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Report</a>   
                                             @if(Auth::user()->can('cb_cash_with_rep') && Auth::user()->hasModulePermission('Cash Bank'))
-                                            <a href="/cb/cash_with_sales_rep_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash With Sales Rep</a>
+                                            <a href="/cb/cash_with_sales_rep_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash With Rep</a>
                                             @endif
 
                                             @if(Auth::user()->can('cb_cheque_with_rep') && Auth::user()->hasModulePermission('Cash Bank'))
-                                            <a href="/cb/cheque_with_sales_rep_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque With Sales Rep</a>                                            
-                                            @endif
-                                            
-                                           
-                                            <a href="/cb/cashDashBoard" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Dashboard</a>                                            
+                                            <a href="/cb/cheque_with_sales_rep_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque With Rep</a>                                            
+                                            @endif                                     
                                             
                                         </div>
+
+                                        
                                     </div>
                                 </div>
 
@@ -548,9 +560,7 @@
                                             @endif
 
 
-                                            @if(Auth::user()->can('sl_supplier_payment') && Auth::user()->hasModulePermission('Supplier'))
-                                            <a href="/sl/supplier_payment_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Payment</a>
-                                            @endif
+                                         
 
                                             @if(Auth::user()->can('sl_supplier_transaction_allocation') && Auth::user()->hasModulePermission('Supplier'))
                                             <a href="/sl/supplier_transaction_allocation_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Transaction Allocation</a>

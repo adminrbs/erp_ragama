@@ -914,10 +914,13 @@ function saveReceipt() {
         }, success: function (response) {
             $('#btnAction').prop('disabled',false);
             console.log(response);
-            if(response.duplicate == "duplicate"){
+            if(response.msg == 'advanceError'){
+                showWarningMessage('Setoff off amount mismatch')
+            }
+            else if(response.duplicate == "duplicate"){
                 showWarningMessage("Cheque number duplicated");
             }
-            if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
+            else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
                 showSuccessMessage('Receipt has been saved');
                 location.href = 'customer_receipt';
             } else {

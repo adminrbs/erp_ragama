@@ -914,7 +914,10 @@ function saveReceipt() {
 
         }, success: function (response) {
             console.log(response);
-            if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
+            if(response.msg == 'advanceError'){
+                showWarningMessage('Setoff off amount mismatch')
+            }
+            else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
                 showSuccessMessage('Receipt has been saved');
                 location.href = 'supplier_payment';
             } else {

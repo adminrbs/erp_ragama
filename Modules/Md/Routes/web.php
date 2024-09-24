@@ -29,6 +29,7 @@ use Modules\Md\Http\Controllers\International_nonproprietaryController;
 use Modules\Md\Http\Controllers\ItemController;
 use Modules\Md\Http\Controllers\locationController;
 use Modules\Md\Http\Controllers\MarketingRouteController;
+use Modules\Md\Http\Controllers\PayeeController;
 use Modules\Md\Http\Controllers\RouteController;
 use Modules\Md\Http\Controllers\salesOrderController;
 use Modules\Md\Http\Controllers\SfaAccessController;
@@ -589,6 +590,11 @@ Route::delete('/deleteLevelFour/{id}',[AccountGroupLevelController::class,'delet
 });
 
 
+/**Payee */
+Route::get('/payee',function(){
+    return view('md::payee');
+});
+Route::post('/savePayee',[PayeeController::class,'savePayee']);
 });
 
 

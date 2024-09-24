@@ -153,7 +153,7 @@ class ChequecollectionByBranchcashierReportController extends Controller
                 foreach ($result as $customerdata) {
                     //dd($result);
                     if ($customerdata->customer_receipt_id == $customerid->customer_receipt_id && $customerid->customer_id == $customerdata->customer_id) {
-                        $cheque_amount += (float)$customerdata->amount;
+                        $cheque_amount = (float)$customerdata->amount;
                         $title = "&emsp;&emsp;<strong>Cheque No : </strong>" . $customerdata->cheque_number . "&emsp;&emsp;<strong>Rff No : </strong>" . $customerdata->external_number. " - <strong>Cheque Amount :</strong>" . number_format($cheque_amount, 2);
                         array_push($table, $customerdata);
                     }

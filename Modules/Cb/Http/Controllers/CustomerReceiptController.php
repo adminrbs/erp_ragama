@@ -211,10 +211,38 @@ class CustomerReceiptController extends Controller
 
     public function saveCustomerReceipt(Request $request)
     {
-    //dd($request->input('receipt_data'));
-
+        //dd($request->input('receipt_data'));
+        DB::beginTransaction();
         try {
-            if($request->get('receipt_method_id') == 2){
+            $receipt_data = json_decode($request->get('receipt_data'), true); // Decode as array
+
+            if ($request->get('advance') == 0) {
+                $sumSetOffAmount = 0;
+                $amount = $request->get('amount');
+                $amountFloat = floatval(str_replace(',', '', $amount));
+                $setOffAmountSum = 0;
+                foreach ($receipt_data as $receiptJson) {
+                    
+                    $receipt = json_decode($receiptJson, true);
+                    
+                    
+                       
+                        $cleanedAmount = preg_replace('/[^0-9.]/', '', $receipt['set_off_amount']);
+                       
+                        $setOffAmountSum += floatval($cleanedAmount);
+                    
+                }
+
+             
+
+                if ($setOffAmountSum < $amountFloat) {
+                   
+                    return response()->json(["msg" => "advanceError"]);
+                }
+            }
+
+
+            if ($request->get('receipt_method_id') == 2) {
                 $single_cheque = json_decode($request->get('single_cheque'));
                 $cheque_number = $single_cheque->cheque_number;
                 $bank_id = $single_cheque->bank_id;
@@ -225,26 +253,27 @@ class CustomerReceiptController extends Controller
                         AND CRC.cheque_number = $cheque_number
                         AND DATE(CRC.created_at) >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH);");
 
-                if($qry[0]->count > 0){
-                    return response()->json(["duplicate" => "duplicate" ]);
+                if ($qry[0]->count > 0) {
+                    DB::rollBack();
+                    return response()->json(["duplicate" => "duplicate"]);
                 }
             }
-            
+
 
             $referencenumber = $request->input('external_number');
-                // dd($referencenumber);
-                $bR_id = $request->get('branch_id');
+            // dd($referencenumber);
+            $bR_id = $request->get('branch_id');
 
-                $data = DB::table('branches')->where('branch_id', $bR_id)->get();
+            $data = DB::table('branches')->where('branch_id', $bR_id)->get();
 
-                $EXPLODE_ID = explode("-", $referencenumber);
+            $EXPLODE_ID = explode("-", $referencenumber);
 
-                $externalNumber  = '';
-                if ($data->count() > 0) {
-                    $documentPrefix = $data[0]->prefix;
-                    $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
-                }
-
+            $externalNumber  = '';
+            if ($data->count() > 0) {
+                $documentPrefix = $data[0]->prefix;
+                $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+            }
+            $customerObj = Customer::find($request->get('customer_id'));
             $receipt = new CustomerReceipt();
             $receipt->internal_number = IntenelNumberController::getNextID();
             $receipt->external_number = $externalNumber;
@@ -264,15 +293,18 @@ class CustomerReceiptController extends Controller
             if ($receipt->save()) {
                 $receipt_data = json_decode($request->get('receipt_data'));
                 //dd($receipt_data);
-                $this->saveCustomerReceiptData($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->customer_id, $request->get('customer_code'), $receipt_data);
+
                 $single_cheque = json_decode($request->get('single_cheque'));
+
+                $this->save_update_DebtorLedger($receipt, $customerObj, $receipt_data);
+                /* $this->saveCustomerReceiptData($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->customer_id, $request->get('customer_code'), $receipt_data); */
                 $this->saveCustomerReceiptCheque($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
-
-
+                DB::commit();
                 array_push($this->response_data, true);
                 return response()->json(["data" => $this->response_data]);
             }
         } catch (Exception $ex) {
+            DB::rollBack();
             return response()->json(["status" => false, "exception" => $ex]);
         }
     }
@@ -280,7 +312,7 @@ class CustomerReceiptController extends Controller
 
 
 
-    public function saveCustomerReceiptData($receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $customer_id, $customer_code, $receiptData)
+    public function saveCustomerReceiptData($dl, $receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $customer_id, $customer_code, $receiptData)
     {
 
 
@@ -307,7 +339,10 @@ class CustomerReceiptController extends Controller
                 $setoff->debtors_ledger_id = $setoff_data->debtors_ledger_id;
                 if ($setoff_data->set_off_amount > 0) {
                     if ($setoff->save()) {
-                        $this->saveDebtorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount,$setoff->debtors_ledger_id);
+                        $this->saveDebtorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount, $setoff->debtors_ledger_id);
+                        $new_ledger_obj = DebtorsLedger::find($dl->debtors_ledger_id);
+                        $new_ledger_obj->paidamount = $new_ledger_obj->paidamount + $setoff->set_off_amount;
+                        $new_ledger_obj->update();
                         array_push($this->response_data, true);
                     }
                 }
@@ -340,6 +375,7 @@ class CustomerReceiptController extends Controller
             //$cheque->cheque_dishonoured_date = $receiptCheque->cheque_dishonoured_date;
             if ($receiptCheque->cheque_referenceNo && $receiptCheque->cheque_number && $receiptCheque->amount) {
                 $response = $cheque->save();
+
                 array_push($this->response_data, $response);
             }
         } catch (Exception $ex) {
@@ -350,10 +386,10 @@ class CustomerReceiptController extends Controller
 
 
 
-    public function saveDebtorLedgerSetoff($internal_number, $external_number, $document_number, $reference_internal_number, $reference_external_number, $reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $amount, $paidamount,$ledger_id)
+    public function saveDebtorLedgerSetoff($internal_number, $external_number, $document_number, $reference_internal_number, $reference_external_number, $reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $amount, $paidamount, $ledger_id)
     {
-        
-//dd($reference_internal_number);
+
+        //dd($reference_internal_number);
         try {
             if ($amount > 0) {
                 $ledger = new DebtorsLedgerSetoff();
@@ -369,9 +405,15 @@ class CustomerReceiptController extends Controller
                 $ledger->customer_id = $customer_id;
                 $ledger->customer_code = $customer_code;
                 $ledger->amount = -$amount;
-               // dd($ledger->internal_number);
+                // dd($ledger->internal_number);
                 if ($ledger->save()) {
-                    $this->save_update_DebtorLedger($ledger, $paidamount,$ledger_id);
+                    // $this->save_update_DebtorLedger($ledger, $paidamount,$ledger_id);
+                    $ledger_update = DebtorsLedger::find($ledger_id);
+                    if ($ledger_update) {
+                        $ledger_update->paidamount += $paidamount;
+                        $response2 =  $ledger_update->update();
+                        array_push($this->response_data, $response2);
+                    }
                     array_push($this->response_data, true);
                 }
             }
@@ -382,35 +424,38 @@ class CustomerReceiptController extends Controller
 
 
 
-    public function save_update_DebtorLedger($ledger_setoff, $paidamount,$ledger_id)
+    public function save_update_DebtorLedger($receipt, $cus_obj, $receipt_data)
     {
 
-//dd($ledger_setoff->reference_internal_number);
+        //dd($ledger_setoff->reference_internal_number);
         try {
 
             $ledger =  new DebtorsLedger();
-            $ledger->internal_number = $ledger_setoff->internal_number;
-            $ledger->external_number = $ledger_setoff->external_number;
-            $ledger->document_number = $ledger_setoff->document_number;
-            $ledger->trans_date = $ledger_setoff->trans_date;
+            $ledger->internal_number = $receipt->internal_number;
+            $ledger->external_number = $receipt->external_number;
+            $ledger->document_number = $receipt->document_number;
+            $ledger->trans_date = $receipt->receipt_date;
             $ledger->description = "Customer Receipt";
-            $ledger->branch_id = $ledger_setoff->branch_id;
-            $ledger->customer_id = $ledger_setoff->customer_id;
-            $ledger->customer_code = $ledger_setoff->customer_code;
-            $ledger->amount = $ledger_setoff->amount;
-            $ledger->paidamount = -$paidamount;
+            $ledger->branch_id = $receipt->branch_id;
+            $ledger->customer_id = $receipt->customer_id;
+            $ledger->customer_code = $cus_obj->customer_code;
+            $ledger->amount = $receipt->amount;
+            //$ledger->paidamount = -$paidamount; // changed . mr.janaka 23/09
+
+            // $ledger->paidamount = $ledger->amount;
             $response1 =  $ledger->save();
+
+            $this->saveCustomerReceiptData($ledger, $receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->customer_id, $ledger->customer_code, $receipt_data);
             array_push($this->response_data, $response1);
             //dd($ledger_setoff->reference_internal_number);
             //$ledger_update =  DebtorsLedger::where('internal_number', '=', $ledger_setoff->reference_internal_number)->first();
-            
-            $ledger_update = DebtorsLedger::find($ledger_id);
-            //dd($ledger_setoff);
-            if ($ledger_update) {
+
+            /* $ledger_update = DebtorsLedger::find($ledger_id); */
+            /* if ($ledger_update) {
                 $ledger_update->paidamount += $paidamount;
                 $response2 =  $ledger_update->update();
                 array_push($this->response_data, $response2);
-            }
+            } */
         } catch (Exception $ex) {
             array_push($this->response_data, $ex);
         }
@@ -430,19 +475,19 @@ class CustomerReceiptController extends Controller
             //$cashier_user_id_qry = DB::select('SELECT user_id FROM users WHERE id ='.$cashier_id);
             //dd($cashier_user_id_qry);
             $cashier_user_id = $cashier_id;
-           /*  if(count($cashier_user_id_qry) > 0){
+            /*  if(count($cashier_user_id_qry) > 0){
                 $cashier_user_id = $cashier_user_id_qry[0]->user_id;
 
             } */
-           
+
             if ($customer_receipt) {
                 $customer_receipt->receipt_cheque = CustomerReceiptCheque::where('customer_receipt_id', '=', $id)->get();
-               
+
                 $customer_receipt->receipt_data = $this->getCustomerReceiptSetoffData($customer_receipt->customer_id, $id);
                 //dd($customer_receipt);
                 $customer_receipt->customer_name = "";
                 $customer_receipt->customer_code = "";
-                $customer_receipt->cashier_user_id = $cashier_user_id; 
+                $customer_receipt->cashier_user_id = $cashier_user_id;
                 $customer = Customer::find($customer_receipt->customer_id);
                 if ($customer) {
                     $customer_receipt->customer_code = $customer->customer_code;
@@ -462,11 +507,10 @@ class CustomerReceiptController extends Controller
     private function getCustomerReceiptSetoffData($customer_id, $receipt_id)
     {
         /* $receipt_data = CustomerReceiptSetoffData::where('customer_receipt_id', '=', $receipt_id)->get(); */
-        $receipt_data = DB::select('SELECT DISTINCT CRS.*,IFNULL(SI.manual_number,CRS.reference_external_number) AS manual_number, DL.return_amount FROM customer_receipt_setoff_data CRS LEFT JOIN sales_invoices SI ON CRS.reference_internal_number = SI.internal_number LEFT JOIN debtors_ledgers DL ON CRS.internal_number = DL.internal_number WHERE CRS.customer_receipt_id = '.$receipt_id.'');
-        
-        if($receipt_data){
+        $receipt_data = DB::select('SELECT DISTINCT CRS.*,IFNULL(SI.manual_number,CRS.reference_external_number) AS manual_number, DL.return_amount FROM customer_receipt_setoff_data CRS LEFT JOIN sales_invoices SI ON CRS.reference_internal_number = SI.internal_number LEFT JOIN debtors_ledgers DL ON CRS.internal_number = DL.internal_number WHERE CRS.customer_receipt_id = ' . $receipt_id . '');
+
+        if ($receipt_data) {
             return $receipt_data;
         }
-        
     }
 }
