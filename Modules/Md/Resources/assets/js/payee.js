@@ -1,7 +1,12 @@
-const { method } = require("lodash");
-
 $(document).ready(function(){
-    
+    $('#btnSavePayee').on('click',function(){
+        alert();
+        if($(this).text() == 'Save'){
+            savePayee();
+        }else{
+
+        }
+    });
 });
 
 function savePayee(){
@@ -25,7 +30,11 @@ function savePayee(){
                 $('#btnSave').prop('disabled', true);
             },
             success: function (response) {
-                
+                if(response.status){
+                    showSuccessMessage('Record saved successfuly');
+                }else{
+                    showWarningMessage('Unable to save');
+                }
             }
         })
 

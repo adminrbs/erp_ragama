@@ -89,9 +89,9 @@ Dashboard
             </div>
             <div class="modal-footer">
                 <input type="hidden" id="id">
-                <button type="submit" id="btnCloseTown" class="btn btn-secondary">Close</button>
-                <button type="submit" id="btnSaveTown" class="btn btn-primary ">Save</button>
-                <button type="submit" id="btnUpdateTown" class="btn btn-primary updateTown">Update</button>
+                <button type="button" id="btnClosePayee" class="btn btn-secondary">Close</button>
+                <button type="button" id="btnSavePayee" class="btn btn-primary ">Save</button>
+                
             </div>
             </form>
         </div>
