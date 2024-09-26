@@ -412,7 +412,10 @@ function getCollectors_and_Cashiers() {
                     var id = collectors[i].employee_id;
                     var name = collectors[i].employee_name;
                     $('#cmbCollector').append('<option value="' + id + '">' + name + '</option>');
-                    $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    if(collectors[i].desgination_id == 9){
+                        $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    }
+                   
                 }
             }
 

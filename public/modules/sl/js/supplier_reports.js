@@ -1,23 +1,16 @@
-var selected = null;
-var selected1 = null;
-var selected2 = null;
-var selected3 = null;
-var selected4 = null;
-var selected5 = null;
-var selected6 = null
 
 
-var selecteCustomer = null;
-var selectecustomergroup = null;
-var selecteCustomerGrade = null;
-var selecteRoute = null;
-var selectSalesrep = null;
+
+var selectSupplier = null;
+var selectSupplygroup = null;
+
 var fromdate = null;
 var todate = null;
 var fromAge = null;
 var toAge = null;
 var selecteBranch = null;
 var cmbgreaterthan = null;
+
 //var cmbSalesrep = null;
 
 
@@ -154,118 +147,12 @@ $(document).ready(function () {
 
     });
 
-    // $('#customerOutstanding').change(function () {
-
-    /*$('#cmbBranch').empty();
-    $('#cmbCustomer').empty();
-    $('#cmbcustomergroup').empty();
-    $('#cmbCustomerGrade').empty();
-    $('#cmbRoute').empty();
-    $('input[type="number"]').val("");
     
-    loadbranch()
-    getCustomer()
-    getCustomergroup()
-    getcustomergrade()
-    getRoute()
-    getSalesrep()*/
 
 
-    //  })
-    /*   $('#debtorleger').change(function () {
-          
-           var branch = $('#cmbBranch')[0]; 
-           if (branch.selectedIndex !== -1) {
-               branch.selectedIndex = -1; 
-             
-           }
-           $('.access-destroy').on('click', function () { $('.select-access-create').select2('destroy'); });
-     
-    */
-    /* $('#cmbCustomer').empty();
-     $('#cmbcustomergroup').empty();
-     $('#cmbCustomerGrade').empty();
-     $('#cmbRoute').empty();
-     $('input[type="number"]').val("");
-    
-     loadbranch()
-     getCustomer()
-     getCustomergroup()
-     getcustomergrade()
-     getRoute()
-     getSalesrep()*/
-
-    //})
-    /*$('#Customer_Ledger').change(function () {
-        $('#cmbBranch').empty();
-        $('#cmbCustomer').empty();
-        $('#cmbcustomergroup').empty();
-        $('#cmbCustomerGrade').empty();
-        $('#cmbRoute').empty();
-        $('input[type="number"]').val("");
-    
-        loadbranch()
-        getCustomer()
-        getCustomergroup()
-        getcustomergrade()
-        getRoute()
-        getSalesrep()
-     
-    
-    })*/
-    $('#txttxtToDate').change(function () {
-
-        // $('#chkdate').prop('checked', false);
-    })
-
-    $('#cmbBranch').change(function () {
-
-        //$('#chkBranch').prop('checked', false);
-
-    })
-    $('#txtFromDate').change(function () {
-
-        //$('#chkdate').prop('checked', false);
-
-    })
-    $('#txttxtToDate').change(function () {
-
-        //$('#chkdate').prop('checked', false);
-    })
-    $('#cmbCustomer').change(function () {
-
-        // $('#chkCustomer').prop('checked', false);
-
-    })
-
-    $('#cmbcustomergroup').change(function () {
-
-        //$('#chkcustomergroup').prop('checked', false);
-
-    })
-    $('#cmbCustomerGrade').change(function () {
-
-        // $('#chkCustomerGrade').prop('checked', false);
-
-    })
-    $('#cmbRoute').change(function () {
-
-        //$('#chkRoute').prop('checked', false);
-
-    })
-    $('#cmbSalesrep').change(function () {
-
-        // $('#Salesrep').prop('checked', false);
-
-    })
-
-
-    loadbranch()
-    getCustomer()
-    getCustomergroup()
-    getcustomergrade()
-    getRoute()
-    getSalesrep()
+    loadbranch();
+    getsuplygroup();
+    getSupplier();
 
 
 
@@ -285,17 +172,6 @@ $(document).ready(function () {
     $('#chkBranch').prop('checked', false);
 
 
-
-
-
-
-
-
-    //const currentDate = new Date().toISOString().slice(0, 10);
-
-
-    //document.getElementById("txtFromDate").value = currentDate;
-    //document.getElementById("txtToDate").value = currentDate;
 
 
     $('#chkdate').on('change', function () {
@@ -438,6 +314,31 @@ $(document).ready(function () {
 
     });
 
+    $('#chkfromtoAge').on('change', function () {
+
+        if (this.checked) {
+            fromAge = $('#txtfromAge').val();
+            toAge = $('#txtToAge').val();
+           
+            $('#txtfromAge').change(function () {
+
+                fromAge = $('#txtfromAge').val();
+
+            })
+            $('#txtToAge').change(function () {
+                toAge = $('#txtToAge').val();
+
+            })
+        } else {
+            
+                 fromAge = null;
+                 toAge = null
+           
+        }
+
+
+    });
+
     $('#chkcustomergroup').on('change', function () {
 
         if (this.checked) {
@@ -509,7 +410,39 @@ $(document).ready(function () {
 
         }
 
-    })
+    });
+    $('#chkSupplier').on('change', function () {
+
+        if (this.checked) {
+            selectSupplier = $('#cmbSupplier').val();
+            $('#cmbSupplier').on('input', function () {
+                selectSupplier = $(this).val();
+                //alert(cmbgreaterthan);
+            });
+        } else {
+            selectSupplier = null
+
+        }
+
+    });
+
+    $('#chkSupply').on('change', function () {
+
+        if (this.checked) {
+            selectSupplygroup = $('#cmbSupplyGroup').val();
+            $('#cmbSupplyGroup').on('input', function () {
+                selectSupplygroup = $(this).val();
+                //alert(cmbgreaterthan);
+            });
+        } else {
+            selectSupplygroup = null
+
+        }
+
+    });
+
+
+    
     $('#chkfromtoAge').on('change', function () {
        
         var fromage = $('#txtfromAge').val();
@@ -585,10 +518,10 @@ $(document).ready(function () {
     if (isChecked == true) {
         $("#Customer_Ledger").prop("checked", false);
     }
-    $("#customerOutstanding").prop("checked", true);
-    var isChecked = $("#customerOutstanding").prop("checked");
+    $("#supplierOutstanding").prop("checked", true);
+    var isChecked = $("#supplierOutstanding").prop("checked");
     if (isChecked == true) {
-        $("#customerOutstanding").prop("checked", false);
+        $("#supplierOutstanding").prop("checked", false);
     }
 
 
@@ -602,159 +535,13 @@ $(document).ready(function () {
 
 
     $("input[type='radio']").click(function () {
-        $('input[type="checkbox"]').prop('checked', false);
-
-        report = this.id;
-
-        jsonData = {
-            branch: "1",
-            customer: "2",
-            customergroup: "3",
-            customerGrade: "4",
-            route: "5",
-            graetertahan: "6",
-            frodate: "7",
-            todate: "8",
-            froage: "9",
-            toage: "10",
-            salesrep: "11"
-
-
-        };
-        console.log(jsonData);
-        $.ajax({
-            type: "post",
-            dataType: 'json',
-            url: "/sc/hidefilter/" + report,
-            data: JSON.stringify(jsonData),
-            processData: false,
-            contentType: false,
-            cache: false,
-            timeout: 800000,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-
-
-
-                if (typeof response.branch === 'undefined') {
-
-                    $('#cmbBranch').prop('disabled', false);
-                    $('#chkBranch').prop('disabled', false);
-                } else {
-
-                    $('#cmbBranch').prop('disabled', true);
-                    $('#chkBranch').prop('disabled', true);
-                }
-
-                if (typeof response.customer === 'undefined') {
-
-                    $('#cmbCustomer').prop('disabled', false);
-                    $('#chkCustomer').prop('disabled', false);
-                } else {
-
-                    $('#cmbCustomer').prop('disabled', true);
-                    $('#chkCustomer').prop('disabled', true);
-                }
-
-                if (typeof response.customergroup === 'undefined') {
-
-                    $('#cmbcustomergroup').prop('disabled', false);
-                    $('#chkcustomergroup').prop('disabled', false);
-                } else {
-
-                    $('#cmbcustomergroup').prop('disabled', true);
-                    $('#chkcustomergroup').prop('disabled', true);
-                }
-
-                if (typeof response.customerGrade === 'undefined') {
-
-                    $('#cmbCustomerGrade').prop('disabled', false);
-                    $('#chkCustomerGrade').prop('disabled', false);
-                } else {
-
-                    $('#cmbCustomerGrade').prop('disabled', true);
-                    $('#chkCustomerGrade').prop('disabled', true);
-                }
-
-                if (typeof response.route === 'undefined') {
-
-                    $('#cmbRoute').prop('disabled', false);
-                    $('#chkRoute').prop('disabled', false);
-                } else {
-
-                    $('#cmbRoute').prop('disabled', true);
-                    $('#chkRoute').prop('disabled', true);
-                }
-                if (typeof response.graetertahan === 'undefined') {
-
-                    $('#cmbgreaterthan').prop('disabled', false);
-                    $('#chkreaterthan').prop('disabled', false);
-                } else {
-
-                    $('#cmbgreaterthan').prop('disabled', true);
-                    $('#chkreaterthan').prop('disabled', true);
-                }
-                if (typeof response.frodate === 'undefined') {
-
-                    $('#txtFromDate').prop('disabled', false);
-                    $('#chkdate').prop('disabled', false);
-                } else {
-
-                    $('#txtFromDate').prop('disabled', true);
-                    $('#chkdate').prop('disabled', true);
-                }
-                if (typeof response.todate === 'undefined') {
-
-                    $('#txtToDate').prop('disabled', false);
-                    $('#chkdate').prop('disabled', false);
-                } else {
-
-                    $('#txtToDate').prop('disabled', true);
-                    $('#chkdate').prop('disabled', true);
-                }
-
-                //from to age
-                if (typeof response.froage === 'undefined') {
-
-                    $('#txtfromAge').prop('disabled', false);
-                    $('#chkfromtoAge').prop('disabled', false);
-                } else {
-
-                    $('#txtfromAge').prop('disabled', true);
-                    $('#chkfromtoAge').prop('disabled', true);
-                }
-                if (typeof response.toage === 'undefined') {
-
-                    $('#txtToAge').prop('disabled', false);
-                    $('#chkfromtoAge').prop('disabled', false);
-                } else {
-
-                    $('#txtToAge').prop('disabled', true);
-                    $('#chkfromtoAge').prop('disabled', true);
-                }
-                if (typeof response.salesrep === 'undefined') {
-                    $('#cmbSalesrep').prop('disabled', false);
-                    $('#chkSalesrep').prop('disabled', false);
-                } else {
-                    $('#cmbSalesrep').prop('disabled', true);
-                    $('#chkSalesrep').prop('disabled', true);
-                }
-
-
-
-            },
-            error: function (error) {
-                // Handle any errors that occur during the AJAX request
-            }
-        });
-
-
-
-
-
+        if ($(this).is(':checked')) {
+            let report_type = $(this).attr('id'); 
+            report = report_type;
+            hideFilters(report_type);
+        }
     });
+    
 
     $('#viewReport').on('click', function () {
 
@@ -833,7 +620,7 @@ $(document).ready(function () {
 
 
         }
-        if (report === "customerOutstanding") {
+        if (report === "supplier_outstanding") {
 
 
 
@@ -842,22 +629,12 @@ $(document).ready(function () {
                 console.log(report);
             }
 
-            /*if (selecteCustomer === null && selectecustomergroup === null && selecteCustomerGrade === null && selecteRoute === null && selectSalesrep === null && fromdate === null && todate === null) {
-                showWarningMessage(" select Filter Option");
-            } else {*/
+            
             var requestData = [
-                { selected: selected },
-                { selected1: selected1 },
-                { selected2: selected2 },
-                { selected3: selected3 },
-                { selected4: selected4 },
-                { selected5: selected5 },
+               
                 //{ selected6: selected6 },
-                { selecteCustomer: selecteCustomer },
-                { selectecustomergroup: selectecustomergroup },
-                { selecteCustomerGrade: selecteCustomerGrade },
-                { selecteRoute: selecteRoute },
-                { selectSalesrep: selectSalesrep },
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
                 { selecteBranch: selecteBranch },
                 { cmbgreaterthan: cmbgreaterthan },
                 { fromdate: fromdate },
@@ -865,14 +642,17 @@ $(document).ready(function () {
                 { fromAge: fromAge },
                 { toAge: toAge },
 
+              
+
+
             ];
 
 
-console.log(requestData);
-            //const jsonArray = JSON.parse(decodeURIComponent(requestData));
+            console.log(requestData);
+            
 
             //getviewReport()
-            $('#pdfContainer').attr('src', '/sc/printoutstandinReport/' + JSON.stringify(requestData));
+            $('#pdfContainer').attr('src', '/sl/printsupoutstandinReport/' + JSON.stringify(requestData));
 
         }
         if (report == null || report == undefined) {
@@ -1064,5 +844,64 @@ function dataclear() {
     toAge = null;
     selecteBranch = null;
     cmbgreaterthan = null;
+
+}
+
+function hideFilters(report){
+    if(report == 'supplier_outstanding'){
+        $('.date_range').prop('disabled',true);
+        $('.branch').prop('disabled',false);
+        $('.supplier').prop('disabled',false);
+        $('.greaterthan').prop('disabled',false);
+        $('.supplygrp').prop('disabled',false);
+
+    }
+}
+
+function getsuplygroup() {
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/sc/getsuplygroup",
+
+        success: function (data) {
+
+
+            $.each(data, function (key, value) {
+
+                data = data + "<option id='' value='" + value.supply_group_id + "'>" + value.supply_group + "<input type='checkbox'></option>";
+
+
+            })
+
+            $('#cmbSupplyGroup').html(data);
+
+        }
+
+    });
+
+}
+
+function getSupplier() {
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/sl/getSupplier",
+
+        success: function (data) {
+
+
+            $.each(data, function (key, value) {
+
+                data = data + "<option id='' value='" + value.supplier_id + "'>" + value.supplier_name + "<input type='checkbox'></option>";
+
+
+            })
+
+            $('#cmbSupplier').html(data);
+
+        }
+
+    });
 
 }

@@ -42,7 +42,7 @@ class CustomerReceiptController extends Controller
 
         $employees = [];
         try {
-            $qry = 'SELECT employees.employee_id, employees.employee_name FROM employees';
+            $qry = 'SELECT employees.employee_id, employees.employee_name,desgination_id FROM employees';
             $employees = DB::select($qry);
         } catch (Exception $ex) {
             return response()->json(["status" => false, "exception" => $ex]);
@@ -341,7 +341,9 @@ class CustomerReceiptController extends Controller
                     if ($setoff->save()) {
                         $this->saveDebtorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount, $setoff->debtors_ledger_id);
                         $new_ledger_obj = DebtorsLedger::find($dl->debtors_ledger_id);
-                        $new_ledger_obj->paidamount = $new_ledger_obj->paidamount + $setoff->set_off_amount;
+                        //$new_ledger_obj->paidamount = $new_ledger_obj->paidamount + $setoff->set_off_amount;
+                        $new_ledger_obj->paidamount = -abs($new_ledger_obj->paidamount + $setoff->set_off_amount);
+
                         $new_ledger_obj->update();
                         array_push($this->response_data, true);
                     }
@@ -439,7 +441,7 @@ class CustomerReceiptController extends Controller
             $ledger->branch_id = $receipt->branch_id;
             $ledger->customer_id = $receipt->customer_id;
             $ledger->customer_code = $cus_obj->customer_code;
-            $ledger->amount = $receipt->amount;
+            $ledger->amount = -$receipt->amount;
             //$ledger->paidamount = -$paidamount; // changed . mr.janaka 23/09
 
             // $ledger->paidamount = $ledger->amount;

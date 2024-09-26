@@ -79,7 +79,7 @@ class ValuationController extends Controller
                     $nonNullCount++;
                 }
             }
-
+            $reportViwer = new ReportViewer();
             if ($nonNullCount > 1) {
                 $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,IH.retial_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
                 LEFT JOIN 
@@ -161,13 +161,13 @@ class ValuationController extends Controller
 
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-                // dd($query);
+                 dd($query);
                 $result = DB::select($query);
                 $resulsupplygroup = DB::select('SELECT IC.item_category_level_1_id,IC.category_level_1 FROM item_category_level_1s IC');
                 $supplygrouparray = [];
                 $table = [];
                 $titel = [];
-                $reportViwer = new ReportViewer();
+                
                 foreach ($resulsupplygroup as $supplygroupid) {
 
                     $table = [];

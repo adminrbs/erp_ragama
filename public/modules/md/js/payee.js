@@ -8,6 +8,13 @@ $(document).ready(function(){
 
         }
     });
+    $('#modelPayee').on('hide.bs.modal', function () {
+        $('#txtPayee').val('');
+    });
+
+    $('#btnClosePayee',function(){
+        $('#modelPayee').hide();
+    });
 });
 
 function savePayee(){
@@ -45,6 +52,40 @@ function savePayee(){
     }
 }
 
+function view(id){
+    $('#modelPayee').modal('show');
+    $('#btnSavePayee').hide();
+    loadEachPayee(id,'view')
+
+}
+
+function edit(id){
+    $('#modelPayee').modal('show');
+    $('#btnSavePayee').text('Update');
+    loadEachPayee(id,'edit')
+
+}
+
+function loadEachPayee(id,type) {
+    $.ajax({
+        url: '/md/loadEachPayee/'+id,
+        method: 'GET',
+        cache: false,
+        timeout: 800000,
+        beforeSend: function () {
+
+        },
+        success: function (response) {   
+            let data = response.data;
+            $('#txtPayee').val(data.payee_name);
+            $('#lblLevelOneHidden').val(id)
+            if(type == 'view'){
+                $('#txtPayee').prop('disabled',true);
+            }
+            
+        }
+    })
+}
 
 
 

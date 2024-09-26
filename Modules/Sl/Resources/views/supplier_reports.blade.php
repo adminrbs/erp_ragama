@@ -109,38 +109,38 @@
                                 <h5 class="card-title">Filters</h5>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="row">
+                                        <div class="row ">
                                             <div class="col-md-5">
                                                 <label style="font-weight: bold;">From</label>
-                                                <input id="txtFromDate" type="date" class="form-control daterange-single">
+                                                <input id="txtFromDate" type="date" class="form-control daterange-single date_range">
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="tx-bold" style="font-weight: bold;">To</label>
-                                                <input id="txtToDate" type="date" class="form-control daterange-single">
+                                                <input id="txtToDate" type="date" class="form-control daterange-single date_range">
                                             </div>
                                             <div class="col-md-1">
-                                                <input id="chkdate" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkdate" type="checkbox" style="margin-top: 30px;" class="date_range">
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row ">
                                             <div class="col-md-11 mb-0 mt-0">
                                                 <label style="font-weight: bold;">Branch</label>
                                                 <!--<select class="form-control validate select2" id="cmbBranch"></select>-->
-                                                <select multiple="multiple" class="select  form-select" id="cmbBranch" data-placeholder="Select Branch"></select>
+                                                <select multiple="multiple" class="select  form-select branch" id="cmbBranch" data-placeholder="Select Branch"></select>
                                             </div>
                                             <div class="col-md-1 mt-0">
-                                                <input id="chkBranch" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkBranch" type="checkbox" style="margin-top: 30px;" class="branch">
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row ">
                                             <div class="col-md-11 mb-0 mt-0">
                                                 <label style="font-weight: bold;">Supplier</label>
                                                 <!-- <select class="form-control validate select2" id="cmbCustomer"></select>-->
-                                                <select multiple="multiple" class="form-select select" id="cmbSupplier" data-placeholder="Select Supplier" style="height: 100%"></select>
+                                                <select multiple="multiple" class="form-select select supplier" id="cmbSupplier" data-placeholder="Select Supplier" style="height: 100%"></select>
                                             </div>
                                             <div class="col-md-1 mt-0">
-                                                <input id="chkSupplier" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkSupplier" type="checkbox" style="margin-top: 30px;" class="supplier">
                                             </div>
                                         </div>
 
@@ -149,53 +149,34 @@
                                         
                                     </div>
                                     <div class="col-md-6">
-                                        <!-- <div class="row">
-                                            <div class="col-md-11 mb-0 ">
-                                                <label style="font-weight: bold;"> Customer Grade</label>
-                                                
-                                                <select multiple="multiple" class="form-select select " id="cmbCustomerGrade" data-placeholder="Select customer Grade"></select>
-                                            </div>
-                                            <div class="col-md-1 mt-0">
-                                                <input id="chkCustomerGrade" type="checkbox" style="margin-top: 30px;">
-                                            </div>
-                                        </div> -->
-                                        <!-- <div class="row">
-                                            <div class="col-md-11 mb-0 ">
-                                                <label style="font-weight: bold;"> Routs</label>
-                                                
-                                                <select multiple="multiple" class="form-select select " id="cmbRoute" data-placeholder="Select Routs"></select>
-                                            </div>
-                                            <div class="col-md-1 mt-0">
-                                                <input id="chkRoute" type="checkbox" style="margin-top: 30px;">
-                                            </div>
-                                        </div> -->
-                                        <div class="row">
+                                        
+                                        <div class="row ">
                                             <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Greater Than(Age)</label>
-                                                <input type="number" class="form-control validate number" id="cmbgreaterthan">
+                                                <input type="number" class="form-control validate number greaterthan" id="cmbgreaterthan">
                                             </div>
                                             <div class="col-md-1 mt-0">
-                                                <input id="chkreaterthan" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkreaterthan" type="checkbox" style="margin-top: 30px;" class="greaterthan">
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row ">
                                             <div class="col-md-5">
                                                 <label style="font-weight: bold;">From(Age)</label>
-                                                <input id="txtfromAge" type="number" class="form-control daterange-single">
+                                                <input id="txtfromAge" type="number" class="form-control daterange-single age">
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="tx-bold" style="font-weight: bold;">To(Age)</label>
-                                                <input id="txtToAge" type="number" class="form-control daterange-single">
+                                                <input id="txtToAge" type="number" class="form-control daterange-single age">
                                             </div>
 
                                             <div class="col-md-1">
 
-                                                <input id="chkfromtoAge" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkfromtoAge" type="checkbox" style="margin-top: 30px;" class="age">
                                             </div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row supplygrp">
                                             <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Supply Group</label>
                                                 <!--<select class="form-control validate select2" id="cmbcustomergroup"></select>-->
@@ -292,6 +273,6 @@
 @endsection
 @section('scripts')
 <script src="{{URL::asset('assets/js/web-rd-fromValidation.js')}}"></script>
-<script src="{{Module::asset('sl:js/debtor_reports.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('sl:js/supplier_reports.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/components_modals.js')}}"></script>
 @endsection

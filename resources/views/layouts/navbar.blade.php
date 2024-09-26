@@ -559,7 +559,7 @@
                                             <a href="/sl/credit_note_supplier_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Credit Note</a>
                                             @endif
 
-
+                                           
                                          
 
                                             @if(Auth::user()->can('sl_supplier_transaction_allocation') && Auth::user()->hasModulePermission('Supplier'))
@@ -593,7 +593,7 @@
                                         <div class="col-lg-4 mb-3 mb-lg-0">
                                             <div class="fw-bold border-bottom pb-2 mb-2">Reports</div>
                                           
-                                            
+                                            <a href="/sl/supplier_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Report</a>
 
 
                                         </div>

@@ -104,48 +104,48 @@ class ItemHistoryController extends Controller
             }
 
             if ($nonNullCount > 1) {
-               /*  $query = ' SELECT items.Item_code, items.item_Name, SUM(item_historys.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
-            FROM item_historys
-            LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
-            LEFT JOIN items ON item_historys.item_id = items.item_id
-            LEFT JOIN locations ON item_historys.location_id = locations.location_id'; */
-            $query = ' SELECT items.Item_code, items.item_Name, SUM(item_historys.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
+               /*  $query = ' SELECT items.Item_code, items.item_Name, SUM(item_history_set_offs.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
+            FROM item_history_set_offs
+            LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
+            LEFT JOIN items ON item_history_set_offs.item_id = items.item_id
+            LEFT JOIN locations ON item_history_set_offs.location_id = locations.location_id'; */
+            $query = ' SELECT items.Item_code, items.item_Name, SUM(item_history_set_offs.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
             FROM items
-            LEFT JOIN item_historys ON items.item_id = item_historys.item_id
-            LEFT JOIN branches ON item_historys.branch_id  = branches.branch_id 
-            LEFT JOIN locations ON item_historys.location_id = locations.location_id';
+            LEFT JOIN item_history_set_offs ON items.item_id = item_history_set_offs.item_id
+            LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
+            LEFT JOIN locations ON item_history_set_offs.location_id = locations.location_id';
 
 
                 $quryModify = "";
                 if ( $todate != null) {
-                    $quryModify .= " item_historys.transaction_date <= '" . $todate . "' AND";
+                    $quryModify .= " item_history_set_offs.transaction_date <= '" . $todate . "' AND";
                     //$quryModify .= "D.trans_date BETWEEN '" . min($fromdate) . "' AND '" . max($todate) . "'";
 
                 }
 
                 if ($selecteBranch != null) {
                     if (count($selecteBranch) > 1) {
-                        $quryModify .= " item_historys.branch_id IN ('" . implode("', '", $selecteBranch) . "') AND";
+                        $quryModify .= " item_history_set_offs.branch_id IN ('" . implode("', '", $selecteBranch) . "') AND";
                     } else {
-                        $quryModify .= " item_historys.branch_id ='" . $selecteBranch[0] . "'AND";
+                        $quryModify .= " item_history_set_offs.branch_id ='" . $selecteBranch[0] . "'AND";
                     }
 
                 }  
 
                 if ($selecteLocation != null) {
                     if (count($selecteLocation) > 1) {
-                        $quryModify .= " item_historys.location_id IN ('" . implode("', '", $selecteLocation) . "') AND";
+                        $quryModify .= " item_history_set_offs.location_id IN ('" . implode("', '", $selecteLocation) . "') AND";
                     } else {
-                        $quryModify .= " item_historys.location_id ='" . $selecteLocation[0] . "'AND";
+                        $quryModify .= " item_history_set_offs.location_id ='" . $selecteLocation[0] . "'AND";
                     }
 
                 }    
 
                 if ($selectedproduct != null) {
                     if (count($selectedproduct) > 1) {
-                        $quryModify .= " item_historys.item_id IN ('" . implode("', '", $selectedproduct) . "') AND";
+                        $quryModify .= " item_history_set_offs.item_id IN ('" . implode("', '", $selectedproduct) . "') AND";
                     } else {
-                        $quryModify .= " item_historys.item_id ='" . $selectedproduct[0] . "'AND";
+                        $quryModify .= " item_history_set_offs.item_id ='" . $selectedproduct[0] . "'AND";
                     }
 
                 }     

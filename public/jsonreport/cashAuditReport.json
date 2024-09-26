@@ -188,6 +188,22 @@
                                 ],
                                 [
                                     {
+                                        "text": "Amount",
+                                        "align": "center",
+                                        "format": "number",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Total Paid",
+                                        "align": "center",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
                                         "text": "Town Name",
                                         "align": "left",
                                         "width": 250,
@@ -211,7 +227,7 @@
                             "y": "0",
                             "margin-top": "-10",
                             "sum": [
-                                "Paid Amount"
+                                "Paid Amount","Amount","Total Paid"
                             ]
                         }
                     }

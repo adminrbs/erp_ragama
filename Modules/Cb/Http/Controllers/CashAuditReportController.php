@@ -43,13 +43,11 @@ class CashAuditReportController extends Controller
         }
         $query_modify = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query_modify);
         $qry = ' SELECT customer_receipts.customer_receipt_id,
-        debtors_ledgers.external_number AS InvoiceNo ,
+        debtors_ledgers.external_number AS InvoiceNo,
         customer_receipts.receipt_status,
         customers.customer_id,
         debtors_ledgers.debtors_ledger_id,
         customer_receipt_setoff_data.customer_receipt_setoff_data_id,
-
-
         customer_receipts.external_number,
         customer_receipts.receipt_date,
         debtors_ledgers.external_number as EX_num,
@@ -57,16 +55,17 @@ class CashAuditReportController extends Controller
         debtors_ledgers.trans_date,
         customers.customer_name AS customer_name,
         DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date) AS Gap,
+        (SELECT SUM(debtors_ledgers.paidamount) FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number ),
+        debtors_ledgers.paidamount,
         town_non_administratives.townName,
-        customer_receipt_setoff_data.set_off_amount
-        
+        customer_receipt_setoff_data.set_off_amount    
  FROM customer_receipts
- LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
- LEFT JOIN customer_receipt_setoff_data ON customer_receipt_setoff_data.customer_receipt_id = customer_receipts.customer_receipt_id 
- LEFT JOIN debtors_ledgers ON customer_receipt_setoff_data.debtors_ledger_id = debtors_ledgers.debtors_ledger_id
- LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
- LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
- LEFT JOIN sales_invoices ON debtors_ledgers.external_number = sales_invoices.external_number ' . $query_modify;
+        LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
+        LEFT JOIN customer_receipt_setoff_data ON customer_receipt_setoff_data.customer_receipt_id = customer_receipts.customer_receipt_id 
+        LEFT JOIN debtors_ledgers ON customer_receipt_setoff_data.debtors_ledger_id = debtors_ledgers.debtors_ledger_id
+        LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
+        LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
+        LEFT JOIN sales_invoices ON debtors_ledgers.external_number = sales_invoices.external_number ' . $query_modify;
 
 
 

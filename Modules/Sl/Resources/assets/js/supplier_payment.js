@@ -1263,8 +1263,9 @@ function loadSetoffTable(sup_id) {
                     var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(tableData[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var return_amount = '<label id="lblReturnAmount' + i + '">0.00</label>';
                     var balance = '<label id="lblBalance' + i + '">' + parseFloat(tableData[i].balance_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
-                    var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" oninput="setoffAmountOnInput(' + str_id + ')">';
-                    var age = '<label id="lblAge' + i + '">0.00</label>';
+                    var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
+                   // var age = '<label id="lblAge' + i + '">0.00</label>';
+                   var age = '<label id="lblAge' + i + '"data-id="'+tableData[i].creditors_ledger_id+'">0.00</label>';
 
                     appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age);
 
@@ -1451,6 +1452,7 @@ function getSetoffTableData() {
             "balance": $('#lblBalance' + i).text().replace(/,(?=.*\.\d+)/g, ''),
             "set_off_amount": $('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, ''),
             "date": $('#lblDate' + i).text(),
+            "creditors_ledger_id": $('#lblAge' + i).attr('data-id')
         }));
     }
 

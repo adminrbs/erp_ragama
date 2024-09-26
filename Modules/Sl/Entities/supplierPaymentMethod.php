@@ -4,6 +4,7 @@ namespace Modules\Sl\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
@@ -19,6 +20,7 @@ class supplierPaymentMethod extends Model
     } */
 
     use HasFactory, LogsActivity;
+    protected $table = 'supplier_payment_methods';
     protected $primaryKey =  'supplier_payment_method_id';
     protected $fillable = [];
    

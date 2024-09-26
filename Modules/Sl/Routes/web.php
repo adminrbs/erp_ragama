@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Sl\Http\Controllers\SupOutstandingcontroller;
 use Modules\Sl\Http\Controllers\SupplierCreditController;
 use Modules\Sl\Http\Controllers\SupplierDebitNoteController;
 use Modules\Sl\Http\Controllers\supplierPaymentController;
@@ -81,4 +82,6 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     Route::get('/supplier_reports', function () {
         return view('sl::supplier_reports');
     });
+    Route::get('/printsupoutstandinReport/{search}', [SupOutstandingcontroller::class, 'printsupoutstandinReport']);
+    Route::get('/getSupplier',[SupOutstandingcontroller::class,'getSupplier']);
 });

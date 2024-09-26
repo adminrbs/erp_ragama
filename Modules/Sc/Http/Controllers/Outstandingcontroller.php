@@ -368,13 +368,13 @@ class Outstandingcontroller extends Controller
 
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-               // dd($query);
+                //dd($query);
                //dd('if');
                 $result = DB::select($query);
 
                 $resulcustomer = DB::select('select customer_id,customer_name,customer_code,routes.route_name,town_non_administratives.townName from customers
-                INNER JOIN routes ON customers.route_id = routes.route_id
-                INNER JOIN town_non_administratives ON customers.town = town_non_administratives.town_id 
+                LEFT JOIN routes ON customers.route_id = routes.route_id
+                LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id 
                 LEFT JOIN  route_towns ON  route_towns.town_id=customers.town 
                 ORDER BY routes.route_order , IFNULL(route_towns.route_town_id,0)');
 
@@ -592,7 +592,7 @@ class Outstandingcontroller extends Controller
                 INNER JOIN town_non_administratives ON customers.town = town_non_administratives.town_id 
                 LEFT JOIN  route_towns ON  route_towns.town_id=customers.town 
                 ORDER BY routes.route_order , IFNULL(route_towns.route_town_id,0)'); */
-                $resulcustomer = DB::select('SELECT customer_id,customer_name,customer_code,routes.route_name,town_non_administratives.townName FROM customers INNER JOIN routes ON customers.route_id = routes.route_id INNER JOIN town_non_administratives ON customers.town = town_non_administratives.town_id');
+                $resulcustomer = DB::select('SELECT customer_id,customer_name,customer_code,routes.route_name,town_non_administratives.townName FROM customers LEFT JOIN routes ON customers.route_id = routes.route_id LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id');
                 $resulbranch = DB::select('select branch_id,branch_name from branches');
 //dd($resulcustomer);
                 $customerablearray = [];
