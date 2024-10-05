@@ -124,21 +124,13 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                         '<label style=\"" . $style . "\">', DATEDIFF(CURDATE(), D.trans_date), '</label>',
                         IF(IPT.payment_term_id = 20, '</b>', '')
                     ) AS age,  
+                     
+                  D.amount,
                     
-                    CONCAT(
-                        IF(IPT.payment_term_id = 20, '<b>', ''), 
-                        '<label style=\"" . $style . "\">', C.credit_amount_hold_limit, '</label>',
-                        IF(IPT.payment_term_id = 20, '</b>', '')
-                    ) AS credit_limit,  
+                  
                     
-                    CONCAT(
-                        IF(IPT.payment_term_id = 20, '<b>', ''), 
-                        '<label style=\"" . $style . "\">', C.credit_period_hold_limit, '</label>',
-                        IF(IPT.payment_term_id = 20, '</b>', '')
-                    ) AS credit_period,  
-                    
-                    D.amount - D.paidamount AS total_outstanding  
-                    
+                    D.amount - D.paidamount AS total_outstanding,  
+                    D.branch_id
                 FROM debtors_ledgers D 
                 LEFT JOIN customers C ON D.customer_id = C.customer_id 
                 LEFT JOIN employees E ON D.employee_id = E.employee_id
@@ -233,17 +225,43 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
                // dd($query);
                 $result = DB::select($query);
 
+
+                $resulcustomer = DB::select('SELECT branch_id,branch_name FROM branches');
+
+                $customerablearray = [];
+                $titel = [];
+                $routes = [];
+                $routes_total = [];
                 $reportViwer = new ReportViewer();
-                $reportViwer->addParameter("debtor_reports_tabaledata", $result);
+                foreach ($resulcustomer as $customerid) {
+                    $table = [];
+
+                    foreach ($result as $customerdata) {
+                        //dd($result);
+                        if ($customerdata->branch_id == $customerid->branch_id) {
+
+                            array_push($table, $customerdata);
+                        }
+                    }
+
+                    if (count($table) > 0) {
+                        array_push($customerablearray, $table);
+  
+                        array_push($titel, "Branch :<strong>" . $customerid->branch_name . " </strong>");
+                        
+                       
+                    }
+                    $reportViwer->addParameter('abc', $titel);
+                   
+                }
+                $reportViwer->addParameter("tabale_data", [$customerablearray]);
+                //$reportViwer = new ReportViewer();
+               // $reportViwer->addParameter("debtor_reports_tabaledata", $result);
+
             } else {
-
-
-
-
 
                 $style = 'font-size:15px;';
                
-
                 $query = "SELECT
                     CONCAT(
                         IF(IPT.payment_term_id = 20, '<b>', ''), 
@@ -512,7 +530,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
             $reportViwer->addParameter('companyAddress', CompanyDetailsController::CompanyAddress());
             $reportViwer->addParameter('companyNumber', CompanyDetailsController::CompanyNumber());
 
-          
+            $reportViwer->addParameter('report_title', "Customer outstanding invoice wise From: ".$fromdate." To: ".$todate);
             $label_height = 0; //(($i + $i2) * 20);
 
             //dd($length . " " . (strlen($filterLabel)));

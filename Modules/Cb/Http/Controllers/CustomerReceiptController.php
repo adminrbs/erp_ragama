@@ -14,6 +14,7 @@ use Modules\Cb\Entities\CustomerReceiptSetoffData;
 use Modules\Cb\Entities\bank;
 use Modules\Cb\Entities\bank_branch;
 use Modules\Cb\Entities\Customer;
+use Modules\Cb\Entities\CustomerReceiptBankSlip;
 use Modules\Cb\Entities\CustomerReceiptCheque;
 use Modules\Cb\Entities\DebtorsLedger;
 use Modules\Cb\Entities\DebtorsLedgerSetoff;
@@ -214,6 +215,16 @@ class CustomerReceiptController extends Controller
         //dd($request->input('receipt_data'));
         DB::beginTransaction();
         try {
+            /* if($request->get('receipt_method_id') == 7){
+                $payment_slip = json_decode($request->get('payment_slip'));
+                $request->validate([
+                    'reference' => 'required|unique:payment_slips,'.$payment_slip->txtSlipRef
+                    
+                ]);
+
+            } */
+            
+
             $receipt_data = json_decode($request->get('receipt_data'), true); // Decode as array
 
             if ($request->get('advance') == 0) {
@@ -295,10 +306,15 @@ class CustomerReceiptController extends Controller
                 //dd($receipt_data);
 
                 $single_cheque = json_decode($request->get('single_cheque'));
-
+                $payment_slip = json_decode($request->get('payment_slip'));
+               // dd($payment_slip);
                 $this->save_update_DebtorLedger($receipt, $customerObj, $receipt_data);
                 /* $this->saveCustomerReceiptData($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->customer_id, $request->get('customer_code'), $receipt_data); */
                 $this->saveCustomerReceiptCheque($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
+                if($receipt->receipt_method_id == 7){
+                    $this->CustomerReceiptsaveBankSLip($receipt,$payment_slip);
+                }
+               
                 DB::commit();
                 array_push($this->response_data, true);
                 return response()->json(["data" => $this->response_data]);
@@ -310,7 +326,26 @@ class CustomerReceiptController extends Controller
     }
 
 
-
+    public function CustomerReceiptsaveBankSLip($receipt,$paymentSlip){
+        try{
+            
+          
+                
+                //$slip_data = json_decode($data);
+                //dd($$data);
+                $slip = new CustomerReceiptBankSlip();
+                $slip->customer_receipt_id = $receipt->customer_receipt_id;
+                $slip->internal_number = $receipt->internal_number;
+                $slip->external_number = $receipt->external_number;
+                $slip->reference = $paymentSlip->cheque_referenceNo;
+                $slip->slip_time = $paymentSlip->slip_time;
+                $slip->slip_date = $paymentSlip->slip_date;
+                $slip->save();
+            
+        }catch (Exception $ex) {
+            array_push($this->response_data, $ex);
+        }
+    }
 
     public function saveCustomerReceiptData($dl, $receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $customer_id, $customer_code, $receiptData)
     {

@@ -1,12 +1,10 @@
 {
-    
     "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
     "paper": "A4",
-
     "detail": [
-		{
-			"height": "100%"
-		},
+        {
+            "height": "30%"
+        },
         {
             "label": {
                 "text": "@_$companyName",
@@ -23,14 +21,14 @@
                 "y": "-150",
                 "font": {
                     "style": "Bold",
-                    "size": "30",
+                    "size": "22",
                     "name": "Tahoma"
                 }
             }
         },
         {
             "label": {
-                "text": "Customer Outstanding - Invoice Wise",
+                "text": "@_$report_title",
                 "align": "center",
                 "height": "30",
                 "width": "100%",
@@ -41,159 +39,175 @@
                 "bg-color": "white",
                 "color": "#000000",
                 "x": "130",
-                "y": "-70",
+                "y": "-90",
                 "font": {
                     "style": "Bold",
-                    "size": "25",
+                    "size": "20",
                     "name": "Tahoma"
                 }
             }
         },
-            {
-            "label": {
-                "text": "@_$filter",
-                "align": "center",
-                "height": "@_$hight",
-                "width": "700",
-                "border-top": "0",
-                "border-bottom": "0",
-                "border-left": "0",
-                "border-right": "0",
-                "bg-color": "white",
-                "color": "#000000",
-                
-                "x": "130",
-                "y": "0",
-                "font": {
-                    "style": "Bold",
-                    "size": "35",
-                    "name": "Tahoma"
-                }
-            }
-        },
-		{
-			"table": {
-				
+        {
+            "group": {
                 "header": [
-                    
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Customer<br>Code</label>",
+                    {
+                        "label": {
+                            "text": "",
                             "align": "left",
-                            "format": "text",
-                            "width":100,
-                            "font-size" : 20
+                            "height": "5",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "black",
+                            "x": "5",
+                            "y": "0",
+                            "padding-top": "0"
                         }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Customer Name</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":250,
-                            "font-size" : 18
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Invoice No</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":160,
-                            "font-size" : 18
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Sales Rep</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":150,
-                            "font-size" : 18
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Collector</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":150,
-                            "font-size" : 18
-                        }
-                    ],
-                    
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Invoice Date</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":150,
-                            "font-size" : 16
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Age</label>",
-                            "align": "left",
-                            "format": "text",
-                            "width":60,
-                            "font-size" : 18
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Credit<br>Limit</label>",
-                            "align": "right",
-                            "format": "text",
-                            "width":50,
-                            "font-size" : 18
-                        }
-                    ],
-                    
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Credit<br>period</label>",
-                            "align": "right",
-                            "format": "text",
-                            "width":50,
-                            "font-size" : 18
-                        }
-                    ],
-                    [
-                        {
-                            "text": "<label style='font-size:13px;'>Total Outstanding</label>",
-                            "align": "right",
-                            "format": "number",
-                            "width":120,
-                            "font-size" : 16
-                        }
-                    ]
+                    }
                 ],
-
-				"body": "@_$debtor_reports_tabaledata",
-				"height": "",
-				"width": "100%",
-				"x": 5,
-				"y": 0,
-				"margin-bottom": "5",
-                "margin-top": "5",
-                "margin-left": "100",
-                "margin-right": "100",
-               
-				"sum": ["<label style='font-size:13px;'>Total Outstanding</label>","0 - 30","31 - 60","61 - 90","Over 91"],
-				"font": {
-					"style": "lite",
-					"size": "30",
-					"name": "Tahoma"
-				},
-                "font-size" : 15
-			}
-
-            
-		}
-      
-	],
-
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "#ffffff",
+                                "color": "black",
+                                "x": "5",
+                                "y": "0",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Customer<br>Code</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":100,
+                                        "font-size" : 20
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Customer Name</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":500,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Invoice No</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":150,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Sales Rep</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":90,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Collector</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":90,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Invoice Date</label>",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width":90,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Age</label>",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width":25,
+                                        "font-size" : 18
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Invoice Amount</label>",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width":120,
+                                        "font-size" : 16
+                                    }
+                                ],
+                                
+                               
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>Total Outstanding</label>",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width":120,
+                                        "font-size" : 16
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "<label style='font-size:13px;'>br</label>",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width":120,
+                                        "font-size" : 16,
+                                        "visible":false
+                                    }
+                                ]
+                            ],
+                            "body": "@_$tabale_data",
+                            "height": "40",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "size": "5",
+                            "margin-top": "0",
+                            "sum": [
+                                "<label style='font-size:13px;'>Invoice Amount</label>",
+                                "<label style='font-size:13px;'>Total Outstanding</label>"
+                               
+                            ],
+                            "font-size": 13,
+                            "group-sum": "@_$route_total",
+                            "layout": ""
+                        }
+                    }
+                ]
+            }
+        }
+    ],
     "footer": [
         {
             "height": 30
@@ -204,7 +218,7 @@
                 "x": 0,
                 "width": "100%",
                 "y": 1090,
-                "text": "Page",
+                "text": "",
                 "position": "",
                 "align": "center",
                 "bg-color": "white",
@@ -215,33 +229,38 @@
                     "style": "plain"
                 }
             }
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 690,
+                "text": "NO 14,1 ST CROSS STREET,NEGOMBO",
+                "position": "fixed",
+                "align": "center",
+                "bg-color": "white",
+                "height": 32,
+                "font": {
+                    "size": 14,
+                    "name": "Tahoma",
+                    "style": "bold"
+                }
+            }
         }
-       
     ],
     "name": "sample_report",
     "header": [
         {
             "no-repeate": true,
-            "height": 70
-           
+            "height": 0
         }
     ],
     "oriantation": "PORTRAIT",
     "title": [
         {
-            "img": {
-                "url": "@_$companylogo",
-                "width": "120",
-                "height": "120",
-                "x": 0,
-                "y": -160,
-                "position": "fixed"
-            }
-        },
-        {
             "no-repeate": true,
-            "height": 50
+            "height": 20
         }
-        
     ]
 }

@@ -41,7 +41,7 @@
 
                         <div class="col-12">
                             <div class="row" style="margin-left: 50px;">
-                               <!--  <div class="alert alert-primary alert-icon-start alert-dismissible text-truncate rounded-pill fade show col-10">
+                                <!--  <div class="alert alert-primary alert-icon-start alert-dismissible text-truncate rounded-pill fade show col-10">
                                     <span class="alert-icon bg-primary text-white rounded-pill" style="font-size: 20px;">
                                         <i class="fa fa-info-circle"></i>
                                     </span>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="mb-4">
 
 
@@ -73,31 +73,31 @@
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Referance No</span></label>
-                                    
+
                                     <input class="form-control" type="text" id="LblexternalNumber" value="New Invoice" disabled>
                                 </div>
 
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
-                                    
+
                                     <input type="date" class="form-control" id="invoice_date_time" disabled>
                                 </div>
 
-                               
+
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Branch</span></label>
                                     <select class="form-select " id="cmbBranch"></select>
                                 </div>
-                              
+
                             </div>
 
                             <div class="row mb-1">
 
-                               
 
-                               
 
+
+                                <!-- 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
                                         <span>Supplier Code</span>
@@ -106,7 +106,7 @@
                                         <input type="text" id="txtSupplier" class="form-control mr-2"> &nbsp;
                                         
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-4" style="display: none;">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Discount Precentage</span></label>
@@ -117,23 +117,55 @@
                                     <input type="number" id="txtDiscountAmount" class="form-control" style="text-align:right;">
                                 </div>
                                 <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;color:white">
+                                        <span>Options</span>
+                                    </label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" id="rdoPayee" name="option" class="rdo"> &nbsp; Option 1
+                                        <input type="radio" id="rdoSup" name="option" class="ms-3 rdo"> &nbsp; Option 2
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Payment Method</span></label>
                                     <select class="form-select" id="cmbPaymentMethod"></select>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>GL Account</span></label>
-                                    <select class="form-select" id="cmbGlAccount"></select>
+                                    <select class="select2 form-control validate" data-live-search="true" id="cmbGlAccount"></select>
                                 </div>
 
                             </div>
                             <div class="row mb-1">
 
-                            <div class="col-md-4">
+                                <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Payee</span></label>
-                                    <select class="form-select " id="cmbPayee"></select>
+                                    <select class="select2 form-control validate" data-live-search="true" id="cmbPayee">
+                                        
+                                    </select>
                                 </div>
+
+
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
+                                        <span>Supplier Code</span>
+                                    </label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" id="txtSupplier" class="form-control mr-2"> &nbsp;
+
+                                    </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
+                                        <span>Description</span>
+                                    </label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" id="txtDescription" class="form-control mr-2"> &nbsp;
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <hr>
@@ -141,7 +173,7 @@
 
                         <ul class="nav nav-tabs mb-0" id="tabs">
                             <li class="nav-item rbs-nav-item">
-                                <a href="#Item" class="nav-link active" aria-selected="true">Product</a>
+                                <a href="#Item" class="nav-link active" aria-selected="true">Accounts</a>
                             </li>
                             <!-- <li class="nav-item rbs-nav-item">
                                 <a href="#rtn" class="nav-link" aria-selected="true">Return Request</a>
@@ -159,23 +191,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th>Item Code</th>
-                                                        <th>Name</th>
-                                                        <th>QTY</th>
-                                                        <th>FOC</th>
-                                                        <th>U.O.M</th>
-                                                        <th>Package Size</th>
-                                                        <th>Pack Size</th>
-                                                        <th>Price</th>
-                                                        <th>Disc. %</th>
-                                                        <th>Disc. Amount</th>
-                                                        <th>Value</th>
-                                                        <th>Avl. Qty</th>
-                                                        <th>Set Off Qty</th>
-                                                        <th>Retail Price</th>
-                                                        <th style="width: 120px;">Set Off</th>
-                                                        <th style="width: 120px;">Button</th>
-                                                        <th>foc_</th>
+                                                        <th>GL Accounts</th>
+                                                        <th>Description</th>
+                                                        <th>Amount</th>
+                                                        <th>Analysis</th>
+                                                        <th>Remove</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -268,7 +288,7 @@
 
 
                                 <div class="row">
-                                 <!--    <div class="col-md-6" style="display: none;">
+                                    <!--    <div class="col-md-6" style="display: none;">
                                         <button class="btn btn-primary" type="button" id="btnSaveDraft" style="width: 100%;">Save Draft</button>
                                     </div> -->
                                     <div class="col-md-6">

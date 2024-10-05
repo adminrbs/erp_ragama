@@ -1,0 +1,239 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "30",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Customer Outstanding - Invoice Wise",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-70",
+                "font": {
+                    "style": "Bold",
+                    "size": "25",
+                    "name": "Tahoma"
+                }
+            }
+        },
+            {
+            "label": {
+                "text": "@_$filter",
+                "align": "center",
+                "height": "@_$hight",
+                "width": "700",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                
+                "x": "130",
+                "y": "0",
+                "font": {
+                    "style": "Bold",
+                    "size": "35",
+                    "name": "Tahoma"
+                }
+            }
+        },
+		{
+			"table": {
+				
+                "header": [
+                    
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Customer<br>Code</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":80,
+                            "font-size" : 20
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Customer Name</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":500,
+                            "font-size" : 18
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Invoice No</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":150,
+                            "font-size" : 18
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Sales Rep</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":90,
+                            "font-size" : 18
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Collector</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":90,
+                            "font-size" : 18
+                        }
+                    ],
+                    
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Invoice Date</label>",
+                            "align": "left",
+                            "format": "text",
+                            "width":90,
+                            "font-size" : 18
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Age</label>",
+                            "align": "right",
+                            "format": "text",
+                            "width":25,
+                            "font-size" : 18
+                        }
+                    ],
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Invoice Amount</label>",
+                            "align": "right",
+                            "format": "number",
+                            "width":120,
+                            "font-size" : 16
+                        }
+                    ],
+                    
+                   
+                    [
+                        {
+                            "text": "<label style='font-size:13px;'>Total Outstanding</label>",
+                            "align": "right",
+                            "format": "number",
+                            "width":120,
+                            "font-size" : 16
+                        }
+                    ]
+                ],
+
+				"body": "@_$debtor_reports_tabaledata",
+				"height": "",
+				"width": "100%",
+				"x": 5,
+				"y": 0,
+				"margin-bottom": "5",
+                "margin-top": "5",
+                "margin-left": "100",
+                "margin-right": "100",
+               
+				"sum": ["<label style='font-size:13px;'>Invoice Amount</label>","<label style='font-size:13px;'>Total Outstanding</label>"],
+				"font": {
+					"style": "lite",
+					"size": "30",
+					"name": "Tahoma"
+				},
+                "font-size" : 15
+			}
+
+            
+		}
+      
+	],
+
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+       
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 70
+           
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "img": {
+                "url": "@_$companylogo",
+                "width": "120",
+                "height": "120",
+                "x": 0,
+                "y": -160,
+                "position": "fixed"
+            }
+        },
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+        
+    ]
+}

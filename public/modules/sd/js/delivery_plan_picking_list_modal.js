@@ -299,6 +299,8 @@ function getSelectedNonPickingInvoice() {
 
 
         var checkBox = $(cells[7].childNodes[0]);
+        console.log(checkBox);
+        
         if (checkBox.is(':checked')) {
             invoiceArray.push({
                 "sales_invoice_id": checkBox.attr('data-sales_invoice_id'),
@@ -307,7 +309,8 @@ function getSelectedNonPickingInvoice() {
         }
 
     }
-
+    console.log(invoiceArray);
+    
     return invoiceArray;
 }
 

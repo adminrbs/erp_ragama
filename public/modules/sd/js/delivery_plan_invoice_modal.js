@@ -384,7 +384,7 @@ function getSelectedInvoice() {
         }
 
 
-        var checkBox = $(cells[7].childNodes[0]);
+        var checkBox = $(cells[8].childNodes[0]);
         if (checkBox.is(':checked')) {
             invoiceArray.push({
                 "sales_invoice_id": checkBox.attr('data-sales_invoice_id'),
@@ -393,7 +393,8 @@ function getSelectedInvoice() {
         }
 
     }
-
+    console.log(invoiceArray);
+    
     return invoiceArray;
 }
 

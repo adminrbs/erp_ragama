@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('patment_voucher_items', function (Blueprint $table) {
+        Schema::create('payment_voucher_items', function (Blueprint $table) {
             $table->id('payment_voucher_item_id')->index();
             $table->integer('payment_voucher_id')->index();
             $table->integer('internal_number');

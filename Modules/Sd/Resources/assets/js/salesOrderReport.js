@@ -4,37 +4,6 @@
 
 function salesorderReport(id) {
 
-   
-    /* const xhr = new XMLHttpRequest();
-     xhr.open("GET", "/sd/printsalesinvoicePdf");
-     xhr.send();
-     xhr.responseType = "json";
-     xhr.onload = () => {
-         if (xhr.readyState == 4 && xhr.status == 200) {
-             const data = xhr.response;
-             console.log(data);
-             reportHeader(data.data, 'PRINT');
-         } else {
-             console.log(`Error: ${xhr.status}`);
-         }
-     };
- */
- 
- /*
-  * To change this license header, choose License Headers in Project Properties.
-  * To change this template file, choose Tools | Templates
-  * and open the template in the editor.
-  */
- 
- //const { grosstotal } = require("lodash");
- 
- /*
-  Created on : Feb 02, 2020, 12:10:33 AM
-  Author     : Sampath Perera
-  */
- 
- 
- 
      $.ajax({
          url: '/sd/printSalesOrderReport/'+id,
          type: 'GET',

@@ -158,6 +158,9 @@
                             <li class="nav-item rbs-nav-item">
                                 <a href="#cheques" class="nav-link" aria-selected="false" hidden>Multiple Cheques</a>
                             </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a id="tab-bank-slip" href="#bankSlip" class="nav-link" aria-selected="false" hidden>Bank Slip</a>
+                            </li>
 
 
                         </ul>
@@ -192,6 +195,7 @@
                                                     <th style="max-width: 80px;text-align: right;" class="hide_col">Balance</th>
                                                     <th style="max-width: 100px;text-align: center;">Setoff</th>
                                                     <th style="max-width: 80px;text-align: right;" class="hide_col">Age</th>
+                                                    <th style="max-width: 80px;text-align: right;" class=""></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblCustomerReceiptSetoff"></tbody>
@@ -238,6 +242,31 @@
 
                             </div>
                             <!-- End of Single Cheuq tab -->
+
+                            <!-- Bank slip -->
+                            <div class="tab-pane fade" id="bankSlip">
+
+                                <div class="row">
+                                    <div class="col-md-2 mt-2">
+                                        <label>Ref No</label>
+                                        <input type="text" id="txtSlipRef" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label for="time" class="form-label">Time</label>
+                                        <input type="time" class="form-control" id="tmSliptime" name="time" step="3600" style="height: 30px;">
+                                    </div>
+
+                                    <div class="col-md-3 mt-2">
+                                        <label for="slipDate" class="form-label">Slip Date</label>
+                                        <input type="date" id="dtSLipDate" name="slipDate" class="form-control form-control-sm">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- End slip -->
+
+
 
                             <!-- Cheques tab -->
 

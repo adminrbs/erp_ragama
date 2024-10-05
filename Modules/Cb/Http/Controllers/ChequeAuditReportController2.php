@@ -59,16 +59,18 @@ class ChequeAuditReportController2 extends Controller
         customer_receipts.receipt_date,
         customer_receipt_cheques.banking_date,
         customer_receipt_cheques.cheque_number,
-        IfNull(sales_invoices.external_number , debtors_ledgers.external_number ) AS InvoiceNo ,
+        debtors_ledgers.external_number AS InvoiceNo ,
         E.employee_name,
         customer_receipt_setoff_data.set_off_amount As Invoice_amont,
         CAST(DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date)AS SIGNED) AS Age,
+        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
+        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
         customer_receipt_cheques.amount,
         banks.bank_name,
         bank_branches.bank_branch_name
         FROM customer_receipts
-        INNER JOIN customer_receipt_setoff_data ON  customer_receipt_setoff_data.customer_receipt_id=customer_receipts.customer_receipt_id 
-        INNER JOIN debtors_ledgers ON debtors_ledgers.debtors_ledger_id =  customer_receipt_setoff_data.debtors_ledger_id  
+        LEFT JOIN customer_receipt_setoff_data ON  customer_receipt_setoff_data.customer_receipt_id=customer_receipts.customer_receipt_id 
+        LEFT JOIN debtors_ledgers ON debtors_ledgers.debtors_ledger_id =  customer_receipt_setoff_data.debtors_ledger_id  
         LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
         LEFT JOIN customer_receipt_cheques ON customer_receipts.customer_receipt_id = customer_receipt_cheques.customer_receipt_id
         LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id

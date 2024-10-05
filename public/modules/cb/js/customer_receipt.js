@@ -4,13 +4,16 @@ var action = undefined;
 var CUSTOMER_RECEIPT_ID = undefined;
 var REFERANCE_ID = undefined;
 var hidden_columns = "";
+var rcptAmountforcheckbox = null;
 $(document).ready(function () {
     getCollectors_and_Cashiers();
     getBank();
     getBranch();
     getReceiptMethod();
-    
+
     $("#tab-single-cheque").attr("hidden", true);
+    $("#tab-bank-slip").attr("hidden", true);
+  
 
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
@@ -19,25 +22,25 @@ $(document).ready(function () {
         CUSTOMER_RECEIPT_ID = id;
         var action = param[0].split('=')[2].split('&')[0];
         if (action == 'view') {
-           // getCollectors_and_Cashiers();
+            // getCollectors_and_Cashiers();
             $('#btnAction').hide();
             $('#btnAutomaticSetoff').hide();
-            $('#txtRefNo').prop('disabled',true);
-            $('#txtDate').prop('disabled',true);
-            $('#txtCustomerID').prop('disabled',true);
-            $('#txtCustomerName').prop('disabled',true);
-            $('#txtCustomerID').prop('disabled',true);
-            $('#cmbCollector').prop('disabled',true);
-            $('#cmbCashier').prop('disabled',true);
-            $('#cmbGLAccount').prop('disabled',true);
-            $('#cmbReceiptMethod').prop('disabled',true);
-            $('#txtAmount').prop('disabled',true);
-            $('#txtDiscount').prop('disabled',true);
-            $('#txtRound_up').prop('disabled',true);
-            $('#cmbBranch').prop('disabled',true);
-            $('#checkAdvancePayment').prop('disabled',true);
+            $('#txtRefNo').prop('disabled', true);
+            $('#txtDate').prop('disabled', true);
+            $('#txtCustomerID').prop('disabled', true);
+            $('#txtCustomerName').prop('disabled', true);
+            $('#txtCustomerID').prop('disabled', true);
+            $('#cmbCollector').prop('disabled', true);
+            $('#cmbCashier').prop('disabled', true);
+            $('#cmbGLAccount').prop('disabled', true);
+            $('#cmbReceiptMethod').prop('disabled', true);
+            $('#txtAmount').prop('disabled', true);
+            $('#txtDiscount').prop('disabled', true);
+            $('#txtRound_up').prop('disabled', true);
+            $('#cmbBranch').prop('disabled', true);
+            $('#checkAdvancePayment').prop('disabled', true);
             //$('.hide_col').hide();
-           
+
         } else if (action == 'edit') {
             hidden_columns = "";
             $('#btnAction').show();
@@ -141,11 +144,11 @@ $(document).ready(function () {
 
     var customer_data_source = getCustomers();
     DataChooser.setTitle('Customer');
-    DataChooser.addCollection("customers",['Customer Name','Customer Code','Town','Route',''],customer_data_source);
+    DataChooser.addCollection("customers", ['Customer Name', 'Customer Code', 'Town', 'Route', ''], customer_data_source);
     $('#txtCustomerID').on('click', function () {
         /* DataChooser.showChooser($(this)); */
-        DataChooser.showChooser($(this),$(this),"customers");
-       $('#data-chooser-modalLabel').text('customers');
+        DataChooser.showChooser($(this), $(this), "customers");
+        $('#data-chooser-modalLabel').text('customers');
     });
 
     $('.select2-single-checque-bank').select2();
@@ -276,9 +279,17 @@ $(document).ready(function () {
         }
     });
 
+  
     $('#cmbReceiptMethod').on('change', function () {
         if ($(this).val() == '2') {
             $("#tab-single-cheque").attr("hidden", false);
+            $("#bankSlip").attr("hidden", true);
+            $("#tab-bank-slip").attr("hidden", true);
+        } else if($(this).val() == '7'){
+            $("#bankSlip").attr("hidden", false);
+            $("#tab-bank-slip").attr("hidden", false);
+           
+            $("#tab-single-cheque").attr("hidden", true);
         } else {
             $("#tab-single-cheque").attr("hidden", true);
             $("#tab-setoff").trigger('click');
@@ -286,6 +297,8 @@ $(document).ready(function () {
             $('#txtChequeNo').val('');
             $('#txtBankCode').val('');
             $('#txtChequeAmount').val('');
+            $("#bankSlip").attr("hidden", true);
+            $("#tab-bank-slip").attr("hidden", true);
         }
     });
 
@@ -293,6 +306,8 @@ $(document).ready(function () {
     $('#txtChequeAmount').on('input', function () {
         $('#txtAmount').val($(this).val());
     });
+
+
 
 
 });
@@ -405,14 +420,17 @@ function getCollectors_and_Cashiers() {
             if (response.status) {
                 var collectors = response.data;
                 console.log(collectors);
-                
+
                 $('#cmbCollector').empty();
                 $('#cmbCashier').empty();
                 for (var i = 0; i < collectors.length; i++) {
                     var id = collectors[i].employee_id;
                     var name = collectors[i].employee_name;
                     $('#cmbCollector').append('<option value="' + id + '">' + name + '</option>');
-                    $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    if (collectors[i].desgination_id == 9) {
+                        $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    }
+
                 }
             }
 
@@ -903,6 +921,7 @@ function saveReceipt() {
             "advance": advane,
             "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
+            "payment_slip": JSON.stringify(getSlip()),
 
         },
         timeout: 800000,
@@ -910,14 +929,14 @@ function saveReceipt() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-            $('#btnAction').prop('disabled',true);
+           // $('#btnAction').prop('disabled', true);
         }, success: function (response) {
-            $('#btnAction').prop('disabled',false);
+            $('#btnAction').prop('disabled', false);
             console.log(response);
-            if(response.msg == 'advanceError'){
+            if (response.msg == 'advanceError') {
                 showWarningMessage('Setoff off amount mismatch')
             }
-            else if(response.duplicate == "duplicate"){
+            else if (response.duplicate == "duplicate") {
                 showWarningMessage("Cheque number duplicated");
             }
             else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
@@ -1256,7 +1275,7 @@ function loadSetoffTable(customer_id) {
                 var tableData = response.data;
                 $('#tblCustomerReceiptSetoff').empty();
                 for (var i = 0; i < tableData.length; i++) {
-                    
+
                     var str_id = "'" + i + "'";
                     var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + tableData[i].internal_number + '" data-external_number="' + tableData[i].external_number + '" data-reference_internal_number="' + tableData[i].reference_internal_number + '"  data-reference_external_number="' + tableData[i].reference_external_number + '"  data-reference_document_number="' + tableData[i].reference_document_number + '"></label>'
                     var date = '<label id="lblDate' + i + '">' + tableData[i].trans_date + '</label>';
@@ -1267,13 +1286,16 @@ function loadSetoffTable(customer_id) {
                     var return_amount = '<label id="lblReturnAmount' + i + '">0.00</label>';
                     var balance = '<label id="lblBalance' + i + '">' + parseFloat(tableData[i].balance_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" onclick="selectAll(this)" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
-                    var age = '<label id="lblAge' + i + '"data-id="'+tableData[i].debtors_ledger_id+'">0.00</label>';
+                    var age = '<label id="lblAge' + i + '"data-id="' + tableData[i].debtors_ledger_id + '"> - </label>';
+                    var chkBox = '<input type="checkbox" id="chkbox' + i + '" onclick="selectRecordToSetOff(this)">'
 
-                    appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age);
+                    appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age, chkBox);
 
 
                 }
             }
+
+
 
         },
         error: function (error) {
@@ -1288,7 +1310,76 @@ function loadSetoffTable(customer_id) {
 
 }
 
-function selectAll(event){
+function selectRecordToSetOff(event) {
+    var txtAmount = $('#txtAmount').val();
+    if (rcptAmountforcheckbox === null) {
+        rcptAmountforcheckbox = parseFloat(txtAmount);
+    }
+    $('#txtAmount').prop('disabled',true);
+
+    if ($(event).prop('checked')) {
+        if (!txtAmount || parseFloat(txtAmount) === 0) {
+            showWarningMessage('Please enter a receipt amount');
+            $(event.target).prop('checked', false);
+            return false;
+        } else {
+
+
+
+            var tr = $($($(event).parent()).parent());
+
+
+            var labelIn8thTd = tr.find('td:eq(7) label').text();
+
+            var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+
+            if (rcptAmountforcheckbox == 0) {
+                showWarningMessage('Insuficent Balance');
+                $(event).prop('checked', false);
+                return false;
+            }
+            if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
+                setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
+                rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
+            } else {
+                setoffbox.val(rcptAmountforcheckbox);
+                rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
+            }
+
+            console.log(rcptAmountforcheckbox);
+
+
+        }
+    } else {
+        var tr = $($($(event).parent()).parent());
+        var labelIn8thTd = tr.find('td:eq(7) label').text();
+        var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+      
+        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
+       
+        setoffbox.val(0);
+
+    }
+
+}
+
+
+function changeAmount() {
+
+    var txtAmount = $('#txtAmount').val();
+  
+        rcptAmountforcheckbox = parseFloat(txtAmount);
+  
+   /*  $('#tblCustomerReceiptSetoff tr').each(function() {
+        var checkbox = $(this).find('td:last-child input[type="checkbox"]'); 
+        var textbox = $(this).find('td:eq(8) input[type="text"]'); 
+        checkbox.prop('checked', false);
+        textbox.val(0);
+    }); */
+}
+
+
+function selectAll(event) {
     $(event).select();
 
 }
@@ -1440,7 +1531,7 @@ function getSetoffTableData() {
     var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
     for (var i = 0; i < rowCount; i++) {
 
-        if(parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0){
+        if (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0) {
             $('#txtSetoff' + i).focus();
             showWarningMessage('Invalied Setoff amount..');
             break;
@@ -1483,6 +1574,21 @@ function getSingleCheque() {
     };
 }
 
+
+function getSlip(){
+    if($('#cmbReceiptMethod').val() == 7){
+        if($('#txtSlipRef').val() == ''){
+            showWarningMessage('Please enter reference details');
+        }else{
+            return {
+                "cheque_referenceNo": $('#txtSlipRef').val(),
+                "slip_time": $('#tmSliptime').val(),
+                "slip_date": $('#dtSLipDate').val(),
+            }
+        }
+    }
+   
+}
 function newReferanceID(table, doc_number) {
     REFERANCE_ID = newID("/cb/customer_receipt/new_referance_id", table, doc_number);
     $('#txtRefNo').val('New Receipt');
@@ -1495,7 +1601,7 @@ function getCustomerReceipt(id) {
         url: '/cb/customer_receipt/getCustomerReceipt/' + id,
         type: 'GET',
         cache: false,
-      async:false,
+        async: false,
         timeout: 800000,
         beforeSend: function () { },
         success: function (response) {
@@ -1540,12 +1646,12 @@ function getCustomerReceipt(id) {
 
             var receipt_data = result.receipt_data;
             console.log(receipt_data);
-            
+
             for (var i = 0; i < receipt_data.length; i++) {
                 var rtn_amount = receipt_data[i].return_amount;
-            if(isNaN(parseFloat(rtn_amount))){
-                rtn_amount = 0;
-            }
+                if (isNaN(parseFloat(rtn_amount))) {
+                    rtn_amount = 0;
+                }
                 var Balance_ = parseFloat(receipt_data[i].amount) - ((parseFloat(receipt_data[i].paid_amount) + parseFloat(rtn_amount)));
                 var str_id = "'" + i + "'";
                 var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + receipt_data[i].internal_number + '" data-external_number="' + receipt_data[i].external_number + '" data-reference_internal_number="' + receipt_data[i].reference_internal_number + '"  data-reference_external_number="' + receipt_data[i].reference_external_number + '"></label>'
@@ -1571,7 +1677,7 @@ function getCustomerReceipt(id) {
 }
 
 
-function appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age) {
+function appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age, chkBox) {
     var row = '<tr>';
     row += '<td hidden>';
     row += hidden_col;
@@ -1588,24 +1694,27 @@ function appendReceiptData(hidden_col, date, document_ref_no, description, amoun
     row += '<td style="text-align:right;max-width: 80px;">';
     row += amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" '+hidden_columns+'>'; 
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
     //row += '<td style="text-align:right;max-width: 80px;" >'; 
     row += paid_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" '+hidden_columns+'>';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
     //row += '<td style="text-align:right;max-width: 80px;" >';
     row += return_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" '+hidden_columns+'>';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
     //row += '<td style="text-align:right;max-width: 80px;">';
     row += balance;
     row += '</td>';
     row += '<td style="max-width: 80px;">';
     row += setoff;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" '+hidden_columns+'>';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
     //row += '<td style="text-align:right;max-width: 80px;">';
     row += age;
+    row += '</td>';
+    row += '<td style="text-align:right;max-width: 80px;">'
+    row += chkBox
     row += '</td>';
     row += '</tr>';
 

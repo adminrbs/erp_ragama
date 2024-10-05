@@ -163,12 +163,8 @@ $(document).ready(function () {
     });
 
 
-    $('#chkCustomer').prop('checked', false);
+    
     $('#chkdate').prop('checked', false);
-    $('#chkcustomergroup').prop('checked', false);
-    $('#chkCustomerGrade').prop('checked', false);
-    $('#chkRoute').prop('checked', false);
-    $('#Salesrep').prop('checked', false);
     $('#chkBranch').prop('checked', false);
 
 
@@ -199,46 +195,7 @@ $(document).ready(function () {
     });
 
 
-    $('#cmbselect').change(function () {
-
-        selected = $('#cmbselect').val();
-        //alert(se)
-        //getselect(selected);
-
-    })
-    $('#cmbselect1').change(function () {
-
-
-        selected1 = $('#cmbselect1').val();
-        //getselect(selected);
-
-    })
-
-    $('#cmbselect2').change(function () {
-
-        selected2 = $('#cmbselect2').val();
-
-        //getselect(selected1);
-    })
-    $('#cmbselect3').change(function () {
-
-        selected3 = $('#cmbselect3').val();
-
-        //getselect(selected1);
-    })
-    $('#cmbselect4').change(function () {
-
-        selected4 = $('#cmbselect4').val();
-
-        //getselect(selected1);
-    })
-    $('#cmbselect5').change(function () {
-
-        selected5 = $('#cmbselect5').val();
-
-        //getselect(selected1);
-    })
-
+   
     $('#chkBranch').on('change', function () {
 
         if (this.checked) {
@@ -267,26 +224,7 @@ $(document).ready(function () {
 
 
 
-    $('#chkCustomer').on('change', function () {
-
-        if (this.checked) {
-            selecteCustomer = $('#cmbCustomer').val();
-            $('#cmbCustomer').change(function () {
-                selecteCustomer = $('#cmbCustomer').val();
-
-            })
-
-        } else {
-
-            /* $('#cmbselect1').val("0");
-             selected1 = 0;*/
-
-            selecteCustomer = null
-            selected1 = null
-        }
-
-    })
-
+    
 
     $('#chkdate').on('change', function () {
 
@@ -339,63 +277,11 @@ $(document).ready(function () {
 
     });
 
-    $('#chkcustomergroup').on('change', function () {
+  
+    
 
-        if (this.checked) {
-            selectecustomergroup = $('#cmbcustomergroup').val();
-            $('#cmbcustomergroup').change(function () {
-                selectecustomergroup = $('#cmbcustomergroup').val();
-            })
-        } else {
-            selectecustomergroup = null
-            selected2 = null
-            /* $('#cmbselect1').val("0");
-             selected1 = 0;*/
-        }
+    
 
-    })
-
-    $('#chkCustomerGrade').on('change', function () {
-
-        if (this.checked) {
-            selecteCustomerGrade = $('#cmbCustomerGrade').val();
-
-            $('#cmbCustomerGrade').change(function () {
-                selecteCustomerGrade = $('#cmbCustomerGrade').val();
-            })
-        } else {
-            selecteCustomerGrade = null
-            selected3 = null
-        }
-
-    })
-
-    $('#chkRoute').on('change', function () {
-
-        if (this.checked) {
-            selecteRoute = $('#cmbRoute').val();
-            $('#cmbRoute').change(function () {
-                selecteRoute = $('#cmbRoute').val();
-            })
-        } else {
-            selecteRoute = null
-            selected4 = null
-        }
-
-    })
-    $('#chkSalesrep').on('change', function () {
-
-        if (this.checked) {
-            selectSalesrep = $('#cmbSalesrep').val();
-            $('#cmbSalesrep').change(function () {
-                selectSalesrep = $('#cmbSalesrep').val();
-            })
-        } else {
-            selectSalesrep = null
-            selected5 = null
-        }
-
-    })
 
     $('#chkreaterthan').on('change', function () {
 
@@ -581,42 +467,27 @@ $(document).ready(function () {
 
         }
 
-        if (report == "Customer_Ledger") {
+        if (report == "suplier_Ledger") {
 
 
-            /*if (selecteCustomer === null && selectecustomergroup === null && selecteCustomerGrade === null && selecteRoute === null && selectSalesrep === null && fromdate === null && todate === null) {
-                showWarningMessage(" select Filter Option");
-            } else {*/
+          
             var requestData = [
-                { selected: selected },
-                { selected1: selected1 },
-                { selected2: selected2 },
-                { selected3: selected3 },
-                { selected4: selected4 },
-                { selected5: selected5 },
-                //{ selected6: selected6 },
-                { selecteCustomer: selecteCustomer },
-                { selectecustomergroup: selectecustomergroup },
-                { selecteCustomerGrade: selecteCustomerGrade },
-                { selecteRoute: selecteRoute },
-                { selectSalesrep: selectSalesrep },
-
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
                 { selecteBranch: selecteBranch },
-
+                { cmbgreaterthan: cmbgreaterthan },
                 { fromdate: fromdate },
                 { todate: todate },
-
                 { fromAge: fromAge },
                 { toAge: toAge },
-                { cmbgreaterthan: cmbgreaterthan },
             ];
-            console.log("cusL", requestData);
+           
 
 
-            //const jsonArray = JSON.parse(decodeURIComponent(requestData));
+          
 
-            //getviewReport()
-            $('#pdfContainer').attr('src', '/sc/Customer_Ledger_reports/' + JSON.stringify(requestData));
+           
+            $('#pdfContainer').attr('src', '/sl/supplier_Ledger_reports/' + JSON.stringify(requestData));
 
 
         }
@@ -669,29 +540,7 @@ $(document).ready(function () {
     });
 });
 
-function getCustomer() {
-    $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: "/sc/get",
 
-        success: function (data) {
-
-
-            $.each(data, function (key, value) {
-
-                data = data + "<option id='' value='" + value.customer_id + "'>" + value.customer_name +'-'+value.customer_code+ "<input type='checkbox'></option>";
-
-
-            })
-
-            $('#cmbCustomer').html(data);
-
-        }
-
-    });
-
-}
 
 function loadbranch() {
     $.ajax({
@@ -712,132 +561,16 @@ function loadbranch() {
         }
     })
 }
-//loading Distributor
-function getDistributor() {
-    $.ajax({
-        url: '/getDistributor',
-        type: 'get',
-        async: false,
-        success: function (data) {
-            $.each(data, function (index, value) {
-                $('#cmbBranch').append('<option value="' + value.distributor_id + '">' + value.distributor_name + '</option>');
-
-            })
-
-        },
-    })
-}
-
-
-function getCustomergroup() {
-    $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: "/sc/getCustomergroup",
-
-        success: function (data) {
 
 
 
-            $.each(data, function (key, value) {
 
-                data = data + "<option id='' value='" + value.customer_group_id + "'>" + value.group + "<input type='checkbox'></option>";
-
-
-            })
-
-            $('#cmbcustomergroup').html(data);
-
-        }
-
-    });
-
-}
-
-
-function getcustomergrade() {
-    $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: "/sc/getcustomergrade",
-
-        success: function (data) {
-            console.log(data);
-
-            $.each(data, function (key, value) {
-
-                data = data + "<option id='' value='" + value.customer_grade_id + "'>" + value.grade + "<input type='checkbox'></option>";
-
-
-            })
-
-            $('#cmbCustomerGrade').html(data);
-
-        }
-
-    });
-
-}
-
-
-function getRoute() {
-    $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: "/sc/getRoute",
-
-        success: function (data) {
-
-
-            $.each(data, function (key, value) {
-
-                data = data + "<option id='' value='" + value.route_id + "'>" + value.route_name + "<input type='checkbox'></option>";
-
-
-            })
-
-            $('#cmbRoute').html(data);
-
-        }
-
-    });
-
-}
-
-function getSalesrep() {
-    $.ajax({
-        type: "get",
-        dataType: 'json',
-        url: "/sc/getSalesrepfor_report",
-
-        success: function (data) {
-
-
-            $.each(data, function (key, value) {
-
-                data = data + "<option id='' value='" + value.employee_id + "'>" + value.employee_name + "<input type='checkbox'></option>";
-
-
-            })
-
-            $('#cmbSalesrep').html(data);
-
-        }
-
-    });
-
-}
 
 
 
 function dataclear() {
     $('input[type="checkbox"]').prop('checked', false);
     $('input[type="number"]').val("");
-    selecteCustomer = null;
-    selectecustomergroup = null;
-    selecteCustomerGrade = null;
-    selecteRoute = null;
-    selectSalesrep = null;
     fromdate = null;
     todate = null;
     fromAge = null;

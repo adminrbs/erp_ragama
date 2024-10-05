@@ -224,6 +224,22 @@
                                 ],
                                 [
                                     {
+                                        "text": "Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Total Paid",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
                                         "text": "Cheque Amount",
                                         "align": "right",
                                         "format": "number",

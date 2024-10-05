@@ -143,7 +143,7 @@ function getReceiptList() {
                 var btn_edit = '<button class="btn btn-primary btn-sm" id="btnEdit_12" onclick="edit(' + id + ')" style="display:none;><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>';
                 var btn_view = '<button class="btn btn-success btn-sm" onclick="view(' + id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>';
                 var btn_delete = '<button class="btn btn-danger btn-sm" onclick="_delete(' + id + ')"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                var btn_print = '<button class="btn btn-secondary btn-sm" onclick="generateReceiptList(' + id + ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                var btn_print = '<button class="btn btn-secondary btn-sm" onclick="supplierReceiptReport(' + id + ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
                
                 data.push({
 
@@ -154,7 +154,7 @@ function getReceiptList() {
                     "chq_no":result[i].cheque_number,
                     "banking_date": result[i].banking_date,
                     "payment_mode": result[i].payment_mode,
-                    "action": btn_view + '&nbsp;',
+                    "action": btn_view + '&nbsp;' + btn_print,
                 });
 
             }

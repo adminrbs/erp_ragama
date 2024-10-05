@@ -5,6 +5,7 @@ var CUSTOMER_RECEIPT_ID = undefined;
 var REFERANCE_ID = undefined;
 var hidden_columns = "hidden";
 var suppliers = [];
+var rcptAmountforcheckbox = null;
 $(document).ready(function () {
    
     getCollectors_and_Cashiers();
@@ -1257,7 +1258,7 @@ function loadSetoffTable(sup_id) {
                     var str_id = "'" + i + "'";
                     var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + tableData[i].internal_number + '" data-external_number="' + tableData[i].external_number + '" data-reference_internal_number="' + tableData[i].reference_internal_number + '"  data-reference_external_number="' + tableData[i].reference_external_number + '"  data-reference_document_number="' + tableData[i].reference_document_number + '"></label>'
                     var date = '<label id="lblDate' + i + '">' + tableData[i].trans_date + '</label>';
-                    var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + tableData[i].document_number + '</label>';
+                    var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + tableData[i].external_number + '</label>';
                     var description = '<label id="lblDescription' + i + '">' + tableData[i].description + '</label>';
                     var amount = '<label id="lblSetoffAmount' + i + '">' + parseFloat(tableData[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(tableData[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
@@ -1265,9 +1266,9 @@ function loadSetoffTable(sup_id) {
                     var balance = '<label id="lblBalance' + i + '">' + parseFloat(tableData[i].balance_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
                    // var age = '<label id="lblAge' + i + '">0.00</label>';
-                   var age = '<label id="lblAge' + i + '"data-id="'+tableData[i].creditors_ledger_id+'">0.00</label>';
-
-                    appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age);
+                   var age = '<label id="lblAge' + i + '"data-id="'+tableData[i].creditors_ledger_id+'">-</label>';
+                    var chkBox = '<input type="checkbox" id="chkbox' + i + '" onclick="selectRecordToSetOff(this)">'
+                    appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age, chkBox);
 
 
                 }
@@ -1286,6 +1287,58 @@ function loadSetoffTable(sup_id) {
 
 }
 
+function selectRecordToSetOff(event) {
+    var txtAmount = $('#txtAmount').val();
+    if (rcptAmountforcheckbox === null) {
+        rcptAmountforcheckbox = parseFloat(txtAmount);
+    }
+    $('#txtAmount').prop('disabled',true);
+
+    if ($(event).prop('checked')) {
+        if (!txtAmount || parseFloat(txtAmount) === 0) {
+            showWarningMessage('Please enter a receipt amount');
+            $(event.target).prop('checked', false);
+            return false;
+        } else {
+
+
+
+            var tr = $($($(event).parent()).parent());
+
+
+            var labelIn8thTd = tr.find('td:eq(7) label').text();
+
+            var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+
+            if (rcptAmountforcheckbox == 0) {
+                showWarningMessage('Insuficent Balance');
+                $(event).prop('checked', false);
+                return false;
+            }
+            if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
+                setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
+                rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
+            } else {
+                setoffbox.val(rcptAmountforcheckbox);
+                rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
+            }
+
+            console.log(rcptAmountforcheckbox);
+
+
+        }
+    } else {
+        var tr = $($($(event).parent()).parent());
+        var labelIn8thTd = tr.find('td:eq(7) label').text();
+        var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+      
+        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
+       
+        setoffbox.val(0);
+
+    }
+
+}
 
 
 function automaticSetoff() {
@@ -1565,7 +1618,7 @@ function getCustomerReceipt(id) {
 }
 
 
-function appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age) {
+function appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age, chkBox) {
     var row = '<tr>';
     row += '<td hidden>';
     row += hidden_col;
@@ -1596,6 +1649,9 @@ function appendReceiptData(hidden_col, date, document_ref_no, description, amoun
     row += '</td>';
     row += '<td style="text-align:right;max-width: 80px;">';
     row += age;
+    row += '</td>';
+    row += '<td style="text-align:right;max-width: 80px;">'
+    row += chkBox
     row += '</td>';
     row += '</tr>';
 

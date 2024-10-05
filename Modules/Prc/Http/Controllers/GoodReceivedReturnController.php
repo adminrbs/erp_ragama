@@ -195,7 +195,7 @@ class GoodReceivedReturnController extends Controller
                         $item_history->transaction_date =$GRN->goods_received_date_time;
                         $item_history->description = "Goods Returned to " . $sup_obj->supplier_name;
                         $item_history->item_id =  $GRN_item->item_id;
-                        $item_history->quantity = -(floatVal($GRN_item->quantity) + floatval($GRN_item->free_quantity));
+                        $item_history->quantity = (floatVal($GRN_item->quantity) + floatval($GRN_item->free_quantity));
                         $item_history->free_quantity = $GRN_item->free_quantity;
                         $item_history->whole_sale_price = $GRN_item->whole_sale_price;
                         $item_history->retial_price = $GRN_item->retial_price;

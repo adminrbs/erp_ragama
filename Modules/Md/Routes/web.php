@@ -24,6 +24,7 @@ use Modules\Md\Http\Controllers\CustomerController;
 use Modules\Md\Http\Controllers\dataController;
 use Modules\Md\Http\Controllers\EmployeeController;
 use Modules\Md\Http\Controllers\freeOfferController;
+use Modules\Md\Http\Controllers\GlAccountAnalysisController;
 use Modules\Md\Http\Controllers\GlAccountController;
 use Modules\Md\Http\Controllers\International_nonproprietaryController;
 use Modules\Md\Http\Controllers\ItemController;
@@ -596,7 +597,21 @@ Route::get('/payee',function(){
 });
 Route::post('/savePayee',[PayeeController::class,'savePayee']);
 Route::get('/loadPayee',[PayeeController::class,'loadPayee']);
-Route::get('/loadEachPayee',[PayeeController::class,'loadEachPayee']);
+Route::get('/loadEachPayee/{id}',[PayeeController::class,'loadEachPayee']);
+Route::post('/updatePayee/{id}',[PayeeController::class,'updatePayee']);
+Route::delete('/deletePayee',[PayeeController::class,'deletePayee']);
+
+
+/**GL Account */
+Route::get('/gl_account_analysis',function(){
+    return view('md::gl_account_analysis');
+});
+Route::post('/saveAnalysis',[GlAccountAnalysisController::class,'saveAnalysis']);
+Route::get('/loadGlAccountAnalysis',[GlAccountAnalysisController::class,'loadGlAccountAnalysis']);
+Route::get('/loadEachGlAccountAnalysis/{id}',[GlAccountAnalysisController::class,'loadEachGlAccountAnalysis']);
+Route::post('/updateGlAccountAnalysis/{id}',[GlAccountAnalysisController::class,'updateGlAccountAnalysis']);
+Route::delete('/deleteAnalysis/{id}',[GlAccountAnalysisController::class,'deleteAnalysis']);
+
 });
 
 

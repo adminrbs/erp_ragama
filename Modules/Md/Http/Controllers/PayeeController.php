@@ -48,4 +48,33 @@ class PayeeController extends Controller
             return response()->json((['status' => true,'data'=>[]]));
         }
     }
+
+    public function updatePayee(Request $request,$id){
+        try{
+            $request->validate([
+                'payee_name' => 'unique:payees,payee_name,' . $id . ',payee_id',
+            ], [
+                'payee_name.unique' => 'record duplicated',  
+            ]);
+                $Payee = new Payee();
+                $Payee->payee_name = $request->input('payeeName');
+                
+                if($Payee->save()){
+                    return response()->json((['status' => true]));
+                }else{
+                    return response()->json((['status' => false]));
+                }
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function deletePayee($id){
+        $payee = Payee::find($id);
+        if($payee->delete()){
+            return response()->json((['status' => true]));
+        }else{
+            return response()->json((['status' => false]));
+        }
+    }
 }

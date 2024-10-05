@@ -17,6 +17,7 @@ use Modules\Sd\Http\Controllers\DeliveryconfirmationController;
 use Modules\Sd\Entities\deliveryconfirmation;
 use Modules\Sd\Http\Controllers\AssingrouttosalesrepController;
 use Modules\Sd\Http\Controllers\AssingsupplygrouptosalesrepController;
+use Modules\Sd\Http\Controllers\CommisionReportController;
 use Modules\Sd\Http\Controllers\customerAppuseController;
 use Modules\Sd\Http\Controllers\CustomerBlockController;
 use Modules\Sd\Http\Controllers\dataController;
@@ -689,4 +690,11 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   Route::post('/saveInvoiceCopyReceived',[SalesInvoiceCoppyIssuedController::class,'saveInvoiceCopyReceived']);
   Route::get('/loadEmpforsalesInvoiceRecieved',[SalesInvoiceCoppyIssuedController::class,'loadEmpforsalesInvoiceRecieved']);
   Route::get('/sales_invoice_copy_received_report/{collection}/{collector}',[SalesInvoiceCoppyIssuedController::class,'sales_invoice_copy_received_report']);
+
+  /**Commision Report */
+  Route::get('/commisionReport',function(){
+    return view('sd::commisionReport');
+  });
+  Route::get('/generatecommisionReport/{search_data}',[CommisionReportController::class,'generatecommisionReport']);
+  
 });

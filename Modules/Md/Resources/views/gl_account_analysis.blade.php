@@ -18,7 +18,7 @@ Dashboard
 <div class="content">
     <div class="card">
         <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-            <h5 class="mb-0">Payee</h5>
+            <h5 class="mb-0">GL Account Analysis</h5>
             <div class="d-inline-flex ms-auto"></div>
         </div>
 
@@ -26,7 +26,7 @@ Dashboard
         <div class="card-body">
             <div>
 
-                <button id="btnPayee" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelPayee">
+                <button id="btnPayee" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelGlAccountAnalysis">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
 
@@ -34,10 +34,10 @@ Dashboard
             </div>
             <div class="table-responsive">
                 <!-- Required for Responsive -->
-                <table class="table datatable-fixed-both- table-striped" id="payeeTable">
+                <table class="table datatable-fixed-both- table-striped" id="glAnalysisTable">
                     <thead>
                         <tr>
-                            <th>Payee Name</th>
+                            <th>GL Account Analysis</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -61,11 +61,11 @@ Dashboard
 {{-- .........Model....... --}}
 
 <!-- Modal Town-->
-<div class="modal fade" id="modelPayee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modelGlAccountAnalysis" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Payee</h5>
+                <h5 class="modal-title" id="exampleModalLabel">GL Account Analysis</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -76,23 +76,21 @@ Dashboard
                         <div class="row">
                             
                             <div class="col-lg">
-                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>Payee<span class="text-danger">*</span></label>
-                                <input type="text" name="Town" id="txtPayee" class="form-control validate" required>
+                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>GL Account Analysis<span class="text-danger">*</span></label>
+                                <input type="text" name="Town" id="txtGlAccountANalysis" class="form-control validate" required>
                                 <span class="text-danger font-weight-bold town1"></span>
-
                             </div>
 
                         </div>
-
 
                 </div>
 
 
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="Payeehidden">
-                <button type="button" id="btnClosePayee" class="btn btn-secondary">Close</button>
-                <button type="button" id="btnSavePayee" class="btn btn-primary ">Save</button>
+                <input type="hidden" id="lblLevelOneHidden">
+                <button type="button" id="btnCloseGlAccountAnalysis" class="btn btn-secondary">Close</button>
+                <button type="button" id="btnSaveGlAccountAnalysis" class="btn btn-primary ">Save</button>
                 
             </div>
             </form>
@@ -141,7 +139,7 @@ Dashboard
 @section('scripts')
 
 <script src="{{ URL::asset('assets/demo/pages/form_validation_library.js') }}"></script>
-<script src="{{ Module::asset('md:js/payee.js') }}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{ Module::asset('md:js/gl_account_analysis.js') }}?random=<?php echo uniqid(); ?>"></script>
 
 <script src="{{ URL::asset('assets/js/web-rd-fromValidation.js') }}"></script>
 

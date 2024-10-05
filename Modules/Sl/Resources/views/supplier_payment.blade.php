@@ -184,7 +184,7 @@
                                                 <tr>
                                                     <th hidden></th>
                                                     <th style="max-width: 100px;">Date</th>
-                                                    <th style="max-width: 80px;">Documnet Ref</th>
+                                                    <th style="max-width: 80px;">Reference</th>
                                                     <th style="max-width: 100%;">Description</th>
                                                     <th style="max-width: 80px;text-align: right;">Amount</th>
                                                     <th style="max-width: 80px;text-align: left;" class="">Previouse Paid Amount</th>
@@ -192,6 +192,7 @@
                                                     <th style="max-width: 80px;text-align: right;" class="">Balance</th>
                                                     <th style="max-width: 100px;text-align: center;">Setoff</th>
                                                     <th style="max-width: 80px;text-align: right;" class="">Age</th>
+                                                    <th style="max-width: 80px;text-align: right;" class=""></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblCustomerReceiptSetoff"></tbody>

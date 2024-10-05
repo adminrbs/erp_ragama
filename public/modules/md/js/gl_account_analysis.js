@@ -1,31 +1,34 @@
 $(document).ready(function(){
-    loadPayee();
-    $('#btnSavePayee').on('click',function(){
+    loadGlAccountAnalysis();
+    $('#btnSaveGlAccountAnalysis').on('click',function(){
         
         if($(this).text() == 'Save'){
-            savePayee();
+            saveAnalysis();
         }else{
-            updatePayee();
+            updateGlAccountAnalysis();
         }
     });
-    $('#modelPayee').on('hide.bs.modal', function () {
-        $('#txtPayee').val('');
+   
+
+    $('#btnCloseGlAccountAnalysis').on('click',function(){
+        $('#modelGlAccountAnalysis').hide();
     });
 
-    $('#btnClosePayee',function(){
-        $('#modelPayee').hide();
+    $('#modelGlAccountAnalysis').on('hide.bs.modal', function () {
+        $('#txtGlAccountANalysis').val('');
+        $('#btnSaveGlAccountAnalysis').show();
     });
 });
 
-function savePayee(){
+function saveAnalysis(){
     let formData = new FormData();
-    if($('#txtPayee').val().length < 1){
-        showWarningMessage('Please enter payee name');
+    if($('#txtGlAccountANalysis').val().length < 1){
+        showWarningMessage('Please enter analysis name');
     }else{
-        formData.append('payeeName',$('#txtPayee').val());
+        formData.append('analysis',$('#txtGlAccountANalysis').val());
         $.ajax({
             method:'post',
-            url:'/md/savePayee',
+            url:'/md/saveAnalysis',
             data:formData,
             enctype: 'multipart/form-data',
             data: formData,
@@ -35,14 +38,14 @@ function savePayee(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function () {
-                $('#btnSavePayee').prop('disabled', true);
+                $('#btnSaveGlAccountAnalysis').prop('disabled', true);
             },
             success: function (response) {
-                $('#btnSavePayee').prop('disabled', false);
+                $('#btnSaveGlAccountAnalysis').prop('disabled', false);
                 if(response.status){
                     showSuccessMessage('Record saved successfuly');
-                    $('#modelPayee').hide();
-                    loadPayee();
+                    $('#modelGlAccountAnalysis').hide();
+                    loadGlAccountAnalysis();
                 }else{
                     showWarningMessage('Unable to save');
                 }
@@ -53,16 +56,16 @@ function savePayee(){
 }
 
 
-function updatePayee(){
-    let id = $('#Payeehidden').val();
+function updateGlAccountAnalysis(){
+    let id = $('#lblLevelOneHidden').val();
     let formData = new FormData();
-    if($('#txtPayee').val().length < 1){
-        showWarningMessage('Please enter payee name');
+    if($('#txtGlAccountANalysis').val().length < 1){
+        showWarningMessage('Please enter name');
     }else{
-        formData.append('payeeName',$('#txtPayee').val());
+        formData.append('analysis',$('#txtGlAccountANalysis').val());
         $.ajax({
             method:'post',
-            url:'/md/updatePayee/'+id,
+            url:'/md/updateGlAccountAnalysis/'+id,
             data:formData,
             enctype: 'multipart/form-data',
             data: formData,
@@ -72,14 +75,14 @@ function updatePayee(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function () {
-                $('#btnSavePayee').prop('disabled', true);
+                $('#btnSaveGlAccountAnalysis').prop('disabled', true);
             },
             success: function (response) {
-                $('#btnSavePayee').prop('disabled', false);
+                $('#btnSaveGlAccountAnalysis').prop('disabled', false);
                 if(response.status){
                     showSuccessMessage('Record updated successfuly');
-                    $('#modelPayee').hide();
-                    loadPayee();
+                    $('#modelGlAccountAnalysis').hide();
+                    loadGlAccountAnalysis();
                 }else{
                     showWarningMessage('Unable to update');
                 }
@@ -89,23 +92,23 @@ function updatePayee(){
     }
 }
 function view(id){
-    $('#modelPayee').modal('show');
-    $('#btnSavePayee').hide();
-    loadEachPayee(id,'view')
-    $('#Payeehidden').val($id)
+    $('#modelGlAccountAnalysis').modal('show');
+    $('#btnSaveGlAccountAnalysis').hide();
+    loadEachGlAccountAnalysis(id,'view')
+    $('#lblLevelOneHidden').val(id)
 
 }
 
 function edit(id){
-    $('#modelPayee').modal('show');
-    $('#btnSavePayee').text('Update');
-    loadEachPayee(id,'edit')
-    $('#Payeehidden').val($id)
+    $('#modelGlAccountAnalysis').modal('show');
+    $('#btnSaveGlAccountAnalysis').text('Update');
+    loadEachGlAccountAnalysis(id,'edit')
+    $('#lblLevelOneHidden').val(id)
 }
 
-function loadEachPayee(id,type) {
+function loadEachGlAccountAnalysis(id,type) {
     $.ajax({
-        url: '/md/loadEachPayee/'+id,
+        url: '/md/loadEachGlAccountAnalysis/'+id,
         method: 'GET',
         cache: false,
         timeout: 800000,
@@ -114,10 +117,12 @@ function loadEachPayee(id,type) {
         },
         success: function (response) {   
             let data = response.data;
-            $('#txtPayee').val(data.payee_name);
+            $('#txtGlAccountANalysis').val(data.gl_account_analyse_name);
             $('#lblLevelOneHidden').val(id)
             if(type == 'view'){
-                $('#txtPayee').prop('disabled',true);
+                $('#txtGlAccountANalysis').prop('disabled',true);
+            }else{
+                $('#txtGlAccountANalysis').prop('disabled',false);
             }
             
         }
@@ -126,10 +131,10 @@ function loadEachPayee(id,type) {
 
 
 
-function loadPayee() {
-    $('#payeeTable tbody').empty();
+function loadGlAccountAnalysis() {
+    $('#glAnalysisTable tbody').empty();
     $.ajax({
-        url: '/md/loadPayee',
+        url: '/md/loadGlAccountAnalysis',
         method: 'get',
         cache: false,
         timeout: 800000,
@@ -139,11 +144,11 @@ function loadPayee() {
         success: function (response) {
             let data = response.data;
             $.each(data, function (key, value) {
-                let btnEdit = '<button class="btn btn-primary btn-sm" onclick="edit(' + value.payee_id + ')" ><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
-                let btnView = '<button class="btn btn-success btn-sm" onclick="view(' + value.payee_id + ')" ><i class="fa fa-eye" aria-hidden="true" ></i></button>';
-                let btnDelete = '<button class="btn btn-danger btn-sm" onclick="deleteRecord(' + value.payee_id + ')" ><i class="fa fa-trash" aria-hidden="true" ></i></button>';
+                let btnEdit = '<button class="btn btn-primary btn-sm" onclick="edit(' + value.gl_account_analyse_id + ')" ><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
+                let btnView = '<button class="btn btn-success btn-sm" onclick="view(' + value.gl_account_analyse_id + ')" ><i class="fa fa-eye" aria-hidden="true" ></i></button>';
+                let btnDelete = '<button class="btn btn-danger btn-sm" onclick="deleteRecord(' + value.gl_account_analyse_id + ')" ><i class="fa fa-trash" aria-hidden="true" ></i></button>';
                 var row = '<tr>' +
-                    '<td>' + value.payee_name + '</td>' +
+                    '<td>' + value.gl_account_analyse_name + '</td>' +
                     
                     '<td>' + btnView + '</td>' +
                     '<td>' + btnEdit + '</td>' +
@@ -151,7 +156,7 @@ function loadPayee() {
 
                     '</tr>';
 
-                $('#payeeTable tbody').append(row);
+                $('#glAnalysisTable tbody').append(row);
 
             });
 
@@ -159,9 +164,9 @@ function loadPayee() {
     })
 }
 
-function deletePayee(id){
+function deleteAnalysis(id){
     $.ajax({
-        url: '/md/deletePayee/'+id,
+        url: '/md/deleteAnalysis/'+id,
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -171,10 +176,10 @@ function deletePayee(id){
         success: function (response) {
             if (response) {
                 showSuccessMessage("Record deleted succesfully");
-                loadPayee();
+                loadGlAccountAnalysis();
 
             }else{
-                loadPayee('Unable to delete');
+                loadGlAccountAnalysis('Unable to delete');
             }
         },
     })
@@ -197,7 +202,7 @@ function deleteRecord(id) {
         callback: function (result) {
             console.log(result);
             if (result) {
-                deletePayee(id);
+                deleteAnalysis(id);
             } else {
 
             }

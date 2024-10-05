@@ -1679,7 +1679,7 @@ ORDER BY sales_returns.order_date DESC;
     //load set off data (from dl - without specific invoice)
     public function load_setoff_data_($id){
         try{
-            $qry = "SELECT dl.debtors_ledger_id, dl.trans_date,IFNULL(si.manual_number,dl.external_number) AS manual_number, (CURRENT_DATE - dl.trans_date)
+            $qry = "SELECT dl.debtors_ledger_id, dl.trans_date,IFNULL(si.external_number,dl.external_number) AS manual_number, (CURRENT_DATE - dl.trans_date)
             AS age,(dl.amount - dl.paidamount) as balance,si.your_reference_number FROM debtors_ledgers dl 
             LEFT JOIN sales_invoices si ON dl.internal_number = si.internal_number WHERE (dl.amount - dl.paidamount) > 0 AND dl.customer_id = $id";
              $result = DB::select($qry);

@@ -11,6 +11,8 @@ use RepoEldo\ELD\ReportViewer;
 
 class BanktransferController extends Controller
 {
+    
+    
     public function bankTransfer($filters){
         $filter_options = json_decode($filters);
         $fromDate = $filter_options->fromDate;
@@ -57,11 +59,14 @@ class BanktransferController extends Controller
         customers.customer_name AS customer_name,
         DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date) AS Gap,
         town_non_administratives.townName,
-        customer_receipt_setoff_data.set_off_amount
-        
+        customer_receipt_setoff_data.set_off_amount,
+        CRBS.reference,
+        CRBS.slip_time,
+        CRBS.slip_date
  FROM customer_receipts
  LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
- LEFT JOIN customer_receipt_setoff_data ON customer_receipt_setoff_data.customer_receipt_id = customer_receipts.customer_receipt_id 
+ LEFT JOIN customer_receipt_setoff_data ON customer_receipt_setoff_data.customer_receipt_id = customer_receipts.customer_receipt_id
+ LEFT JOIN customer_receipt_bank_slips CRBS ON  customer_receipts.customer_receipt_id = CRBS.customer_receipt_id
  LEFT JOIN debtors_ledgers ON customer_receipt_setoff_data.debtors_ledger_id = debtors_ledgers.debtors_ledger_id
  LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
  LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
@@ -91,8 +96,8 @@ class BanktransferController extends Controller
             foreach ($result as $customerdata) {
                 //dd($result);
                 if ($customerdata->customer_id == $customerid->customer_id) {
-
-
+                    $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Reference : </strong>" . $customerdata->reference . " - <strong>Slip Date : </strong>" . $customerdata->slip_date . " - ".$customerdata->slip_time  ;
+                    array_push($titel, $title_text);
                     array_push($table, $customerdata);
                 }
             }
@@ -104,7 +109,7 @@ class BanktransferController extends Controller
                 array_push($customerablearray, $table);
 
 
-                array_push($titel, $customerid->customer_name);
+               // array_push($titel, $customerid->customer_name);
 
                 $reportViwer->addParameter('abc', $titel);
             }

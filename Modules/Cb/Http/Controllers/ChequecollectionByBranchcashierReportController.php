@@ -138,38 +138,49 @@ class ChequecollectionByBranchcashierReportController extends Controller
 
 //dd($qry);
 
-            $resulcustomer = DB::select('select sfa_receipts.customer_receipt_id,customers.customer_id,customers.customer_name 
-        from sfa_receipts INNER JOIN customers ON sfa_receipts.customer_id = customers.customer_id');
+            $resulcustomer = DB::select('select sfa_receipts.customer_receipt_id,customers.customer_id,customers.customer_name,sfa_receipt_cheques.cheque_number
+        from sfa_receipts INNER JOIN customers ON sfa_receipts.customer_id = customers.customer_id INNER JOIN sfa_receipt_cheques ON sfa_receipt_cheques.customer_receipt_id = sfa_receipts.customer_receipt_id');
 
             $customerablearray = [];
+            $cheque_number_array = [];
+            $titel = [];
             $titel_array = [];
             $reportViwer = new ReportViewer();
             foreach ($resulcustomer as $customerid) {
+                if (!in_array($customerid->cheque_number, $cheque_number_array, true)) {
+                    $table = [];
 
-                $table = [];
+                    $title = "";
+                    $cheque_amount = 0;
+                    $inv_amount = 0;
+                    $bool = true;
+                    foreach ($result as $customerdata) {
+                        //dd($result);
+                        if ($customerdata->cheque_number == $customerid->cheque_number && $customerdata->customer_receipt_id == $customerid->customer_receipt_id) {
+                            $cheque_amount += (float)$customerdata->amount;
+                            $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Receipt Date : </strong>" . $customerdata->receipt_date . " - <strong>Cheque No : </strong>" . $customerdata->cheque_number . " - <strong>Banking Date : </strong>" . $customerdata->banking_date . " - <strong>Cheque Amount :</strong>" . number_format($cheque_amount, 2);
+                          // $title_text = ""; 
+                           if ($bool) {
+                                array_push($titel, $title_text);
+                                $cheque_amount += (float)$customerdata->amount;
+                                
+                                $bool = false;
+                            }
+                            array_push($table, $customerdata);
 
-                $title = "";
-                $cheque_amount = 0;
-                foreach ($result as $customerdata) {
-                    //dd($result);
-                    if ($customerdata->customer_receipt_id == $customerid->customer_receipt_id && $customerid->customer_id == $customerdata->customer_id) {
-                        $cheque_amount = (float)$customerdata->amount;
-                        $title = "&emsp;&emsp;<strong>Cheque No : </strong>" . $customerdata->cheque_number . "&emsp;&emsp;<strong>Rff No : </strong>" . $customerdata->external_number. " - <strong>Cheque Amount :</strong>" . number_format($cheque_amount, 2);
-                        array_push($table, $customerdata);
+                            
+                       
+                        }
                     }
+    
+    
+                    if (count($table) > 0) {
+                        array_push($customerablearray, $table);
+                        $reportViwer->addParameter('abc', $titel);
+                    }
+
                 }
-
-
-
-                if (count($table) > 0) {
-
-                    //if ($customerid->customer_id == $customerdata->customer_id) {
-                    $title = "<strong>Customer Name : </strong>" . $customerid->customer_name . "" . $title;
-                    array_push($customerablearray, $table);
-                    array_push($titel_array,$title);
-                    $reportViwer->addParameter('abc', $titel_array);
-                    //}
-                }
+               
             }
 
             $rep_name_qry = DB::select("SELECT CONCAT(employee_name,' - ',employee_code) as employee_name FROM employees WHERE employees.employee_id = 2");

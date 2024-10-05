@@ -2,6 +2,7 @@
 
 namespace Modules\Sl\Http\Controllers;
 
+use App\Http\Controllers\CompanyDetailsController;
 use App\Http\Controllers\IntenelNumberController;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -160,7 +161,7 @@ class supplierPaymentController extends Controller
             A.creditors_ledger_id,
             0 AS return_amount,
             (ABS(A.amount) - A.paidamount)AS balance_amount   
-            FROM  creditors_ledger AS A  WHERE  A.amount<> A.paidamount AND A.supplier_id='" . $sup_id . "' AND A.document_number = '120'";
+            FROM  creditors_ledger AS A  WHERE  A.amount<> A.paidamount AND A.supplier_id='" . $sup_id . "' AND (A.document_number = '120' OR A.document_number = '2200')";
             // dd($query);
             $data = DB::select($query);
             return response()->json(["status" => true, "data" => $data]);
@@ -487,6 +488,21 @@ class supplierPaymentController extends Controller
             $data = DB::select($query);
             return response()->json(["status" => true, "data" => $data]);
         } catch (Exception $ex) {
+            return response()->json(["status" => false, "exception" => $ex]);
+        }
+    }
+
+
+    public function supplierReceiptReport($id){
+        try{
+            $recptData = [];
+            $supplierData = [];
+            $recptData = DB::select("SELECT SR.external_number, SRSD.reference_external_number,CL.trans_date,CL.amount,CL.paidamount,SRSD.amount as receipt_amount,(CL.amount - CL.paidamount) AS balance FROM supplier_payments SR INNER JOIN supplier_payment_setoff_data SRSD ON SR.supplier_payment_id = SRSD.supplier_payments_id INNER JOIN creditors_ledger CL ON SRSD.reference_external_number = CL.external_number WHERE SR.supplier_payment_id = $id");
+            $supplierData = DB::select("SELECT S.supplier_name, S.primary_address FROM suppliers S INNER JOIN supplier_payments SR ON S.supplier_id = SR.supplier_id WHERE SR.supplier_payment_id = $id");
+            $branch = DB::select("SELECT B.branch_name FROM branches B INNER JOIN supplier_payments SR ON B.branch_id = SR.branch_id WHERE SR.supplier_payment_id = $id");
+            $companyDetails = CompanyDetailsController::CompanyName();
+            return response()->json(["status" => true, "supplierData" => $supplierData, "recptData" => $recptData, "branch"=>$branch, "companyName" => $companyDetails]);
+        }catch(Exception $ex){
             return response()->json(["status" => false, "exception" => $ex]);
         }
     }

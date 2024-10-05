@@ -202,6 +202,33 @@
                                         "width": 100,
                                         "format": "number"
                                     }
+                                ], 
+                                [
+                                    {
+                                        "text": "Reference",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number",
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "slip_time",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number",
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "slip_date",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number",
+                                        "visible":false
+                                    }
                                 ]
                             ],
                             "body": "@_$cash_audit_tabaledata",

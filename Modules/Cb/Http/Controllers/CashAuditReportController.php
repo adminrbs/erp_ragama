@@ -55,8 +55,9 @@ class CashAuditReportController extends Controller
         debtors_ledgers.trans_date,
         customers.customer_name AS customer_name,
         DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date) AS Gap,
-        (SELECT SUM(debtors_ledgers.paidamount) FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number ),
-        debtors_ledgers.paidamount,
+        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
+        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
+        
         town_non_administratives.townName,
         customer_receipt_setoff_data.set_off_amount    
  FROM customer_receipts

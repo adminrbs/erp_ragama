@@ -5,7 +5,7 @@ $(document).ready(function(){
         if($(this).text() == 'Save'){
             savePayee();
         }else{
-
+            updatePayee();
         }
     });
     $('#modelPayee').on('hide.bs.modal', function () {
@@ -52,10 +52,47 @@ function savePayee(){
     }
 }
 
+
+function updatePayee(){
+    let id = $('#Payeehidden').val();
+    let formData = new FormData();
+    if($('#txtPayee').val().length < 1){
+        showWarningMessage('Please enter payee name');
+    }else{
+        formData.append('payeeName',$('#txtPayee').val());
+        $.ajax({
+            method:'post',
+            url:'/md/updatePayee/'+id,
+            data:formData,
+            enctype: 'multipart/form-data',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+                $('#btnSavePayee').prop('disabled', true);
+            },
+            success: function (response) {
+                $('#btnSavePayee').prop('disabled', false);
+                if(response.status){
+                    showSuccessMessage('Record updated successfuly');
+                    $('#modelPayee').hide();
+                    loadPayee();
+                }else{
+                    showWarningMessage('Unable to update');
+                }
+            }
+        })
+
+    }
+}
 function view(id){
     $('#modelPayee').modal('show');
     $('#btnSavePayee').hide();
     loadEachPayee(id,'view')
+    $('#Payeehidden').val($id)
 
 }
 
@@ -63,7 +100,7 @@ function edit(id){
     $('#modelPayee').modal('show');
     $('#btnSavePayee').text('Update');
     loadEachPayee(id,'edit')
-
+    $('#Payeehidden').val($id)
 }
 
 function loadEachPayee(id,type) {
@@ -107,8 +144,9 @@ function loadPayee() {
                 let btnDelete = '<button class="btn btn-danger btn-sm" onclick="deleteRecord(' + value.payee_id + ')" ><i class="fa fa-trash" aria-hidden="true" ></i></button>';
                 var row = '<tr>' +
                     '<td>' + value.payee_name + '</td>' +
-                    '<td>' + btnEdit + '</td>' +
+                    
                     '<td>' + btnView + '</td>' +
+                    '<td>' + btnEdit + '</td>' +
                     '<td>' + btnDelete + '</td>' +
 
                     '</tr>';
@@ -119,4 +157,52 @@ function loadPayee() {
 
         }
     })
+}
+
+function deletePayee(id){
+    $.ajax({
+        url: '/md/deletePayee/'+id,
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, beforeSend: function () {
+            
+        },
+        success: function (response) {
+            if (response) {
+                showSuccessMessage("Record deleted succesfully");
+                loadPayee();
+
+            }else{
+                loadPayee('Unable to delete');
+            }
+        },
+    })
+}
+
+function deleteRecord(id) {
+    bootbox.confirm({
+        title: 'Delete confirmation',
+        message: '<div class="d-flex justify-content-center align-items-center mb-3"><i class="fa fa-times fa-5x text-danger" ></i></div><div class="d-flex justify-content-center align-items-center "><p class="h2">Are you sure?</p></div>',
+        buttons: {
+            confirm: {
+                label: '<i class="fa fa-check"></i>&nbsp;Yes',
+                className: 'btn-Danger'
+            },
+            cancel: {
+                label: '<i class="fa fa-times"></i>&nbsp;No',
+                className: 'btn-link'
+            }
+        },
+        callback: function (result) {
+            console.log(result);
+            if (result) {
+                deletePayee(id);
+            } else {
+
+            }
+        }
+    });
+    $('.bootbox').find('.modal-header').addClass('bg-danger text-white');
+
 }

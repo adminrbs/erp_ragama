@@ -25,6 +25,7 @@ use Modules\Cb\Http\Controllers\ChequesBankedController;
 use Modules\Cb\Http\Controllers\ChquesToBeBankedController;
 use Modules\Cb\Http\Controllers\DashboardDataController;
 use Modules\Cb\Http\Controllers\DirectChequeController;
+use Modules\Cb\Http\Controllers\PaymentVoucherController;
 use Modules\Cb\Http\Controllers\ReturnChequesController;
 use Modules\Cb\Http\Controllers\SfaReceiptsManageController;
 
@@ -289,4 +290,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    Route::get('/payment_voucher',function(){
         return view("cb::payment_vouchers");
    });
+   Route::get('/loadPayee',[PaymentVoucherController::class,'loadPayee']);
+   Route::get('/loadAccounts',[PaymentVoucherController::class,'loadAccounts']);
+   Route::get('/loadAccountAnalysisData',[PaymentVoucherController::class,'loadAccountAnalysisData']);
 });

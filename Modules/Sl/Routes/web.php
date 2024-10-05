@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Sl\Http\Controllers\SupOutstandingcontroller;
 use Modules\Sl\Http\Controllers\SupplierCreditController;
 use Modules\Sl\Http\Controllers\SupplierDebitNoteController;
+use Modules\Sl\Http\Controllers\SupplierLedgerReportController;
 use Modules\Sl\Http\Controllers\supplierPaymentController;
 use Modules\Sl\Http\Controllers\SupplierTransactionAllocationController;
 
@@ -62,6 +63,7 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     Route::post('/supplier_receipt/save_supplier_receipt',[supplierPaymentController::class,'save_supplier_receipt']);
     Route::get('/supplier_receipt/getReceiptMethod',[supplierPaymentController::class,'getReceiptMethod']);
     Route::get('/supplier_pyment_list/getReceiptList',[supplierPaymentController::class,'getReceiptList']);
+    Route::get('/supplierReceiptReport/{id}',[supplierPaymentController::class,'supplierReceiptReport']);
 
 
     /**Transaction allocation */
@@ -84,4 +86,5 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     });
     Route::get('/printsupoutstandinReport/{search}', [SupOutstandingcontroller::class, 'printsupoutstandinReport']);
     Route::get('/getSupplier',[SupOutstandingcontroller::class,'getSupplier']);
+    Route::get('/supplier_Ledger_reports/{filters}',[SupplierLedgerReportController::class,'supplier_Ledger_reports']);
 });

@@ -73,5 +73,6 @@
 @endsection
 @section('scripts')
 <script src="{{Module::asset('sl:js/supplier_payment_list.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('sl:js/supplier_receipt_report.js')}}?random=<?php echo uniqid(); ?>"></script>
 
 @endsection
