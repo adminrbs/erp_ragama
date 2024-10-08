@@ -93,12 +93,19 @@ $(document).ready(function () {
         getEachproduct(GRNID, status);
 
     }
-    const [count, setCount] = useState("");
+    const textBox = document.getElementById("txtDescription");
+    textBox.addEventListener("input", (event) => {
+        const newValue = event.target.value;
+        setState(newValue);
+      });
+
+    const [getState, setState] = useState(0);
+   
     //item table
      tableData = $('#tblData').transactionTable({
         "columns": [
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "","valuefrom": "datachooser","thousand_seperator":false,"disabled": "" },
-            { "type": "text", "class": "transaction-inputs", "value": count, "style": "width:370px;", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "value": getState(), "style": "width:370px;", "disabled": "disabled" },
             { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "",  },
             { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "style": "width:150px;", "event": "",  },
             
@@ -112,7 +119,6 @@ $(document).ready(function () {
 
     tableData.addRow();
    
- 
  
 
 });
@@ -490,11 +496,14 @@ function loadPayee(){
 function useState(initialValue) {
     let state = initialValue;
     
-    const getState = () => state;
+    const getState = () => state; // Function to get the state
     
     const setState = (newValue) => {
-      state = newValue;
+      state = newValue; // Function to update the state
     };
     
-    return [getState, setState];
+    return [getState, setState]; // Return both functions
   }
+  
+
+  

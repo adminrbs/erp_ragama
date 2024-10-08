@@ -175,7 +175,8 @@
                                         "text": "Customer Name",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 230
+                                        "width": 230,
+                                        "visible":false
                                     }
                                 ],
                                 [
@@ -204,16 +205,24 @@
                                 ],
                                 [
                                     {
-                                        "text": "Town Name",
-                                        "align": "left",
-                                        "width": 250,
-                                        "format": "text",
-                                        "visible":false
+                                        "text": "Return Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                               
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number"
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Paid Amount",
+                                        "text": "Balance",
                                         "align": "right",
                                         "width": 100,
                                         "format": "number"
@@ -227,7 +236,7 @@
                             "y": "0",
                             "margin-top": "-10",
                             "sum": [
-                                "Paid Amount","Amount","Total Paid"
+                                "Paid Amount","Amount","Total Paid","Return Amount","Balance"
                             ]
                         }
                     }

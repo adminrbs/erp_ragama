@@ -206,14 +206,7 @@
                                         "width": 150
                                     }
                                 ],
-                                [
-                                    {
-                                        "text": "Paid Amount",
-                                        "align": "right",
-                                        "format": "number",
-                                        "width": 100
-                                    }
-                                ],
+                               
                                 [
                                     {
                                         "text": "Age",
@@ -230,9 +223,34 @@
                                         "width": 100
                                     }
                                 ],
+                               
                                 [
                                     {
                                         "text": "Total Paid",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Return Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Balance",
                                         "align": "right",
                                         "format": "number",
                                         "width": 100
@@ -246,6 +264,24 @@
                                         "visible": false,
                                         "width": 100
                                     }
+                                ],
+                                [
+                                    {
+                                        "text": "BANK",
+                                        "align": "right",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "branch",
+                                        "align": "right",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
                                 ]
                             ],
                             "body": "@_$cheque_audit_tabaledata",
@@ -255,7 +291,7 @@
                             "y": "0",
                             "margin-top": "-10",
                             "sum": [
-                                "Paid Amount"
+                                "Paid Amount","Amount","Total Paid","Return Amount","Balance"
                             ],
                             "group-sum": "@_$route_total",
                             "layout": "fixed"

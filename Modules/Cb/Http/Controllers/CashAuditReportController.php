@@ -55,24 +55,23 @@ class CashAuditReportController extends Controller
         debtors_ledgers.trans_date,
         customers.customer_name AS customer_name,
         DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date) AS Gap,
-        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
-        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
-        
-        town_non_administratives.townName,
-        customer_receipt_setoff_data.set_off_amount    
+        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
+        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
+        (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
+        customer_receipt_setoff_data.set_off_amount,
+        ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance    
  FROM customer_receipts
         LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
         LEFT JOIN customer_receipt_setoff_data ON customer_receipt_setoff_data.customer_receipt_id = customer_receipts.customer_receipt_id 
         LEFT JOIN debtors_ledgers ON customer_receipt_setoff_data.debtors_ledger_id = debtors_ledgers.debtors_ledger_id
         LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
-        LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
         LEFT JOIN sales_invoices ON debtors_ledgers.external_number = sales_invoices.external_number ' . $query_modify;
 
 
 
         $result = DB::select($qry);
 
-
+//dd($result);
 
         $resulcustomer = DB::select('select customer_id,customer_name from customers');
 

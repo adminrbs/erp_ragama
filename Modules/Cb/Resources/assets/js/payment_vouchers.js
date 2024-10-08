@@ -93,12 +93,11 @@ $(document).ready(function () {
         getEachproduct(GRNID, status);
 
     }
-    const [count, setCount] = useState("");
-    //item table
+   
      tableData = $('#tblData').transactionTable({
         "columns": [
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "","valuefrom": "datachooser","thousand_seperator":false,"disabled": "" },
-            { "type": "text", "class": "transaction-inputs", "value": count, "style": "width:370px;", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:370px;", "disabled": "disabled" },
             { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "",  },
             { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "style": "width:150px;", "event": "",  },
             
@@ -487,14 +486,3 @@ function loadPayee(){
 }
 
 
-function useState(initialValue) {
-    let state = initialValue;
-    
-    const getState = () => state;
-    
-    const setState = (newValue) => {
-      state = newValue;
-    };
-    
-    return [getState, setState];
-  }

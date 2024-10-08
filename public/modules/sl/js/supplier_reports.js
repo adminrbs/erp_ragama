@@ -467,7 +467,7 @@ $(document).ready(function () {
 
         }
 
-        if (report == "suplier_Ledger") {
+        if (report == "suplier_Ledger") { //supplier ledger
 
 
           

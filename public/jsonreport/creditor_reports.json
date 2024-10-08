@@ -1,0 +1,229 @@
+{
+    
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+
+    "detail": [
+		{
+			"height": "100%"
+		},
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "Debtors Age Analysis",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-70",
+                "font": {
+                    "style": "Bold",
+                    "size": "20",
+                    "name": "Tahoma"
+                }
+            }
+        },
+            {
+            "label": {
+                "text": "@_$filter",
+                "align": "center",
+                "height": "@_$hight",
+                "width": "700",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                
+                "x": "130",
+                "y": "0",
+                "font": {
+                    "style": "Bold",
+                    "size": "15",
+                    "name": "Tahoma"
+                }
+            }
+        },
+		{
+			"table": {
+				
+                "header": [
+                    
+                    [
+                        {
+                            "text": "Customer<br>Code",
+                            "align": "left",
+                            "format": "text",
+                            "width":80
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Supplier Name",
+                            "align": "left",
+                            "format": "text",
+                            "width":250
+                        }
+                    ],
+                   
+                  
+                    [
+                        {
+                            "text": "Credit<br>Limit",
+                            "align": "right",
+                            "format": "text",
+                            "width":50
+                        }
+                    ],
+                    
+                    [
+                        {
+                            "text": "Credit<br>period",
+                            "align": "right",
+                            "format": "text",
+                            "width":50
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Total Outstanding",
+                            "align": "right",
+                            "format": "number",
+                            "width":110
+                        }
+                    ], [
+                        {
+                            "text": "0 - 30",
+                            "align": "right",
+                            "format": "number",
+                            "width":75
+                        }
+                    ], 
+                    [
+                        {
+                            "text": "31 - 60",
+                            "align": "right",
+                            "format": "number",
+                            "width":75
+                        }
+                    ],
+                    [
+                        {
+                            "text": "61 - 90",
+                            "align": "right",
+                            "format": "number",
+                            "width":75
+                        }
+                    ],
+                    [
+                        {
+                            "text": "Over 91",
+                            "align": "right",
+                            "format": "number",
+                            "width":75
+                        }
+                    ]
+                    
+                ],
+
+				"body": "@_$creditor_reports_tabaledata",
+				"height": "",
+				"width": "100%",
+				"x": 5,
+				"y": 0,
+				"margin-bottom": "5",
+                "margin-top": "5",
+                "margin-left": "100",
+                "margin-right": "100",
+               
+				"sum": ["Total Outstanding","0 - 30","31 - 60","61 - 90","Over 91"],
+				"font": {
+					"style": "lite",
+					"size": "10",
+					"name": "Tahoma"
+				}
+			}
+
+            
+		}
+      
+	],
+
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+       
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 70
+           
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "img": {
+                "url": "@_$companylogo",
+                "width": "120",
+                "height": "120",
+                "x": 0,
+                "y": -160,
+                "position": "fixed"
+            }
+        },
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+        
+    ]
+}

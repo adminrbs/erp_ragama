@@ -61,10 +61,13 @@ class ChequeAuditReportController2 extends Controller
         customer_receipt_cheques.cheque_number,
         debtors_ledgers.external_number AS InvoiceNo ,
         E.employee_name,
-        customer_receipt_setoff_data.set_off_amount As Invoice_amont,
+        
         CAST(DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date)AS SIGNED) AS Age,
-        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
+        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1) AS  Invoice_amont,
         (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_internal_number = debtors_ledgers.internal_number LIMIT 1),
+        (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
+        customer_receipt_setoff_data.set_off_amount,
+        ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance,
         customer_receipt_cheques.amount,
         banks.bank_name,
         bank_branches.bank_branch_name
@@ -74,7 +77,6 @@ class ChequeAuditReportController2 extends Controller
         LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
         LEFT JOIN customer_receipt_cheques ON customer_receipts.customer_receipt_id = customer_receipt_cheques.customer_receipt_id
         LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
-        LEFT JOIN sales_invoices ON sales_invoices.internal_number=debtors_ledgers.internal_number
         LEFT JOIN banks ON customer_receipt_cheques.bank_id = banks.bank_id
         LEFT JOIN bank_branches ON customer_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id' . $query_modify;
             //dd($qry);
