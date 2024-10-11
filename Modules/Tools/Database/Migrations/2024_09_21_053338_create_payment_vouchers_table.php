@@ -27,7 +27,6 @@ return new class extends Migration
             $table->integer('gl_account_id');
             $table->string('remarks');
             $table->integer('status');
-            $table->integer('document_number');
             $table->timestamps();
         });
     }

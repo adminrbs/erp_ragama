@@ -121,8 +121,8 @@
                                         <span>Options</span>
                                     </label>
                                     <div class="d-flex align-items-center">
-                                        <input type="radio" id="rdoPayee" name="option" class="rdo"> &nbsp; Option 1
-                                        <input type="radio" id="rdoSup" name="option" class="ms-3 rdo"> &nbsp; Option 2
+                                        <input type="radio" id="rdoPayee" name="option" class="rdo" value="1"> &nbsp; Option 1
+                                        <input type="radio" id="rdoSup" name="option" class="ms-3 rdo"  value="2"> &nbsp; Option 2
                                     </div>
                                 </div>
 
@@ -306,7 +306,7 @@
                                 <br>
 
                                 <div class="row">
-                                    <div class="form-check">
+                                    <div class="form-check" style="display: none;">
                                         <input class="form-check-input" type="checkbox" value="" id="chkPrintReport">
                                         <label class="form-check-label" for="chkPrintReport">
                                             Print

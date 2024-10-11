@@ -58,8 +58,16 @@ class BanktransferController extends Controller
         debtors_ledgers.trans_date,
         customers.customer_name AS customer_name,
         DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date) AS Gap,
+        (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
+        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
+        (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
+
+
+
+
         town_non_administratives.townName,
         customer_receipt_setoff_data.set_off_amount,
+        ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance,
         CRBS.reference,
         CRBS.slip_time,
         CRBS.slip_date

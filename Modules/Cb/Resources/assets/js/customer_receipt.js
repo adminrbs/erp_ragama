@@ -929,7 +929,7 @@ function saveReceipt() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-           // $('#btnAction').prop('disabled', true);
+            $('#btnAction').prop('disabled', true);
         }, success: function (response) {
             $('#btnAction').prop('disabled', false);
             console.log(response);

@@ -281,8 +281,6 @@ var hidden_array = [5,9];
                 "discount_percentage": arr[i][8].val(),
                 "discount_amount": arr[i][9].val(),
             }));
-
-
         }
         bootbox.confirm({
             title: 'Save confirmation',

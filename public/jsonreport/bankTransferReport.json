@@ -175,7 +175,8 @@
                                         "text": "Customer Name",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 250
+                                        "width": 250,
+                                        "visible":false
                                     }
                                 ],
                                 [
@@ -184,6 +185,30 @@
                                         "align": "center",
                                         "format": "text",
                                         "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Amount",
+                                        "align": "center",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Total Paid",
+                                        "align": "center",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Return Amount",
+                                        "align": "center",
+                                        "format": "number",
+                                        "width": 100
                                     }
                                 ],
                                 [
@@ -198,6 +223,14 @@
                                 [
                                     {
                                         "text": "Paid Amount",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Balance",
                                         "align": "right",
                                         "width": 100,
                                         "format": "number"

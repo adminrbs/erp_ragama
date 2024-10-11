@@ -11,10 +11,12 @@ var referanceID;
 var ItemList;
 var got_from_pickOrder = false;
 var value_for_radio_button = undefined;
-var analysisTableArray = []
+var analysisTableArray = [];
+var commonDiscription = "";
+var table_ = undefined;
 $(document).ready(function () {
-    $('#rdoPayee').prop('checked',true);
-    $('#txtSupplier').prop('disabled',true);
+    $('#rdoPayee').prop('checked', true);
+    $('#txtSupplier').prop('disabled', true);
     getServerTime();
     getBranches();
     getReceiptMethod();
@@ -22,30 +24,46 @@ $(document).ready(function () {
     $('.select2').select2();
     $('#cmbBranch').change();
     loadAccountAnalysisData();
-    
+
     loadPamentType();
     suppliers = loadSupplierTochooser();
     ItemList = loadAccounts();
-    DataChooser.addCollection("supplier",['', '', '', '',''], suppliers);
-    DataChooser.addCollection("Accounts",['', '', '', '',''], ItemList);
+    DataChooser.addCollection("supplier", ['', '', '', '', ''], suppliers);
+    DataChooser.addCollection("Accounts", ['', '', '', '', ''], ItemList);
 
 
-    $('.rdo').on('change',function(){
+    $('.rdo').on('change', function () {
         optionType(this)
     })
 
     //setting datat to data chooser -supplier
     $('#txtSupplier').on('focus', function () {
-        DataChooser.showChooser($(this),$(this),"supplier");
+        DataChooser.showChooser($(this), $(this), "supplier");
         $('#data-chooser-modalLabel').text('Suppliers');
     });
 
-    
-
+    $('#btnSave').on('click',function(){
+        var arr = tableData.getDataSourceObject();
+        var collection = [];
+        for (var i = 0; i < arr.length; i++) {
+            collection.push(JSON.stringify({
+                "account_id": arr[i][0].attr('data-id'),
+                "description": arr[i][1].val(),
+                "amount": arr[i][2].val(),
+                "analysis":arr[i][3].val(),
+                
+                
+            }));
+        }
+        console.log(collection);
+      
+        
+        newReferanceID('payment_vouchers',2750);
+        saveVoucher(collection);
+    });
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
         var param = sPageURL.split('?');
-        /*   reuqestID = param[0].split('=')[1].split('&')[0]; */
         GRNID = param[0].split('=')[1].split('&')[0];
         var status = param[0].split('=')[2].split('&')[0];
         action = param[0].split('=')[3].split('&')[0];
@@ -59,20 +77,10 @@ $(document).ready(function () {
             $('#btnPickOrders').hide();
             $('#btnBack').show();
             $('#alert_div').hide();
-           
-        }
-        else if (action == 'edit' && status == 'Original') {
+
+        } else if (action == 'edit' && status == 'Original') {
             $('#btnSave').text('Update');
             $('#btnSaveDraft').hide();
-            $('#btnApprove').hide();
-            $('#btnReject').hide();
-            $('#btnPickOrders').hide();
-            $('#btnBack').show();
-
-        } else if (action == 'edit' && status == 'Draft') {
-            $('#btnSave').text('Save and Send');
-            $('#btnSaveDraft').text('Update Draft');
-           /*  $('#btnSaveDraft').show(); */
             $('#btnApprove').hide();
             $('#btnReject').hide();
             $('#btnPickOrders').hide();
@@ -88,21 +96,17 @@ $(document).ready(function () {
             disableComponents();
 
         }
-       
-        getEachGRN(GRNID, status);
-        getEachproduct(GRNID, status);
-
     }
-   
-     tableData = $('#tblData').transactionTable({
+
+    tableData = $('#tblData').transactionTable({
         "columns": [
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "","valuefrom": "datachooser","thousand_seperator":false,"disabled": "" },
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:370px;", "disabled": "disabled" },
-            { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "",  },
-            { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "style": "width:150px;", "event": "",  },
-            
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
+            { "type": "text", "class": "transaction-inputs", "value": commonDiscription, "style": "width:370px;" },
+            { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
+            { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "style": "width:150px;", "event": "", },
+
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
-            
+
         ],
         "auto_focus": 0,
         "hidden_col": []
@@ -110,14 +114,35 @@ $(document).ready(function () {
     });
 
     tableData.addRow();
-   
- 
- 
+    table_ = tableData;
+
+
+    $('#txtDescription').on('input', function () {
+        commonDiscription = $(this).val();
+        var rowObjects = tableData.getDataSourceObject();
+        for (var i = 0; i < rowObjects.length; i++) {
+            var desc_cell = rowObjects[i][1];
+            desc_cell.val(commonDiscription);
+
+        }
+
+    });
 
 });
+var total_sum = ()=> {
+    
+}
+function calTotal(event) {
+   
+    var arr = table_.getDataSourceObject();
+    for (var i = 0; i < arr.length; i++) {
+        var row_amount = arr[i][2].val();
+    }
+    
 
+}
 
-function loadAccountAnalysisData(){
+function loadAccountAnalysisData() {
     $.ajax({
         url: '/cb/loadAccountAnalysisData',
         type: 'get',
@@ -125,8 +150,6 @@ function loadAccountAnalysisData(){
         success: function (data) {
             var analysis = data.data;
             console.log(analysis);
-            
-            
 
             $.each(analysis, function (index, value) {
                 analysisTableArray.push({
@@ -134,10 +157,6 @@ function loadAccountAnalysisData(){
                     text: value.gl_account_analyse_name
                 });
             });
-
-            
-            
-           
         },
     })
 }
@@ -145,11 +164,11 @@ function loadAccountAnalysisData(){
 
 
 
-function itemEventListner(event){
+function itemEventListner(event) {
 
     console.log(ItemList);
-    DataChooser.setDataSourse(['','','',''],ItemList);
-    DataChooser.showChooser(event,event);
+    DataChooser.setDataSourse(['', '', '', ''], ItemList);
+    DataChooser.showChooser(event, event);
     $('#data-chooser-modalLabel').text('Items');
 }
 
@@ -178,13 +197,10 @@ function getBranches() {
                 $('#cmbBranch').append('<option value="' + value.branch_id + '">' + value.branch_name + '</option>');
 
             })
-           
+
         },
     })
 }
-
-
-
 
 
 
@@ -200,8 +216,6 @@ function loadSupplierTochooser() {
         success: function (response) {
             if (response) {
                 var supplierData = response.data;
-                console.log(supplierData);
-           /*   DataChooser.setDataSourse(['','','',''],supplierData); */
                 data = supplierData;
             }
         },
@@ -223,9 +237,8 @@ function loadSupplierOtherDetails(id) {
             console.log(data)
             var txt = data.data;
             var supID = txt[0].supplier_id;
-            /*  console.log(txt); */
             $('#lblSupplierAddress').val(txt[0].primary_address);
-            $('#lblSupplierName').attr('data-id',supID);
+            $('#lblSupplierName').attr('data-id', supID);
             $('#txtSupplierInvoiceNumber').focus();
 
         },
@@ -241,17 +254,17 @@ function loadAccounts() {
     $.ajax({
         url: '/cb/loadAccounts',
         type: 'get',
-        async:false,
+        async: false,
         dataType: 'json',
         success: function (response) {
             if (response.success) {
                 list = response.data;
-                
+
             }
             console.log(response.data);
             $.each(response.data, function (index, value) {
                 //console.log(value.hidden_id);
-                
+
                 $('#cmbGlAccount').append('<option value="' + value.hidden_id + '">' + value.id + '</option>');
 
             })
@@ -266,7 +279,7 @@ function loadAccounts() {
 
 function showTransactionDataChooser(event, visible) {
     if (visible) {
-        DataChooser.showChooser(event, event,"Accounts");
+        DataChooser.showChooser(event, event, "Accounts");
         $('#data-chooser-modalLabel').text('Accounts');
     }
 }
@@ -277,7 +290,7 @@ function loadPamentType() {
         url: '/prc/loadPamentType',
         type: 'get',
         dataType: 'json',
-        async:false,
+        async: false,
         success: function (data) {
             $.each(data, function (index, value) {
                 $('#cmbPaymentType').append('<option value="' + value.supplier_payment_method_id + '">' + value.supplier_payment_method + '</option>');
@@ -320,47 +333,35 @@ function dataChooserEventListener(event, id, value) {
 
 
 
-        $.ajax({
-            url: '/prc/getItemInfo/' + item_id,
-            type: 'get',
-            success: function (response) {
-                console.log(response);
-                var expireDateManage = response[0].manage_expire_date;
-                var batchManage = response[0].manage_batch;
-                if (expireDateManage == 1) {
-                   
-                    $(row_childs[14]).removeAttr('disabled');
-                }
-                if (batchManage == 1) {
-                    $(row_childs[13]).val(response[0].Item_code);
-                    $(row_childs[13]).removeAttr('disabled');
-                }
-
-                $(row_childs[1]).val(response[0].item_Name);
-                $(row_childs[4]).val(response[0].unit_of_measure);
-                $(row_childs[6]).val(response[0].package_unit);
-                $(row_childs[5]).val(response[0].package_size);
-                $(row_childs[7]).val(response[0].average_cost_price);
-                $(row_childs[11]).val(response[0].whole_sale_price);
-                $(row_childs[12]).val(response[0].retial_price);
-                $(row_childs[2]).focus();
-                $(row_childs[2]).val('');
-                $(row_childs[3]).val('');
-               
-                $(row_childs[9]).val('');
-                $(row_childs[10]).val('');
-                $(row_childs[15]).val('');
-
-                if($('#txtDiscountPrecentage').val().length > 0){
-                    $(row_childs[8]).val($('#txtDiscountPrecentage').val());
-                    
-                }else{
-                    $(row_childs[8]).removeAttr('disabled');
-                }
-                calculation();
-                
-            }
-        })
+        /*   $.ajax({
+              url: '/prc/getItemInfo/' + item_id,
+              type: 'get',
+              success: function (response) {
+                  console.log(response);
+                  var expireDateManage = response[0].manage_expire_date;
+                  var batchManage = response[0].manage_batch;
+                  if (expireDateManage == 1) {
+                     
+                      $(row_childs[14]).removeAttr('disabled');
+                  }
+                  if (batchManage == 1) {
+                      $(row_childs[13]).val(response[0].Item_code);
+                      $(row_childs[13]).removeAttr('disabled');
+                  }
+  
+                  $(row_childs[1]).val(response[0].item_Name);
+                 
+  
+                  if($('#txtDiscountPrecentage').val().length > 0){
+                      $(row_childs[8]).val($('#txtDiscountPrecentage').val());
+                      
+                  }else{
+                      $(row_childs[8]).removeAttr('disabled');
+                  }
+                  calculation();
+                  
+              }
+          }) */
 
     }
 
@@ -375,28 +376,20 @@ function clearTableData() {
 }
 
 
-
-
-
-
-function newReferanceID(table,doc_number) {
-     referanceID = newID("../newReferenceNumber_GRN_referenceId", table,doc_number);
-  //  $('#LblexternalNumber').val(referanceID);
+function newReferanceID(table, doc_number) {
+    referanceID = newID("../newReferenceNumber_paymentVoucher_referenceId", table, doc_number);
+    //  $('#LblexternalNumber').val(referanceID);
 }
 
 //clear labels
 
-function dataChooserShowEventListener(event){
+function dataChooserShowEventListener(event) {
 
 }
 
 
-
-
-
-
- //load payment term
- function getReceiptMethod() {
+//load payment term
+function getReceiptMethod() {
 
     $.ajax({
         type: "GET",
@@ -418,7 +411,6 @@ function dataChooserShowEventListener(event){
                     $('#cmbPaymentMethod').append('<option value="' + id + '">' + name + '</option>');
                 }
 
-            
             }
 
         },
@@ -455,22 +447,22 @@ function getServerTime() {
     })
 }
 
-function optionType(event){
-    if($(event).attr('id') == 'rdoPayee'){
-       $('#txtSupplier').prop('disabled',true);
-       $('#cmbPayee').prop('disabled',false);
-    }else{
-        $('#txtSupplier').prop('disabled',false);
-        $('#cmbPayee').prop('disabled',true);
+function optionType(event) {
+    if ($(event).attr('id') == 'rdoPayee') {
+        $('#txtSupplier').prop('disabled', true);
+        $('#cmbPayee').prop('disabled', false);
+    } else {
+        $('#txtSupplier').prop('disabled', false);
+        $('#cmbPayee').prop('disabled', true);
     }
 }
 
-function loadPayee(){
+function loadPayee() {
     $.ajax({
         url: '/cb/loadPayee',
         method: 'get',
         dataType: 'json',
-        async:false,
+        async: false,
         success: function (data) {
             $.each(data.data, function (index, value) {
                 $('#cmbPayee').append('<option value="' + value.payee_id + '">' + value.payee_name + '</option>');
@@ -486,3 +478,55 @@ function loadPayee(){
 }
 
 
+function saveVoucher(collection) {
+
+
+    if (parseInt(collection.length) <= 0) {
+        showWarningMessage('Unable to save without an account');
+        return
+    }
+
+        //var total_amount = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
+        formData.append('collection', JSON.stringify(collection));
+        formData.append('LblexternalNumber', referanceID); 
+        formData.append('cmbBranch', $('#cmbBranch').val()); 
+        formData.append('cmbPaymentMethod',$('#cmbPaymentMethod').val());
+        formData.append('cmbGlAccount',$('#cmbGlAccount').val());
+       
+        if($('#rdoPayee').prop('checked')){
+            formData.append('option',1);
+            formData.append('payee',$('#cmbPayee').val());
+        }else{
+            formData.append('option',2);
+            formData.append('supplier',$('#txtSupplier').attr('data-id'));
+        }
+        formData.append('remarks',$('#txtRemarks').val());
+    
+        $.ajax({
+            url: '/cb/saveVoucher',
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            timeout: 800000,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+               // $('#btnSave').prop('disabled', true);
+            }, success: function (response) {
+             
+            }, error: function (data) {
+                console.log(data.responseText)
+            }, complete: function () {
+
+            }
+        })
+        getServerTime();
+
+    
+
+}

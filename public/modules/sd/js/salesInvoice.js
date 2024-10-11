@@ -947,7 +947,7 @@ function addSalesInvoice(collection, id,return_request_collection) {
         if(!isNaN(parseInt(order_id))){
             formData.append('order_id', order_id);
         }
-        //  var ext = $('#LblexternalNumber').val();
+       
 
         $.ajax({
             url: '/sd/addSalesInvoice/' + id,
@@ -992,13 +992,7 @@ function addSalesInvoice(collection, id,return_request_collection) {
                     showSuccessMessage("Successfully saved");
                     
                     updateStatusOfOrder(order_id);
-                  /*   if ($('#chkPrintReport').prop('checked')) {
-                        salesinvoiceReport(primaryKey);
-                    } */
-
-                  /*   clearTableData();
-                    tableData.addRow(); */
-                   // resetForm();
+                 
                     hash_map = new HashMap();
                     url = "/sd/salesInvoiceList";
                     window.location.href = url;

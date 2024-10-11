@@ -282,7 +282,7 @@ $(document).ready(function () {
     });
 
     $('#cmbReceiptMethod').on('change', function () {
-        if ($(this).val() == '3') {
+        if ($(this).val() == '2') {
             $("#tab-single-cheque").attr("hidden", false);
         } else {
             $("#tab-single-cheque").attr("hidden", true);

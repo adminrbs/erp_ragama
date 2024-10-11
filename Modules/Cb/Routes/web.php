@@ -293,4 +293,5 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    Route::get('/loadPayee',[PaymentVoucherController::class,'loadPayee']);
    Route::get('/loadAccounts',[PaymentVoucherController::class,'loadAccounts']);
    Route::get('/loadAccountAnalysisData',[PaymentVoucherController::class,'loadAccountAnalysisData']);
+   Route::post('/saveVoucher',[PaymentVoucherController::class,'saveVoucher']);
 });

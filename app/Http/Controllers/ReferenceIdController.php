@@ -325,6 +325,7 @@ class ReferenceIdController extends Controller
         //dd($request->input('id'));
         try {
             $branch_id = $request->input('id');
+           // dd($branch_id);
             $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
             // $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . " WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' AND branch_id = '".$branch_id."' ORDER BY customer_receipt_id  DESC LIMIT 1";
             /*  $query = "SELECT IF(ISNULL(external_number), 0, external_number) AS id 
@@ -349,7 +350,7 @@ LIMIT 1";  */
             ORDER BY 
                 customer_receipt_id DESC 
             LIMIT 1";
-            //dd($query);
+            dd($query);
             $result = DB::select($query);
             $id = 1;
             if (count($result) == 1) {
@@ -1206,7 +1207,7 @@ LIMIT 1";  */
 
             $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
 
-            $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' ORDER BY sales_invoice_copy_issued_id DESC LIMIT 1";
+            $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%'  ORDER BY sales_invoice_copy_issued_id DESC LIMIT 1";
             // dd($query);
             $result = DB::select($query);
 
@@ -1231,5 +1232,40 @@ LIMIT 1";  */
         } catch (Exception $ex) {
             return $ex;
         }
+    }
+
+
+    public function newReferenceNumber_paymentVoucher_referenceId(Request $request,$table, $doc_number){
+        try {
+
+            $branch_id = $request->input('id');
+            $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
+
+            $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' AND branch_id = '" . $branch_id . "'  ORDER BY payment_voucher_id DESC LIMIT 1";
+            // dd($query);
+            $result = DB::select($query);
+
+            $id = 1;
+
+            if (count($result) == 1) {
+
+                $result = explode("-", $result[0]->id);
+                //dd($result);
+                if (count($result) >= 3) {
+
+                    $id = (int) $result[2] + 1;
+                    //dd($id); 
+                } else {
+                    $id = (int) $result[0] + 1;
+                }
+            }
+
+
+
+            return response()->json(["id" => $id, "prefix" => $prefix]);
+        } catch (Exception $ex) {
+            return $ex;
+        }
+
     }
 }

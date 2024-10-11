@@ -69,7 +69,7 @@ class BinCardController extends Controller
         '' AS user_name
     FROM (
         SELECT IFNULL(SUM(quantity), 0) AS quantity,
-        IFNULL(IH.manual_number, IH.external_number) AS reference_number,
+        IH.external_number AS reference_number,
         IH.whole_sale_price,
         IH.retial_price,
         IH.cost_price
@@ -80,7 +80,7 @@ class BinCardController extends Controller
     UNION ALL
     SELECT
         IH.transaction_date,
-        IFNULL(IH.manual_number, IH.external_number) AS reference_number,
+        IH.external_number AS reference_number,
         IH.whole_sale_price,
         IH.retial_price,
         IH.cost_price,
