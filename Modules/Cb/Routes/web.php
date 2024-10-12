@@ -290,8 +290,12 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    Route::get('/payment_voucher',function(){
         return view("cb::payment_vouchers");
    });
+   Route::get('/payment_voucher_list',function(){
+    return view("cb::payment_vouchers_list");
+   });
    Route::get('/loadPayee',[PaymentVoucherController::class,'loadPayee']);
    Route::get('/loadAccounts',[PaymentVoucherController::class,'loadAccounts']);
    Route::get('/loadAccountAnalysisData',[PaymentVoucherController::class,'loadAccountAnalysisData']);
    Route::post('/saveVoucher',[PaymentVoucherController::class,'saveVoucher']);
+   Route::get('/getGRNdata',[PaymentVoucherController::class,'getGRNdata']);
 });

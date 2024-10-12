@@ -111,4 +111,19 @@ class PaymentVoucherController extends Controller
             return $ex;
         }
     }
+
+
+    public function getGRNdata(){
+        try{
+            $qry = "SELECT PV.payment_voucher_id,PV.external_number,PV.transaction_date,PV.total_amount,S.supplier_name,P.payee_name,B.branch_name FROM payment_vouchers PV LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN branches B ON PV.branch_id = b.branch_id";
+            $result = DB::select($qry);
+            if($result){
+                return response()->json(['success' => true,'data' => $result]);
+            }else{
+                return response()->json(['success' => false,'data' => []]);
+            }
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
 }

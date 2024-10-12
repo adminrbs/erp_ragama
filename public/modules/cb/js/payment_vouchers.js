@@ -130,11 +130,19 @@ $(document).ready(function () {
 
 });
 
+var total_Sum = 0;
 function calTotal(event) {
    
     var arr = table_.getDataSourceObject();
-    console.log(arr);
+    for (var i = 0; i < arr.length; i++) {
+        console.log(arr[i][2].val());
+        
+       // total_Sum += parseFloat(arr[i][2].val().replace(/,/g, ''));
+       total_Sum += parseFloat(arr[i][2].val());
+    }
     
+    
+    $('#lblGrossTotal').text(total_Sum);    
 
 }
 
