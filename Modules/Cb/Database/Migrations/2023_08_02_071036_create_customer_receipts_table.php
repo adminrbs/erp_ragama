@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('customer_receipts', function (Blueprint $table) {
-            $table->id('customer_receipt_id');
+            $table->id('customer_receipt_id')->index();
             $table->integer('internal_number');
             $table->string('external_number',50);
             $table->integer('branch_id');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->decimal('round_up',10,2);
             $table->integer('advance');
             $table->integer('document_number');
+            $table->string('your_reference',200)->nullable();
             $table->timestamps();
 
             $table->index('customer_receipt_id','cus_receiptid');

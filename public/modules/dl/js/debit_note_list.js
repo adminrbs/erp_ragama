@@ -115,7 +115,11 @@ function view(id){
     window.location.href = url;
 }
 
-
+function print(id){
+    
+    url = "/dl/print_dl/" + id;
+    window.location.href = url;
+}
 
 
 

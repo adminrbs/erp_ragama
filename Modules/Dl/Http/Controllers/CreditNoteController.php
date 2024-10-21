@@ -141,7 +141,7 @@ class CreditNoteController extends Controller
                 //  $disabled = "disabled";
                 //   $buttons = '<button class="btn btn-primary btn-sm" id="btnEdit_' . $item->debit_notes_id . '" onclick="btnEdit_(' . $item->sales_order_Id . ', \'' . $status . '\')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160';
                 $buttons = '<button class="btn btn-success btn-sm" onclick="view(' . $item->credit_notes_id . ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160';
-                //  $buttons .= '<button class="btn btn-secondary btn-sm" onclick="salesorderReport(' . $item->debit_notes_id . ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                  $buttons .= '<button class="btn btn-secondary btn-sm" onclick="print(' . $item->credit_notes_id . ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
 
                 $item->buttons = $buttons;
 

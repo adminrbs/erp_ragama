@@ -922,6 +922,7 @@ function saveReceipt() {
             "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
             "payment_slip": JSON.stringify(getSlip()),
+            "your_ref":$('#txtYourReference').val()
 
         },
         timeout: 800000,
@@ -1656,7 +1657,7 @@ function getCustomerReceipt(id) {
                 var str_id = "'" + i + "'";
                 var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + receipt_data[i].internal_number + '" data-external_number="' + receipt_data[i].external_number + '" data-reference_internal_number="' + receipt_data[i].reference_internal_number + '"  data-reference_external_number="' + receipt_data[i].reference_external_number + '"></label>'
                 var date = '<label id="lblDate' + i + '">' + receipt_data[i].date + '</label>';
-                var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + receipt_data[i].manual_number + '</label>';
+                var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + receipt_data[i].reference_external_number + '</label>';
                 var description = '<label id="lblDescription' + i + '">Sales Invoice</label>';
                 var amount = '<label id="lblSetoffAmount' + i + '">' + parseFloat(receipt_data[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                 var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(receipt_data[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';

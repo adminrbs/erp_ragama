@@ -82,6 +82,7 @@ const DatatableFixedColumns = function () {
                 { "data":"route_name" },
                 { "data": "employee_name" },
                 { "data": "total_amount" },
+                { "data": "sales_order_ref" },
                
                 { "data": "statusLabel" },
                 { "data": "printed" },
@@ -94,7 +95,7 @@ const DatatableFixedColumns = function () {
             
 
         });
-
+        table.column(6).visible(false);
         
 
 

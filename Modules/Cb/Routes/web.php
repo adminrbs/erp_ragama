@@ -60,6 +60,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::post('/customer_receipt/saveCustomerReceipt', [CustomerReceiptController::class, 'saveCustomerReceipt']);
     Route::get('/customer_receipt/getCustomerReceipt/{id}', [CustomerReceiptController::class, 'getCustomerReceipt']);
     Route::put('/customer_receipt/updateCustomerReceipt/{id}', [CustomerReceiptController::class, 'updateCustomerReceipt']);
+    Route::get('/customer_receipt/generateReceiptReport/{id}',[CustomerReceiptController::class,'generateReceiptReport']);
     /** End of Customer Receipt */
 
 
@@ -292,10 +293,16 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    });
    Route::get('/payment_voucher_list',function(){
     return view("cb::payment_vouchers_list");
-   });
+   })->middleware(['is.logged','can:cb_payment_voucher']);
    Route::get('/loadPayee',[PaymentVoucherController::class,'loadPayee']);
    Route::get('/loadAccounts',[PaymentVoucherController::class,'loadAccounts']);
    Route::get('/loadAccountAnalysisData',[PaymentVoucherController::class,'loadAccountAnalysisData']);
    Route::post('/saveVoucher',[PaymentVoucherController::class,'saveVoucher']);
    Route::get('/getGRNdata',[PaymentVoucherController::class,'getGRNdata']);
+   Route::get('/getEachPaymentVoucher/{id}',[PaymentVoucherController::class,'getEachPaymentVoucher']);
+   Route::post('/updateVoucher/{id}',[PaymentVoucherController::class,'updateVoucher']);
+   Route::delete('/deleteVOucher/{id}',[PaymentVoucherController::class,'deleteVOucher']);
+
+   /**Payment voucher receipt */
+   Route::get('/paymentVoucher_Receipt/{id}',[PaymentVoucherController::class,'paymentVoucher_Receipt']);
 });

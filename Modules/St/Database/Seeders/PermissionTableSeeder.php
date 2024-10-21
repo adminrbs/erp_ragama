@@ -286,10 +286,24 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'Add Purchase Order','slug' => 'prc_add_purchase_order','sub'=>'111','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//169
             ['name' => 'Edit Purchase Order','slug' => 'prc_edit_purchase_order','sub'=>'169','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//170
             ['name' => 'View Purchase Order','slug' => 'prc_view_purchase_order','sub'=>'169','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//171
-            ['name' => 'Delete Purchase Order','slug' => 'prc_delete_purchase_order','sub'=>'169','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//171
+            ['name' => 'Delete Purchase Order','slug' => 'prc_delete_purchase_order','sub'=>'169','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//172
 
-            ['name' => 'Cash Bank Dashboard','slug' => 'cb_cash_bank_dashboard','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//172
-            ['name' => 'SFA Receipts','slug' => 'cb_sfa_recceipt','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//173
+            ['name' => 'Cash Bank Dashboard','slug' => 'cb_cash_bank_dashboard','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//173
+            ['name' => 'SFA Receipts','slug' => 'cb_sfa_recceipt','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//174
+
+            ['name' => 'Bonus Claim','slug' => 'prc_bonus_claim','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//175
+            ['name' => 'Add Bonus Claim','slug' => 'prc_add_bonus_claim','sub'=>'174','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//176
+            ['name' => 'View Bonus Claim','slug' => 'prc_view_bonus_claim','sub'=>'174','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//177
+            ['name' => 'Print Bonus Claim','slug' => 'prc_print_bonus_claim','sub'=>'174','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//178
+
+            ['name' => 'Supplier Report','slug' => 'sl_supplier_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//179
+
+            ['name' => 'Payment Voucher','slug' => 'cb_payment_voucher','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//180
+            ['name' => 'Add Payment Voucher','slug' => 'cb_add_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//181
+            ['name' => 'View Payment Voucher','slug' => 'cb_view_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//182
+            ['name' => 'Print Payment Voucher','slug' => 'cb_print_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//184
+            ['name' => 'Delete Payment Voucher','slug' => 'cb_delete_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//184
+            
             
 
         ]);

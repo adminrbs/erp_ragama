@@ -83,7 +83,7 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     /** Supplier reports */
     Route::get('/supplier_reports', function () {
         return view('sl::supplier_reports');
-    });
+    })->middleware(['can:sl_supplier_report']);
     Route::get('/printsupoutstandinReport/{search}', [SupOutstandingcontroller::class, 'printsupoutstandinReport']);
     Route::get('/getSupplier',[SupOutstandingcontroller::class,'getSupplier']);
     Route::get('/supplier_Ledger_reports/{filters}',[SupplierLedgerReportController::class,'supplier_Ledger_reports']);

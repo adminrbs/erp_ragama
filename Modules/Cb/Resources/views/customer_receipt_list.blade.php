@@ -48,6 +48,7 @@
                                 <th>Banking Date</th>
                                 <th>Payment Mode</th>
                                 <th>Action Menu</th>
+                                <!-- <th>Invoice Numbers</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -75,5 +76,7 @@
 @endsection
 @section('scripts')
 <script src="{{Module::asset('cb:js/customer_receipt_list.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('cb:js/customer_receipt_report.js')}}?random=<?php echo uniqid(); ?>"></script>
+
 
 @endsection

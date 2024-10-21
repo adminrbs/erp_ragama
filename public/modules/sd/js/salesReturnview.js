@@ -200,10 +200,11 @@ function getEachSalesReturn(id, status) {
             var res = salesInv.data;
            
             getLocation(res[0].branch_id);
-           
+           // console.log(res[0].order_date_time);
+            
             /* ('#lblSupplierAddress').text(txt[0].primary_address); */
             $('#LblexternalNumber').val(res[0].manual_number);
-            $('#invoice_date_time').val(res[0].order_date_time);
+            $('#invoice_date_time').val(res[0].order_date);
             $('#cmbBranch').val(res[0].branch_id);
             $('#cmbLocation').val(res[0].location_id);
             $('#cmbEmp').val(res[0].employee_id);

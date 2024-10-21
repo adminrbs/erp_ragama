@@ -4,7 +4,7 @@ var tableDataOther = undefined;
 var formData = new FormData;
 var task;
 var suppliers = [];
-var GRNID = null;
+var p_voucher_id = null;
 var reuqestID;
 var action = undefined;
 var referanceID;
@@ -61,42 +61,6 @@ $(document).ready(function () {
         newReferanceID('payment_vouchers',2750);
         saveVoucher(collection);
     });
-    if (window.location.search.length > 0) {
-        var sPageURL = window.location.search.substring(1);
-        var param = sPageURL.split('?');
-        GRNID = param[0].split('=')[1].split('&')[0];
-        var status = param[0].split('=')[2].split('&')[0];
-        action = param[0].split('=')[3].split('&')[0];
-        task = param[0].split('=')[4].split('&')[0];
-        if (action == 'edit' && status == 'Original' && task == 'approval') {
-            $('#btnSave').hide();
-            $('#btnSaveDraft').hide();
-            $('#btnApprove').show();
-            $('#btnReject').show();
-            $('#btnSaveDraft').hide();
-            $('#btnPickOrders').hide();
-            $('#btnBack').show();
-            $('#alert_div').hide();
-
-        } else if (action == 'edit' && status == 'Original') {
-            $('#btnSave').text('Update');
-            $('#btnSaveDraft').hide();
-            $('#btnApprove').hide();
-            $('#btnReject').hide();
-            $('#btnPickOrders').hide();
-            $('#btnBack').show();
-
-        } else if (action == 'view') {
-            $('#btnSave').hide();
-            $('#btnSaveDraft').hide();
-            $('#btnApprove').hide();
-            $('#btnReject').hide();
-            $('#btnPickOrders').hide();
-            $('#btnBack').show();
-            disableComponents();
-
-        }
-    }
 
     tableData = $('#tblData').transactionTable({
         "columns": [
@@ -115,6 +79,51 @@ $(document).ready(function () {
 
     tableData.addRow();
     table_ = tableData;
+   
+if (window.location.search.length > 0) {
+   
+    var sPageURL = window.location.search.substring(1);
+
+   
+    var params = sPageURL.split('&'); 
+    
+  
+    var p_voucher_id = '';
+    var action = '';
+
+   
+    for (var i = 0; i < params.length; i++) {
+        var param = params[i].split('=');
+        if (param[0] === 'id') {
+            p_voucher_id = param[1];
+        }
+        if (param[0] === 'action') {
+            action = param[1];
+        }
+    }
+
+    // Log extracted parameters
+    console.log(p_voucher_id);
+    console.log(action);
+
+    // Handle the action logic
+    if (action == 'edit') {
+        $('#btnSave').text('Update');
+    } else if (action == 'view') {
+        $('#btnSave').hide();
+        $('#btnSaveDraft').hide();
+        $('#btnApprove').hide();
+        $('#btnReject').hide();
+        $('#btnPickOrders').hide();
+        $('#btnBack').show();
+       // disableComponents();
+    }
+
+    // Call function to fetch payment voucher details
+    getEachPaymentVoucher(p_voucher_id);
+}
+
+    
 
 
     $('#txtDescription').on('input', function () {
@@ -130,19 +139,70 @@ $(document).ready(function () {
 
 });
 
-var total_Sum = 0;
+function getEachPaymentVoucher(id){
+    $.ajax({
+        url: '/cb/getEachPaymentVoucher/'+id,
+        type: 'get',
+        async: false,
+        success: function (data) {
+            console.log(data.pv_item);
+            $('#LblexternalNumber').val(data.pv.external_number);
+            $('#invoice_date_time').val(data.pv.transaction_date);
+            $('#cmbBranch').val(data.pv.branch_id);
+            if(data.pv.supplier_id == null){
+                $('#rdoPayee').prop('checked',true);
+                $('#cmbPayee').val(data.pv.payee_id);
+            }else{
+                $('#rdoSup').prop('checked',true);
+                $('#txtSupplier').val(data.sup_code.supplier_code);
+                $('#txtSupplier').attr('data-id',data.pv.supplier_id);
+            }
+            $('#txtDescription').val(data.pv.description);
+            $('#txtRemarks').val(data.pv.remarks);
+
+
+
+            var dataSource = [];
+            $.each(data.pv_item, function (index, value) {
+              
+                console.log(tableData);
+                
+                dataSource.push([
+                    { "type": "text", "class": "transaction-inputs", "value": value.account_code, "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
+                    { "type": "text", "class": "transaction-inputs", "value": value.description, "style": "width:370px;" },
+                    { "type": "number", "class": "transaction-inputs math-abs math-round", "value": value.amount, "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
+                    { "type": "select", "class": "transaction-inputs", "value": analysisTableArray,"selected_option":value.gl_account_analysis_id, "style": "width:150px;", "event": "", },
+                    { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
+
+                ]);
+
+            });
+           
+            tableData.setDataSource(dataSource);
+            
+            
+        }
+    });
+}
+
+
+
 function calTotal(event) {
-   
+    var total_Sum = 0;
     var arr = table_.getDataSourceObject();
     for (var i = 0; i < arr.length; i++) {
         console.log(arr[i][2].val());
         
        // total_Sum += parseFloat(arr[i][2].val().replace(/,/g, ''));
-       total_Sum += parseFloat(arr[i][2].val());
+       if(!isNaN(parseFloat(arr[i][2].val()))){
+        total_Sum += parseFloat(arr[i][2].val());
+       }
+       
     }
     
     
-    $('#lblGrossTotal').text(total_Sum);    
+    $('#lblGrossTotal').text(parseFloat(total_Sum).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
+    $('#lblNetTotal').text(parseFloat(total_Sum).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());    
 
 }
 
@@ -337,35 +397,7 @@ function dataChooserEventListener(event, id, value) {
 
 
 
-        /*   $.ajax({
-              url: '/prc/getItemInfo/' + item_id,
-              type: 'get',
-              success: function (response) {
-                  console.log(response);
-                  var expireDateManage = response[0].manage_expire_date;
-                  var batchManage = response[0].manage_batch;
-                  if (expireDateManage == 1) {
-                     
-                      $(row_childs[14]).removeAttr('disabled');
-                  }
-                  if (batchManage == 1) {
-                      $(row_childs[13]).val(response[0].Item_code);
-                      $(row_childs[13]).removeAttr('disabled');
-                  }
-  
-                  $(row_childs[1]).val(response[0].item_Name);
-                 
-  
-                  if($('#txtDiscountPrecentage').val().length > 0){
-                      $(row_childs[8]).val($('#txtDiscountPrecentage').val());
-                      
-                  }else{
-                      $(row_childs[8]).removeAttr('disabled');
-                  }
-                  calculation();
-                  
-              }
-          }) */
+       
 
     }
 
@@ -490,7 +522,6 @@ function saveVoucher(collection) {
         return
     }
 
-        //var total_amount = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
         formData.append('collection', JSON.stringify(collection));
         formData.append('LblexternalNumber', referanceID); 
         formData.append('cmbBranch', $('#cmbBranch').val()); 
@@ -504,6 +535,7 @@ function saveVoucher(collection) {
             formData.append('option',2);
             formData.append('supplier',$('#txtSupplier').attr('data-id'));
         }
+        formData.append('description',$('#txtDescription').val());
         formData.append('remarks',$('#txtRemarks').val());
     
         $.ajax({
@@ -520,13 +552,76 @@ function saveVoucher(collection) {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function () {
-               // $('#btnSave').prop('disabled', true);
+                $('#btnSave').prop('disabled', true);
             }, success: function (response) {
-             
+                $('#btnSave').prop('disabled', false);
+                if(response.success){
+                    showSuccessMessage("Successfuly saved");
+                }else{
+                    showWarningMessage("Unable to save");
+                }
             }, error: function (data) {
                 console.log(data.responseText)
             }, complete: function () {
 
+            }
+        })
+        getServerTime();
+
+    
+
+}
+
+function updateVoucher(collection) {
+    var id = p_voucher_id;
+
+    if (parseInt(collection.length) <= 0) {
+        showWarningMessage('Unable to save without an account');
+        return
+    }
+
+        formData.append('collection', JSON.stringify(collection));
+        formData.append('LblexternalNumber', referanceID); 
+        formData.append('cmbBranch', $('#cmbBranch').val()); 
+        formData.append('cmbPaymentMethod',$('#cmbPaymentMethod').val());
+        formData.append('cmbGlAccount',$('#cmbGlAccount').val());
+       
+        if($('#rdoPayee').prop('checked')){
+            formData.append('option',1);
+            formData.append('payee',$('#cmbPayee').val());
+        }else{
+            formData.append('option',2);
+            formData.append('supplier',$('#txtSupplier').attr('data-id'));
+        }
+        formData.append('description',$('#txtDescription').val());
+        formData.append('remarks',$('#txtRemarks').val());
+    
+        $.ajax({
+            url: '/cb/updateVoucher/'+id,
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            timeout: 800000,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+                $('#btnSave').prop('disabled', true);
+            }, success: function (response) {
+                $('#btnSave').prop('disabled', false);
+                if(response.success){
+                    showSuccessMessage("Successfuly updated");
+                }else{
+                    showWarningMessage("Unable to update");
+                }
+            }, error: function (data) {
+                console.log(data.responseText)
+            }, complete: function () {
+                
             }
         })
         getServerTime();

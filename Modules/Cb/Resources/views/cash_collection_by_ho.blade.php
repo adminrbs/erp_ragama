@@ -20,7 +20,7 @@
     <div class="card mt-2">
         <div class="card">
             <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-                <h5 class="mb-0">Cash Received From SR</h5>
+                <h5 class="mb-0">Cash Received From Offcie(SR)</h5>
             </div>
             <div class="row" id="top_border">
            <!--  <div class="col-md-2" style="margin-left: 10px;margin-top: 10px">

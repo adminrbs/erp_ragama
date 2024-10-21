@@ -9,7 +9,7 @@ use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class PatmentVoucherItems extends Model
+class PaymentVoucherItems extends Model
 {
     use HasFactory, LogsActivity;
     protected $table = "payment_voucher_items";

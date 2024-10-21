@@ -189,7 +189,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     });
     Route::get('/bonus_claim_List',function(){
         return view('prc::bonus_claim_List');
-    });
+    })->middleware(['is.logged','can:prc_bonus_claim']);
     Route::post('/addbonusClaim/{id}',[BonusClaimController::class,'addbonusClaim']);
     Route::get('/getBonusdata/{id}',[BonusClaimController::class,'getBonusdata']);
     Route::get('/getEacchBonusclaim/{id}/{status}',[BonusClaimController::class,'getEacchBonusclaim']);

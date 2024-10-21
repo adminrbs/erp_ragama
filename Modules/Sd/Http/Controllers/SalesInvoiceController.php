@@ -659,24 +659,31 @@ return response()->json([
             $searchValue = request('search.value');
 
             $query = DB::table('sales_invoices')
-                ->select(
-                    'external_number',
-                    'manual_number',
-                    'sales_invoice_Id',
-                    'order_date_time',
-                    DB::raw("FORMAT(total_amount, 2) as total_amount"),
-                    'approval_status',
-                    DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"),
-                    DB::raw("SUBSTRING(customers.customer_name, 1, 20) as customer_name"),
-                    DB::raw("'Original' AS status"),
-                    DB::raw("SUBSTRING(routes.route_name, 1, 10) as route_name"),
-                    'is_reprint_allowed',
-                    'is_printed'
-                )
-                ->leftJoin('employees', 'sales_invoices.employee_id', '=', 'employees.employee_id')
-                ->leftJoin('customers', 'sales_invoices.customer_id', '=', 'customers.customer_id')
-                ->leftJoin('routes', 'customers.route_id', '=', 'routes.route_id')
-                ->where('sales_invoices.document_number', '=', '210');
+    ->select(
+        'sales_invoices.external_number',
+        'manual_number',
+        'sales_invoice_Id',
+        'sales_invoices.order_date_time',
+        DB::raw("FORMAT(sales_invoices.total_amount, 2) as total_amount"),
+        'sales_orders.external_number AS sales_order_ref',
+        'sales_invoices.approval_status',
+        DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"),
+        DB::raw("SUBSTRING(customers.customer_name, 1, 20) as customer_name"),
+        DB::raw("'Original' AS status"),
+        DB::raw("SUBSTRING(routes.route_name, 1, 10) as route_name"),
+        'is_reprint_allowed',
+        'is_printed'
+    )
+    ->leftJoin('employees', 'sales_invoices.employee_id', '=', 'employees.employee_id')
+    ->leftJoin('customers', 'sales_invoices.customer_id', '=', 'customers.customer_id')
+    ->leftJoin('routes', 'customers.route_id', '=', 'routes.route_id')
+    ->leftJoin('sales_orders', function($join) {
+        $join->on('sales_invoices.sales_order_Id', '=', 'sales_orders.sales_order_Id')
+             ->where('sales_invoices.sales_order_Id', '>', 0);
+    })
+    ->where('sales_invoices.document_number', '=', '210');
+    
+
 
             // Add the whereIn clause only if the branch_id_array is not empty
             if (!empty($branch_ids)) {
@@ -687,10 +694,10 @@ return response()->json([
             if (!empty($searchValue)) {
                 $query->where(function ($query) use ($searchValue) {
                     $search_amount = str_replace(',', '', $searchValue);
-                    $query->where('external_number', 'like', '%' . $searchValue . '%')
-                        ->orWhere('manual_number', 'like', '%' . $searchValue . '%')
-                        ->orWhere('order_date_time', 'like', '%' . $searchValue . '%')
-                        ->orWhere('total_amount', 'like', '%' . $search_amount . '%')
+                    $query->where('sales_invoices.external_number', 'like', '%' . $searchValue . '%')
+                        ->orWhere('sales_invoices.manual_number', 'like', '%' . $searchValue . '%')
+                        ->orWhere('sales_invoices.order_date_time', 'like', '%' . $searchValue . '%')
+                        ->orWhere('sales_invoices.total_amount', 'like', '%' . $search_amount . '%')
                         ->orWhere('employees.employee_name', 'like', '%' . $searchValue . '%')
                         ->orWhere('customers.customer_name', 'like', '%' . $searchValue . '%')
                         ->orWhere('routes.route_name', 'like', '%' . $searchValue . '%');

@@ -26,9 +26,18 @@ const DatatableFixedColumns = function () {
         });
 
         // Left and right fixed columns
-        $('.datatable-fixed-both').DataTable({
+       var table = $('.datatable-fixed-both').DataTable({
             "createdRow": function (row, data, dataIndex) {
                 $(row).css("height", "55px");
+            },
+            processing: true,
+            search: {
+                return: true
+            },
+            serverSide: true,
+            ajax: {
+                url : '/cb/customer_receipt_list/getReceiptList',
+               
             },
             columnDefs: [
                 {
@@ -88,19 +97,20 @@ const DatatableFixedColumns = function () {
             "pageLength": 100,
             "order": [],
             "columns": [
-                { "data": "ref_number" },
-                { "data": "date" },
-                { "data": "customer" },
+                { "data": "external_number" },
+                { "data": "receipt_date" },
+                { "data": "customer_name" },
                 { "data": "amount" },
-                { "data": "chq_no" },
+                { "data": "cheque_number" },
                 { "data": "banking_date" },
                 { "data": "payment_mode" },
-                { "data": "action" }
+                { "data": "buttons" },
+                
 
             ],
             "stripeClasses": ['odd-row', 'even-row'],
         });
-
+        table.column(8).visible(false);
     };
 
     return {
@@ -112,7 +122,10 @@ const DatatableFixedColumns = function () {
 
 // Initialize module
 document.addEventListener('DOMContentLoaded', function () {
+    showProgress();
     DatatableFixedColumns.init();
+    //hideProgress();
+    
 });
 
 
@@ -121,7 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $(document).ready(function () {
 
-    getReceiptList();
+   // getReceiptList();
+   hideProgress();
 });
 
 
@@ -136,7 +150,8 @@ function getReceiptList() {
         beforeSend: function () { },
         success: function (response) {
             var result = response.data;
-
+            console.log(result);
+            
             var data = [];
             for (var i = 0; i < result.length; i++) {
                 var id = result[i].customer_receipt_id;
@@ -155,6 +170,7 @@ function getReceiptList() {
                     "banking_date": result[i].banking_date,
                     "payment_mode": result[i].payment_mode,
                     "action": btn_edit + '&nbsp;' + btn_view + '&nbsp;' + btn_delete + '&nbsp;' + btn_print,
+                    "invoice_numbers":result[i].invoice_numbers
                 });
 
             }
@@ -167,7 +183,9 @@ function getReceiptList() {
         error: function (error) {
             console.log(error);
         },
-        complete: function () { }
+        complete: function () { 
+            hideProgress();
+        }
     });
 }
 

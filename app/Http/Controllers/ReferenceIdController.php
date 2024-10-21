@@ -350,7 +350,7 @@ LIMIT 1";  */
             ORDER BY 
                 customer_receipt_id DESC 
             LIMIT 1";
-            dd($query);
+            //dd($query);
             $result = DB::select($query);
             $id = 1;
             if (count($result) == 1) {

@@ -46,7 +46,7 @@ class TransactionAllocationController extends Controller
             $transaction_data_qry = DB::select('SELECT
      DL.debtors_ledger_id,
      DL.trans_date,
-     IFNULL(DL.manual_number, DL.external_number) AS external_number,
+     DL.external_number AS external_number,
      DL.amount,
      DL.paidamount,
      (DL.amount - DL.paidamount) AS balance,

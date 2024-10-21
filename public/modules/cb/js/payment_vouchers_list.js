@@ -169,17 +169,20 @@ function _delete(id, status) {
 
 function edit(id, status) {
 
-    url = "/prc/goodReciveNote?id=" + id + "&paramS=" + status + "&action=edit" + "&task=null";
+    url = "/cb/payment_voucher?id=" + id  + "&action=edit";
     window.location.href = url;
 
 }
 
 function view(id, status) {
 
-    url = "/prc/goodReciveNoteView?id=" + id + "&paramS=" + status + "&action=view" + "&task=null";
+    url = "/cb/payment_voucher?id=" + id  + "&action=view";
     window.location.href = url;
 }
 
+function printVoucher(id) {
+    paymentVoucher_Receipt(id);
+}
 
 
 //load data to table
@@ -196,11 +199,11 @@ function getPaymentVouchers() {
             var disabled = "";
             for (var i = 0; i < dt.length; i++) {
                
-                btnEdit = '<button class="btn btn-primary btn-sm" id="btnEdit_' + dt[i].payment_voucher_id + '" onclick="edit(' + dt[i].payment_voucher_id +')" ' + disabled + ' style="display:none;"><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
-                btnDlt = '<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].payment_voucher_id + ')"' + disabled + ' style="display:none;><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                btnPrint = '<button class="btn btn-secondary btn-sm" onclick="printGoodResiveReportPdf(' + dt[i].payment_voucher_id + ')" ' + disabled + '><i class="fa fa-print" aria-hidden="true"></i></button>'
-                data.push({
+                btnEdit = '<button class="btn btn-primary btn-sm" id="btnEdit_' + dt[i].payment_voucher_id + '" onclick="edit(' + dt[i].payment_voucher_id +')" ' + disabled + '"><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
+                btnDlt = '<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].payment_voucher_id + ')"' + disabled + '><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                btnPrint = '<button class="btn btn-secondary btn-sm" onclick="printVoucher(' + dt[i].payment_voucher_id + ')"><i class="fa fa-print" aria-hidden="true"></i></button>'
 
+                data.push({
                     "reference": dt[i].external_number,
                     "date": dt[i].transaction_date,
                     "supplier": dt[i].supplier_name,
@@ -228,10 +231,10 @@ function getPaymentVouchers() {
 
 
 
-function deleteGRN(id, status) {
+function deleteVOucher(id) {
     console.log(id);
     $.ajax({
-        url: '/prc/deleteGRN/' + id + '/' + status,
+        url: '/db/deleteVOucher/' + id,
         type: 'delete',
         data: {
             _token: $('input[name=_token]').val()
@@ -239,8 +242,8 @@ function deleteGRN(id, status) {
         beforeSend: function () {
 
         }, success: function (response) {
-            var status = response.message;
-            if (status == "Deleted") {
+            var status = response.success;
+            if (status) {
                 showSuccessMessage("Successfully deleted");
 
             } else {

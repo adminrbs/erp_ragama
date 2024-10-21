@@ -2,6 +2,7 @@
 
 namespace Modules\Cb\Http\Controllers;
 
+use App\Http\Controllers\CompanyDetailsController;
 use App\Http\Controllers\IntenelNumberController;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -301,6 +302,9 @@ class CustomerReceiptController extends Controller
             $receipt->advance = $request->get('advance');
             $receipt->document_number = 500;
             $receipt->is_direct_receipt = 1;
+            if($request->get('your_ref')){
+                $receipt->your_reference = $request->get('your_ref');
+            }
             if ($receipt->save()) {
                 $receipt_data = json_decode($request->get('receipt_data'));
                 //dd($receipt_data);
@@ -550,4 +554,44 @@ class CustomerReceiptController extends Controller
             return $receipt_data;
         }
     }
+
+    public function generateReceiptReport($id)
+    {
+        try {
+            return response()->json(['success' => true, 'data' => [
+                'customerRecipthedder' => $this->customerRecipthedder($id),
+                'customerRecipt' => $this->customerRecipt($id),
+                'company' => CompanyDetailsController::CompanyName(),
+                'adderess' => CompanyDetailsController::CompanyAddress(),
+                'phoneNumber' => CompanyDetailsController::CompanyContactDetails(),
+
+            ]]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => false, 'error' => $ex->getMessage()]);
+        }
+    }
+
+    private function customerRecipthedder($id)
+    {
+        try {
+           $data = DB::select("SELECT B.branch_name,B.address AS Baddress,CR.external_number,CR.receipt_date ,C.customer_name,C.primary_address FROM customer_receipts CR
+INNER JOIN branches B ON B.branch_id= CR.branch_id
+INNER JOIN customers C ON C.customer_id= CR.customer_id
+WHERE CR.customer_receipt_id='$id'");
+            return ($data);
+        } catch (Exception $ex) {
+            return $ex;
+        }
+    }
+
+    private function customerRecipt($id)
+    {
+        try {
+            $receipt_data = DB::select('SELECT DISTINCT CRS.*,DATEDIFF(CURRENT_DATE,DL.trans_date) AS age , DL.description  FROM customer_receipt_setoff_data CRS LEFT JOIN sales_invoices SI ON CRS.reference_internal_number = SI.internal_number LEFT JOIN debtors_ledgers DL ON CRS.internal_number = DL.internal_number WHERE CRS.customer_receipt_id = ' . $id . '');
+            return ($receipt_data);
+        } catch (Exception $ex) {
+            return $ex;
+        }
+    }
+
 }

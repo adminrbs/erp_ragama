@@ -194,7 +194,10 @@
                                             @if(Auth::user()->can('md_common_settings') && Auth::user()->hasModulePermission('Master Data'))
                                             <a href="/md/commonSetting" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Common Setting</a>
                                             @endif
+
                                             <a href="/md/account_group_level" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Account Level</a>
+                                            <a href="/md/payee" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payee</a>
+                                        
                                         </div>
                                     </div>
                                 </div>
@@ -217,7 +220,7 @@
                                             <a href="/cb/direcet_cash_bundle_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office</a>
                                             @endif
 
-                                            <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque from direct receipt</a> <!-- direct check bulk create -->
+                                            <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct check bundle</a> <!-- direct check bulk create -->
 
                                             <a href="/cb/direct_cheque_collection_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office</a> <!-- direct check bulk recive from head office -->
 
@@ -251,7 +254,7 @@
 
 
                                             @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
-                                            <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From SR</a>
+                                            <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office (SR)</a>
                                             @endif
                                         
                                           
@@ -276,11 +279,27 @@
                                             <!-- <a href="/cb/cheque_return_cancel_approval_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Return Cancelation Approval</a> -->
                                             
 
-                                            <a href="/cb/cash_audit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Audit</a>
+                                        <!--     <a href="/cb/cash_audit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Audit</a>
                                             <a href="/cb/cheque_audit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Audit</a>
 
                                             <a href="/cb/cash_audit_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Audit List</a>
+                                            <a href="/cb/cheque_audit_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Audit List</a> -->
+                                            @if(Auth::user()->can('cb_cash_audit') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cash_audit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Audit</a>
+                                            @endif
+                                            
+                                            @if(Auth::user()->can('cb_cash_audit') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cheque_audit" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Audit</a>
+                                            @endif
+
+                                            @if(Auth::user()->can('cb_cash_audit_list') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cash_audit_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Audit List</a>
+                                            @endif
+
+                                            @if(Auth::user()->can('cb_cheque_audit_list') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_audit_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Audit List</a>
+                                            @endif
+                                        
                                         </div>
 
                                         <div class="col-lg-2 mb-2 mb-lg-0">
@@ -292,7 +311,9 @@
                                         </div>
                                         <div class="col-lg-2 mb-2 mb-lg-0">
                                             <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Other</div>
-                                            <a href="#" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payment Voucher</a>
+                                            @if(Auth::user()->can('cb_payment_voucher') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/payment_voucher_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payment Voucher</a>
+                                            @endif
                                             <a href="#" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Funds Transfer</a>
 
                                           
@@ -592,9 +613,9 @@
                                         </div>
                                         <div class="col-lg-4 mb-3 mb-lg-0">
                                             <div class="fw-bold border-bottom pb-2 mb-2">Reports</div>
-                                          
+                                            @if(Auth::user()->can('sl_supplier_report') && Auth::user()->hasModulePermission('Supplier'))
                                             <a href="/sl/supplier_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Supplier Report</a>
-
+                                            @endif
 
                                         </div>
 
@@ -935,7 +956,9 @@
                                             <a href="/prc/GRNapprovalList" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Goods Receive Note Approval List</a>
                                             @endif
 
+                                            @if(Auth::user()->can('prc_bonus_claim') && Auth::user()->hasModulePermission('Procument'))
                                             <a href="/prc/bonus_claim_List" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Bonus Claim</a>
+                                            @endif
                                             <!-- <a href="/prc/GRRetrunApprovalList" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Goods Receive Return Approval</a> -->
 
                                         </div>

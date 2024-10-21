@@ -21,10 +21,10 @@ class MdDatabaseSeeder extends Seeder
             SupplyGroupTableSeeder::class,
             TownTableSeeder::class,
             VehicleTableSeeder::class,  */
-             EmployeeDesignationsTableSeeder::class,
+            /*  EmployeeDesignationsTableSeeder::class, */
            /*  customerPaymentModes::class */
             
-           
+           GLAccountTypeTableSeeder::class
 
         ]);
 

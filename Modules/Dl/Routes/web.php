@@ -13,7 +13,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Dl\Http\Controllers\CreditNoteController;
+use Modules\Dl\Http\Controllers\CreditNoteReceiptController;
 use Modules\Dl\Http\Controllers\DebitNoteController;
+use Modules\Dl\Http\Controllers\DebitNoteReceiptController;
 use Modules\Dl\Http\Controllers\TransactionAllocationController;
 
 Route::prefix('dl')->middleware(['is.logged'])->group(function() {
@@ -42,6 +44,7 @@ Route::prefix('dl')->middleware(['is.logged'])->group(function() {
     Route::post('/addDebitNote',[DebitNoteController::class,'addDebitNote']);
     Route::get('/get_debit_note_details',[DebitNoteController::class,'get_debit_note_details']);
     Route::get('/getEachDebitNote/{id}',[DebitNoteController::class,'getEachDebitNote']);
+    Route::get('/print_dl/{id}',[DebitNoteReceiptController::class,'print_dl']);
 
 
     /** credit note */
@@ -56,4 +59,5 @@ Route::prefix('dl')->middleware(['is.logged'])->group(function() {
     Route::get('/get_credit_note_details',[CreditNoteController::class,'get_credit_note_details']);
     Route::get('/getEachcreditNote/{id}',[CreditNoteController::class,'getEachcreditNote']);
     Route::get('/getSalesRep',[CreditNoteController::class,'getSalesRep']);
+    Route::get('/print_cr/{id}',[CreditNoteReceiptController::class,'print_cr']);
 });

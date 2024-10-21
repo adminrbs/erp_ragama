@@ -43,7 +43,7 @@
                                 <th>Route</th>
                                 <th>Sales Rep</th>
                                 <th style="text-align: right;">Amount</th>
-                               
+                                <th>Sales Order</th>
                                 <th>Status</th>
                                 <th>Printed</th>
                                 <!-- <th>Approval Status</th> -->
