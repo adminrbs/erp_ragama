@@ -211,15 +211,7 @@
                                         "width": 100
                                     }
                                 ],
-                                [
-                                    {
-                                        "text": "Town Name",
-                                        "align": "left",
-                                        "width": 250,
-                                        "format": "text",
-                                        "visible":false
-                                    }
-                                ],
+                               
                                 [
                                     {
                                         "text": "Paid Amount",

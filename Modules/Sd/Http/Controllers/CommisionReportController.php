@@ -38,11 +38,11 @@ class CommisionReportController extends Controller
             if ($collector == null) {
 
                 $collectorIds = DB::table('employees')
-                ->whereIn('desgination_id', [7, 8]) 
-                ->pluck('employee_id')
-                ->toArray();
-            
-            
+                    ->whereIn('desgination_id', [7, 8])
+                    ->pluck('employee_id')
+                    ->toArray();
+
+
 
 
 
@@ -72,14 +72,37 @@ class CommisionReportController extends Controller
             $html .= '<tr>';
             $html .= '<th colspan="2" style="text-align: center;width:300px;">Total</th>';
             $html .= '<th style="width:100px;">' . number_format($this->finalTotal, 2, '.', ',') . '</th>' .
-            '<th style="width:100px;">' . number_format($this->finalEarnings, 2, '.', ',') . '</th>' .
-            '<th style="width:120px;">' . number_format($this->finalDeduction, 2, '.', ',') . '</th>' .
-            '<th style="width:120px;">' . number_format($this->finalchqReturns, 2, '.', ',') . '</th>' .
-            '<th style="width:120px;">' . number_format($this->finalsalesReturns, 2, '.', ',') . '</th>';
-   
+                '<th style="width:100px;">' . number_format($this->finalEarnings, 2, '.', ',') . '</th>' .
+                '<th style="width:120px;">' . number_format($this->finalDeduction, 2, '.', ',') . '</th>' .
+                '<th style="width:120px;">' . number_format($this->finalchqReturns, 2, '.', ',') . '</th>' .
+                '<th style="width:120px;">' . number_format($this->finalsalesReturns, 2, '.', ',') . '</th>';
+
             $html .= '</tr>';
             $html .= '</thead>';
             $html .= '</table>';
+            $html .= '<br>';
+            $html .= '<table>';
+            $html .= '<tr>';
+            $html .= '<td><b>Total Earnings</b></td>';
+            $html .= '<td style="text-align: right"> ' . number_format($this->finalEarnings, 2, '.', ',') . '</td>';
+            $html .= '</tr>';
+
+            $html .= '<tr>';
+            $html .= '<td><b>Total Deduction</b></td>';
+            $html .= '<td style="text-align: right"> ' . number_format($this->finalDeduction, 2, '.', ',') . '</td>';
+            $html .= '</tr>';
+
+            // Calculate Net Earnings
+            $netEarnings = $this->finalEarnings - $this->finalDeduction;
+
+            $html .= '<tr>';
+            $html .= '<td><b>Net Earnings</b></td>';
+            $html .= '<td style="text-align: right"> ' . number_format($netEarnings, 2, '.', ',') . '</td>';
+            $html .= '</tr>';
+
+            $html .= '</table>';
+
+
             $html .= '</html>';
 
 
@@ -172,22 +195,23 @@ class CommisionReportController extends Controller
             $rangeArray = $commissionPrecentage[$b_id];
             $qry = "
             SELECT
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount ELSE 0 END), 0) AS first_range,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount ELSE 0 END), 0) AS second_range,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[4] . " AND " . $rangeArray[5] . " THEN CR.amount ELSE 0 END), 0) AS third_range,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) > " . $rangeArray[6] . " THEN CR.amount ELSE 0 END), 0) AS forth_range,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount * " . $rangeArray[7] . " ELSE 0 END), 0) AS commison_for_first,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount * " . $rangeArray[8] . " ELSE 0 END), 0) AS commison_for_second,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[4] . " AND " . $rangeArray[5] . " THEN 0 ELSE 0 END), 0) AS commison_for_third,
-                IFNULL(SUM(CASE WHEN DATEDIFF(D.trans_date, CR.receipt_date) > " . $rangeArray[6] . " THEN -CR.amount * " . $rangeArray[9] . " ELSE 0 END), 0) AS deductive_commision,
+                'report' as report,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount ELSE 0 END), 0) AS first_range,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount ELSE 0 END), 0) AS second_range,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[4] . " AND " . $rangeArray[5] . " THEN CR.amount ELSE 0 END), 0) AS third_range,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) > " . $rangeArray[6] . " THEN CR.amount ELSE 0 END), 0) AS forth_range,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount * " . $rangeArray[7] . " ELSE 0 END), 0) AS commison_for_first,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount * " . $rangeArray[8] . " ELSE 0 END), 0) AS commison_for_second,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) BETWEEN " . $rangeArray[4] . " AND " . $rangeArray[5] . " THEN 0 ELSE 0 END), 0) AS commison_for_third,
+                IFNULL(SUM(CASE WHEN DATEDIFF(CR.receipt_date,D.trans_date) > " . $rangeArray[6] . " THEN -CR.amount * " . $rangeArray[9] . " ELSE 0 END), 0) AS deductive_commision,
         
         (
     SELECT 
         IFNULL(
             SUM(
                 CASE 
-                    WHEN DATEDIFF(DB.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount * " . $rangeArray[7] . "
-                    WHEN DATEDIFF(DB.trans_date, CR.receipt_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount * " . $rangeArray[8] . "
+                    WHEN DATEDIFF(CR.receipt_date,DB.trans_date) BETWEEN " . $rangeArray[0] . " AND " . $rangeArray[1] . " THEN CR.amount * " . $rangeArray[7] . "
+                    WHEN DATEDIFF(CR.receipt_date,DB.trans_date) BETWEEN " . $rangeArray[2] . " AND " . $rangeArray[3] . " THEN CR.amount * " . $rangeArray[8] . "
                     ELSE 0
                 END
     ), 
@@ -230,7 +254,7 @@ class CommisionReportController extends Controller
             LEFT JOIN customer_receipts CR ON E.employee_id = CR.collector_id 
                 AND CR.receipt_date BETWEEN '" . $from . "' AND '" . $to . "'
             LEFT JOIN customer_receipt_setoff_data CRSD ON CR.customer_receipt_id = CRSD.customer_receipt_id
-            LEFT JOIN debtors_ledgers D ON CRSD.reference_external_number = D.external_number
+            LEFT JOIN debtors_ledgers D ON CRSD.debtors_ledger_id = D.debtors_ledger_id
             LEFT JOIN branches B ON D.branch_id = B.branch_id
             LEFT JOIN customer_receipt_cheques CRC ON CR.customer_receipt_id = CRC.customer_receipt_id
             LEFT JOIN cheque_returns CRT ON CRC.customer_receipt_cheque_id = CRT.customer_receipt_cheque_id
@@ -263,8 +287,8 @@ class CommisionReportController extends Controller
         }
 
         $commissionFormulas = [
-            1 => ['0-72 Days', '73-78 Days', '49-85 Days', 'After 86 days'],
-            2 => ['0-72 Days', '73-78 Days', '49-85 Days', 'After 86 days'],
+            1 => ['0-72 Days', '73-78 Days', '79-85 Days', 'After 86 days'],
+            2 => ['0-72 Days', '73-78 Days', '79-85 Days', 'After 86 days'],
             4 => ['0-62 Days', '63-68 Days', '69-75 Days', 'After 76 days'],
             5 => ['0-46 Days', '47-52 Days', '53-58 Days', 'After 59 days'],
             6 => ['0-38 Days', '39-45 Days', '46-55 Days', 'After 56 days'],
@@ -323,6 +347,7 @@ class CommisionReportController extends Controller
             $firstRange = number_format($row->first_range ?? 0, 2, '.', ',');
             $secondRange = number_format($row->second_range ?? 0, 2, '.', ',');
             $thirdRange = number_format($row->third_range ?? 0, 2, '.', ',');
+            $forthRange = number_format($row->forth_range ?? 0, 2, '.', ',');
             $commFirst = number_format($row->commison_for_first ?? 0, 2, '.', ',');
             $commSecond = number_format($row->commison_for_second ?? 0, 2, '.', ',');
             $commThird = number_format($row->commison_for_third ?? 0, 2, '.', ',');
@@ -331,16 +356,23 @@ class CommisionReportController extends Controller
             $chqRtn = number_format($row->total_return ?? 0, 2, '.', ',');
             $salesRtn = number_format($row->total_sales_return ?? 0, 2, '.', ',');
 
+
+
             $this->finalTotal += (is_numeric($firstRangeCleaned = str_replace(',', '', $firstRange)) ? $firstRangeCleaned : 0) +
-                     (is_numeric($secondRangeCleaned = str_replace(',', '', $secondRange)) ? $secondRangeCleaned : 0) +
-                     (is_numeric($thirdRangeCleaned = str_replace(',', '', $thirdRange)) ? $thirdRangeCleaned : 0);
+                (is_numeric($secondRangeCleaned = str_replace(',', '', $secondRange)) ? $secondRangeCleaned : 0) +
+                (is_numeric($thirdRangeCleaned = str_replace(',', '', $thirdRange)) ? $thirdRangeCleaned : 0) +
+                (is_numeric($forthRangeCleaned = str_replace(',', '', $forthRange)) ? $forthRangeCleaned : 0);
 
             $this->finalEarnings += (is_numeric($commFirstCleaned = str_replace(',', '', $commFirst)) ? $commFirstCleaned : 0) +
-                        (is_numeric($commSecondCleaned = str_replace(',', '', $commSecond)) ? $commSecondCleaned : 0) +
-                        (is_numeric($commThirdCleaned = str_replace(',', '', $commThird)) ? $commThirdCleaned : 0);
+                (is_numeric($commSecondCleaned = str_replace(',', '', $commSecond)) ? $commSecondCleaned : 0) +
+                (is_numeric($commThirdCleaned = str_replace(',', '', $commThird)) ? $commThirdCleaned : 0);
 
-            $this->finalDeduction += (is_numeric($chqReturnComCleaned = str_replace(',', '', $chqReturnCom)) ? $chqReturnComCleaned : 0) +
-                         (is_numeric($deductiveCommCleaned = str_replace(',', '', $deductiveComm)) ? $deductiveCommCleaned : 0);
+            /*  $this->finalDeduction += (is_numeric($chqReturnComCleaned = str_replace(',', '', $chqReturnCom)) ? $chqReturnComCleaned : 0) +
+                         (is_numeric($deductiveCommCleaned = str_replace(',', '', $deductiveComm)) ? $deductiveCommCleaned : 0); */
+            $this->finalDeduction +=
+                (is_numeric($chqReturnComCleaned = str_replace(',', '', $chqReturnCom)) ? abs($chqReturnComCleaned) : 0) +
+                (is_numeric($deductiveCommCleaned = str_replace(',', '', $deductiveComm)) ? abs($deductiveCommCleaned) : 0);
+
 
             $this->finalchqReturns += (is_numeric($chqRtnCleaned = str_replace(',', '', $chqRtn)) ? $chqRtnCleaned : 0);
 
@@ -370,15 +402,18 @@ class CommisionReportController extends Controller
 
             $table .= '<tr>';
             $table .= '<td>' . htmlspecialchars($rangeArray[3]) . '</td>';
-            $table .= '<td></td><td></td>';
-            $table .= '<td style="text-align: right;">' . $deductiveComm . '</td>';
+            $table .= '<td style="text-align: right;">' . $forthRange . '</td>';
+            $table .= '<td></td>';
+            // $table .= '<td style="text-align: right;">' . $deductiveComm . '</td>';
+            $table .= '<td style="text-align: right;">' . number_format((abs((float)$row->deductive_commision) + abs((float)$row->cheque_return_commission_sum)), 2)
+                . '</td>';
             $table .= '<td></td><td></td></tr>';
 
             // Handle Chq Returns row
             $table .= '<tr>';
             $table .= '<td>Chq returns</td>';
             $table .= '<td></td><td></td>';
-            $table .= '<td style="text-align: right;">' .$chqReturnCom . '</td>';
+            $table .= '<td style="text-align: right;">' . $chqReturnCom . '</td>';
             $table .= '<td style="text-align: right;">' . $chqRtn . '</td>';
             $table .= '<td></td></tr>';
 

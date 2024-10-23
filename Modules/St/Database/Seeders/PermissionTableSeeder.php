@@ -299,12 +299,12 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'Supplier Report','slug' => 'sl_supplier_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//179
 
             ['name' => 'Payment Voucher','slug' => 'cb_payment_voucher','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//180
-            ['name' => 'Add Payment Voucher','slug' => 'cb_add_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//181
-            ['name' => 'View Payment Voucher','slug' => 'cb_view_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//182
-            ['name' => 'Print Payment Voucher','slug' => 'cb_print_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//184
-            ['name' => 'Delete Payment Voucher','slug' => 'cb_delete_payment_voucher','sub'=>'179','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//184
+            ['name' => 'Add Payment Voucher','slug' => 'cb_add_payment_voucher','sub'=>'180','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//181
+            ['name' => 'View Payment Voucher','slug' => 'cb_view_payment_voucher','sub'=>'180','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//182
+            ['name' => 'Print Payment Voucher','slug' => 'cb_print_payment_voucher','sub'=>'180','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//183
+            ['name' => 'Delete Payment Voucher','slug' => 'cb_delete_payment_voucher','sub'=>'180','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//184
             
-            
+            ['name' => 'Commision Report','slug' => 'sd_commision_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//185
 
         ]);
         

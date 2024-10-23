@@ -694,7 +694,7 @@ Route::get('/loadReturnRequest/{customerID}',[SalesInvoiceController::class,'loa
   /**Commision Report */
   Route::get('/commisionReport',function(){
     return view('sd::commisionReport');
-  });
+  })->middleware(['is.logged','can:sd_commision_report']);
   Route::get('/generatecommisionReport/{search_data}',[CommisionReportController::class,'generatecommisionReport']);
   
 });

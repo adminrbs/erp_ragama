@@ -1623,8 +1623,10 @@ function getCustomerReceipt(id) {
             $('#txtRound_up').val(result.round_up);
             $('#cmbBranch').val(result.branch_id);
 
-            if (result.receipt_method_id == '3') {
+            if (result.receipt_method_id == '2') {
                 $("#tab-single-cheque").attr("hidden", false);
+            }else if(result.receipt_method_id == '7'){
+                $("#tab-bank-slip").attr("hidden", false);
             }
             var cashier_user = result.cashier_user_id;
             console.log(cashier_user);

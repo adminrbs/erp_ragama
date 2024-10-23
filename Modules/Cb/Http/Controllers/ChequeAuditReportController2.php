@@ -130,7 +130,7 @@ GROUP BY
             foreach ($resulcustomer as $customerid) {
 
 
-                if (!in_array($customerid->cheque_number, $cheque_number_array, true)) {
+                if (!in_array($customerid->cheque_number,$cheque_number_array,true)) {
                     $table = [];
                     $cheque_amount = 0;
                     $inv_amount = 0;

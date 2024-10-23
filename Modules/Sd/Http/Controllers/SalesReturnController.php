@@ -290,7 +290,7 @@ class SalesReturnController extends Controller
                     $debotrs_ledgers_ = DebtorsLedger::find($id); 
                     //dd($debotrs_ledgers_);
                     $debotrs_ledgers_->paidamount = $debotrs_ledgers_->paidamount + $amount;
-
+                    $debotrs_ledgers_->return_amount = $debotrs_ledgers_->return_amount + $amount; // updaeting return column
 
                     //sales return set off record - set off invoice data with set off amount
                     $return_setoff = new sales_return_debtor_setoff();

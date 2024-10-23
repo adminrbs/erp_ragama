@@ -11,9 +11,10 @@ use RepoEldo\ELD\ReportViewer;
 
 class BanktransferController extends Controller
 {
-    
-    
-    public function bankTransfer($filters){
+
+
+    public function bankTransfer($filters)
+    {
         $filter_options = json_decode($filters);
         $fromDate = $filter_options->fromDate;
         $toDate = $filter_options->toDate;
@@ -61,11 +62,7 @@ class BanktransferController extends Controller
         (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
         (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
         (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
-
-
-
-
-        town_non_administratives.townName,
+        
         customer_receipt_setoff_data.set_off_amount,
         ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance,
         CRBS.reference,
@@ -77,18 +74,28 @@ class BanktransferController extends Controller
  LEFT JOIN customer_receipt_bank_slips CRBS ON  customer_receipts.customer_receipt_id = CRBS.customer_receipt_id
  LEFT JOIN debtors_ledgers ON customer_receipt_setoff_data.debtors_ledger_id = debtors_ledgers.debtors_ledger_id
  LEFT JOIN employees E ON customer_receipts.collector_id = E.employee_id
- LEFT JOIN town_non_administratives ON customers.town = town_non_administratives.town_id
+ 
  LEFT JOIN sales_invoices ON debtors_ledgers.external_number = sales_invoices.external_number ' . $query_modify;
 
 
-
+        //dd($qry);
         $result = DB::select($qry);
 
 
 
-        $resulcustomer = DB::select('select customer_id,customer_name from customers');
+        // $resulcustomer = DB::select('select customer_id,customer_name from customers');
+        $resulcustomer = DB::select('SELECT
+	customer_receipts.customer_receipt_id,
+	customers.customer_name,
+    customers.customer_id,
+	CRBS.reference
+FROM
+	customer_receipts
+	INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id
+	INNER JOIN customer_receipt_bank_slips CRBS ON customer_receipts.customer_receipt_id = CRBS.customer_receipt_id');
 
         $customerablearray = [];
+        $reference_array = [];
         $titel = [];
         $reportViwer = new ReportViewer();
         $title = "Bank Transfers";
@@ -98,28 +105,38 @@ class BanktransferController extends Controller
 
         $reportViwer->addParameter("title", $title);
         foreach ($resulcustomer as $customerid) {
-            $table = [];
+            if (!in_array($customerid->reference, $reference_array, true)) {
+                $table = [];
 
-
-            foreach ($result as $customerdata) {
-                //dd($result);
-                if ($customerdata->customer_id == $customerid->customer_id) {
-                    $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Reference : </strong>" . $customerdata->reference . " - <strong>Slip Date : </strong>" . $customerdata->slip_date . " - ".$customerdata->slip_time  ;
-                    array_push($titel, $title_text);
-                    array_push($table, $customerdata);
+                $bool = true;
+                array_push($reference_array, $customerid->reference);
+                foreach ($result as $customerdata) {
+                    //dump($customerdata->customer_id);
+                    //dd($result);
+                    if ($customerdata->customer_id == $customerid->customer_id) {
+                        $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Reference : </strong>" . $customerdata->reference . " - <strong>Slip Date : </strong>" . $customerdata->slip_date . " - " . $customerdata->slip_time;
+                        if ($bool) {
+                            array_push($titel, $title_text);
+                          
+                            $bool = false;
+                        }
+                        array_push($table, $customerdata);
+                        //array_push($titel, $title_text);
+                        //array_push($table, $customerdata);
+                    }
                 }
-            }
 
 
 
-            if (count($table) > 0) {
+                if (count($table) > 0) {
 
-                array_push($customerablearray, $table);
+                    array_push($customerablearray, $table);
 
 
-               // array_push($titel, $customerid->customer_name);
+                    // array_push($titel, $customerid->customer_name);
 
-                $reportViwer->addParameter('abc', $titel);
+                    $reportViwer->addParameter('abc', $titel);
+                }
             }
         }
 

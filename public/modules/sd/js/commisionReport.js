@@ -262,6 +262,9 @@ $(document).ready(function () {
     $('#viewReport').on('click', function () {
 
         //alert(report);
+        if(!$('#chkdate').prop('disabled')){
+            showWarningMessage("Please select the date range")
+        }else{
         
         if (report == "commisionReport") {
             
@@ -284,6 +287,7 @@ $(document).ready(function () {
 
 
         }
+    }
 
         if (report == null || report == undefined) {
             showWarningMessage(" select Report");

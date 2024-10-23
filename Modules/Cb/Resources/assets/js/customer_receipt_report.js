@@ -106,7 +106,7 @@ function generateReceiptList(id) {
  
                                      body: [
                                         [
-                                            { text: (customerRecipthedder[0].branch_name || ''), fontSize: 16, bold: true, alignment: 'left', border: [false, false, false, false] },
+                                            { text: 'Branch :'+(customerRecipthedder[0].branch_name || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
                                             { text: '', fontSize: 14, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: 'Receipt No :'+(customerRecipthedder[0].external_number || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                            

@@ -180,6 +180,7 @@
 
                                             <a href="/md/marketingRoute" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Marketing Route</a>
 
+
                                         </div>
 
                                         <div class="col-lg-4">
@@ -467,6 +468,10 @@
                                             @endif
 
                                             <a href="/sd/productwisereport" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Marketing Report</a>
+
+                                            @if(Auth::user()->can('sd_commision_report') && Auth::user()->hasModulePermission('Sales And Distribution'))
+                                            <a href="/sd/commisionReport" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Commision Report</a>
+                                            @endif
                                         </div>
 
                                     </div>
