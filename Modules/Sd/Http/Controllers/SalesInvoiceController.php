@@ -101,13 +101,14 @@ class SalesInvoiceController extends Controller
         }
     }
 
-    public function loademployeesAccordingToBranch($id){
+    public function loademployeesAccordingToBranch($id)
+    {
         try {
             $emp =  DB::table('employees')
                 ->select('employees.employee_id', 'employees.employee_name')
                 ->join('employee_branches', 'employees.employee_id', '=', 'employee_branches.employee_id')
                 ->where('employees.desgination_id', '=', 7)
-                ->where('employee_branches.branch_id','=',$id)
+                ->where('employee_branches.branch_id', '=', $id)
                 ->get();
             if ($emp) {
                 return response()->json($emp);
@@ -292,7 +293,7 @@ class SalesInvoiceController extends Controller
                 if ($Sales_invoice->save()) {
                     $cus_name = DB::select("SELECT customers.customer_name FROM sales_invoices INNER JOIN customers ON sales_invoices.customer_id = customers.customer_id WHERE sales_invoices.sales_invoice_Id = '" . $Sales_invoice->sales_invoice_Id . "'");
 
-                    
+
                     //looping ifrst array
                     foreach ($collection as $i) {
                         $item = json_decode($i);
@@ -369,12 +370,12 @@ class SalesInvoiceController extends Controller
                             $item_history->manual_number = $Sales_invoice->manual_number;
                             $item_history->save();
                         }
-                       
+
                         foreach ($setOffArray as $j) {
-                           
+
                             $SetOff_item = json_decode($j);
                             if ($SetOff_item->item_id == $item_id) {
-                                
+
                                 $setOff = new SalesInvoiceItemSetoff();
                                 $setOff->internal_number = $Sales_invoice->internal_number;
                                 $setOff->external_number = $Sales_invoice->external_number;
@@ -386,17 +387,15 @@ class SalesInvoiceController extends Controller
                                 $setOff->whole_sale_price = $SetOff_item->wholesale_price;
                                 $setOff->retail_price = $SetOff_item->retail_price;
                                 $setOff->batch_number = $SetOff_item->batch_no;
-                               // dd("afte");
+                                // dd("afte");
                                 $setOff->save();
-                                
+
                                 // break;
                             }
-                            
                         }
-                        
                     }
-                    
-                   // if  (is_array($return_request_collection) && count($return_request_collection) > 0) {
+
+                    // if  (is_array($return_request_collection) && count($return_request_collection) > 0) {
                     foreach ($return_request_collection as $j) {
                         $return = new sales_invoice_return_request();
                         $return->internal_number = $Sales_invoice->internal_number;
@@ -406,15 +405,15 @@ class SalesInvoiceController extends Controller
                         $return->employee_id = $j->rep_id;
                         $return->item_id = $j->item_id;
                         $return->quantity = $j->qty;
-                        if($return->save()){
+                        if ($return->save()) {
                             $r_item = sfa_return_request_item::find($j->sfa_return_request_items_id);
                             $r_item->invoiced = 1;
                             $r_item->sales_invoice_Id = $Sales_invoice->sales_invoice_Id;
                             $r_item->update();
                         }
                     }
-              // }
-              
+                    // }
+
                     if ($S_order) {
                         $S_order->order_status_id = 2;
                         $S_order->update();
@@ -659,30 +658,30 @@ return response()->json([
             $searchValue = request('search.value');
 
             $query = DB::table('sales_invoices')
-    ->select(
-        'sales_invoices.external_number',
-        'manual_number',
-        'sales_invoice_Id',
-        'sales_invoices.order_date_time',
-        DB::raw("FORMAT(sales_invoices.total_amount, 2) as total_amount"),
-        'sales_orders.external_number AS sales_order_ref',
-        'sales_invoices.approval_status',
-        DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"),
-        DB::raw("SUBSTRING(customers.customer_name, 1, 20) as customer_name"),
-        DB::raw("'Original' AS status"),
-        DB::raw("SUBSTRING(routes.route_name, 1, 10) as route_name"),
-        'is_reprint_allowed',
-        'is_printed'
-    )
-    ->leftJoin('employees', 'sales_invoices.employee_id', '=', 'employees.employee_id')
-    ->leftJoin('customers', 'sales_invoices.customer_id', '=', 'customers.customer_id')
-    ->leftJoin('routes', 'customers.route_id', '=', 'routes.route_id')
-    ->leftJoin('sales_orders', function($join) {
-        $join->on('sales_invoices.sales_order_Id', '=', 'sales_orders.sales_order_Id')
-             ->where('sales_invoices.sales_order_Id', '>', 0);
-    })
-    ->where('sales_invoices.document_number', '=', '210');
-    
+                ->select(
+                    'sales_invoices.external_number',
+                    'manual_number',
+                    'sales_invoice_Id',
+                    'sales_invoices.order_date_time',
+                    DB::raw("FORMAT(sales_invoices.total_amount, 2) as total_amount"),
+                    'sales_orders.external_number AS sales_order_ref',
+                    'sales_invoices.approval_status',
+                    DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"),
+                    DB::raw("SUBSTRING(customers.customer_name, 1, 20) as customer_name"),
+                    DB::raw("'Original' AS status"),
+                    DB::raw("SUBSTRING(routes.route_name, 1, 10) as route_name"),
+                    'is_reprint_allowed',
+                    'is_printed'
+                )
+                ->leftJoin('employees', 'sales_invoices.employee_id', '=', 'employees.employee_id')
+                ->leftJoin('customers', 'sales_invoices.customer_id', '=', 'customers.customer_id')
+                ->leftJoin('routes', 'customers.route_id', '=', 'routes.route_id')
+                ->leftJoin('sales_orders', function ($join) {
+                    $join->on('sales_invoices.sales_order_Id', '=', 'sales_orders.sales_order_Id')
+                        ->where('sales_invoices.sales_order_Id', '>', 0);
+                })
+                ->where('sales_invoices.document_number', '=', '210');
+
 
 
             // Add the whereIn clause only if the branch_id_array is not empty
@@ -721,9 +720,9 @@ return response()->json([
 
                 $encodedManualNumber = $this->base64Encode($item->external_number);
                 $info = '<a href="../sd/invoice_nfo?manual_number=' . $encodedManualNumber . '&action=inquery" onclick="updateTotal()" target="_blank">' . $item->external_number . '&nbsp;&nbsp;<i class="fa fa-info-circle text-info fa-lg" aria-hidden="true"></i></a>';
-                
+
                 $printed = '<input type="checkbox" class="form-check-input" disabled>';
-                if($item->is_printed == 1){
+                if ($item->is_printed == 1) {
                     $printed = '<input type="checkbox" class="form-check-input" checked disabled>';
                 }
                 $item->info = $info;
@@ -1414,24 +1413,24 @@ return response()->json([
 
             $items = [];
             if ($sup_id > 0) {
-              /*   $qry = "SELECT it.item_id, it.Item_code, it.item_Name,SG.supply_group,
+                /*   $qry = "SELECT it.item_id, it.Item_code, it.item_Name,SG.supply_group,
                 sd_item_stock_balance(it.item_id, ".$branch_.", ".$location_.") AS stock_balance FROM items it 
                      LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                      WHERE it.is_active = 1 AND SG.supply_group_id = " . $sup_id; */
-                    // dd($qry);
-               /*  $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name,SG.supply_group,
+                // dd($qry);
+                /*  $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name,SG.supply_group,
                 sd_item_stock_balance(it.item_id, ".$branch_.", ".$location_.") AS stock_balance FROM items it 
                      LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                      WHERE it.is_active = 1 AND SG.supply_group_id = " . $sup_id); */
 
                 /* $items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name FROM items it"); */
-              /*   $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
+                /*   $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
                 (SELECT COALESCE(quantity, 0) AS stock_balance FROM stock_balances WHERE branch_id = ? AND location_id = ? AND item_id = it.item_id) AS stock_balance
                 FROM items it 
                 LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                 WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_id]); */
 
-$items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
+                $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
 (SELECT 
     GREATEST(SUM(COALESCE(quantity, 0)), 0) AS stock_balance 
 FROM 
@@ -1446,7 +1445,6 @@ GROUP BY
 FROM items it 
 LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
 WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_id]);
-
             } else {
                 //$items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name,sd_item_stock_balance(it.item_id, ".$branch_.", ".$location_.") AS stock_balance FROM items it WHERE is_active = 1");
                 $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name, SG.supply_group,
@@ -1459,7 +1457,7 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
             // dd($items);
             $collection = [];
             foreach ($items as $item) {
-                array_push($collection, ["hidden_id" => $item->item_id, "id" =>  $item->item_Name, "value" =>  $item->Item_code, "value2"=>(int)$item->stock_balance,"collection" => [$item->item_id, $item->item_Name, $item->Item_code]]);
+                array_push($collection, ["hidden_id" => $item->item_id, "id" =>  $item->item_Name, "value" =>  $item->Item_code, "value2" => (int)$item->stock_balance, "collection" => [$item->item_id, $item->item_Name, $item->Item_code]]);
             }
             return response()->json(['success' => true, 'data' => $collection]);
         } catch (Exception $ex) {
@@ -1467,22 +1465,23 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
         }
     }
 
-    public function loadReturnRequest($cus_id){
-        try{
+    public function loadReturnRequest($cus_id)
+    {
+        try {
             $qry = "SELECT SRR.request_date_time,SRR.employee_id,I.Item_code,I.item_Name,I.package_unit, E.employee_name,
             SRRI.quantity,SRRI.sfa_return_request_items_id,SRRI.item_id
              FROM sfa_return_request SRR INNER JOIN sfa_return_request_items SRRI ON SRR.sfa_return_request_Id = SRRI.sfa_return_request_Id 
              INNER JOIN items I ON SRRI.item_id = I.item_id INNER JOIN employees E ON SRR.employee_id = E.employee_id 
              WHERE SRR.customer_id = $cus_id AND SRRI.invoiced = 0";
 
-             $result = DB::select($qry);
+            $result = DB::select($qry);
             // dd($result);
-             if($result){
+            if ($result) {
                 return response()->json(["status" => true, "data" => $result]);
-             }else{
+            } else {
                 return response()->json(["status" => true, "data" => []]);
-             }
-        }catch(Exception $ex){
+            }
+        } catch (Exception $ex) {
             return $ex;
         }
     }

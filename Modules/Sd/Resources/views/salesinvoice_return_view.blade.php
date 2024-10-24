@@ -140,6 +140,12 @@
                             <li class="nav-item rbs-nav-item">
                                 <a href="#Item" class="nav-link active" aria-selected="true">Product</a>
                             </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a href="#set_off" class="nav-link" aria-selected="true">Invoice Set Off</a>
+                            </li>
+                           <!--  <li class="nav-item rbs-nav-item" id="return_item_tab">
+                                <a href="#returned_item" class="nav-link" aria-selected="true">Returned Items</a>
+                            </li> -->
 
                         </ul>
 
@@ -164,6 +170,30 @@
                                                         
                                                         <th>Value</th>
                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show" id="set_off">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="set_off_table">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th style="width: 50px;">Date</th>
+                                                        <th style="width: 350px;">Invoice</th>
+                                                        <th style="width: 100;">Set off amount</th>
+                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody>

@@ -141,6 +141,10 @@ var referanceID;
 var ItemList;
 
 $(document).ready(function () {
+    $('#tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
     getLocation();
     getBranches();
     loadBookNumber();
@@ -163,7 +167,7 @@ $(document).ready(function () {
     }
     getEachSalesReturn(Invoice_id, 'Original');
     getEachproduct(Invoice_id,'Original');
-
+    getEachSetOff(Invoice_id);
 
     $('#btnBack').on('click',function(){
         if(task == "approval"){
@@ -203,7 +207,7 @@ function getEachSalesReturn(id, status) {
            // console.log(res[0].order_date_time);
             
             /* ('#lblSupplierAddress').text(txt[0].primary_address); */
-            $('#LblexternalNumber').val(res[0].manual_number);
+            $('#LblexternalNumber').val(res[0].external_number);
             $('#invoice_date_time').val(res[0].order_date);
             $('#cmbBranch').val(res[0].branch_id);
             $('#cmbLocation').val(res[0].location_id);
@@ -292,6 +296,42 @@ function getEachproduct(id, status) {
     });
 }
 
+function getEachSetOff(id) {
+    $.ajax({
+        url: '/sd/getEachSetOffSalesReturn/' + id ,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            var dt = response.data
+           
+            
+            
+
+            var data = [];
+            for (var i = 0; i < dt.length; i++) {
+                var formattedAmount = parseFloat(dt[i].setoff_amount).toLocaleString();
+
+                // Create a new row with the formatted setoff_amount
+                var newRow = `
+                    <tr>
+                        <td>${dt[i].trans_date}</td>
+                        <td>${dt[i].external_number}</td>
+                        <td style="text-align:right">${formattedAmount}</td>
+                    </tr>
+                `;
+            
+            // Append the new row to the table body
+            $('#set_off_table tbody').append(newRow);
+                
+                
+            }
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 function calculateTotals(dt) {
     

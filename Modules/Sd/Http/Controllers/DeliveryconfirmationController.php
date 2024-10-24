@@ -49,14 +49,16 @@ class DeliveryconfirmationController extends Controller
             LEFT JOIN deliveryconfirmations ON sales_invoices.sales_invoice_Id = deliveryconfirmations.sales_invoice_Id WHERE (deliveryconfirmations.status = 0 OR deliveryconfirmations.sales_invoice_Id IS NULL)";
     
             if ($id == 0) {
-               // $query = $baseQuery . "OR deliveryconfirmations.sales_invoice_Id IS NULL";
-                $result = DB::select($baseQuery);
+                $query = $baseQuery . " AND sales_invoices.order_date_time >= '2024-10-23'";
+                $result = DB::select($query);
                 return response()->json((['success' => 'Data loaded', 'data' => $result]));
             } else if($id > 0) {
                 $query = $baseQuery . " AND sales_invoices.delivery_plan_id =".$id;
                 
                 $result = DB::select($query);
-                return response()->json((['success' => 'Data loaded', 'data' => $result]));
+                return response(
+                    
+                )->json((['success' => 'Data loaded', 'data' => $result]));
             }
         } catch (Exception $ex) {
             return $ex;

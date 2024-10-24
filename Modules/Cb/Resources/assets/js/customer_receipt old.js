@@ -5,7 +5,6 @@ var CUSTOMER_RECEIPT_ID = undefined;
 var REFERANCE_ID = undefined;
 var hidden_columns = "";
 var rcptAmountforcheckbox = null;
-var total_set_off_Amount = 0;
 $(document).ready(function () {
     getCollectors_and_Cashiers();
     getBank();
@@ -619,7 +618,6 @@ function getBankBranch(bank_id) {
 
 
 function saveReceipt() {
-    total_set_off_Amount = 0;
     if ($('#txtRefNo').val().trim().length === 0) {
         $('#txtRefNo').focus();
         $(window).scrollTop(0);
@@ -901,12 +899,8 @@ function saveReceipt() {
         showWarningMessage('Invalied New Referance No');
         return;
     }
-    let amount = parseFloat($('#txtAmount').val().replace(/,/g, '') || 0);
-    let discount = parseFloat($('#txtDiscount').val().replace(/,/g, '') || 0);
-    let round_up = parseFloat($('#txtRound_up').val().replace(/,/g, '') || 0);
-    var receipt_data_set = JSON.stringify(getSetoffTableData());
-    if(((amount - discount) + round_up) == total_set_off_Amount){
-   
+
+
     $.ajax({
         url: '/cb/customer_receipt/saveCustomerReceipt',
         method: 'post',
@@ -925,7 +919,7 @@ function saveReceipt() {
             "round_up": $('#txtRound_up').val(),
             "branch_id": $('#cmbBranch').val(),
             "advance": advane,
-            "receipt_data": receipt_data_set,
+            "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
             "payment_slip": JSON.stringify(getSlip()),
             "your_ref":$('#txtYourReference').val()
@@ -959,10 +953,6 @@ function saveReceipt() {
 
         }
     });
-}else{
-    
-    showWarningMessage('Amount mismatch');
-}
 }
 
 
@@ -1561,9 +1551,6 @@ function getSetoffTableData() {
             "date": $('#lblDate' + i).text(),
             "debtors_ledger_id": $('#lblAge' + i).attr('data-id')
         }));
-
-        total_set_off_Amount = total_set_off_Amount + (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
-
     }
     console.log(setoffData);
 

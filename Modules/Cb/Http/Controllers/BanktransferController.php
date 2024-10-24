@@ -84,7 +84,7 @@ class BanktransferController extends Controller
 
 
         // $resulcustomer = DB::select('select customer_id,customer_name from customers');
-        $resulcustomer = DB::select('SELECT
+        $resulcustomer = DB::select('SELECT DISTINCT
 	customer_receipts.customer_receipt_id,
 	customers.customer_name,
     customers.customer_id,
@@ -93,7 +93,7 @@ FROM
 	customer_receipts
 	INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id
 	INNER JOIN customer_receipt_bank_slips CRBS ON customer_receipts.customer_receipt_id = CRBS.customer_receipt_id');
-
+    //dd($resulcustomer);
         $customerablearray = [];
         $reference_array = [];
         $titel = [];
@@ -113,7 +113,7 @@ FROM
                 foreach ($result as $customerdata) {
                     //dump($customerdata->customer_id);
                     //dd($result);
-                    if ($customerdata->customer_id == $customerid->customer_id) {
+                    if ($customerdata->customer_id == $customerid->customer_id && $customerdata->reference == $customerid->reference) {
                         $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Reference : </strong>" . $customerdata->reference . " - <strong>Slip Date : </strong>" . $customerdata->slip_date . " - " . $customerdata->slip_time;
                         if ($bool) {
                             array_push($titel, $title_text);

@@ -385,7 +385,7 @@ Route::prefix('sd')->middleware(['is.logged'])->group(function () {
     Route::get('get_returned_items_details/{id}/{item_id}',[SalesReturnController::class,'get_returned_items_details']);
     Route::get('/return_getItemInfo/{item_id}', [SalesReturnController::class, 'getItemInfo']);
     Route::get('/get_wh_price_with_rt_price',[SalesReturnController::class,'get_wh_price_with_rt_price']);
-
+    Route::get('/getEachSetOffSalesReturn/{id}',[SalesReturnController::class,'getEachSetOffSalesReturn']);
     /**sales return details */
     Route::get('/sales_return_details',function(){
         return view('sd::return_details');

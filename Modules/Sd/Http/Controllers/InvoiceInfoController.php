@@ -85,6 +85,8 @@ SELECT
     U.name
 FROM 
     sales_returns SR
+LEFT JOIN
+    sales_return_debtor_setoffs SRDS ON SR.sales_return_Id = SRDS.sales_return_Id
 LEFT JOIN 
     sales_invoices SI ON SR.sales_invoice_id = SI.sales_invoice_Id
 LEFT JOIN 
@@ -94,8 +96,9 @@ LEFT JOIN
 LEFT JOIN 
     users U ON SR.prepaired_by = U.id
 WHERE 
-    SI.external_number = ?
-', [$number]);
+    SRDS.external_number = ? OR SI.external_number = ?
+', [$number, $number]);
+
 
 
 

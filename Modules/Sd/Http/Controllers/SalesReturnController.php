@@ -319,7 +319,7 @@ class SalesReturnController extends Controller
                          $dl_set_off->branch_id = $Sales_invoice->branch_id;
                          $dl_set_off->customer_id = $debotrs_ledgers_->customer_id;
                          $dl_set_off->customer_code = $debotrs_ledgers_->customer_code;
-                         $dl_set_off->amount = $amount;
+                         $dl_set_off->amount = -$amount;
                          $dl_set_off->save();
 
                          
@@ -1006,7 +1006,7 @@ class SalesReturnController extends Controller
                 customers.primary_address,
                 customers.customer_code,
                 towns.town_name,
-                sales_invoices.manual_number AS SI_ext
+                sales_invoices.external_number AS SI_ext
 
             FROM 
                 sales_returns
@@ -1813,6 +1813,18 @@ ORDER BY sales_returns.order_date DESC;
             return response()->json($result);
         }
 
+    }
+
+    public function getEachSetOffSalesReturn($id){
+        $qry = "SELECT SRDS.external_number, SRDS.setoff_amount, DL.trans_date 
+        FROM sales_return_debtor_setoffs SRDS 
+        LEFT JOIN debtors_ledgers DL ON SRDS.external_number = DL.external_number 
+        WHERE SRDS.sales_return_Id = ?";
+        $result = DB::select($qry, [$id]);
+
+        if ($result) {
+            return response()->json(['success' => 'Data loaded', 'data' => $result]);
+        }
     }
 
 
