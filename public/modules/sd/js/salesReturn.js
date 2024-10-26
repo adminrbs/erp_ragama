@@ -41,7 +41,7 @@ $(document).ready(function () {
     loadReason();
 
     //load books
-    loadBookNumber();
+   // loadBookNumber();
 
     //back
     $('#btnBack').hide();
@@ -612,15 +612,7 @@ function addSalesReturn(collection, id, setoff_array, text_box_values) {
         showWarningMessage('Unable to save without an item');
         return
     }
-    if (isNaN(parseInt($('#txtPageNumber').val()))) {
-        showWarningMessage('Please enter a page number');
-        $('#txtPageNumber').addClass('is-invalid');
-        return
-    } else if (isNaN(parseInt($('#cmbBookNumber').val()))) {
-        showWarningMessage('Please select a book');
-        $('#cmbBookNumber').addClass('is-invalid');
-        return
-    }
+    
     if (!$('#cmbLocation').val()) {
         showWarningMessage('Location should be set');
         return;
@@ -659,7 +651,7 @@ function addSalesReturn(collection, id, setoff_array, text_box_values) {
         formData.append('cmbReason', $('#cmbReason').val());
         formData.append('code', $('#invoice_date_time').data('id'));
         formData.append('branch_code', $('#cmbBranch').data('id'));
-        formData.append('book_number', $('#cmbBookNumber').val());
+       // formData.append('book_number', $('#cmbBookNumber').val());
         formData.append('page_number', $('#txtPageNumber').val());
         formData.append('txtyourreferencenumber', $('#txtyourreferencenumber').val());
         formData.append('sales_analyst_id',$('#cmbSalesAnalysist').val());
@@ -1798,7 +1790,7 @@ function checkReturnLocation(br_id_) {
 }
 
 //load book number
-function loadBookNumber() {
+/* function loadBookNumber() {
     $.ajax({
         url: '/sd/loadBookNumber/',
         type: 'get',
@@ -1815,7 +1807,7 @@ function loadBookNumber() {
         }
     })
 
-}
+} */
 
 //load set off data from DL using customer code - without invoice
 function load_setoff_data_(id) {

@@ -87,8 +87,8 @@ class SalesReturnController extends Controller
             $Sales_invoice->return_reason_id = $request->input('cmbReason');
             $Sales_invoice->manual_number = $manual_number;
             $Sales_invoice->prepaired_by = $PreparedBy;
-            $Sales_invoice->book_id = $request->input('book_number');
-            $Sales_invoice->page_number = $request->input('page_number');
+           // $Sales_invoice->book_id = $request->input('book_number');
+           // $Sales_invoice->page_number = $request->input('page_number');
             $Sales_invoice->your_reference_number = $request->input('txtyourreferencenumber');
             $Sales_invoice->sales_analyst_id = $request->input('sales_analyst_id');
             $CU_ID = $Sales_invoice->customer_id;
@@ -1681,8 +1681,8 @@ ORDER BY sales_returns.order_date DESC;
         try{
             $qry = "SELECT dl.debtors_ledger_id, dl.trans_date,IFNULL(si.external_number,dl.external_number) AS manual_number, (CURRENT_DATE - dl.trans_date)
             AS age,(dl.amount - dl.paidamount) as balance,si.your_reference_number FROM debtors_ledgers dl 
-            LEFT JOIN sales_invoices si ON dl.internal_number = si.internal_number WHERE (dl.amount - dl.paidamount) > 0 AND dl.customer_id = $id";
-             $result = DB::select($qry);
+            LEFT JOIN sales_invoices si ON dl.internal_number = si.internal_number WHERE (dl.amount - dl.paidamount) > 0 AND dl.document_number = 210 AND dl.customer_id = $id";
+             $result = DB::select($qry); //add doc no 210 to salesreturn
              if($result){
                 return response()->json(['status' => true, 'data' => $result]);
              }else{
@@ -1715,11 +1715,11 @@ ORDER BY sales_returns.order_date DESC;
             sales_invoices SI ON dl.external_number = SI.external_number
         WHERE 
             dl.customer_id = '" . $cus_id[0]->customer_id . "' 
-            AND (dl.amount - dl.paidamount) > 0
+            AND (dl.amount - dl.paidamount) > 0 AND dl.document_number = 210
         ORDER BY 
             dl.trans_date DESC";
 
-
+//add doc no 210 to sales return on 25/10/2024
              $result = DB::select($qry);
              if($result){
                 return response()->json(['status' => true, 'data' => $result]);

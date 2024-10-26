@@ -905,6 +905,12 @@ function saveReceipt() {
     let discount = parseFloat($('#txtDiscount').val().replace(/,/g, '') || 0);
     let round_up = parseFloat($('#txtRound_up').val().replace(/,/g, '') || 0);
     var receipt_data_set = JSON.stringify(getSetoffTableData());
+    if($('#checkAdvancePayment').prop('checked')){
+        if(((amount - discount) + round_up) < total_set_off_Amount){
+            showWarningMessage("Advance payment should be greater than total set off amount");
+            return false;
+        }
+    }
     if(((amount - discount) + round_up) == total_set_off_Amount){
    
     $.ajax({

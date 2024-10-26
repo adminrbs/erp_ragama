@@ -9,6 +9,8 @@ var action;
 var pre_setoff_amount = 0;
 var pre_dl_id = undefined;
 var global_event = undefined;
+var set_off_return_external = null;
+let dataSet = [];
 $(document).ready(function () {
 
     getBranches();
@@ -36,9 +38,14 @@ $(document).ready(function () {
         balance = parseFloat($(this).find('td:eq(5)').text().replace(/,/g, ''));
         selected_balance_cell = $(this).find('td:eq(5)');
         selected_dl_id = $(this).find('td:eq(6)').text();
+        let setoff_row_description = $(this).find('td:eq(2)').text();
+        if(setoff_row_description == "Sales Return"){
+            set_off_return_external = $(this).find('td:eq(1)').text();
+        }else{
+            set_off_return_external = null;
+        }
 
-
-
+        //alert(set_off_return_external);
     });
 
 
@@ -73,6 +80,23 @@ $(document).ready(function () {
                     $('#set_off_data_table tr.highlight td:eq(5)').text(parseFloat(balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }));
                 }
                 $(this).find('td:eq(8)').text(selected_dl_id)
+
+                let transaction_row_description = $(this).find('td:eq(2)').text();
+                if(transaction_row_description == "Sales invoice"){
+                   
+                    if(set_off_return_external != null){
+                        transaction_invoice_external = $(this).find('td:eq(1)').text();
+                        var set_amount =  $(this).find('td:eq(6)').text();
+                        //alert(set_amount);
+                        dataSet.push({
+                            set_off_return_external: set_off_return_external,
+                            transaction_invoice_external: transaction_invoice_external,
+                            value: set_amount
+                        });
+
+                    }
+                    
+                }
             } else {
                 showWarningMessage('Balance should be greater than 0.00');
 
@@ -82,6 +106,7 @@ $(document).ready(function () {
             showWarningMessage('This record has been already setoff');
         }
 
+console.log(dataSet);
 
 
     });
@@ -447,6 +472,21 @@ function validateStoff(event) {
         $(event).text('');
     }
 
+    var row_descr = trElement.find('td:eq(2)').text();
+    if(row_descr == "Sales invoice"){
+        if(dataSet.length > 0){
+            var row_inv_extr = trElement.find('td:eq(1)').text();
+            let existingRecord = dataSet.find(function(record) {
+                return record.transaction_invoice_external === row_inv_extr;
+            });
+            if(existingRecord){
+                let this_tr_setoff = trElement.find('td:eq(6)').text();
+                alert(this_tr_setoff);
+                
+            }
+        }
+       
+    }
 
 }
 

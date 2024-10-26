@@ -124,7 +124,7 @@
                                     <input type="number" id="txtDiscountAmount" class="form-control" style="text-align:right;">
                                 </div>
 
-                                <div class="col-md-4">
+                             <!--    <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Book Number</span></label>
@@ -135,7 +135,7 @@
                                             <input type="number" id="txtPageNumber" class="form-control" style="text-align:right;">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Your reference number</span></label>

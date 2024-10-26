@@ -14,7 +14,8 @@ use Modules\Dl\Entities\customer_transaction_alocation;
 use Modules\Dl\Entities\customer_transaction_alocations_setoff;
 use Modules\Dl\Entities\DebtorsLedger as EntitiesDebtorsLedger;
 use Modules\Dl\Entities\DebtorsLedger;
-
+use Modules\Dl\Entities\sales_return;
+use Modules\Dl\Entities\sales_return_debtor_setoff;
 
 class TransactionAllocationController extends Controller
 {
@@ -63,7 +64,7 @@ class TransactionAllocationController extends Controller
             $set_off_data = DB::select('SELECT
      DL.debtors_ledger_id,
      DL.trans_date,
-     IFNULL(DL.manual_number, DL.external_number) AS external_number,
+     DL.external_number AS external_number,
      DL.amount,
      (DL.amount - DL.paidamount) AS balance,
      GD.use_for AS description
@@ -86,6 +87,15 @@ class TransactionAllocationController extends Controller
     {
 
         try {
+           /*  if($request->input('dataSet')){
+                $dataSet = json_decode($request->input('dataSet'));
+                foreach ($dataSet as $dataSetVal) {
+                    $retun_obj = sales_return::where("external_number","=",$dataSetVal->set_off_return_external)->get();
+                    
+                   
+                }
+
+            } */
             $collection = json_decode($request->input('collection'));
            // dd($collection);
             $referencenumber = $request->input('LblexternalNumber');
@@ -133,6 +143,8 @@ class TransactionAllocationController extends Controller
 
                 $customer_transaction_allocation_setoff = new customer_transaction_alocations_setoff();
                 $customer_transaction_allocation_setoff->debtor_ledger_id = $dl_id;
+                $customer_transaction_allocation_setoff->internal_number =  $customer_transaction_allocation->internal_number;
+                $customer_transaction_allocation_setoff->external_number =  $customer_transaction_allocation->$externalNumber;
                 $customer_transaction_allocation_setoff->customer_transaction_alocation_id =  $customer_transaction_allocation->customer_transaction_alocation_id;
                 $customer_transaction_allocation_setoff->reference_internal_number = $reference_data[0]->internal_number;
                 $customer_transaction_allocation_setoff->reference_external_number = $reference_data[0]->external_number;
@@ -153,7 +165,36 @@ class TransactionAllocationController extends Controller
                 $debtor_ledger_setoff_record->update();
 
             }
-
+            if ($request->input('dataSet')) {
+                $dataSet = json_decode($request->input('dataSet'));
+                foreach ($dataSet as $dataSetVal) {
+                    // Remove thousand separators from the value
+                    $valueWithoutSeparators = str_replace(',', '', $dataSetVal->value);
+            
+                    $retun_obj = sales_return::where("external_number", $dataSetVal->set_off_return_external)->first();
+                    $debtors_ledger_obj = DebtorsLedger::where("external_number", $dataSetVal->transaction_invoice_external)->first();
+                    
+                    if ($retun_obj && $debtors_ledger_obj) {
+                        $sales_return_debtor_setoff_obj = new sales_return_debtor_setoff();
+                        $sales_return_debtor_setoff_obj->debtors_ledger_id = $debtors_ledger_obj->debtors_ledger_id;
+                        $sales_return_debtor_setoff_obj->internal_number = $debtors_ledger_obj->internal_number;
+                        $sales_return_debtor_setoff_obj->external_number = $debtors_ledger_obj->external_number;
+                        $sales_return_debtor_setoff_obj->sales_return_Id = $retun_obj->sales_return_Id;
+                        $sales_return_debtor_setoff_obj->setoff_amount = $valueWithoutSeparators;
+            
+                        if ($sales_return_debtor_setoff_obj->save()) {
+                           // $inv_dl_obj = DebtorsLedger::where("external_number", $dataSetVal->transaction_invoice_external)->first();
+                            
+                            if ($debtors_ledger_obj) {
+                                $debtors_ledger_obj->return_amount += $valueWithoutSeparators;
+                                $debtors_ledger_obj->update(); 
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
             return response()->json(["status" => true,"message"=>"success"]);
 
         } catch (Exception $ex) {
