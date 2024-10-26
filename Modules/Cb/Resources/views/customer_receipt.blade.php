@@ -162,7 +162,7 @@
                             </li>
 
                             <li class="nav-item rbs-nav-item">
-                                <a id="single_cheque" href="#single_cheque" class="nav-link" aria-selected="false">Single Cheque</a>
+                                <a id="tab-single-cheque" href="#single_cheque" class="nav-link" aria-selected="false">Single Cheque</a>
                             </li>
                             <li class="nav-item rbs-nav-item">
                                 <a href="#cheques" class="nav-link" aria-selected="false" hidden>Multiple Cheques</a>
