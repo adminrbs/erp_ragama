@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Dl\Entities;
+namespace Modules\Gl\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,16 +9,15 @@ use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class credit_note extends Model
+class GeneralLedger extends Model
 {
     use HasFactory,LogsActivity;
 
-    use HasFactory, LogsActivity;
-    protected $table = "credit_notes";
-    protected $primaryKey =  'credit_notes_id';
     protected $fillable = [];
-   
-    protected static $logOnlyDirty = true;
+
+    protected $table = "general_ledgers";
+    protected $primaryKey = "general_ledger_id";
+
     public function tapActivity(Activity $activity, string $eventName)
     {
         $activity->log_name = "credit_notes";
@@ -31,4 +30,6 @@ class credit_note extends Model
             ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+    
+   
 }
