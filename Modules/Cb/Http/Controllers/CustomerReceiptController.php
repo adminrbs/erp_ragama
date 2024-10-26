@@ -2,6 +2,7 @@
 
 namespace Modules\Cb\Http\Controllers;
 
+use App\Http\Controllers\ChequeReferenceNumberController;
 use App\Http\Controllers\CompanyDetailsController;
 use App\Http\Controllers\IntenelNumberController;
 use Exception;
@@ -407,6 +408,7 @@ class CustomerReceiptController extends Controller
             $cheque->bank_code = $receiptCheque->bank_code;
             $cheque->cheque_referenceNo = $receiptCheque->cheque_referenceNo;
             $cheque->cheque_number = $receiptCheque->cheque_number;
+            $cheque->customer_cheque_reference_number = ChequeReferenceNumberController::customerChequeReferenceGenerator();
             $cheque->banking_date = $receiptCheque->banking_date;
             $cheque->amount = $receiptCheque->amount;
             $cheque->bank_id = $receiptCheque->bank_id;

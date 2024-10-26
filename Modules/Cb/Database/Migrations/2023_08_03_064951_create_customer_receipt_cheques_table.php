@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('external_number',200);
             $table->string('cheque_referenceNo',200);
             $table->string('cheque_number',200);
+            $table->integer('customer_cheque_reference_number');
             $table->string('bank_code',50);
             $table->date('banking_date');
             $table->decimal('amount',10,2);
