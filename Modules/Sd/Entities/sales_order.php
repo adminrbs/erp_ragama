@@ -32,7 +32,7 @@ class sales_order extends Model
         // Chain fluent methods for configuration options
     }
 
-   /*  public function save(array $options = [])
+    public function save(array $options = [])
     {
         $saved = parent::save($options);
         if ($saved) {
@@ -52,5 +52,5 @@ class sales_order extends Model
         }
 
         return $deleted;
-    } */
+    }
 }

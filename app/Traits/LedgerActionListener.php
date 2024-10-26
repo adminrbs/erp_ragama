@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\GeneralLedger;
+use Modules\Gl\Entities\GeneralLedger;
 
 trait LedgerActionListener
 {
