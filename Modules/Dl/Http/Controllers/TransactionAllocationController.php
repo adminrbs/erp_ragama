@@ -87,6 +87,7 @@ class TransactionAllocationController extends Controller
     {
 
         try {
+            DB::beginTransaction();
            /*  if($request->input('dataSet')){
                 $dataSet = json_decode($request->input('dataSet'));
                 foreach ($dataSet as $dataSetVal) {
@@ -122,7 +123,7 @@ class TransactionAllocationController extends Controller
 
                 }
                 
-
+                //dd($externalNumber);
                 $customer_transaction_allocation = new customer_transaction_alocation();
                 $customer_transaction_allocation->internal_number = IntenelNumberController::getNextID();
                 $customer_transaction_allocation->external_number = $externalNumber;
@@ -132,7 +133,7 @@ class TransactionAllocationController extends Controller
                 $customer_transaction_allocation->branch_id = $br_id;
                 $customer_transaction_allocation->created_by = Auth::user()->id;
                 $customer_transaction_allocation->save();
-
+                //dd()
             foreach ($collection as $data) {
                // $bR_id = $data->branch_id;
                 $setoff_id = $data->dl_set_off_id;
@@ -144,7 +145,7 @@ class TransactionAllocationController extends Controller
                 $customer_transaction_allocation_setoff = new customer_transaction_alocations_setoff();
                 $customer_transaction_allocation_setoff->debtor_ledger_id = $dl_id;
                 $customer_transaction_allocation_setoff->internal_number =  $customer_transaction_allocation->internal_number;
-                $customer_transaction_allocation_setoff->external_number =  $customer_transaction_allocation->$externalNumber;
+                $customer_transaction_allocation_setoff->external_number =  $externalNumber;
                 $customer_transaction_allocation_setoff->customer_transaction_alocation_id =  $customer_transaction_allocation->customer_transaction_alocation_id;
                 $customer_transaction_allocation_setoff->reference_internal_number = $reference_data[0]->internal_number;
                 $customer_transaction_allocation_setoff->reference_external_number = $reference_data[0]->external_number;
@@ -194,10 +195,11 @@ class TransactionAllocationController extends Controller
                 }
             }
             
-            
+            DB::commit();
             return response()->json(["status" => true,"message"=>"success"]);
 
         } catch (Exception $ex) {
+            DB::rollBack();
             return $ex;
         }
     }
