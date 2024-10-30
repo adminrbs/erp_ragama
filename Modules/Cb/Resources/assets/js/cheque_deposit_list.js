@@ -245,11 +245,16 @@ function getAccount() {
 
 
 function shortenString(inputString, maxLength) {
+if(inputString != null){
     if (inputString.length <= maxLength) {
         return inputString;
     } else {
         return inputString.substring(0, maxLength) + '...';
     }
+}else{
+    return "";
+}
+    
 }
 
 function update_status_calculation(event){

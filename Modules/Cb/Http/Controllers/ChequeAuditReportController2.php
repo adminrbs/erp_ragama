@@ -64,7 +64,7 @@ class ChequeAuditReportController2 extends Controller
         
         CAST(DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date)AS SIGNED) AS Age,
         (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) AS  Invoice_amont,
-        (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1),
+        (SELECT customer_receipt_setoff_data.paid_amount  FROM customer_receipt_setoff_data WHERE customer_receipt_setoff_data.external_number = customer_receipt_cheques.external_number LIMIT 1),
         (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
         customer_receipt_setoff_data.set_off_amount,
         ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance,

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Modules\Cb\Entities\DebtorsLedgerSetoff;
+use Modules\Dl\Entities\Customer;
 use Modules\Dl\Entities\customer_transaction_alocation;
 
 use Modules\Dl\Entities\customer_transaction_alocations_setoff;
@@ -188,7 +190,23 @@ class TransactionAllocationController extends Controller
                             
                             if ($debtors_ledger_obj) {
                                 $debtors_ledger_obj->return_amount += $valueWithoutSeparators;
-                                $debtors_ledger_obj->update(); 
+                                if($debtors_ledger_obj->update()){
+                                    $cus = Customer::find($retun_obj->customer_id);
+                                    $dl_set_off = new DebtorsLedgerSetoff();
+                                    $dl_set_off->internal_number = $retun_obj->internal_number;
+                                    $dl_set_off->external_number = $retun_obj->external_number;
+                                    $dl_set_off->document_number =  $retun_obj->document_number;
+                                    $dl_set_off->reference_internal_number = $debtors_ledger_obj->internal_number;
+                                    $dl_set_off->reference_external_number = $debtors_ledger_obj->external_number;
+                                    $dl_set_off->reference_document_number = $debtors_ledger_obj->document_number;
+                                    $dl_set_off->trans_date = $retun_obj->order_date;
+                                    $dl_set_off->description = "Sales returned from ".$cus->customer_name;
+                                    $dl_set_off->branch_id = $retun_obj->branch_id;
+                                    $dl_set_off->customer_id = $retun_obj->customer_id;
+                                    $dl_set_off->customer_code = $cus->customer_code;
+                                    $dl_set_off->amount = -$valueWithoutSeparators;
+                                    $dl_set_off->save();
+                                } 
                             }
                         }
                     }

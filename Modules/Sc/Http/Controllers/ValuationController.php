@@ -81,10 +81,42 @@ class ValuationController extends Controller
             }
 
             if ($nonNullCount > 1) {
-                $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,IH.retial_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
+                /* $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,IH.retial_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
                 LEFT JOIN 
                 ( SELECT  item_id  , branch_id,location_id,transaction_date, ABS(SUM(quantity-setoff_quantity)) AS in_hand  ,whole_sale_price,retial_price, (SUM(quantity-setoff_quantity)*whole_sale_price) AS `value` 
-                 FROM item_history_set_offs WHERE  ((quantity - setoff_quantity) > 0) AND transaction_date <= CURDATE()  GROUP BY item_id,branch_id ) IH  ON IH.item_id=I.item_id';
+                 FROM item_history_set_offs WHERE  ((quantity - setoff_quantity) > 0) AND transaction_date <= CURDATE()  GROUP BY item_id,branch_id ) IH  ON IH.item_id=I.item_id'; */
+                 $query = 'SELECT  
+    I.item_id, 
+    I.item_code, 
+    I.item_Name, 
+    I.package_unit AS package_size, 
+    IH.in_hand, 
+    IH.whole_sale_price, 
+    IH.retial_price, 
+    ABS(IH.`value`), 
+    I.category_level_1_id  
+FROM 
+    items I 
+INNER JOIN 
+    (SELECT  
+        item_id, 
+        branch_id, 
+        location_id, 
+        transaction_date, 
+        ABS(SUM(quantity - setoff_quantity)) AS in_hand, 
+        whole_sale_price, 
+        retial_price, 
+        (SUM(quantity - setoff_quantity) * whole_sale_price) AS `value` 
+    FROM 
+        item_history_set_offs 
+    WHERE  
+       
+         transaction_date <= CURDATE() 
+    GROUP BY 
+        item_id, branch_id) IH 
+ON 
+    IH.item_id = I.item_id
+';
 
 
 
@@ -92,17 +124,17 @@ class ValuationController extends Controller
 
                 if ($selecteBranch != null) {
                     if (count($selecteBranch) > 1) {
-                        $quryModify .= " IH.branch_id IN ('" . implode("', '", $selecteBranch) . "') AND";
+                        $quryModify .= " IH.branch_id IN ('" . implode("', '", $selecteBranch) . "') AND ";
                     } else {
-                        $quryModify .= " IH.branch_id ='" . $selecteBranch[0] . "'AND";
+                        $quryModify .= " IH.branch_id ='" . $selecteBranch[0] . "' AND ";
                     }
                 }
 
                 if ($selecteLocation != null) {
                     if (count($selecteLocation) > 1) {
-                        $quryModify .= " IH.location_id IN ('" . implode("', '", $selecteLocation) . "') AND";
+                        $quryModify .= " IH.location_id IN ('" . implode("', '", $selecteLocation) . "') AND ";
                     } else {
-                        $quryModify .= " IH.location_id ='" . $selecteLocation[0] . "'AND";
+                        $quryModify .= " IH.location_id ='" . $selecteLocation[0] . "' AND ";
                     }
                 }
 
@@ -110,44 +142,44 @@ class ValuationController extends Controller
 
 
                 if ($todate != null) {
-                    $quryModify .= " IH.transaction_date <='" . $todate . "' AND";
+                    $quryModify .= " IH.transaction_date <='" . $todate . "' AND ";
                 }
 
                 if ($selectedproduct != null) {
                     if (count($selectedproduct) > 1) {
-                        $quryModify .= " IH.item_id IN ('" . implode("', '", $selectedproduct) . "') AND";
+                        $quryModify .= " IH.item_id IN ('" . implode("', '", $selectedproduct) . "') AND ";
                     } else {
-                        $quryModify .= " IH.item_id ='" . $selectedproduct[0] . "'AND";
+                        $quryModify .= " IH.item_id ='" . $selectedproduct[0] . "' AND ";
                     }
                 }
                 if ($selectecategory1 != null) {
                     if (count($selectecategory1) > 1) {
-                        $quryModify .= " I.category_level_1_id IN ('" . implode("', '", $selectecategory1) . "') AND";
+                        $quryModify .= " I.category_level_1_id IN ('" . implode("', '", $selectecategory1) . "') AND ";
                     } else {
-                        $quryModify .= " I.category_level_1_id ='" . $selectecategory1[0] . "'AND";
+                        $quryModify .= " I.category_level_1_id ='" . $selectecategory1[0] . "' AND ";
                     }
                 }
 
                 if ($selectecategory2 != null) {
                     if (count($selectecategory2) > 1) {
-                        $quryModify .= " I.category_level_2_id IN ('" . implode("', '", $selectecategory2) . "') AND";
+                        $quryModify .= " I.category_level_2_id IN ('" . implode("', '", $selectecategory2) . "') AND ";
                     } else {
-                        $quryModify .= " I.category_level_2_id ='" . $selectecategory2[0] . "'AND";
+                        $quryModify .= " I.category_level_2_id ='" . $selectecategory2[0] . "' AND ";
                     }
                 }
 
                 if ($selectecategory3 != null) {
                     if (count($selectecategory3) > 1) {
-                        $quryModify .= " I.category_level_3_id IN ('" . implode("', '", $selectecategory3) . "') AND";
+                        $quryModify .= " I.category_level_3_id IN ('" . implode("', '", $selectecategory3) . "') AND ";
                     } else {
-                        $quryModify .= " I.category_level_3_id ='" . $selectecategory3[0] . "'AND";
+                        $quryModify .= " I.category_level_3_id ='" . $selectecategory3[0] . "' AND ";
                     }
                 }
                 if ($selectSupplygroup != null) {
                     if (count($selectSupplygroup) > 1) {
-                        $quryModify .= " I.supply_group_id  IN ('" . implode("', '", $selectSupplygroup) . "') AND";
+                        $quryModify .= " I.supply_group_id  IN ('" . implode("', '", $selectSupplygroup) . "') AND ";
                     } else {
-                        $quryModify .= " I.supply_group_id  ='" . $selectSupplygroup[0] . "'AND";
+                        $quryModify .= " I.supply_group_id  ='" . $selectSupplygroup[0] . "' AND ";
                     }
                 }
 

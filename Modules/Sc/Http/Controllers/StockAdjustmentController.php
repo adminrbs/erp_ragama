@@ -20,7 +20,7 @@ class StockAdjustmentController extends Controller
     public function addstockadjustment(Request $request)
     {
         try {
-
+            DB::beginTransaction();
             $setOffArray = json_decode($request->input('setOffArray'));
             // dd($setOffArray);
             $referencenumber = $request->input('LblexternalNumber');
@@ -117,9 +117,10 @@ class StockAdjustmentController extends Controller
 
                     $this->createAndSaveItemHistory($st_adjustment, $st_adjustment_item, $setOff);
                 }
-
+                DB::commit();
                 return response()->json(["status" => true, "primaryKey" => $st_adjustment->goods_received_return_Id]);
             } else {
+                DB::rollBack();
                 return response()->json(["status" => false]);
             }
         } catch (Exception $ex) {
@@ -203,8 +204,8 @@ class StockAdjustmentController extends Controller
         $itemhistory_setOff->location_id = $st_adjustment->location_id;
 
         $itemhistory_setOff->item_id = $setOff->item_id;
-        $itemhistory_setOff->quantity = $st_adjustment_item->quantity;
-        $itemhistory_setOff->setoff_quantity = $st_adjustment_item->quantity;
+        $itemhistory_setOff->quantity = -$setOff->set_off_qty;
+        $itemhistory_setOff->setoff_quantity = -$setOff->set_off_qty;
         $itemhistory_setOff->whole_sale_price = $setOff->whole_sale_price;
         $itemhistory_setOff->retial_price = $setOff->retial_price;
         $itemhistory_setOff->cost_price = $setOff->cost_price;
@@ -289,7 +290,7 @@ class StockAdjustmentController extends Controller
 
         try {
             $adjusment = stock_adjustment::find($id);
-            $adjustment_item = DB::select('SELECT
+            $adjustment_item = DB::select('SELECT DISTINCT
             SI.stock_adjusment_item_id,
             SI.packsize,
             SI.cost_price,
@@ -300,7 +301,8 @@ class StockAdjustmentController extends Controller
             I.Item_code,
             SO.whole_sale_price AS set_wh,
             SO.retial_price AS set_rt,
-            SO.cost_price AS set_co
+            SO.cost_price AS set_co,
+            I.item_id
         FROM
             stock_adjustment_items SI
         INNER JOIN
