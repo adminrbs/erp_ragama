@@ -81,11 +81,83 @@ class ValuationController extends Controller
             }
 
             if ($nonNullCount > 1) {
-                /* $query = 'SELECT  I.item_id ,I.item_code, I.item_Name , I.package_unit as package_size , IH.in_hand  ,IH.whole_sale_price,IH.retial_price,ABS(IH.`value`),I.category_level_1_id  FROM items  I 
-                LEFT JOIN 
-                ( SELECT  item_id  , branch_id,location_id,transaction_date, ABS(SUM(quantity-setoff_quantity)) AS in_hand  ,whole_sale_price,retial_price, (SUM(quantity-setoff_quantity)*whole_sale_price) AS `value` 
-                 FROM item_history_set_offs WHERE  ((quantity - setoff_quantity) > 0) AND transaction_date <= CURDATE()  GROUP BY item_id,branch_id ) IH  ON IH.item_id=I.item_id'; */
-                 $query = 'SELECT  
+                /* $query = 'SELECT
+  I.item_id,
+  I.item_code,
+  I.item_Name,
+  I.package_unit AS package_size,
+  IH.in_hand,
+  IH.whole_sale_price,
+  IH.retial_price,
+  ABS( IH.`value` ),
+  I.category_level_1_id 
+FROM
+  items I
+  LEFT JOIN (
+  SELECT
+    item_id,
+    branch_id,
+    location_id,
+    transaction_date,
+    ABS(
+    SUM( quantity - setoff_quantity )) AS in_hand,
+    whole_sale_price,
+    retial_price,
+    ( SUM( quantity - setoff_quantity )* whole_sale_price ) AS `value` 
+  FROM
+    item_history_set_offs 
+  WHERE
+    (( quantity - setoff_quantity ) > 0 ) 
+    AND transaction_date <= CURDATE() 
+  GROUP BY
+    item_id,
+  branch_id 
+  ) IH ON IH.item_id = I.item_id'; */
+
+  $query = 'SELECT
+  I.item_id,
+  I.item_code,
+  I.item_Name,
+  I.package_unit AS package_size,
+  IH.in_hand,
+  IH.whole_sale_price,
+  IH.retial_price,
+  ABS( IH.`value` ),
+  I.category_level_1_id 
+FROM
+  items I
+  INNER JOIN (
+  SELECT
+    item_id,
+    branch_id,
+    location_id,
+    transaction_date,
+    ABS(
+    SUM( quantity - setoff_quantity )) AS in_hand,
+    whole_sale_price,
+    retial_price,
+    ( SUM( quantity - setoff_quantity )* whole_sale_price ) AS `value` 
+  FROM
+    item_history_set_offs 
+  WHERE
+    (( quantity - setoff_quantity ) > 0 )';
+    
+    
+
+    $query_seond_part = '
+  GROUP BY
+    item_id,
+  branch_id 
+  ) IH ON IH.item_id = I.item_id';
+
+
+
+
+
+
+
+
+                /*  $query = 'SELECT  
     I.item_id, 
     I.item_code, 
     I.item_Name, 
@@ -117,33 +189,36 @@ INNER JOIN
 ON 
     IH.item_id = I.item_id
 ';
-
+ */
 
 
                 $quryModify = "";
+                $middleQuery = " AND ";
+
+
 
                 if ($selecteBranch != null) {
                     if (count($selecteBranch) > 1) {
-                        $quryModify .= " IH.branch_id IN ('" . implode("', '", $selecteBranch) . "') AND ";
+                        $middleQuery .= " branch_id IN ('" . implode("', '", $selecteBranch) . "') AND ";
                     } else {
-                        $quryModify .= " IH.branch_id ='" . $selecteBranch[0] . "' AND ";
+                        $middleQuery .= " branch_id ='" . $selecteBranch[0] . "' AND ";
                     }
                 }
 
                 if ($selecteLocation != null) {
                     if (count($selecteLocation) > 1) {
-                        $quryModify .= " IH.location_id IN ('" . implode("', '", $selecteLocation) . "') AND ";
+                        $middleQuery .= " location_id IN ('" . implode("', '", $selecteLocation) . "') AND ";
                     } else {
-                        $quryModify .= " IH.location_id ='" . $selecteLocation[0] . "' AND ";
+                        $middleQuery .= " location_id ='" . $selecteLocation[0] . "' AND ";
                     }
                 }
 
-
-
-
                 if ($todate != null) {
-                    $quryModify .= " IH.transaction_date <='" . $todate . "' AND ";
+                    $middleQuery .= " transaction_date <='" . $todate . "' AND ";
                 }
+
+                $middleQuery = rtrim($middleQuery, 'AND OR ');
+
 
                 if ($selectedproduct != null) {
                     if (count($selectedproduct) > 1) {
@@ -183,7 +258,9 @@ ON
                     }
                 }
 
-
+                
+                $query .= $middleQuery;
+                $query .= $query_seond_part;
 
                 if ($quryModify != "") {
 
@@ -193,7 +270,7 @@ ON
 
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-                // dd($query);
+                 //dd($query);
                 $result = DB::select($query);
                 $resulsupplygroup = DB::select('SELECT IC.item_category_level_1_id,IC.category_level_1 FROM item_category_level_1s IC');
                 $supplygrouparray = [];

@@ -313,7 +313,7 @@ class CustomerReceiptController extends Controller
                 $single_cheque = json_decode($request->get('single_cheque'));
                 $payment_slip = json_decode($request->get('payment_slip'));
                // dd($payment_slip);
-                $this->save_update_DebtorLedger($receipt, $customerObj, $receipt_data);
+                $this->save_update_DebtorLedger($receipt, $customerObj, $receipt_data,$request->get('total_set_off_amount'));
                 /* $this->saveCustomerReceiptData($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->customer_id, $request->get('customer_code'), $receipt_data); */
                 $this->saveCustomerReceiptCheque($receipt->customer_receipt_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
                 if($receipt->receipt_method_id == 7){
@@ -380,11 +380,10 @@ class CustomerReceiptController extends Controller
                 if ($setoff_data->set_off_amount > 0) {
                     if ($setoff->save()) {
                         $this->saveDebtorLedgerSetoff($internal_number, $external_number, 500, $setoff_data->reference_internal_number, $setoff_data->reference_external_number, $setoff_data->reference_document_number, $trans_date, $branch_id, $customer_id, $customer_code, $setoff_data->set_off_amount, $setoff_data->set_off_amount, $setoff->debtors_ledger_id);
-                        $new_ledger_obj = DebtorsLedger::find($dl->debtors_ledger_id);
-                        //$new_ledger_obj->paidamount = $new_ledger_obj->paidamount + $setoff->set_off_amount;
+                       /*  $new_ledger_obj = DebtorsLedger::find($dl->debtors_ledger_id);
                         $new_ledger_obj->paidamount = -abs($new_ledger_obj->paidamount + $setoff->set_off_amount);
 
-                        $new_ledger_obj->update();
+                        $new_ledger_obj->update(); */ // changed 10/30/24 moved this to debtors ledger save fnction.
                         array_push($this->response_data, true);
                     }
                 }
@@ -467,7 +466,7 @@ class CustomerReceiptController extends Controller
 
 
 
-    public function save_update_DebtorLedger($receipt, $cus_obj, $receipt_data)
+    public function save_update_DebtorLedger($receipt, $cus_obj, $receipt_data,$total_set_off_amount)
     {
 
         //dd($ledger_setoff->reference_internal_number);
@@ -484,6 +483,7 @@ class CustomerReceiptController extends Controller
             $ledger->customer_code = $cus_obj->customer_code;
             $ledger->amount = -$receipt->amount;
             //$ledger->paidamount = -$paidamount; // changed . mr.janaka 23/09
+            $ledger->paidamount = -$total_set_off_amount; // changed . 10/30
 
             // $ledger->paidamount = $ledger->amount;
             $response1 =  $ledger->save();

@@ -909,69 +909,81 @@ function saveReceipt() {
         if(((amount - discount) + round_up) < total_set_off_Amount){
             showWarningMessage("Advance payment should be greater than total set off amount");
             return false;
+        }else{
+            receiptSaveRequest(amount,discount,round_up,total_set_off_Amount,advane,receipt_data_set);
         }
+    }else{
+        receiptSaveRequest(amount,discount,round_up,total_set_off_Amount,advane,receipt_data_set);
     }
-    if(((amount - discount) + round_up) == total_set_off_Amount){
+
+}
+
+function receiptSaveRequest(amount,discount,round_up,total_set_off_Amount,advane,receipt_data_set){
+    /* if(((amount - discount) + round_up) == total_set_off_Amount){ */
    
-    $.ajax({
-        url: '/cb/customer_receipt/saveCustomerReceipt',
-        method: 'post',
-        enctype: 'multipart/form-data',
-        data: {
-            "external_number": REFERANCE_ID,
-            "customer_id": $('#txtCustomerID').attr('data-id'),
-            "customer_code": $('#txtCustomerID').val(),
-            "receipt_date": $('#txtDate').val(),
-            "collector_id": $('#cmbCollector').val(),
-            "cashier_id": $('#cmbCashier').val(),
-            "gl_account_id": $('#cmbGLAccount').val(),
-            "receipt_method_id": $('#cmbReceiptMethod').val(),
-            "amount": $('#txtAmount').val(),
-            "discount": $('#txtDiscount').val(),
-            "round_up": $('#txtRound_up').val(),
-            "branch_id": $('#cmbBranch').val(),
-            "advance": advane,
-            "receipt_data": receipt_data_set,
-            "single_cheque": JSON.stringify(getSingleCheque()),
-            "payment_slip": JSON.stringify(getSlip()),
-            "your_ref":$('#txtYourReference').val()
-
-        },
-        timeout: 800000,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        beforeSend: function () {
-            $('#btnAction').prop('disabled', true);
-        }, success: function (response) {
-            $('#btnAction').prop('disabled', false);
-            console.log(response);
-            if (response.msg == 'advanceError') {
-                showWarningMessage('Setoff off amount mismatch')
-            }
-            else if (response.duplicate == "duplicate") {
-                showWarningMessage("Cheque number duplicated");
-            }
-            else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
-                showSuccessMessage('Receipt has been saved');
-                location.href = 'customer_receipt';
-            } else {
-                showErrorMessage('Something went wrong');
-            }
-
-        }, error: function (data) {
-            console.log(data.responseText)
-        }, complete: function () {
-
-        }
-    });
-}else{
+        $.ajax({
+            url: '/cb/customer_receipt/saveCustomerReceipt',
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: {
+                "external_number": REFERANCE_ID,
+                "customer_id": $('#txtCustomerID').attr('data-id'),
+                "customer_code": $('#txtCustomerID').val(),
+                "receipt_date": $('#txtDate').val(),
+                "collector_id": $('#cmbCollector').val(),
+                "cashier_id": $('#cmbCashier').val(),
+                "gl_account_id": $('#cmbGLAccount').val(),
+                "receipt_method_id": $('#cmbReceiptMethod').val(),
+                "amount": $('#txtAmount').val(),
+                "discount": $('#txtDiscount').val(),
+                "round_up": $('#txtRound_up').val(),
+                "branch_id": $('#cmbBranch').val(),
+                "advance": advane,
+                "receipt_data": receipt_data_set,
+                "single_cheque": JSON.stringify(getSingleCheque()),
+                "payment_slip": JSON.stringify(getSlip()),
+                "your_ref":$('#txtYourReference').val(),
+                "total_set_off_amount":total_set_off_Amount
     
-    showWarningMessage('Amount mismatch');
+            },
+            timeout: 800000,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+                $('#btnAction').prop('disabled', true);
+            }, success: function (response) {
+                $('#btnAction').prop('disabled', false);
+                console.log(response);
+                if (response.msg == 'advanceError') {
+                    showWarningMessage('Setoff off amount mismatch')
+                }
+                else if (response.duplicate == "duplicate") {
+                    showWarningMessage("Cheque number duplicated");
+                }
+                else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
+                    showSuccessMessage('Receipt has been saved');
+                    location.href = 'customer_receipt';
+                } else {
+                    showErrorMessage('Something went wrong');
+                }
+    
+            }, error: function (data) {
+                console.log(data.responseText)
+            }, complete: function () {
+    
+            }
+        });
+    /* }else{
+       
+        console.log("amount : " +amount);
+        console.log("discount : " +discount);
+        console.log("round_up : " +round_up);
+        console.log("total_set_off_Amount : " +total_set_off_Amount);
+        
+        showWarningMessage('Amount mismatch');
+    } */
 }
-}
-
-
 
 function updateReceipt() {
 
@@ -1328,7 +1340,9 @@ function loadSetoffTable(customer_id) {
 }
 
 function selectRecordToSetOff(event) {
+    var set_amount = 0
     var txtAmount = $('#txtAmount').val();
+    set_amount = forSetOffAmount() || 0;
     if (rcptAmountforcheckbox === null) {
         rcptAmountforcheckbox = parseFloat(txtAmount);
     }
@@ -1340,7 +1354,7 @@ function selectRecordToSetOff(event) {
             $(event.target).prop('checked', false);
             return false;
         } else {
-
+            
 
 
             var tr = $($($(event).parent()).parent());
@@ -1355,6 +1369,8 @@ function selectRecordToSetOff(event) {
                 $(event).prop('checked', false);
                 return false;
             }
+            rcptAmountforcheckbox = rcptAmountforcheckbox - set_amount;
+
             if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
                 setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
                 rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
@@ -1362,8 +1378,6 @@ function selectRecordToSetOff(event) {
                 setoffbox.val(rcptAmountforcheckbox);
                 rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
             }
-
-            console.log(rcptAmountforcheckbox);
 
 
         }
@@ -1577,7 +1591,20 @@ function getSetoffTableData() {
 
 }
 
+function forSetOffAmount(){
+    
+    var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
+    var _set_off_amount = 0
+    for (var i = 0; i < rowCount; i++) {
 
+    
+        _set_off_amount = _set_off_amount + (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
+
+    }
+    
+    return _set_off_amount;
+
+}
 
 function getSingleCheque() {
     return {
