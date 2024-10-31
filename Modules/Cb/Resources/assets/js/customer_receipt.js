@@ -1339,7 +1339,7 @@ function loadSetoffTable(customer_id) {
 
 }
 
-function selectRecordToSetOff(event) {
+/* function selectRecordToSetOff(event) {
     var set_amount = 0
     var txtAmount = $('#txtAmount').val();
     set_amount = forSetOffAmount() || 0;
@@ -1356,6 +1356,12 @@ function selectRecordToSetOff(event) {
         } else {
             
 
+
+           if(set_amount < 0){
+            console.log(set_amount);
+            
+            $(event).prop('checked',false);
+           }else{
 
             var tr = $($($(event).parent()).parent());
 
@@ -1378,6 +1384,8 @@ function selectRecordToSetOff(event) {
                 setoffbox.val(rcptAmountforcheckbox);
                 rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
             }
+           
+           }
 
 
         }
@@ -1386,15 +1394,63 @@ function selectRecordToSetOff(event) {
         var labelIn8thTd = tr.find('td:eq(7) label').text();
         var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
       
-        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
+        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox)  + set_amount;
        
         setoffbox.val(0);
 
     }
 
-}
+} */
+
+    function selectRecordToSetOff(event) {
+        var set_amount = 0
+        var txtAmount = $('#txtAmount').val() || 0;
+        var discount = $('#txtDiscount').val() || 0;
+        var round_up = $('#txtRound_up').val() || 0;
+        var calc = (parseFloat(txtAmount) - parseFloat(discount)) + parseFloat(round_up);
+        set_amount = forSetOffAmount() || 0;
+        if (rcptAmountforcheckbox === null) {
+            rcptAmountforcheckbox = calc ;
+        }
+        //$('#txtAmount').prop('disabled',true);
+        if ($(event).prop('checked')) {
+            if (!txtAmount || parseFloat(txtAmount) === 0) {
+                showWarningMessage('Please enter a receipt amount');
+                $(event.target).prop('checked', false);
+                return false;
+            }else{
+
+                var tr = $($($(event).parent()).parent());
+                var rowBalance = tr.find('td:eq(7) label').text();
+                var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+                if(rcptAmountforcheckbox >= parseFloat(rowBalance.replace(/,(?=.*\.\d+)/g, '')) + parseFloat(set_amount)){
+                    setoffbox.val(parseFloat(rowBalance.replace(/,(?=.*\.\d+)/g, '')) + parseFloat(set_amount));
+                    rcptAmountforcheckbox = rcptAmountforcheckbox - rowBalance;
+                }else if(rcptAmountforcheckbox < rowBalance.replace(/,(?=.*\.\d+)/g, '')){
+                    setoffbox.val(rcptAmountforcheckbox);
+                    rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox;
+                }else{
+                    showWarningMessage("Insufficient Balance");
+                    $(event).prop('checked',false);
+                }
+
+            } 
+        }else{
+            var tr = $($($(event).parent()).parent());
+            var rowBalance = tr.find('td:eq(7) label').text();
+            var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+          
+            rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox)  + setoffbox;
+           
+            setoffbox.val(0);
+            
+        }
+      
+    
+    }
 
 
+    
 function changeAmount() {
 
     var txtAmount = $('#txtAmount').val();
