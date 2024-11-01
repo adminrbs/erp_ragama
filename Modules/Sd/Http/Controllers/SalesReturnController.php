@@ -1118,7 +1118,8 @@ class SalesReturnController extends Controller
     public function checkReturnLocation($id)
     {
         try {
-            $qry = "SELECT locations.location_id,locations.location_name FROM locations WHERE locations.location_type_id = 2 AND locations.branch_id = $id AND locations.Status = 1";
+            /* $qry = "SELECT locations.location_id,locations.location_name FROM locations WHERE locations.location_type_id = 2 AND locations.branch_id = $id AND locations.Status = 1";  changed on 10/31/24 Mr.Janaka*/ 
+            $qry = "SELECT locations.location_id,locations.location_name FROM locations WHERE locations.branch_id = $id AND locations.Status = 1";
             $result = DB::select($qry);
             if (count($result) > 0) {
                 return response()->json(['status' => true, 'data' => $result]);

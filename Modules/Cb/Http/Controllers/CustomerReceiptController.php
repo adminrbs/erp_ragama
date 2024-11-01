@@ -267,7 +267,7 @@ class CustomerReceiptController extends Controller
                         AND DATE(CRC.created_at) >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH);");
 
                 if ($qry[0]->count > 0) {
-                    DB::rollBack();
+                    //DB::rollBack();
                     return response()->json(["duplicate" => "duplicate"]);
                 }
             }
@@ -333,6 +333,7 @@ class CustomerReceiptController extends Controller
 
     public function CustomerReceiptsaveBankSLip($receipt,$paymentSlip){
         try{
+          //  DB::beginTransaction();
             
           
                 
@@ -346,8 +347,9 @@ class CustomerReceiptController extends Controller
                 $slip->slip_time = $paymentSlip->slip_time;
                 $slip->slip_date = $paymentSlip->slip_date;
                 $slip->save();
-            
+          // DB::commit(); 
         }catch (Exception $ex) {
+          //  DB::rollBack();
             array_push($this->response_data, $ex);
         }
     }
@@ -357,7 +359,7 @@ class CustomerReceiptController extends Controller
 
 
         try {
-
+           // DB::beginTransaction();
             foreach ($receiptData  as $data) {
                 $setoff_data = json_decode($data);
                 //dd($setoff_data->reference_internal_number);
@@ -388,7 +390,9 @@ class CustomerReceiptController extends Controller
                     }
                 }
             }
+          //  DB::commit();
         } catch (Exception $ex) {
+          //  DB::rollBack();
             array_push($this->response_data, $ex);
         }
     }
@@ -400,6 +404,7 @@ class CustomerReceiptController extends Controller
 
 
         try {
+         //   DB::beginTransaction();
             $cheque = new CustomerReceiptCheque();
             $cheque->customer_receipt_id = $receipt_id;
             $cheque->internal_number = $internal_number;
@@ -420,7 +425,9 @@ class CustomerReceiptController extends Controller
 
                 array_push($this->response_data, $response);
             }
+          //  DB::commit();
         } catch (Exception $ex) {
+          //  DB::rollBack();
             array_push($this->response_data, $ex);
         }
     }
@@ -432,6 +439,7 @@ class CustomerReceiptController extends Controller
     {
 
         //dd($reference_internal_number);
+     //   DB::beginTransaction();
         try {
             if ($amount > 0) {
                 $ledger = new DebtorsLedgerSetoff();
@@ -459,7 +467,9 @@ class CustomerReceiptController extends Controller
                     array_push($this->response_data, true);
                 }
             }
+          //  DB::commit();
         } catch (Exception $ex) {
+           // DB::rollBack();
             array_push($this->response_data, $ex);
         }
     }
@@ -471,7 +481,7 @@ class CustomerReceiptController extends Controller
 
         //dd($ledger_setoff->reference_internal_number);
         try {
-
+          //  DB::beginTransaction();
             $ledger =  new DebtorsLedger();
             $ledger->internal_number = $receipt->internal_number;
             $ledger->external_number = $receipt->external_number;
@@ -499,7 +509,9 @@ class CustomerReceiptController extends Controller
                 $response2 =  $ledger_update->update();
                 array_push($this->response_data, $response2);
             } */
+         //  DB::commit();
         } catch (Exception $ex) {
+           // DB::rollBack();
             array_push($this->response_data, $ex);
         }
     }

@@ -52,7 +52,7 @@ class SupplierTransactionAllocationController extends Controller
             creditors_ledger CL
             LEFT JOIN global_documents GD ON CL.document_number = GD.document_number
             WHERE
-            CL.amount > 0 AND CL.amount > CL.paidamount AND CL.supplier_id = ' . $sup_id);
+            CL.amount < 0 AND CL.amount <> CL.paidamount AND CL.supplier_id = ' . $sup_id);
 
 
             //set off
@@ -69,7 +69,7 @@ class SupplierTransactionAllocationController extends Controller
                 LEFT JOIN global_documents GD ON CL.document_number = GD.document_number
  
         WHERE
-            CL.amount < 0 AND CL.amount < CL.paidamount AND CL.supplier_id =' . $sup_id);
+            CL.amount > 0 AND CL.amount > CL.paidamount AND CL.supplier_id =' . $sup_id);
 
             return response()->json(["header" => $sup_header_details, "transaction" => $transaction_data_qry, "set_off_data"=>$set_off_data]);
         } catch (Exception $ex) {
