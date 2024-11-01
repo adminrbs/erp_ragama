@@ -56,6 +56,7 @@
                     <table class="table datatable-fixed-both table-striped" id="cheque_deposit_table">
                         <thead>
                             <tr>
+                                <th>Receipt Date</th>
                                 <th>Date</th>
                                 <th>Reference #</th>
                                 <th>Customer</th>

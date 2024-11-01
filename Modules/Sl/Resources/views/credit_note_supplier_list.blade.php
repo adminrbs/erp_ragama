@@ -27,7 +27,7 @@
                 <h5 class="mb-0">Supplier Credit Note List</h5>
             </div>
             <div class="col-md-3" style="margin-left: 10px;margin-top:5px">
-                <a href="/sl/supplier_debit_note" class="btn btn-primary">
+                <a href="/sl/supplier_credit_note" class="btn btn-primary">
                     <i class="fa fa-plus">&nbsp;Create New</i>
                 </a>
             </div>

@@ -26,7 +26,7 @@ use Modules\Sl\Entities\supplier_payment_setoff_data;
 use Modules\Sl\Entities\supplier_payments;
 use Modules\Sl\Entities\supplierPaymentMethod;
 
-class supplierPaymentController extends Controller
+class supplierPaymentControllerOld extends Controller
 {
     protected $response_data = [];
 

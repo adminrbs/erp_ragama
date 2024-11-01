@@ -82,6 +82,13 @@
                                         PO Help Report
                                     </label>
                                 </li>
+                                <li class="list-group-item" style="">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" name="poHelpReport" value="poHelpReport" id="poHelpReport" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        PO Help Report
+                                    </label>
+                                </li>
 
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
@@ -176,6 +183,12 @@
             <iframe id="pdfContainer" src="" style="min-width: 80%; min-height: 750px;background-color: white;margin-top: 30px;;"></iframe>
         </div>
     </div>
+   <!--  <div class="row" style="background-color: gray;">
+        <div class="col-md-12" style="text-align: center;">
+            <iframe id="pdfContainer" src=""
+                style="min-width: 90%; min-height: 750px;background-color: white;margin-top: 30px;"></iframe>
+        </div>
+    </div> -->
 
 </body>
 

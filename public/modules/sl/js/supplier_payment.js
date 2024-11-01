@@ -3,17 +3,18 @@
 var action = undefined;
 var CUSTOMER_RECEIPT_ID = undefined;
 var REFERANCE_ID = undefined;
-var hidden_columns = "hidden";
-var suppliers = [];
+var hidden_columns = "";
 var rcptAmountforcheckbox = null;
+var total_set_off_Amount = 0;
 $(document).ready(function () {
-   
-    getCollectors_and_Cashiers();
+    //getCollectors_and_Cashiers();
     getBank();
     getBranch();
     getReceiptMethod();
-    newReferanceID('supplier_payments', 2500);
+    //newReferanceID('supplier_payments', 2500);
     $("#tab-single-cheque").attr("hidden", true);
+    $("#tab-bank-slip").attr("hidden", true);
+
 
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
@@ -53,6 +54,7 @@ $(document).ready(function () {
         $('#btnAutomaticSetoff').show();
         $('#btnAction').text('Save');
     }
+
 
 
 
@@ -146,22 +148,21 @@ $(document).ready(function () {
     suppliers = loadSupplierTochooser();
 
     DataChooser.addCollection("suppliers",['', '', '', '',''], suppliers);
-    
     $('#txtCustomerID').on('click', function () {
-       // DataChooser.showChooser($(this));
+        DataChooser.showChooser($(this),$(this),"suppliers");
+        $('#data-chooser-modalLabel').text('suppliers');
+     });
 
-       DataChooser.showChooser($(this),$(this),"suppliers");
-       $('#data-chooser-modalLabel').text('suppliers');
-    });
-
-    $('.select2-single-checque-bank').select2();
-    $('.select2-multi-checque-bank').select2();
-    $('.select2-single-checque-branch').select2();
-    $('.select2-multi-checque-branch').select2();
+     $('.select2-single-checque-bank').select2();
+     $('.select2-multi-checque-bank').select2();
+     $('.select2-single-checque-branch').select2();
+     $('.select2-multi-checque-branch').select2();
 
     $('#btnAction').on('click', function (event) {
         event.preventDefault();
         if ($(this).text() == 'Save') {
+           // newReferanceID('customer_receipts', 500);
+           newReferanceID('supplier_payments', 2500);
             saveReceipt();
         } else if ($(this).text() == 'Update') {
             updateReceipt();
@@ -281,9 +282,17 @@ $(document).ready(function () {
         }
     });
 
+
     $('#cmbReceiptMethod').on('change', function () {
         if ($(this).val() == '2') {
             $("#tab-single-cheque").attr("hidden", false);
+            $("#bankSlip").attr("hidden", true);
+            $("#tab-bank-slip").attr("hidden", true);
+        } else if ($(this).val() == '7') {
+            $("#bankSlip").attr("hidden", false);
+            $("#tab-bank-slip").attr("hidden", false);
+
+            $("#tab-single-cheque").attr("hidden", true);
         } else {
             $("#tab-single-cheque").attr("hidden", true);
             $("#tab-setoff").trigger('click');
@@ -291,6 +300,8 @@ $(document).ready(function () {
             $('#txtChequeNo').val('');
             $('#txtBankCode').val('');
             $('#txtChequeAmount').val('');
+            $("#bankSlip").attr("hidden", true);
+            $("#tab-bank-slip").attr("hidden", true);
         }
     });
 
@@ -298,6 +309,8 @@ $(document).ready(function () {
     $('#txtChequeAmount').on('input', function () {
         $('#txtAmount').val($(this).val());
     });
+
+
 
 
 });
@@ -356,44 +369,6 @@ function addMultiChequeRow() {
 
 
 
-
-
-function getCustomers() {
-
-
-    var customer_source = [];
-    $.ajax({
-        type: "GET",
-        url: '/cb/customer_receipt/getCustomers',
-        async: false,
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function () {
-
-        },
-        success: function (response) {
-            if (response.status) {
-                customer_source = response.data;
-            }
-
-        },
-        error: function (error) {
-            console.log(error);
-
-        },
-        complete: function () {
-
-        }
-
-    });
-
-    return customer_source;
-}
-
-
-
-
 function getCollectors_and_Cashiers() {
 
     $.ajax({
@@ -409,13 +384,18 @@ function getCollectors_and_Cashiers() {
         success: function (response) {
             if (response.status) {
                 var collectors = response.data;
+                console.log(collectors);
+
                 $('#cmbCollector').empty();
                 $('#cmbCashier').empty();
                 for (var i = 0; i < collectors.length; i++) {
                     var id = collectors[i].employee_id;
                     var name = collectors[i].employee_name;
                     $('#cmbCollector').append('<option value="' + id + '">' + name + '</option>');
-                    $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    if (collectors[i].desgination_id == 9) {
+                        $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
+                    }
+
                 }
             }
 
@@ -603,6 +583,7 @@ function getBankBranch(bank_id) {
 
 
 function saveReceipt() {
+    total_set_off_Amount = 0;
     if ($('#txtRefNo').val().trim().length === 0) {
         $('#txtRefNo').focus();
         $(window).scrollTop(0);
@@ -634,7 +615,7 @@ function saveReceipt() {
     }
 
 
-    if ($('#cmbCollector').val() === null) {
+/*     if ($('#cmbCollector').val() === null) {
         $('#cmbCollector').focus();
         $(window).scrollTop(0);
         $('#cmbCollector').css('borderColor', "red");
@@ -643,9 +624,9 @@ function saveReceipt() {
     } else {
         $('#cmbCollector').css('borderColor', "#059669");
     }
+ */
 
-
-    if ($('#cmbCashier').val() == null) {
+   /*  if ($('#cmbCashier').val() == null) {
         $('#cmbCashier').focus();
         $(window).scrollTop(0);
         $('#cmbCashier').css('borderColor', "red");
@@ -653,7 +634,7 @@ function saveReceipt() {
         return;
     } else {
         $('#cmbCashier').css('borderColor', "#059669");
-    }
+    } */
 
 
 
@@ -870,6 +851,7 @@ function saveReceipt() {
     for (var i = 0; i < rowCount; i++) {
 
         if ($('#txtSetoff' + i).val() == '') {
+            //$('#txtSetoff' + i).val(0);
             $("#tab-setoff").trigger('click');
             $('#txtSetoff' + i).focus();
             showWarningMessage('Invalied Setoff');
@@ -883,7 +865,25 @@ function saveReceipt() {
         showWarningMessage('Invalied New Referance No');
         return;
     }
+    let amount = parseFloat($('#txtAmount').val().replace(/,/g, '') || 0);
+    let discount = parseFloat($('#txtDiscount').val().replace(/,/g, '') || 0);
+    let round_up = parseFloat($('#txtRound_up').val().replace(/,/g, '') || 0);
+    var receipt_data_set = JSON.stringify(getSetoffTableData());
+    if ($('#checkAdvancePayment').prop('checked')) {
+        if (((amount - discount) + round_up) < total_set_off_Amount) {
+            showWarningMessage("Advance payment should be greater than total set off amount");
+            return false;
+        } else {
+            receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set);
+        }
+    } else {
+        receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set);
+    }
 
+}
+
+function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set) {
+    /* if(((amount - discount) + round_up) == total_set_off_Amount){ */
 
     $.ajax({
         url: '/sl/supplier_receipt/save_supplier_receipt',
@@ -894,8 +894,8 @@ function saveReceipt() {
             "supplier_id": $('#txtCustomerID').attr('data-id'),
             "supplier_code": $('#txtCustomerID').val(),
             "receipt_date": $('#txtDate').val(),
-            "collector_id": $('#cmbCollector').val(),
-            "cashier_id": $('#cmbCashier').val(),
+            "collector_id": 0,
+            "cashier_id": 0,
             "gl_account_id": $('#cmbGLAccount').val(),
             "receipt_method_id": $('#cmbReceiptMethod').val(),
             "amount": $('#txtAmount').val(),
@@ -903,8 +903,11 @@ function saveReceipt() {
             "round_up": $('#txtRound_up').val(),
             "branch_id": $('#cmbBranch').val(),
             "advance": advane,
+            "receipt_data": receipt_data_set,
             "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
+           /*  "your_ref": $('#txtYourReference').val(), */
+            "total_set_off_amount": total_set_off_Amount
 
         },
         timeout: 800000,
@@ -912,7 +915,7 @@ function saveReceipt() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-
+            $('#btnAction').prop('disabled', true);
         }, success: function (response) {
             console.log(response);
             if(response.msg == 'advanceError'){
@@ -931,9 +934,16 @@ function saveReceipt() {
 
         }
     });
+    /* }else{
+       
+        console.log("amount : " +amount);
+        console.log("discount : " +discount);
+        console.log("round_up : " +round_up);
+        console.log("total_set_off_Amount : " +total_set_off_Amount);
+        
+        showWarningMessage('Amount mismatch');
+    } */
 }
-
-
 
 function updateReceipt() {
 
@@ -973,7 +983,7 @@ function updateReceipt() {
     }
 
 
-    if ($('#cmbCollector').val() === null) {
+    /* if ($('#cmbCollector').val() === null) {
         $('#cmbCollector').focus();
         $(window).scrollTop(0);
         $('#cmbCollector').css('borderColor', "red");
@@ -981,10 +991,10 @@ function updateReceipt() {
         return;
     } else {
         $('#cmbCollector').css('borderColor', "#059669");
-    }
+    } */
 
 
-    if ($('#cmbCashier').val() == null) {
+   /*  if ($('#cmbCashier').val() == null) {
         $('#cmbCashier').focus();
         $(window).scrollTop(0);
         $('#cmbCashier').css('borderColor', "red");
@@ -992,7 +1002,7 @@ function updateReceipt() {
         return;
     } else {
         $('#cmbCashier').css('borderColor', "#059669");
-    }
+    } */
 
 
 
@@ -1254,7 +1264,7 @@ function loadSetoffTable(sup_id) {
                 var tableData = response.data;
                 $('#tblCustomerReceiptSetoff').empty();
                 for (var i = 0; i < tableData.length; i++) {
-                    
+
                     var str_id = "'" + i + "'";
                     var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + tableData[i].internal_number + '" data-external_number="' + tableData[i].external_number + '" data-reference_internal_number="' + tableData[i].reference_internal_number + '"  data-reference_external_number="' + tableData[i].reference_external_number + '"  data-reference_document_number="' + tableData[i].reference_document_number + '"></label>'
                     var date = '<label id="lblDate' + i + '">' + tableData[i].trans_date + '</label>';
@@ -1274,6 +1284,8 @@ function loadSetoffTable(sup_id) {
                 }
             }
 
+            
+
         },
         error: function (error) {
             console.log(error);
@@ -1287,8 +1299,10 @@ function loadSetoffTable(sup_id) {
 
 }
 
-function selectRecordToSetOff(event) {
+/* function selectRecordToSetOff(event) {
+    var set_amount = 0
     var txtAmount = $('#txtAmount').val();
+    set_amount = forSetOffAmount() || 0;
     if (rcptAmountforcheckbox === null) {
         rcptAmountforcheckbox = parseFloat(txtAmount);
     }
@@ -1300,8 +1314,14 @@ function selectRecordToSetOff(event) {
             $(event.target).prop('checked', false);
             return false;
         } else {
+            
 
 
+           if(set_amount < 0){
+            console.log(set_amount);
+            
+            $(event).prop('checked',false);
+           }else{
 
             var tr = $($($(event).parent()).parent());
 
@@ -1315,6 +1335,8 @@ function selectRecordToSetOff(event) {
                 $(event).prop('checked', false);
                 return false;
             }
+            rcptAmountforcheckbox = rcptAmountforcheckbox - set_amount;
+
             if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
                 setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
                 rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
@@ -1322,8 +1344,8 @@ function selectRecordToSetOff(event) {
                 setoffbox.val(rcptAmountforcheckbox);
                 rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
             }
-
-            console.log(rcptAmountforcheckbox);
+           
+           }
 
 
         }
@@ -1332,14 +1354,111 @@ function selectRecordToSetOff(event) {
         var labelIn8thTd = tr.find('td:eq(7) label').text();
         var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
       
-        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
+        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox)  + set_amount;
        
         setoffbox.val(0);
 
     }
 
+} */
+
+    function selectRecordToSetOff(event) {
+        var txtAmount = $('#txtAmount').val();
+        if (rcptAmountforcheckbox === null) {
+            rcptAmountforcheckbox = parseFloat(txtAmount);
+        }
+        $('#txtAmount').prop('disabled',true);
+    
+        if ($(event).prop('checked')) {
+            if (!txtAmount || parseFloat(txtAmount) === 0) {
+                showWarningMessage('Please enter a receipt amount');
+                $(event.target).prop('checked', false);
+                return false;
+            } else {
+    
+    
+    
+                var tr = $($($(event).parent()).parent());
+    
+    
+                var labelIn8thTd = tr.find('td:eq(7) label').text();
+    
+                var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+    
+                if (rcptAmountforcheckbox == 0) {
+                    showWarningMessage('Insuficent Balance');
+                    $(event).prop('checked', false);
+                    return false;
+                }
+                if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
+                    setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
+                    rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
+                } else {
+                    setoffbox.val(rcptAmountforcheckbox);
+                    rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
+                }
+    
+                console.log(rcptAmountforcheckbox);
+    
+    
+            }
+        } else {
+            var tr = $($($(event).parent()).parent());
+            var labelIn8thTd = tr.find('td:eq(7) label').text();
+            var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+          
+            rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
+           
+            setoffbox.val(0);
+    
+        }
+    
+    }
+
+
+function onFocusInChangeValue(event){
+    var tr = $($($(event).parent()).parent());
+    var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+    var setoffValue = parseFloat(setoffbox.val().replace(/,/g, '')) || 0;
+
+    if(rcptAmountforcheckbox != null){
+        rcptAmountforcheckbox - setoffValue;
+    }
+    console.log(rcptAmountforcheckbox);
 }
 
+function onFocusOutChangeValue(event){
+    var tr = $($($(event).parent()).parent());
+    var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
+    var setoffValue = parseFloat(setoffbox.val().replace(/,/g, '')) || 0;
+
+    if(rcptAmountforcheckbox != null){
+        rcptAmountforcheckbox + setoffValue;
+    }
+    console.log(rcptAmountforcheckbox);
+    
+}
+
+
+function changeAmount() {
+
+    var txtAmount = $('#txtAmount').val();
+
+    rcptAmountforcheckbox = parseFloat(txtAmount);
+
+    /*  $('#tblCustomerReceiptSetoff tr').each(function() {
+         var checkbox = $(this).find('td:last-child input[type="checkbox"]'); 
+         var textbox = $(this).find('td:eq(8) input[type="text"]'); 
+         checkbox.prop('checked', false);
+         textbox.val(0);
+     }); */
+}
+
+
+function selectAll(event) {
+    $(event).select();
+
+}
 
 function automaticSetoff() {
     if ($('#txtAmount').val().trim().length === 0) {
@@ -1488,13 +1607,13 @@ function getSetoffTableData() {
     var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
     for (var i = 0; i < rowCount; i++) {
 
-        if(parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0){
+        if (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0) {
             $('#txtSetoff' + i).focus();
             showWarningMessage('Invalied Setoff amount..');
             break;
         }
         setoffData.push(JSON.stringify({
-            "internal_number": $('#lblDataID' + i).attr('data-internal_number'),
+           "internal_number": $('#lblDataID' + i).attr('data-internal_number'),
             "external_number": $('#lblDataID' + i).attr('data-external_number'),
             "reference_internal_number": $('#lblDataID' + i).attr('data-reference_internal_number'),
             "reference_external_number": $('#lblDataID' + i).attr('data-reference_external_number'),
@@ -1507,13 +1626,30 @@ function getSetoffTableData() {
             "date": $('#lblDate' + i).text(),
             "creditors_ledger_id": $('#lblAge' + i).attr('data-id')
         }));
+
+        total_set_off_Amount = total_set_off_Amount + (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
+
     }
+    console.log(setoffData);
 
     return setoffData;
 
 }
 
+function forSetOffAmount() {
 
+    var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
+    var _set_off_amount = 0
+    for (var i = 0; i < rowCount; i++) {
+
+
+        _set_off_amount = _set_off_amount + (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
+
+    }
+
+    return _set_off_amount;
+
+}
 
 function getSingleCheque() {
     return {
@@ -1530,8 +1666,23 @@ function getSingleCheque() {
     };
 }
 
+
+function getSlip() {
+    if ($('#cmbReceiptMethod').val() == 7) {
+        if ($('#txtSlipRef').val() == '') {
+            showWarningMessage('Please enter reference details');
+        } else {
+            return {
+                "cheque_referenceNo": $('#txtSlipRef').val(),
+                "slip_time": $('#tmSliptime').val(),
+                "slip_date": $('#dtSLipDate').val(),
+            }
+        }
+    }
+
+}
 function newReferanceID(table, doc_number) {
-    REFERANCE_ID = newID("/newReferenceNumber_supplierPayment", table, doc_number);
+    REFERANCE_ID = newID("../newReferenceNumber_supplierPayment", table, doc_number);
     $('#txtRefNo').val('New Receipt');
 }
 
@@ -1635,19 +1786,23 @@ function appendReceiptData(hidden_col, date, document_ref_no, description, amoun
     row += '<td style="text-align:right;max-width: 80px;">';
     row += amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
+    //row += '<td style="text-align:right;max-width: 80px;" >'; 
     row += paid_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
+    //row += '<td style="text-align:right;max-width: 80px;" >';
     row += return_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
+    //row += '<td style="text-align:right;max-width: 80px;">';
     row += balance;
     row += '</td>';
     row += '<td style="max-width: 80px;">';
     row += setoff;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
+    //row += '<td style="text-align:right;max-width: 80px;">';
     row += age;
     row += '</td>';
     row += '<td style="text-align:right;max-width: 80px;">'
@@ -1738,60 +1893,6 @@ function lockInputsSetoff() {
 function dataChooserShowEventListener(event) {
 
 }
-
-
-//load custoners
-function loadCustomerTOchooser() {
-
-    var data = [];
-    $.ajax({
-        url: '/sd/loadCustomerTOchooser',
-        type: 'get',
-        dataType: 'json',
-        async: false,
-        success: function (response) {
-            if (response) {
-                var customerData = response.data;
-                console.log(customerData);
-                /*  DataChooser.setDataSourse(supplierData); */
-                data = customerData;
-            }
-        },
-        error: function (error) {
-            console.log(error);
-        },
-
-    })
-    return data;
-}
-//load supplier other details
-function loadCustomerOtherDetails(id) {
-
-    $.ajax({
-        url: '/sd/loadCustomerOtherDetails/' + id,
-        type: 'get',
-        dataType: 'json',
-        async:false,
-        success: function (data) {
-            console.log(data)
-            var txt = data.data;
-            /*  console.log(txt); */
-            $('#lblCustomerAddress').val(txt[0].primary_address);
-            var cusID = txt[0].customer_id;
-            var payment_term_id_ = txt[0].payment_term_id;
-            $('#lblCustomerName').attr('data-id', cusID);
-            $('#cmbPaymentTerm').val(payment_term_id_);
-            $('#cmbDeliverType').focus();
-
-
-        },
-        error: function (error) {
-            console.log(error);
-        },
-
-    })
-}
-
 
 //load item
 function loadSupplierTochooser() {

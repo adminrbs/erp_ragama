@@ -59,16 +59,16 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label class="compulsory-field">Collector</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbCollector"></select>
+                                <label>Balance to be set off</label>
+                                <input type="number" class="form-control form-control-sm math-abs" id="txtBalanceToSetoff" style="text-align: right;" value="0.00" disabled>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label class="compulsory-field">Cashier</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbCashier"></select>
+                                <label>Branch</label>
+                                <select class="form-control form-control-sm" id="cmbBranch"></select>
                                 </div>
                             </div>
                         </div>
@@ -88,18 +88,30 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <label class="compulsory-field">Receipt Method</label>
+                                <div class="col-md-3">
+                                    <label class="compulsory-field">Payment Method</label>
                                     <select class="form-control form-control-sm compulsory-field" id="cmbReceiptMethod">
                                         <option value="1">Not Applicable</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label class="compulsory-field">Amount</label>
                                     <input type="number" class="form-control form-control-sm compulsory-field math-abs" id="txtAmount" style="text-align: right;" value="0.00">
                                 </div>
+                                <div class="col-md-3">
+                                            <label>Discount</label>
+                                            <input type="number" class="form-control form-control-sm math-abs" id="txtDiscount" style="text-align: right;" value="0.00">
+                                        </div>
+                                        <div class="col-md-2">
+                                        <label>Round up</label>
+                                        <input type="number" class="form-control form-control-sm" id="txtRound_up" style="text-align: right;" value="0.00">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <br>
+                                        <input type="checkbox" id="checkAdvancePayment" name="advancePayment">Advance Payment
+                                        </div>
                             </div>
                         </div>
 
@@ -108,20 +120,15 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <label>Balance to be set off</label>
-                                            <input type="number" class="form-control form-control-sm math-abs" id="txtBalanceToSetoff" style="text-align: right;" value="0.00" disabled>
+                                           
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
+                                        
                                         <div class="col-md-6">
-                                            <label>Discount</label>
-                                            <input type="number" class="form-control form-control-sm math-abs" id="txtDiscount" style="text-align: right;" value="0.00">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Round up</label>
-                                            <input type="number" class="form-control form-control-sm" id="txtRound_up" style="text-align: right;" value="0.00">
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -131,12 +138,11 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Branch</label>
-                                    <select class="form-control form-control-sm" id="cmbBranch"></select>
+                                    
                                 </div>
                                 <div class="col-md-6">
                                     <br>
-                                    <input type="checkbox" id="checkAdvancePayment" name="advancePayment">Advance Payment
+                                    
                                 </div>
                             </div>
                         </div>

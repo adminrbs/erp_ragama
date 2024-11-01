@@ -83,6 +83,9 @@ class PaymentVoucherController extends Controller
             $PaymentVoucher->transaction_date = Carbon::now();
             if ($request->input('option') == 1) {
                 $PaymentVoucher->payee_id = $request->input('payee');
+                if($request->input('payee') == 1){
+                    $PaymentVoucher->payee_name = $request->input('notApplicablePayee');
+                }
             } else {
                 $PaymentVoucher->supplier_id = $request->input('supplier');
             }

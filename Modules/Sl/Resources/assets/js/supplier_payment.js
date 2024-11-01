@@ -7,7 +7,7 @@ var hidden_columns = "";
 var rcptAmountforcheckbox = null;
 var total_set_off_Amount = 0;
 $(document).ready(function () {
-    getCollectors_and_Cashiers();
+    //getCollectors_and_Cashiers();
     getBank();
     getBranch();
     getReceiptMethod();
@@ -615,7 +615,7 @@ function saveReceipt() {
     }
 
 
-    if ($('#cmbCollector').val() === null) {
+/*     if ($('#cmbCollector').val() === null) {
         $('#cmbCollector').focus();
         $(window).scrollTop(0);
         $('#cmbCollector').css('borderColor', "red");
@@ -624,9 +624,9 @@ function saveReceipt() {
     } else {
         $('#cmbCollector').css('borderColor', "#059669");
     }
+ */
 
-
-    if ($('#cmbCashier').val() == null) {
+   /*  if ($('#cmbCashier').val() == null) {
         $('#cmbCashier').focus();
         $(window).scrollTop(0);
         $('#cmbCashier').css('borderColor', "red");
@@ -634,7 +634,7 @@ function saveReceipt() {
         return;
     } else {
         $('#cmbCashier').css('borderColor', "#059669");
-    }
+    } */
 
 
 
@@ -894,8 +894,8 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
             "supplier_id": $('#txtCustomerID').attr('data-id'),
             "supplier_code": $('#txtCustomerID').val(),
             "receipt_date": $('#txtDate').val(),
-            "collector_id": $('#cmbCollector').val(),
-            "cashier_id": $('#cmbCashier').val(),
+            "collector_id": 0,
+            "cashier_id": 0,
             "gl_account_id": $('#cmbGLAccount').val(),
             "receipt_method_id": $('#cmbReceiptMethod').val(),
             "amount": $('#txtAmount').val(),
@@ -922,7 +922,7 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
                 showWarningMessage('Setoff off amount mismatch')
             }
             else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
-                showSuccessMessage('Receipt has been saved');
+                showSuccessMessage('Payment has been saved');
                 location.href = 'supplier_payment';
             } else {
                 showErrorMessage('Something went wrong');
@@ -983,7 +983,7 @@ function updateReceipt() {
     }
 
 
-    if ($('#cmbCollector').val() === null) {
+    /* if ($('#cmbCollector').val() === null) {
         $('#cmbCollector').focus();
         $(window).scrollTop(0);
         $('#cmbCollector').css('borderColor', "red");
@@ -991,10 +991,10 @@ function updateReceipt() {
         return;
     } else {
         $('#cmbCollector').css('borderColor', "#059669");
-    }
+    } */
 
 
-    if ($('#cmbCashier').val() == null) {
+   /*  if ($('#cmbCashier').val() == null) {
         $('#cmbCashier').focus();
         $(window).scrollTop(0);
         $('#cmbCashier').css('borderColor', "red");
@@ -1002,7 +1002,7 @@ function updateReceipt() {
         return;
     } else {
         $('#cmbCashier').css('borderColor', "#059669");
-    }
+    } */
 
 
 
@@ -1224,7 +1224,7 @@ function updateReceipt() {
         }, success: function (response) {
             console.log(response);
             if (response.status) {
-                showSuccessMessage('Receipt has been updated');
+                showSuccessMessage('Payment has been updated');
                 location.href = 'customer_receipt_list';
             } else {
                 showErrorMessage('Something went wrong');
@@ -1682,7 +1682,7 @@ function getSlip() {
 
 }
 function newReferanceID(table, doc_number) {
-    REFERANCE_ID = newID("/cb/customer_receipt/new_referance_id", table, doc_number);
+    REFERANCE_ID = newID("../newReferenceNumber_supplierPayment", table, doc_number);
     $('#txtRefNo').val('New Receipt');
 }
 

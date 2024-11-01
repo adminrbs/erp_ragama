@@ -3,18 +3,18 @@
 var action = undefined;
 var CUSTOMER_RECEIPT_ID = undefined;
 var REFERANCE_ID = undefined;
-var hidden_columns = "";
+var hidden_columns = "hidden";
+var suppliers = [];
 var rcptAmountforcheckbox = null;
-var total_set_off_Amount = 0;
 $(document).ready(function () {
+   
     getCollectors_and_Cashiers();
     getBank();
     getBranch();
     getReceiptMethod();
-
+    newReferanceID('supplier_payments', 2500);
     $("#tab-single-cheque").attr("hidden", true);
     $("#tab-bank-slip").attr("hidden", true);
-
 
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
@@ -23,25 +23,26 @@ $(document).ready(function () {
         CUSTOMER_RECEIPT_ID = id;
         var action = param[0].split('=')[2].split('&')[0];
         if (action == 'view') {
-            // getCollectors_and_Cashiers();
             $('#btnAction').hide();
             $('#btnAutomaticSetoff').hide();
-            $('#txtRefNo').prop('disabled', true);
-            $('#txtDate').prop('disabled', true);
-            $('#txtCustomerID').prop('disabled', true);
-            $('#txtCustomerName').prop('disabled', true);
-            $('#txtCustomerID').prop('disabled', true);
-            $('#cmbCollector').prop('disabled', true);
-            $('#cmbCashier').prop('disabled', true);
-            $('#cmbGLAccount').prop('disabled', true);
-            $('#cmbReceiptMethod').prop('disabled', true);
-            $('#txtAmount').prop('disabled', true);
-            $('#txtDiscount').prop('disabled', true);
-            $('#txtRound_up').prop('disabled', true);
-            $('#cmbBranch').prop('disabled', true);
-            $('#checkAdvancePayment').prop('disabled', true);
-            //$('.hide_col').hide();
 
+            $('#txtRefNo').prop('disabled',true);
+            $('#txtDate').prop('disabled',true);
+            $('#txtCustomerID').prop('disabled',true);
+            $('#txtCustomerName').prop('disabled',true);
+            $('#txtCustomerID').prop('disabled',true);
+            $('#cmbCollector').prop('disabled',true);
+            $('#cmbCashier').prop('disabled',true);
+            $('#cmbGLAccount').prop('disabled',true);
+            $('#cmbReceiptMethod').prop('disabled',true);
+
+            $('#txtAmount').prop('disabled',true);
+            $('#txtDiscount').prop('disabled',true);
+            $('#txtRound_up').prop('disabled',true);
+            $('#cmbBranch').prop('disabled',true);
+            $('#checkAdvancePayment').prop('disabled',true);
+            $('.hide_col').hide();
+           
         } else if (action == 'edit') {
             hidden_columns = "";
             $('#btnAction').show();
@@ -143,13 +144,15 @@ $(document).ready(function () {
         addMultiChequeRow();
     });
 
-    var customer_data_source = getCustomers();
-    DataChooser.setTitle('Customer');
-    DataChooser.addCollection("customers", ['Customer Name', 'Customer Code', 'Town', 'Route', ''], customer_data_source);
+    suppliers = loadSupplierTochooser();
+
+    DataChooser.addCollection("suppliers",['', '', '', '',''], suppliers);
+    
     $('#txtCustomerID').on('click', function () {
-        /* DataChooser.showChooser($(this)); */
-        DataChooser.showChooser($(this), $(this), "customers");
-        $('#data-chooser-modalLabel').text('customers');
+       // DataChooser.showChooser($(this));
+
+       DataChooser.showChooser($(this),$(this),"suppliers");
+       $('#data-chooser-modalLabel').text('suppliers');
     });
 
     $('.select2-single-checque-bank').select2();
@@ -160,7 +163,6 @@ $(document).ready(function () {
     $('#btnAction').on('click', function (event) {
         event.preventDefault();
         if ($(this).text() == 'Save') {
-            newReferanceID('customer_receipts', 500);
             saveReceipt();
         } else if ($(this).text() == 'Update') {
             updateReceipt();
@@ -280,17 +282,9 @@ $(document).ready(function () {
         }
     });
 
-
     $('#cmbReceiptMethod').on('change', function () {
         if ($(this).val() == '2') {
             $("#tab-single-cheque").attr("hidden", false);
-            $("#bankSlip").attr("hidden", true);
-            $("#tab-bank-slip").attr("hidden", true);
-        } else if ($(this).val() == '7') {
-            $("#bankSlip").attr("hidden", false);
-            $("#tab-bank-slip").attr("hidden", false);
-
-            $("#tab-single-cheque").attr("hidden", true);
         } else {
             $("#tab-single-cheque").attr("hidden", true);
             $("#tab-setoff").trigger('click');
@@ -298,8 +292,6 @@ $(document).ready(function () {
             $('#txtChequeNo').val('');
             $('#txtBankCode').val('');
             $('#txtChequeAmount').val('');
-            $("#bankSlip").attr("hidden", true);
-            $("#tab-bank-slip").attr("hidden", true);
         }
     });
 
@@ -307,8 +299,6 @@ $(document).ready(function () {
     $('#txtChequeAmount').on('input', function () {
         $('#txtAmount').val($(this).val());
     });
-
-
 
 
 });
@@ -420,18 +410,13 @@ function getCollectors_and_Cashiers() {
         success: function (response) {
             if (response.status) {
                 var collectors = response.data;
-                console.log(collectors);
-
                 $('#cmbCollector').empty();
                 $('#cmbCashier').empty();
                 for (var i = 0; i < collectors.length; i++) {
                     var id = collectors[i].employee_id;
                     var name = collectors[i].employee_name;
                     $('#cmbCollector').append('<option value="' + id + '">' + name + '</option>');
-                    if (collectors[i].desgination_id == 9) {
-                        $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
-                    }
-
+                    $('#cmbCashier').append('<option value="' + id + '">' + name + '</option>');
                 }
             }
 
@@ -539,7 +524,7 @@ function getReceiptMethod() {
 
     $.ajax({
         type: "GET",
-        url: '/cb/customer_receipt/getReceiptMethod',
+        url: '/sl/supplier_receipt/getReceiptMethod',
         async: false,
         processData: false,
         contentType: false,
@@ -552,8 +537,8 @@ function getReceiptMethod() {
                 var method = response.data;
                 $('#cmbReceiptMethod').empty();
                 for (var i = 0; i < method.length; i++) {
-                    var id = method[i].customer_payment_method_id;
-                    var name = method[i].customer_payment_method;
+                    var id = method[i].supplier_payment_method_id;
+                    var name = method[i].supplier_payment_method;
                     $('#cmbReceiptMethod').append('<option value="' + id + '">' + name + '</option>');
                 }
 
@@ -619,7 +604,6 @@ function getBankBranch(bank_id) {
 
 
 function saveReceipt() {
-    total_set_off_Amount = 0;
     if ($('#txtRefNo').val().trim().length === 0) {
         $('#txtRefNo').focus();
         $(window).scrollTop(0);
@@ -887,7 +871,6 @@ function saveReceipt() {
     for (var i = 0; i < rowCount; i++) {
 
         if ($('#txtSetoff' + i).val() == '') {
-            //$('#txtSetoff' + i).val(0);
             $("#tab-setoff").trigger('click');
             $('#txtSetoff' + i).focus();
             showWarningMessage('Invalied Setoff');
@@ -901,34 +884,16 @@ function saveReceipt() {
         showWarningMessage('Invalied New Referance No');
         return;
     }
-    let amount = parseFloat($('#txtAmount').val().replace(/,/g, '') || 0);
-    let discount = parseFloat($('#txtDiscount').val().replace(/,/g, '') || 0);
-    let round_up = parseFloat($('#txtRound_up').val().replace(/,/g, '') || 0);
-    var receipt_data_set = JSON.stringify(getSetoffTableData());
-    if ($('#checkAdvancePayment').prop('checked')) {
-        if (((amount - discount) + round_up) < total_set_off_Amount) {
-            showWarningMessage("Advance payment should be greater than total set off amount");
-            return false;
-        } else {
-            receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set);
-        }
-    } else {
-        receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set);
-    }
 
-}
-
-function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, advane, receipt_data_set) {
-    /* if(((amount - discount) + round_up) == total_set_off_Amount){ */
 
     $.ajax({
-        url: '/cb/customer_receipt/saveCustomerReceipt',
+        url: '/sl/supplier_receipt/save_supplier_receipt',
         method: 'post',
         enctype: 'multipart/form-data',
         data: {
             "external_number": REFERANCE_ID,
-            "customer_id": $('#txtCustomerID').attr('data-id'),
-            "customer_code": $('#txtCustomerID').val(),
+            "supplier_id": $('#txtCustomerID').attr('data-id'),
+            "supplier_code": $('#txtCustomerID').val(),
             "receipt_date": $('#txtDate').val(),
             "collector_id": $('#cmbCollector').val(),
             "cashier_id": $('#cmbCashier').val(),
@@ -939,11 +904,8 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
             "round_up": $('#txtRound_up').val(),
             "branch_id": $('#cmbBranch').val(),
             "advance": advane,
-            "receipt_data": receipt_data_set,
+            "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
-            "payment_slip": JSON.stringify(getSlip()),
-            "your_ref": $('#txtYourReference').val(),
-            "total_set_off_amount": total_set_off_Amount
 
         },
         timeout: 800000,
@@ -951,19 +913,15 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-            $('#btnAction').prop('disabled', true);
+
         }, success: function (response) {
-            $('#btnAction').prop('disabled', false);
             console.log(response);
-            if (response.msg == 'advanceError') {
+            if(response.msg == 'advanceError'){
                 showWarningMessage('Setoff off amount mismatch')
-            }
-            else if (response.duplicate == "duplicate") {
-                showWarningMessage("Cheque number duplicated");
             }
             else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
                 showSuccessMessage('Receipt has been saved');
-                location.href = 'customer_receipt';
+                location.href = 'supplier_payment';
             } else {
                 showErrorMessage('Something went wrong');
             }
@@ -974,16 +932,9 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
 
         }
     });
-    /* }else{
-       
-        console.log("amount : " +amount);
-        console.log("discount : " +discount);
-        console.log("round_up : " +round_up);
-        console.log("total_set_off_Amount : " +total_set_off_Amount);
-        
-        showWarningMessage('Amount mismatch');
-    } */
 }
+
+
 
 function updateReceipt() {
 
@@ -1280,19 +1231,19 @@ function updateReceipt() {
 
 function dataChooserEventListener(event, id, value) {
     $('#txtCustomerName').val(id);
-    var customer_id = $('#txtCustomerID').attr('data-id');
-    loadSetoffTable(customer_id);
+    var sup_id = $('#txtCustomerID').attr('data-id');
+    loadSetoffTable(sup_id);
 
 }
 
 
 
-function loadSetoffTable(customer_id) {
+function loadSetoffTable(sup_id) {
 
 
     $.ajax({
         type: "GET",
-        url: '/cb/customer_receipt/loadSetoffTable/' + customer_id,
+        url: '/sl/customer_receipt/loadSetoffTable/' + sup_id,
         processData: false,
         contentType: false,
         cache: false,
@@ -1304,7 +1255,7 @@ function loadSetoffTable(customer_id) {
                 var tableData = response.data;
                 $('#tblCustomerReceiptSetoff').empty();
                 for (var i = 0; i < tableData.length; i++) {
-
+                    
                     var str_id = "'" + i + "'";
                     var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + tableData[i].internal_number + '" data-external_number="' + tableData[i].external_number + '" data-reference_internal_number="' + tableData[i].reference_internal_number + '"  data-reference_external_number="' + tableData[i].reference_external_number + '"  data-reference_document_number="' + tableData[i].reference_document_number + '"></label>'
                     var date = '<label id="lblDate' + i + '">' + tableData[i].trans_date + '</label>';
@@ -1314,19 +1265,15 @@ function loadSetoffTable(customer_id) {
                     var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(tableData[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var return_amount = '<label id="lblReturnAmount' + i + '">0.00</label>';
                     var balance = '<label id="lblBalance' + i + '">' + parseFloat(tableData[i].balance_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
-                    var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" onclick="selectAll(this)"  oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
-                    // var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs" style="text-align:right; max-width: 80px;" onclick="selectAll(this)" onfocusin="onFocusInChangeValue(this)" onfocusout="onFocusOutChangeValue(this)" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
-
-                    var age = '<label id="lblAge' + i + '"data-id="' + tableData[i].debtors_ledger_id + '"> - </label>';
+                    var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
+                   // var age = '<label id="lblAge' + i + '">0.00</label>';
+                   var age = '<label id="lblAge' + i + '"data-id="'+tableData[i].creditors_ledger_id+'">-</label>';
                     var chkBox = '<input type="checkbox" id="chkbox' + i + '" onclick="selectRecordToSetOff(this)">'
-
                     appendReceiptData(hidden_col, date, document_ref_no, description, amount, paid_amount, return_amount, balance, setoff, age, chkBox);
 
 
                 }
             }
-
-
 
         },
         error: function (error) {
@@ -1341,10 +1288,8 @@ function loadSetoffTable(customer_id) {
 
 }
 
-/* function selectRecordToSetOff(event) {
-    var set_amount = 0
+function selectRecordToSetOff(event) {
     var txtAmount = $('#txtAmount').val();
-    set_amount = forSetOffAmount() || 0;
     if (rcptAmountforcheckbox === null) {
         rcptAmountforcheckbox = parseFloat(txtAmount);
     }
@@ -1356,14 +1301,8 @@ function loadSetoffTable(customer_id) {
             $(event.target).prop('checked', false);
             return false;
         } else {
-            
 
 
-           if(set_amount < 0){
-            console.log(set_amount);
-            
-            $(event).prop('checked',false);
-           }else{
 
             var tr = $($($(event).parent()).parent());
 
@@ -1377,8 +1316,6 @@ function loadSetoffTable(customer_id) {
                 $(event).prop('checked', false);
                 return false;
             }
-            rcptAmountforcheckbox = rcptAmountforcheckbox - set_amount;
-
             if (rcptAmountforcheckbox > labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')) {
                 setoffbox.val(labelIn8thTd.replace(/,(?=.*\.\d+)/g, ''));
                 rcptAmountforcheckbox = rcptAmountforcheckbox - labelIn8thTd.replace(/,(?=.*\.\d+)/g, '')
@@ -1386,8 +1323,8 @@ function loadSetoffTable(customer_id) {
                 setoffbox.val(rcptAmountforcheckbox);
                 rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
             }
-           
-           }
+
+            console.log(rcptAmountforcheckbox);
 
 
         }
@@ -1396,114 +1333,14 @@ function loadSetoffTable(customer_id) {
         var labelIn8thTd = tr.find('td:eq(7) label').text();
         var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
       
-        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox)  + set_amount;
+        rcptAmountforcheckbox = parseFloat(rcptAmountforcheckbox) + parseFloat(setoffbox.val());
        
         setoffbox.val(0);
 
     }
 
-} */
-
-function selectRecordToSetOff(event) {
-    var set_amount = 0
-    var txtAmount = $('#txtAmount').val();
-    set_amount = forSetOffAmount() || 0;
-    var txtAmount = $('#txtAmount').val() || 0;
-    var discount = $('#txtDiscount').val() || 0;
-    var round_up = $('#txtRound_up').val() || 0;
-    var calc = (parseFloat(txtAmount) - parseFloat(discount)) + parseFloat(round_up);
-    if (rcptAmountforcheckbox === null) {
-        rcptAmountforcheckbox = parseFloat(txtAmount);
-    }
-    $('#txtAmount').prop('disabled', true);
-
-    if ($(event).prop('checked')) {
-        if (!txtAmount || parseFloat(txtAmount) === 0) {
-            showWarningMessage('Please enter a receipt amount');
-            $(event).prop('checked', false);
-            return false;
-        } else {
-            var tr = $(event).closest('tr');
-            var rowBalance = parseFloat(tr.find('td:eq(7) label').text().replace(/,/g, ''));
-            var setoffbox = tr.find('td:eq(8) input[type=number]');
-            if (rcptAmountforcheckbox <= 0) {
-                showWarningMessage("Insufient Balance");
-                $(event).prop('checked', false);
-            } else if (rcptAmountforcheckbox > (parseFloat(rowBalance) + parseFloat(set_amount))) {
-                setoffbox.val(rowBalance);
-                console.log(parseFloat(rowBalance) + parseFloat(set_amount));
-                rcptAmountforcheckbox = rcptAmountforcheckbox - rowBalance;
-            } else if (rcptAmountforcheckbox < (parseFloat(rowBalance) + parseFloat(set_amount))) {
-                setoffbox.val(rcptAmountforcheckbox);
-                console.log(parseFloat(rowBalance) + parseFloat(set_amount));
-                rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
-            } else if (rcptAmountforcheckbox == (parseFloat(rowBalance) + parseFloat(set_amount))) {
-                setoffbox.val(rcptAmountforcheckbox);
-                console.log(parseFloat(rowBalance) + parseFloat(set_amount));
-                
-                rcptAmountforcheckbox = rcptAmountforcheckbox - rcptAmountforcheckbox
-            } else {
-                showWarningMessage("Insufient Balance");
-                $(event).prop('checked', false);
-            }
-
-        }
-
-    } else {
-        var tr = $(event).closest('tr');
-        var rowBalance = parseFloat(tr.find('td:eq(7) label').text().replace(/,/g, ''));
-        var setoffbox = tr.find('td:eq(8) input[type=number]');
-        var setoffValue = parseFloat(setoffbox.val().replace(/,/g, '')) || 0;
-        rcptAmountforcheckbox += setoffValue;
-        setoffbox.val(0);
-    }
 }
 
-
-
-function onFocusInChangeValue(event) {
-    var tr = $($($(event).parent()).parent());
-    var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
-    var setoffValue = parseFloat(setoffbox.val().replace(/,/g, '')) || 0;
-
-    if (rcptAmountforcheckbox != null) {
-        rcptAmountforcheckbox - setoffValue;
-    }
-    console.log(rcptAmountforcheckbox);
-}
-
-function onFocusOutChangeValue(event) {
-    var tr = $($($(event).parent()).parent());
-    var setoffbox = $(tr.find('td:eq(8) input[type=number]'));
-    var setoffValue = parseFloat(setoffbox.val().replace(/,/g, '')) || 0;
-
-    if (rcptAmountforcheckbox != null) {
-        rcptAmountforcheckbox + setoffValue;
-    }
-    console.log(rcptAmountforcheckbox);
-
-}
-
-
-function changeAmount() {
-
-    var txtAmount = $('#txtAmount').val();
-
-    rcptAmountforcheckbox = parseFloat(txtAmount);
-
-    /*  $('#tblCustomerReceiptSetoff tr').each(function() {
-         var checkbox = $(this).find('td:last-child input[type="checkbox"]'); 
-         var textbox = $(this).find('td:eq(8) input[type="text"]'); 
-         checkbox.prop('checked', false);
-         textbox.val(0);
-     }); */
-}
-
-
-function selectAll(event) {
-    $(event).select();
-
-}
 
 function automaticSetoff() {
     if ($('#txtAmount').val().trim().length === 0) {
@@ -1652,7 +1489,7 @@ function getSetoffTableData() {
     var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
     for (var i = 0; i < rowCount; i++) {
 
-        if (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0) {
+        if(parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) < 0){
             $('#txtSetoff' + i).focus();
             showWarningMessage('Invalied Setoff amount..');
             break;
@@ -1667,35 +1504,17 @@ function getSetoffTableData() {
             "paid_amount": $('#lblPaidAmount' + i).text().replace(/,(?=.*\.\d+)/g, ''),
             "return_amount": $('#lblReturnAmount' + i).text().replace(/,(?=.*\.\d+)/g, ''),
             "balance": $('#lblBalance' + i).text().replace(/,(?=.*\.\d+)/g, ''),
-            "set_off_amount": $('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '') || '0',
+            "set_off_amount": $('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, ''),
             "date": $('#lblDate' + i).text(),
-            "debtors_ledger_id": $('#lblAge' + i).attr('data-id')
+            "creditors_ledger_id": $('#lblAge' + i).attr('data-id')
         }));
-
-        total_set_off_Amount = total_set_off_Amount + (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
-
     }
-    console.log(setoffData);
 
     return setoffData;
 
 }
 
-function forSetOffAmount() {
 
-    var rowCount = $('#tblCustomerReceiptSetoff >tr').length;
-    var _set_off_amount = 0
-    for (var i = 0; i < rowCount; i++) {
-
-
-        _set_off_amount =+ (parseFloat($('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')) || 0);
-
-
-    }
-
-    return _set_off_amount;
-
-}
 
 function getSingleCheque() {
     return {
@@ -1712,23 +1531,8 @@ function getSingleCheque() {
     };
 }
 
-
-function getSlip() {
-    if ($('#cmbReceiptMethod').val() == 7) {
-        if ($('#txtSlipRef').val() == '') {
-            showWarningMessage('Please enter reference details');
-        } else {
-            return {
-                "cheque_referenceNo": $('#txtSlipRef').val(),
-                "slip_time": $('#tmSliptime').val(),
-                "slip_date": $('#dtSLipDate').val(),
-            }
-        }
-    }
-
-}
 function newReferanceID(table, doc_number) {
-    REFERANCE_ID = newID("/cb/customer_receipt/new_referance_id", table, doc_number);
+    REFERANCE_ID = newID("/newReferenceNumber_supplierPayment", table, doc_number);
     $('#txtRefNo').val('New Receipt');
 }
 
@@ -1736,10 +1540,10 @@ function newReferanceID(table, doc_number) {
 
 function getCustomerReceipt(id) {
     $.ajax({
-        url: '/cb/customer_receipt/getCustomerReceipt/' + id,
+        url: '/sl/supplier_payment/getReceipt/' + id,
         type: 'GET',
         cache: false,
-        async: false,
+      async:false,
         timeout: 800000,
         beforeSend: function () { },
         success: function (response) {
@@ -1751,7 +1555,7 @@ function getCustomerReceipt(id) {
             $('#txtCustomerName').val(result.customer_name);
             $('#txtCustomerID').attr('data-id', result.customer_id);
             $('#cmbCollector').val(result.collector_id);
-            $('#cmbCashier').val(result.cashier_id);
+         //   $('#cmbCashier').val(result.cashier_user_id);
             $('#cmbGLAccount').val(result.gl_account_id);
             $('#cmbReceiptMethod').val(result.receipt_method_id);
 
@@ -1760,14 +1564,12 @@ function getCustomerReceipt(id) {
             $('#txtRound_up').val(result.round_up);
             $('#cmbBranch').val(result.branch_id);
 
-            if (result.receipt_method_id == '2') {
+            if (result.receipt_method_id == '3') {
                 $("#tab-single-cheque").attr("hidden", false);
-            } else if (result.receipt_method_id == '7') {
-                $("#tab-bank-slip").attr("hidden", false);
             }
             var cashier_user = result.cashier_user_id;
             console.log(cashier_user);
-            //$('#cmbCashier').val(result.cashier_user_id);
+            $('#cmbCashier').val(result.cashier_user_id);
 
             var receipt_cheque = result.receipt_cheque;
             for (var i = 0; i < receipt_cheque.length; i++) {
@@ -1786,17 +1588,17 @@ function getCustomerReceipt(id) {
 
             var receipt_data = result.receipt_data;
             console.log(receipt_data);
-
+            
             for (var i = 0; i < receipt_data.length; i++) {
                 var rtn_amount = receipt_data[i].return_amount;
-                if (isNaN(parseFloat(rtn_amount))) {
-                    rtn_amount = 0;
-                }
+            if(isNaN(parseFloat(rtn_amount))){
+                rtn_amount = 0;
+            }
                 var Balance_ = parseFloat(receipt_data[i].amount) - ((parseFloat(receipt_data[i].paid_amount) + parseFloat(rtn_amount)));
                 var str_id = "'" + i + "'";
                 var hidden_col = '<label id="lblDataID' + i + '" data-internal_number="' + receipt_data[i].internal_number + '" data-external_number="' + receipt_data[i].external_number + '" data-reference_internal_number="' + receipt_data[i].reference_internal_number + '"  data-reference_external_number="' + receipt_data[i].reference_external_number + '"></label>'
                 var date = '<label id="lblDate' + i + '">' + receipt_data[i].date + '</label>';
-                var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + receipt_data[i].reference_external_number + '</label>';
+                var document_ref_no = '<label id="lblDocumentRefNo' + i + '">' + receipt_data[i].manual_number + '</label>';
                 var description = '<label id="lblDescription' + i + '">Sales Invoice</label>';
                 var amount = '<label id="lblSetoffAmount' + i + '">' + parseFloat(receipt_data[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                 var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(receipt_data[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
@@ -1834,23 +1636,19 @@ function appendReceiptData(hidden_col, date, document_ref_no, description, amoun
     row += '<td style="text-align:right;max-width: 80px;">';
     row += amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
-    //row += '<td style="text-align:right;max-width: 80px;" >'; 
+    row += '<td style="text-align:right;max-width: 80px;">';
     row += paid_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
-    //row += '<td style="text-align:right;max-width: 80px;" >';
+    row += '<td style="text-align:right;max-width: 80px;">';
     row += return_amount;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
-    //row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;">';
     row += balance;
     row += '</td>';
     row += '<td style="max-width: 80px;">';
     row += setoff;
     row += '</td>';
-    row += '<td style="text-align:right;max-width: 80px;" ' + hidden_columns + '>';
-    //row += '<td style="text-align:right;max-width: 80px;">';
+    row += '<td style="text-align:right;max-width: 80px;">';
     row += age;
     row += '</td>';
     row += '<td style="text-align:right;max-width: 80px;">'
@@ -1940,4 +1738,106 @@ function lockInputsSetoff() {
 
 function dataChooserShowEventListener(event) {
 
+}
+
+
+//load custoners
+function loadCustomerTOchooser() {
+
+    var data = [];
+    $.ajax({
+        url: '/sd/loadCustomerTOchooser',
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (response) {
+            if (response) {
+                var customerData = response.data;
+                console.log(customerData);
+                /*  DataChooser.setDataSourse(supplierData); */
+                data = customerData;
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+    return data;
+}
+//load supplier other details
+function loadCustomerOtherDetails(id) {
+
+    $.ajax({
+        url: '/sd/loadCustomerOtherDetails/' + id,
+        type: 'get',
+        dataType: 'json',
+        async:false,
+        success: function (data) {
+            console.log(data)
+            var txt = data.data;
+            /*  console.log(txt); */
+            $('#lblCustomerAddress').val(txt[0].primary_address);
+            var cusID = txt[0].customer_id;
+            var payment_term_id_ = txt[0].payment_term_id;
+            $('#lblCustomerName').attr('data-id', cusID);
+            $('#cmbPaymentTerm').val(payment_term_id_);
+            $('#cmbDeliverType').focus();
+
+
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+}
+
+
+//load item
+function loadSupplierTochooser() {
+
+    var data = [];
+    $.ajax({
+        url: '/prc/loadSupplierTochooser',
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (response) {
+            if (response) {
+                var supplierData = response.data;
+                console.log(supplierData);
+           /*   DataChooser.setDataSourse(['','','',''],supplierData); */
+                data = supplierData;
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+    return data;
+}
+//load supplier other details
+function loadSupplierOtherDetails(id) {
+
+    $.ajax({
+        url: '/prc/loadSupplierOtherDetails/' + id,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            var txt = data.data;
+            var supID = txt[0].supplier_id;
+            /*  console.log(txt); */
+            $('#lblSupplierAddress').val(txt[0].primary_address);
+            $('#lblSupplierName').attr('data-id',supID);
+            $('#txtSupplierInvoiceNumber').focus();
+
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
 }

@@ -8,11 +8,13 @@ use Modules\Prc\Http\Controllers\GoodReceivedReturnController;
 use Modules\Prc\Http\Controllers\GoodsReceiveSummeryReportController;
 use Modules\Prc\Http\Controllers\GoodsReturnReportController;
 use Modules\Prc\Http\Controllers\GoodsReturnSummeryReportController;
+use Modules\Prc\Http\Controllers\PoHelpNewReport as ControllersPoHelpNewReport;
 use Modules\Prc\Http\Controllers\PoHelpReportController;
 use Modules\Prc\Http\Controllers\PurchaseOrderController;
 use Modules\Prc\Http\Controllers\PurchaseOrderReporController;
 use Modules\Prc\Http\Controllers\PurchaseRequestController;
 use Modules\Prc\Http\Controllers\SalesInvoiceController;
+use Modules\Prc\Http\Controllers\PoHelpNewReport;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,6 +182,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     return view('prc::reports');
     });
     Route::get('/poHelpReport/{filters}',[PoHelpReportController::class,'poHelpReport']);
+    Route::get('/poHelpReportNew/{filters}',[PoHelpNewReport::class,'poHelpReport']);
     Route::get('/good_receive_summery_report/{filters}',[GoodsReceiveSummeryReportController::class,'goods_receive_summery_report']);
     Route::get('/goods_return_summery_report/{filters}',[GoodsReturnSummeryReportController::class,'goods_return_summery_report']);
 

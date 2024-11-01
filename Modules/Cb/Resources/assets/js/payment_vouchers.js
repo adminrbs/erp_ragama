@@ -17,6 +17,13 @@ var table_ = undefined;
 $(document).ready(function () {
     $('#rdoPayee').prop('checked', true);
     $('#txtSupplier').prop('disabled', true);
+    $('#cmbPayee').on('change',function(){
+        if($(this).val() == 1){
+            $('#txtNotApplicalePayee').prop('disabled',false);
+        }else{
+            $('#txtNotApplicalePayee').prop('disabled',true);
+        }
+    });
     getServerTime();
     getBranches();
     getReceiptMethod();
@@ -487,9 +494,13 @@ function optionType(event) {
     if ($(event).attr('id') == 'rdoPayee') {
         $('#txtSupplier').prop('disabled', true);
         $('#cmbPayee').prop('disabled', false);
+        if($('#cmbPayee').val() == 1){
+            $('#txtNotApplicalePayee').prop('disabled', false);
+        }
     } else {
         $('#txtSupplier').prop('disabled', false);
         $('#cmbPayee').prop('disabled', true);
+        $('#txtNotApplicalePayee').prop('disabled', true);
     }
 }
 
@@ -515,7 +526,7 @@ function loadPayee() {
 
 
 function saveVoucher(collection) {
-
+var payee = true
 
     if (parseInt(collection.length) <= 0) {
         showWarningMessage('Unable to save without an account');
@@ -531,6 +542,15 @@ function saveVoucher(collection) {
         if($('#rdoPayee').prop('checked')){
             formData.append('option',1);
             formData.append('payee',$('#cmbPayee').val());
+            if($('#cmbPayee').val() == 1){
+                if($('#txtNotApplicalePayee').val() == ""){
+                    showWarningMessage("Please enter payee name");
+                    payee = false
+                }else{
+                    payee = true;
+                    formData.append('notApplicablePayee',$('#txtNotApplicalePayee').val());
+                }
+            }
         }else{
             formData.append('option',2);
             formData.append('supplier',$('#txtSupplier').attr('data-id'));
@@ -538,34 +558,36 @@ function saveVoucher(collection) {
         formData.append('description',$('#txtDescription').val());
         formData.append('remarks',$('#txtRemarks').val());
     
-        $.ajax({
-            url: '/cb/saveVoucher',
-            method: 'post',
-            enctype: 'multipart/form-data',
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            timeout: 800000,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            beforeSend: function () {
-                $('#btnSave').prop('disabled', true);
-            }, success: function (response) {
-                $('#btnSave').prop('disabled', false);
-                if(response.success){
-                    showSuccessMessage("Successfuly saved");
-                }else{
-                    showWarningMessage("Unable to save");
+        if(payee){
+            $.ajax({
+                url: '/cb/saveVoucher',
+                method: 'post',
+                enctype: 'multipart/form-data',
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                timeout: 800000,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function () {
+                    $('#btnSave').prop('disabled', true);
+                }, success: function (response) {
+                    $('#btnSave').prop('disabled', false);
+                    if(response.success){
+                        showSuccessMessage("Successfuly saved");
+                    }else{
+                        showWarningMessage("Unable to save");
+                    }
+                }, error: function (data) {
+                    console.log(data.responseText)
+                }, complete: function () {
+    
                 }
-            }, error: function (data) {
-                console.log(data.responseText)
-            }, complete: function () {
-
-            }
-        })
+            })
+        }
         getServerTime();
 
     

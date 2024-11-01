@@ -2,6 +2,7 @@
 
 namespace Modules\Sl\Http\Controllers;
 
+use App\Http\Controllers\ChequeReferenceNumberController;
 use App\Http\Controllers\CompanyDetailsController;
 use App\Http\Controllers\IntenelNumberController;
 use Exception;
@@ -254,7 +255,7 @@ class supplierPaymentController extends Controller
                 //  dd($request->get('single_cheque'));
                 $single_cheque = json_decode($request->get('single_cheque'));
                 //dd($single_cheque);
-                if ($request->get('receipt_method_id') == 3) {
+                if ($request->get('receipt_method_id') == 2) {
                     $this->saveSupplierReceiptCheque($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
                 }
 
@@ -324,6 +325,7 @@ class supplierPaymentController extends Controller
 
 
         try {
+            //dd($receiptCheque->cheque_number);
             $cheque = new supplier_payment_cheques();
             $cheque->supplier_payment_id = $receipt_id;
             $cheque->internal_number = $internal_number;
@@ -331,6 +333,7 @@ class supplierPaymentController extends Controller
             $cheque->bank_code = $receiptCheque->bank_code;
             $cheque->cheque_referenceNo = $receiptCheque->cheque_referenceNo;
             $cheque->cheque_number = $receiptCheque->cheque_number;
+            $cheque->supplier_cheque_reference_number = ChequeReferenceNumberController::ChequeSupplierReferenceGenerator();
             $cheque->banking_date = $receiptCheque->banking_date;
             $cheque->amount = -$receiptCheque->amount;
             $cheque->bank_id = $receiptCheque->bank_id;

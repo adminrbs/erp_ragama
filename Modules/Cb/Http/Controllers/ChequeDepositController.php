@@ -41,7 +41,8 @@ class ChequeDepositController extends Controller
             customer_receipt_cheques.external_number,
             customer_receipt_cheques.amount,
             customer_receipt_cheques.cheque_number,
-            customers.customer_name
+            customers.customer_name,
+            customer_receipts.receipt_date
         FROM 
             customer_receipt_cheques
         INNER JOIN customer_receipts ON customer_receipt_cheques.customer_receipt_id = customer_receipts.customer_receipt_id

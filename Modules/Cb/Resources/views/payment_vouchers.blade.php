@@ -71,16 +71,24 @@
 
                             <div class="row mb-1">
 
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Referance No</span></label>
-
                                     <input class="form-control" type="text" id="LblexternalNumber" value="New Invoice" disabled>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;color:white">
+                                        <span>Options</span>
+                                    </label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" id="rdoPayee" name="option" class="rdo" value="1"> &nbsp; Option 1
+                                        <input type="radio" id="rdoSup" name="option" class="ms-3 rdo"  value="2"> &nbsp; Option 2
+                                    </div>
                                 </div>
 
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
-
                                     <input type="date" class="form-control" id="invoice_date_time" disabled>
                                 </div>
 
@@ -110,25 +118,31 @@
 
                                 <div class="col-md-4" style="display: none;">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Discount Precentage</span></label>
-                                    <input type="number" id="txtDiscountPrecentage" class="form-control" style="text-align:right;" disabled>
+                                    <input type="number" id="txtDiscountPrecentage" class="form-control" style="text-align:right;">
                                 </div>
                                 <div class="col-md-4" style="display: none;">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Discount Amount</span></label>
                                     <input type="number" id="txtDiscountAmount" class="form-control" style="text-align:right;">
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;color:white">
+                               <!--  <div class="col-md-4"> -->
+                                    <!-- <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;color:white">
                                         <span>Options</span>
-                                    </label>
-                                    <div class="d-flex align-items-center">
+                                    </label> -->
+                                   <!--  <div class="d-flex align-items-center">
                                         <input type="radio" id="rdoPayee" name="option" class="rdo" value="1"> &nbsp; Option 1
                                         <input type="radio" id="rdoSup" name="option" class="ms-3 rdo"  value="2"> &nbsp; Option 2
-                                    </div>
+                                    </div> -->
+                               <!--  </div> -->
+                               <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Payee</span></label>
+                                    <select class="select2 form-control validate" data-live-search="true" id="cmbPayee">
+                                        
+                                    </select>
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Payment Method</span></label>
-                                    <select class="form-select" id="cmbPaymentMethod"></select>
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Payee</span></label>
+                                    <input type="text" class="form-control" id="txtNotApplicalePayee">
                                 </div>
 
                                 <div class="col-md-4">
@@ -139,13 +153,16 @@
                             </div>
                             <div class="row mb-1">
 
-                                <div class="col-md-4">
+                               <!--  <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Payee</span></label>
                                     <select class="select2 form-control validate" data-live-search="true" id="cmbPayee">
                                         
                                     </select>
+                                </div> -->
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Payment Method</span></label>
+                                    <select class="form-select" id="cmbPaymentMethod"></select>
                                 </div>
-
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">

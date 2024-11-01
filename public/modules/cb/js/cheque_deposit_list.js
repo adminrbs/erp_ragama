@@ -69,6 +69,7 @@ const DatatableFixedColumns = function () {
             "paging":false,
             "columns": [
                
+                { "data": "receiptDate"},
                 { "data": "date" },
                 { "data": "ref_number" },
                 { "data": "customer" },
@@ -198,6 +199,7 @@ function load_cheques_for_deposit(date_){
                    var _check_box = '<input class="form-check-input" type="checkbox" id="'+dt[i].customer_receipt_cheque_id + '" onchange="update_status_calculation(this)">';
                    
                     data.push({
+                        "receiptDate":dt[i].receipt_date,
                         "date": dt[i].banking_date,
                         "ref_number": '<div data-id="'+dt[i].customer_receipt_cheque_id+'">'+dt[i].external_number+'</div>',
                         "customer":shortenString(dt[i].customer_name,50),
@@ -245,11 +247,16 @@ function getAccount() {
 
 
 function shortenString(inputString, maxLength) {
+if(inputString != null){
     if (inputString.length <= maxLength) {
         return inputString;
     } else {
         return inputString.substring(0, maxLength) + '...';
     }
+}else{
+    return "";
+}
+    
 }
 
 function update_status_calculation(event){

@@ -223,7 +223,11 @@ function load_supplier_data(code) {
                         var newRow = $("<tr>");
 
                         
-                        var balance_ = parseFloat(value.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                        var balance_ = Math.abs(parseFloat(value.balance)).toLocaleString('en-US', { 
+                            minimumFractionDigits: 2, 
+                            maximumFractionDigits: 2 
+                        });
+                        
                         newRow.append("<td>" + value.trans_date + "</td>");
                         newRow.append("<td>" + value.external_number + "</td>");
                         newRow.append("<td>" + value.description + "</td>");
