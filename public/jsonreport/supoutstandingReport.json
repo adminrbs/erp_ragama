@@ -145,7 +145,7 @@
                                         "text": "Balance Amount",
                                         "align": "right",
                                         "format": "number",
-                                        "width": 100,
+                                        "width": 120,
                                         "font-size": 13
                                     }
                                 ]
@@ -160,7 +160,8 @@
                             "sum": [
                                 "Original Amount",
                                 "Paid Amount",
-                                "Net Total"
+                                "Net Total",
+                                "Balance Amount"
                             ],
                             "font-size": 13,
                             "group-sum": "route_total",

@@ -72,7 +72,7 @@
                             <ul class="list-group">
 
                                 <li class="list-group-item">
-                                    <label style="display: flex; align-items: center;">
+                                    <label style="display: none; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="Supplier's Ledger" id="suplier_Ledger" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
                                         Supplier's Ledger
@@ -80,7 +80,7 @@
                                 </li>
                                 <br>
                                 <li class="list-group-item">
-                                    <label style="display: flex; align-items: center;">
+                                    <label style="display: none; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="creditorleger" id="creditorlegerAge" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
                                         Creditor Age Analysis

@@ -86,9 +86,9 @@ class SupOutstandingcontroller extends Controller
                               
                                 DATEDIFF(CURDATE(), D.trans_date) AS age_days ,
                                 D.trans_date,
-                                D.amount, 
-                                D.paidamount, 
-                               (D.amount - D.paidamount) AS balance_amount,
+                                ABS(D.amount), 
+                                ABS(D.paidamount), 
+                               ABS((D.amount - D.paidamount)) AS balance_amount,
                                D.supplier_id,
                                B.branch_id
 
@@ -103,7 +103,7 @@ class SupOutstandingcontroller extends Controller
 
 
                             WHERE 
-                                (D.amount - D.paidamount) > 0";
+                                (ABS(D.amount) - D.paidamount) > 0";
 
 
 
@@ -205,9 +205,9 @@ class SupOutstandingcontroller extends Controller
                D.external_number  AS invoice_number,
                DATEDIFF(CURDATE(), D.trans_date) AS age_days ,
                D.trans_date,
-               D.amount , 
-               D.paidamount , 
-              (D.amount - D.paidamount) AS balance_amount,
+               ABS(D.amount) , 
+               ABS(D.paidamount) , 
+              ABS((D.amount - D.paidamount)) AS balance_amount,
               D.supplier_id,
               B.branch_id
 
@@ -222,7 +222,7 @@ class SupOutstandingcontroller extends Controller
 
 
            WHERE 
-               (D.amount - D.paidamount) > 0";
+               (ABS(D.amount) - D.paidamount) > 0";
 
 
 
