@@ -83,7 +83,7 @@ $(document).ready(function () {
             }
         }
 
-        
+
         let csvContent = "data:text/csv;charset=utf-8,";
 
         table_rows.forEach(function (rowArray) {
@@ -147,7 +147,7 @@ $(document).ready(function () {
 
     });
 
-    
+
 
 
     loadbranch();
@@ -163,7 +163,7 @@ $(document).ready(function () {
     });
 
 
-    
+
     $('#chkdate').prop('checked', false);
     $('#chkBranch').prop('checked', false);
 
@@ -195,7 +195,7 @@ $(document).ready(function () {
     });
 
 
-   
+
     $('#chkBranch').on('change', function () {
 
         if (this.checked) {
@@ -224,7 +224,7 @@ $(document).ready(function () {
 
 
 
-    
+
 
     $('#chkdate').on('change', function () {
 
@@ -257,7 +257,7 @@ $(document).ready(function () {
         if (this.checked) {
             fromAge = $('#txtfromAge').val();
             toAge = $('#txtToAge').val();
-           
+
             $('#txtfromAge').change(function () {
 
                 fromAge = $('#txtfromAge').val();
@@ -268,19 +268,19 @@ $(document).ready(function () {
 
             })
         } else {
-            
-                 fromAge = null;
-                 toAge = null
-           
+
+            fromAge = null;
+            toAge = null
+
         }
 
 
     });
 
-  
-    
 
-    
+
+
+
 
 
     $('#chkreaterthan').on('change', function () {
@@ -328,23 +328,23 @@ $(document).ready(function () {
     });
 
 
-    
+
     $('#chkfromtoAge').on('change', function () {
-       
+
         var fromage = $('#txtfromAge').val();
         var toage = $('#txtToAge').val();
 
-     
-            if (fromage.length > 0 && toage.length <= 0) {
-                showWarningMessage("Enter To(Age)");
-                $('#chkfromtoAge').prop('checked', false);
-            } else if (fromage.length <= 0 && toage.length > 0) {
-                //alert("to from")
-                showWarningMessage("Enter From(Age)");
-                $('#chkfromtoAge').prop('checked', false);
-            }
 
-         else  if(fromage.length > 0 && toage.length> 0){
+        if (fromage.length > 0 && toage.length <= 0) {
+            showWarningMessage("Enter To(Age)");
+            $('#chkfromtoAge').prop('checked', false);
+        } else if (fromage.length <= 0 && toage.length > 0) {
+            //alert("to from")
+            showWarningMessage("Enter From(Age)");
+            $('#chkfromtoAge').prop('checked', false);
+        }
+
+        else if (fromage.length > 0 && toage.length > 0) {
 
             if (this.checked) {
 
@@ -368,7 +368,7 @@ $(document).ready(function () {
                 toAge = null
 
             }
-         }
+        }
 
 
     });
@@ -422,47 +422,49 @@ $(document).ready(function () {
 
     $("input[type='radio']").click(function () {
         if ($(this).is(':checked')) {
-            let report_type = $(this).attr('id'); 
+            let report_type = $(this).attr('id');
             report = report_type;
             hideFilters(report_type);
         }
     });
-    
+
 
     $('#viewReport').on('click', function () {
 
 
 
-        if (report == "debtorleger") {
+        if (report == "creditorlegerAge") {
+
+            if (report == null || report == undefined || report == "") {
+                showWarningMessage("Select Filter Option");
+                console.log(report);
+            }
+
 
             var requestData = [
-                { selected: selected },
-                { selected1: selected1 },
-                { selected2: selected2 },
-                { selected3: selected3 },
-                { selected4: selected4 },
-                { selected5: selected5 },
+
                 //{ selected6: selected6 },
-                { selecteCustomer: selecteCustomer },
-                { selectecustomergroup: selectecustomergroup },
-                { selecteCustomerGrade: selecteCustomerGrade },
-                { selecteRoute: selecteRoute },
-                { selectSalesrep: selectSalesrep },
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
                 { selecteBranch: selecteBranch },
+                { cmbgreaterthan: cmbgreaterthan },
                 { fromdate: fromdate },
                 { todate: todate },
                 { fromAge: fromAge },
                 { toAge: toAge },
-                { cmbgreaterthan: cmbgreaterthan },
+
+
+
 
             ];
 
 
-            console.log("llr", requestData);
-            //const jsonArray = JSON.parse(decodeURIComponent(requestData));
+            console.log(requestData);
+
 
             //getviewReport()
-            $('#pdfContainer').attr('src', '/sc/debtor_reports/' + JSON.stringify(requestData));
+            $('#pdfContainer').attr('src', '/sl/creditorAgeAnalysisReport/' + JSON.stringify(requestData));
+
 
 
         }
@@ -470,7 +472,7 @@ $(document).ready(function () {
         if (report == "suplier_Ledger") { //supplier ledger
 
 
-          
+
             var requestData = [
                 { selectSupplier: selectSupplier },
                 { selectSupplygroup: selectSupplygroup },
@@ -481,12 +483,12 @@ $(document).ready(function () {
                 { fromAge: fromAge },
                 { toAge: toAge },
             ];
-           
 
 
-          
 
-           
+
+
+
             $('#pdfContainer').attr('src', '/sl/supplier_Ledger_reports/' + JSON.stringify(requestData));
 
 
@@ -500,9 +502,9 @@ $(document).ready(function () {
                 console.log(report);
             }
 
-            
+
             var requestData = [
-               
+
                 //{ selected6: selected6 },
                 { selectSupplier: selectSupplier },
                 { selectSupplygroup: selectSupplygroup },
@@ -513,14 +515,14 @@ $(document).ready(function () {
                 { fromAge: fromAge },
                 { toAge: toAge },
 
-              
+
 
 
             ];
 
 
             console.log(requestData);
-            
+
 
             //getviewReport()
             $('#pdfContainer').attr('src', '/sl/printsupoutstandinReport/' + JSON.stringify(requestData));
@@ -580,14 +582,29 @@ function dataclear() {
 
 }
 
-function hideFilters(report){
-    if(report == 'supplier_outstanding'){
-        $('.date_range').prop('disabled',true);
-        $('.branch').prop('disabled',false);
-        $('.supplier').prop('disabled',false);
-        $('.greaterthan').prop('disabled',false);
-        $('.supplygrp').prop('disabled',false);
+function hideFilters(report) {
+    if (report == 'supplier_outstanding') {
+        $('.date_range').prop('disabled', true);
+        $('.branch').prop('disabled', false);
+        $('.supplier').prop('disabled', false);
+        $('.greaterthan').prop('disabled', false);
+        $('.supplygrp').prop('disabled', false);
+        $('.age').prop('disabled', false);
+    } else if (report == 'suplier_Ledger') {
+        $('.date_range').prop('disabled', false);
+        $('.branch').prop('disabled', false);
+        $('.supplier').prop('disabled', false);
+        $('.greaterthan').prop('disabled', true);
+        $('.supplygrp').prop('disabled', false);
+        $('.age').prop('disabled', true);
 
+    } else if (report == 'creditorlegerAge') {
+        $('.date_range').prop('disabled', true);
+        $('.branch').prop('disabled', false);
+        $('.supplier').prop('disabled', false);
+        $('.greaterthan').prop('disabled', false);
+        $('.supplygrp').prop('disabled', false);
+        $('.age').prop('disabled', false)
     }
 }
 

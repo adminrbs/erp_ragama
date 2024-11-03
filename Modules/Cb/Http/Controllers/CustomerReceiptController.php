@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Cb\Entities\branch;
 use Modules\Cb\Entities\CustomerReceipt;
@@ -303,6 +304,7 @@ class CustomerReceiptController extends Controller
             $receipt->advance = $request->get('advance');
             $receipt->document_number = 500;
             $receipt->is_direct_receipt = 1;
+            $receipt->created_by = Auth::user()->id;
             if($request->get('your_ref')){
                 $receipt->your_reference = $request->get('your_ref');
             }

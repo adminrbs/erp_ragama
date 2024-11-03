@@ -228,7 +228,8 @@ class StockAdjustmentController extends Controller
     public function getstock_adjustmentdata()
     {
         try {
-            $result = stock_adjustment::all();
+           // $result = stock_adjustment::all();
+            $result= DB::select("SELECT SA.*,U.`name`  FROM stock_adjustments SA LEFT JOIN users U ON SA.cretae_by = U.id");
             if ($result) {
                 return response()->json((['success' => 'Data loaded', 'data' => $result]));
             } else {

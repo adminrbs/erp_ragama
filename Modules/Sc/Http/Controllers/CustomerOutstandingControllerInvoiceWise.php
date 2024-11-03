@@ -222,7 +222,7 @@ class CustomerOutstandingControllerInvoiceWise extends Controller
 
                 $query .=  $quryModify . ' GROUP BY D.external_number ORDER BY DATEDIFF(CURDATE(), D.trans_date) DESC';
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-               // dd($query);
+                dd($query);
                 $result = DB::select($query);
 
 

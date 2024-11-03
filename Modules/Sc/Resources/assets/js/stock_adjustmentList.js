@@ -57,6 +57,7 @@ const DatatableFixedColumns = function () {
             "columns": [
                 { "data": "date" },
                 { "data": "reference" },
+                { "data": "user" },
                 { "data": "action" },
 
             ],
@@ -167,6 +168,7 @@ function getstock_adjustmentdata() {
               data.push({
                    "date": dt[i].date,
                    "reference": dt[i].external_number,
+                   "user":dt[i].name,
                    "action":'<button class="btn btn-success btn-sm" onclick="view(' + dt[i].stock_adjustment_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>',
                });
                

@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Cb\Entities\branch;
 use Modules\Cb\Entities\CustomerReceipt;
@@ -246,6 +247,7 @@ class supplierPaymentController extends Controller
             $receipt->round_up = $request->get('round_up');
             $receipt->advance = $request->get('advance');
             $receipt->document_number = 2500;
+            $receipt->created_by = Auth::user()->id;
             //dd($receipt);
             if ($receipt->save()) {
                 $receipt_data = json_decode($request->get('receipt_data'));

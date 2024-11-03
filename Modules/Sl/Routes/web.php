@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Sl\Http\Controllers\CreditorAgeAnalysisController;
 use Modules\Sl\Http\Controllers\SupOutstandingcontroller;
 use Modules\Sl\Http\Controllers\SupplierCreditController;
 use Modules\Sl\Http\Controllers\SupplierDebitNoteController;
@@ -87,4 +88,5 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     Route::get('/printsupoutstandinReport/{search}', [SupOutstandingcontroller::class, 'printsupoutstandinReport']);
     Route::get('/getSupplier',[SupOutstandingcontroller::class,'getSupplier']);
     Route::get('/supplier_Ledger_reports/{filters}',[SupplierLedgerReportController::class,'supplier_Ledger_reports']);
+    Route::get('/creditorAgeAnalysisReport/{filters}',[CreditorAgeAnalysisController::class,'creditorAgeAnalysisReport']);
 });

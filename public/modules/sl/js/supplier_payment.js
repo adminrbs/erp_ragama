@@ -922,7 +922,7 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
                 showWarningMessage('Setoff off amount mismatch')
             }
             else if (response.data[0] == true && response.data[1] == true && response.data[2] == true && response.data[3] == true && response.data[4] == true) {
-                showSuccessMessage('Receipt has been saved');
+                showSuccessMessage('Payment has been saved');
                 location.href = 'supplier_payment';
             } else {
                 showErrorMessage('Something went wrong');
@@ -1224,7 +1224,7 @@ function updateReceipt() {
         }, success: function (response) {
             console.log(response);
             if (response.status) {
-                showSuccessMessage('Receipt has been updated');
+                showSuccessMessage('Payment has been updated');
                 location.href = 'customer_receipt_list';
             } else {
                 showErrorMessage('Something went wrong');

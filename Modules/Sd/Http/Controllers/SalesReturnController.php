@@ -418,7 +418,7 @@ class SalesReturnController extends Controller
             DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"), 
             DB::raw("SUBSTRING(customers.customer_name, 1, 20) as customer_name"),
             DB::raw('"Original" AS status'),
-            'sales_invoices.manual_number AS si_manual_number'
+            'sales_invoices.external_number AS si_manual_number'
         )
         ->join('employees', 'sales_returns.employee_id', '=', 'employees.employee_id')
         ->join('customers', 'sales_returns.customer_id', '=', 'customers.customer_id')
@@ -1743,7 +1743,7 @@ ORDER BY sales_returns.order_date DESC;
     //load return set off data
     public function loadReturnSetoffData($id){
         try{
-            $result = DB::select('SELECT SI.manual_number,SRD.setoff_amount FROM sales_return_debtor_setoffs SRD INNER JOIN sales_invoices SI ON SRD.external_number = SI.external_number WHERE SRD.sales_return_Id ='.$id);
+            $result = DB::select('SELECT SI.external_number as manual_number,SRD.setoff_amount FROM sales_return_debtor_setoffs SRD INNER JOIN sales_invoices SI ON SRD.external_number = SI.external_number WHERE SRD.sales_return_Id ='.$id);
             if($result){
                 return response()->json(['status' => true, 'data' => $result]);
              }else{
