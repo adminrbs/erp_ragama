@@ -123,6 +123,7 @@ public function updateUser(Request $request, $id)
         $user = User::findOrFail($id);
 
         $inputPassword = $request->get('txtPassword');
+        //dd($request->get('txtPassword'));
         if (Hash::check($inputPassword, $user->password)){
       // if ($inputPassword) {
             if ($user) {
@@ -136,13 +137,12 @@ public function updateUser(Request $request, $id)
 
 
                 $userRoleId = $request->input('cmbuserRole');
+                //dd($userRoleId);
                 $userRole = UserRole::where('user_id', $user->id)->firstOrFail();
-
+                    //dd($userRole);
                 if ($userRoleId !== 'null') {
                     $userRole->role_id = $userRoleId;
-                    $userRole->save();
-
-
+                    $userRole->update();
                 }
 
                 return response()->json(['status' => true]);

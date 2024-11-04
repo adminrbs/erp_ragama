@@ -230,13 +230,13 @@ class TransactionAllocationController extends Controller
             CTA.external_number,
             CTA.amount,
             DATE(CTA.created_at) AS created_date,
-            E.employee_name,
+            U.`name` AS employee_name,
             B.branch_name,
             CUS.customer_code,
             CUS.customer_name
         FROM
             customer_transaction_alocations AS CTA
-            INNER JOIN customers CUS ON CTA.customer_id = CUS.customer_id
+            LEFT JOIN customers CUS ON CTA.customer_id = CUS.customer_id
             LEFT JOIN branches B ON CTA.branch_id = B.branch_id
            LEFT JOIN users U ON CTA.created_by = U.id
            LEFT JOIN employees E ON U.user_id = E.employee_id
