@@ -79,7 +79,7 @@ class ChequeAuditReportController2 extends Controller
         LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
         LEFT JOIN banks ON customer_receipt_cheques.bank_id = banks.bank_id
         LEFT JOIN bank_branches ON customer_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id' . $query_modify;
-            dd($qry);
+            //dd($qry);
             $result = DB::select($qry);
             //dd($result);
             $resulcustomer = DB::select('select customer_receipts.customer_receipt_id,customers.customer_name,CRC.cheque_number 
