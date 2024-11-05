@@ -72,6 +72,14 @@
                                                 <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
                                             </a>
                                         </li>
+
+                                        <li class="nav-item">
+                                            <a href="#tab_navbars_demo_general_Ledger" class="nav-link rounded" data-bs-toggle="tab">
+                                                <i class="ph-rows me-2"></i>
+                                                General Ledger
+                                                <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
+                                            </a>
+                                        </li>
                                         @if(Auth::user()->hasModulePermission('Cash Bank'))
                                         <li class="nav-item">
                                             <a href="#tab_navbars_demo_cashBank" class="nav-link rounded" data-bs-toggle="tab">
@@ -566,6 +574,28 @@
                                             @endif
 
 
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane dropdown-scrollable-xl fade p-3" id="tab_navbars_demo_general_Ledger">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="fw-bold border-bottom pb-2 mb-2">List</div>
+                                           
+                                        </div>
+                                        <div class="col-lg-6 mb-3 mb-lg-0">
+                                            <div class="fw-bold border-bottom pb-2 mb-2">Reports</div>
+
+                                            
+                                            <a href="/gl/gl_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Reports</a>
+                                           
+
+                                           
+                                            
                                         </div>
 
 

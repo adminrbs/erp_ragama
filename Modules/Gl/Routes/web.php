@@ -11,6 +11,13 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::prefix('gl')->group(function() {
     Route::get('/', 'GlController@index');
+
+/**GL Reports */
+Route::get('/gl_reports',function(){
+    return view('gl::gl_report');
+});
 });

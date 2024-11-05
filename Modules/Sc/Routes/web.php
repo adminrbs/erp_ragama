@@ -63,7 +63,7 @@ Route::prefix('sc')->middleware(['is.logged'])->group(function () {
 
     Route::get('/genarateReport', function () {
         return view('sc::genarateReport');
-    });
+    })->middleware(['is.logged', 'can:sc_reports']);
 
     Route::get('/getproduct', [Outstandingcontroller::class, 'getproduct']);
     Route::get('/getproduct_sup_id', [Outstandingcontroller::class, 'getproduct_sup_id']);

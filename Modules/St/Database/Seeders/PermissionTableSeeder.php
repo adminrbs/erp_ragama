@@ -306,6 +306,8 @@ class PermissionTableSeeder extends Seeder
             
             ['name' => 'Commision Report','slug' => 'sd_commision_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//185
 
+            
+
         ]);
         
     }
