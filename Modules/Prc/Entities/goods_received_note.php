@@ -37,7 +37,7 @@ class goods_received_note extends Model
         return \Modules\Prc\Database\factories\GoodsReceivedNoteFactory::new();
     } */
 
-    public function save(array $options = [])
+   /*  public function save(array $options = [])
     {
         $saved = parent::save($options);
         if ($saved) {
@@ -57,5 +57,5 @@ class goods_received_note extends Model
         }
 
         return $deleted;
-    }
+    } */
 }
