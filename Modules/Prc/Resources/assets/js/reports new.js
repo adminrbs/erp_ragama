@@ -31,6 +31,7 @@ $(document).ready(function () {
     });
 
     $('#btnExport').on('click', function () {
+        //alert();
         var iframe = document.getElementById('pdfContainer');
         var tables = iframe.contentWindow.document.getElementsByTagName("table");
 

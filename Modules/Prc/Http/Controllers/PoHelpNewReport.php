@@ -22,20 +22,20 @@ try{
     $fromdate = $searchOption[0]->fromdate;
     $todate = $searchOption[1]->todate;
     $selecteBranch = $searchOption[2]->selecteBranch;
-    //$selectedproduct = $searchOption[3]->selectedproduct;
     $selectSupplygroup = $searchOption[3]->selectSupplygroup;
 
-    /* $user_id = auth()->id();
-    $userrole = "SELECT users_roles.role_id FROM users_roles WHERE users_roles.user_id=$user_id";
-    $alluserrol = DB::select($userrole);
-    if (!empty($alluserrol) && $alluserrol[0]->role_id === 2 || $alluserrol[0]->role_id === 3) {  
-        if (count($selecteBranch) <= 0) {
-            return;
-        }
-    } */
-  
+    $mainLocations = DB::select("SELECT location_id FROM locations WHERE locations.location_type_id = 3 AND locations.branch_id IN ('" . implode("', '", $selecteBranch) . "')");
 
-    // dd($searchOption);
+    // Extract location IDs into a simple array
+    $locationIds = array_column($mainLocations, 'location_id');
+    
+    // Build the location query as a comma-separated list
+    $locatin_query = "";
+    if (!empty($locationIds)) {
+        $locatin_query .= "location_id IN ('" . implode("', '", $locationIds) . "')";
+    }
+    
+
 
 
     $nonNullCount = 0;
@@ -52,9 +52,7 @@ try{
         if ($searchOption[2]->selecteBranch !== null) {
             $nonNullCount++;
         }
-       /*  if($searchOption[3]->selectedproduct !== null){
-            $nonNullCount++;
-} */
+      
         if ($searchOption[3]->selectSupplygroup !== null) {
             $nonNullCount++;
         }
@@ -121,7 +119,7 @@ try{
         ELSE ROUND((ROUND((S.avg_sales * 80) / 100, 0) - L.qty_in_hand), 0) 
     END AS reoder,  I.supply_group_id , SG.supply_group,L.branch_id , B.branch_name , I.item_id
                     FROM 
-                    ( SELECT branch_id , item_id , SUM(quantity) AS  qty_in_hand  From item_historys IH WHERE  $quryModify
+                    ( SELECT branch_id , item_id , SUM(quantity) AS  qty_in_hand  From item_historys IH WHERE  $quryModify AND $locatin_query
                     GROUP BY branch_id , item_id   
                     )  L   
                     INNER JOIN items I ON I.item_id = L.item_id 
@@ -140,7 +138,7 @@ try{
 
 
         //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);
-       // dd($query);
+        //dd($query);
         $result = DB::select($query);
         //dd($result);
         // $reportViwer = new ReportViewer();

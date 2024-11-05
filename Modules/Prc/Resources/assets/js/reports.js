@@ -66,7 +66,7 @@ $(document).ready(function () {
         }*/
         console.log(filters);
         $('#row1').hide();
-        if (report == "poHelpReport") {
+       /*  if (report == "poHelpReport") {
 
 
             $.ajax({
@@ -81,7 +81,61 @@ $(document).ready(function () {
 
 
 
-        }
+        } */
+            var iframe = document.getElementById('pdfContainer');
+            var tables = iframe.contentWindow.document.getElementsByTagName("table");
+    
+            // Iterate through tables
+            const table_rows = [];
+            for (var i = 0; i < tables.length; i++) {
+                var table = tables[i];
+    
+                // Access the content of the table
+                for (var j = 0; j < table.rows.length; j++) {
+                    var row = table.rows[j];
+                    var row_data = [];
+                    for (var k = 0; k < row.cells.length; k++) {
+                        var cell = row.cells[k];
+                        var row_val = cell.textContent;
+                        if (row_val) {
+    
+                            var contains_comma = /,/.exec(row_val);
+                            if (contains_comma) {
+                                row_val = row_val.replace(/,/g, ' ');
+                            }
+                            var contains_n = /\n/.exec(row_val);
+                            if (contains_n) {
+                                row_val = row_val.replace(/\n/g, ' ');
+                            }
+                            var contains_r = /\r/.exec(row_val);
+                            if (contains_r) {
+                                row_val = row_val.replace(/\r/g, ' ');
+                            }
+                            row_data.push(row_val);
+                        } else {
+                            row_data.push("");
+                        }
+                    }
+                    table_rows.push(row_data);
+                }
+            }
+    
+    
+            let csvContent = "data:text/csv;charset=utf-8,";
+    
+            table_rows.forEach(function (rowArray) {
+                console.log(rowArray);
+                let row = rowArray.join(",");
+                csvContent += row + "\r\n";
+            });
+    
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "my_data.csv");
+            document.body.appendChild(link); // Required for FF
+    
+            link.click(); // This will download the data file named "my_data.csv".
 
 
 
