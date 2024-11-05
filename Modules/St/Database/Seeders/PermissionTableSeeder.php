@@ -306,6 +306,21 @@ class PermissionTableSeeder extends Seeder
             
             ['name' => 'Commision Report','slug' => 'sd_commision_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//185
 
+            ['name' => 'Sales Invoice Copy Issued','slug' => 'sd_sales_invoice_copy_issued','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//186
+
+            ['name' => 'Sales Invoice Copy Received','slug' => 'sd_sales_invoice_copy_received','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//187
+
+            ['name' => 'Blocked Order List','slug' => 'sd_blocked_order_list','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//188
+
+            ['name' => 'Reprint Request Approval List','slug' => 'sd_reprint_request_approval_list','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//189
+
+            ['name' => 'Finish Delivery Plan','slug' => 'sd_finish_delivery_plan','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//190
+
+            ['name' => 'Marketing Report','slug' => 'sd_marketing_report','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//191
+
+            ['name' => 'Invoice Tracking','slug' => 'sd_invoice_tracking','sub'=>'null','action'=>false,'created_at' => Carbon::now(),'updated_at' => Carbon::now()],//192
+
+            
             
 
         ]);
