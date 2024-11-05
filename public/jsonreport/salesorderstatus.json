@@ -150,7 +150,7 @@
                                         "text": "Name",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 200
+                                        "width": 250
                                     }
                                 ],
                                 
@@ -175,7 +175,8 @@
                                         "text": "Required",
                                         "align": "right",
                                         "format": "text",
-                                        "width": 80
+                                        "width": 80,
+                                        "visible":false
                                     }
                                 ],
                                 [
@@ -190,7 +191,8 @@
                                         "text": "Reorder",
                                         "align": "right",
                                         "format": "text",
-                                        "width": 80
+                                        "width": 80,
+                                        "visible":false
                                     }
                                 ]
                             ],

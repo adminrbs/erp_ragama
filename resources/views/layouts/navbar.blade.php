@@ -585,13 +585,13 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="fw-bold border-bottom pb-2 mb-2">List</div>
-                                           
+                                            <a href="/gl/gl_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>General Gernal</a>
                                         </div>
                                         <div class="col-lg-6 mb-3 mb-lg-0">
                                             <div class="fw-bold border-bottom pb-2 mb-2">Reports</div>
 
                                             
-                                            <a href="/gl/gl_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Reports</a>
+                                            <a href="/gl/gl_reports" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Finance Reports</a>
                                            
 
                                            

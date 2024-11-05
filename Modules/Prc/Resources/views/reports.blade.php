@@ -77,7 +77,7 @@
 
                                 <li class="list-group-item" style="display:none;">
                                     <label style="display: flex; align-items: center;">
-                                        <input class="form-check-input" type="radio" name="option1" name="poHelpReport" value="poHelpReport" id="poHelpReport" style="margin-right: 10px;">
+                                        <input class="form-check-input" type="radio" name="option1" name="poHelpReport1" value="poHelpReport1" id="poHelpReport1" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
                                         PO Help Report
                                     </label>

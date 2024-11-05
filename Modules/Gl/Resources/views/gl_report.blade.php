@@ -70,22 +70,22 @@
                         <div class="card-body">
                             <h5 class="card-title">Reports</h5>
                             <ul class="list-group">
-
-                                <li class="list-group-item">
-                                    <label style="display: flex; align-items: center;">
-                                        <input class="form-check-input" type="radio" name="option1" value="Customer's Ledger" id="Customer_Ledger" style="margin-right: 10px;">
-                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Customer's Ledger
-                                    </label>
-                                </li>
-                                <br>
+                            
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="debtorleger" id="debtorleger" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Debtors Age Analysis
+                                        Ledger 
                                     </label>
                                 </li>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="Customer's Ledger" id="Customer_Ledger" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Trial Balance 
+                                    </label>
+                                </li>
+                                
 
 
                                 <br>
@@ -93,7 +93,7 @@
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="Customer's Outstanding Age Analysis" id="customerOutstanding" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Customer's Outstanding
+                                        Financial Performance
                                     </label>
                                 </li>
 
@@ -101,7 +101,7 @@
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="invoiceWise" id="outstandingInvoiceWise" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Customer Outstanding - Invoice Wise
+                                        Statement of Financial Position
                                     </label>
                                 </li>
                                 <br>
