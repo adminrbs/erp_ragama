@@ -184,7 +184,7 @@ class CustomerReceiptController extends Controller
             A.amount ,
             A.paidamount AS paid_amount,
             A.debtors_ledger_id,
-            0 AS return_amount,
+            COALESCE(A.return_amount, 0) AS return_amount,
             (A.amount - A.paidamount)AS balance_amount   
             FROM  debtors_ledgers AS A  WHERE  A.amount<> A.paidamount AND A.customer_id='" . $customer_id . "' AND (A.document_number = '210' OR A.document_number = '1600')";
             $data = DB::select($query);

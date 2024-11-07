@@ -161,7 +161,7 @@ class supplierPaymentController extends Controller
             ABS(A.amount) as amount,
             A.paidamount AS paid_amount ,
             A.creditors_ledger_id,
-            0 AS return_amount,
+            COALESCE(A.return_amount, 0) AS return_amount,
             (ABS(A.amount) - A.paidamount)AS balance_amount   
             FROM  creditors_ledger AS A  WHERE  A.amount<> A.paidamount AND A.supplier_id='" . $sup_id . "' AND (A.document_number = '120' OR A.document_number = '2300')";
             // dd($query);
