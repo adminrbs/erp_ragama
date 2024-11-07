@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use RepoEldo\ELD\ReportViewer;
 
-class ChequeAuditReportController2 extends Controller
+class ChequeAuditReportController2_06_11 extends Controller
 {
     public function chequeAuditReport($filters)
 
@@ -64,11 +64,10 @@ class ChequeAuditReportController2 extends Controller
         
         CAST(DATEDIFF(customer_receipts.receipt_date,debtors_ledgers.trans_date)AS SIGNED) AS Age,
         (SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) AS  Invoice_amont,
-        ( customer_receipt_setoff_data.paid_amount - IFNULL((SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),0)  ) AS total_paid,
-		(SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
-         (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
+        (SELECT customer_receipt_setoff_data.paid_amount  FROM customer_receipt_setoff_data WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number) AS total_paid,
+        (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
         customer_receipt_setoff_data.set_off_amount,
-        ( customer_receipt_setoff_data.Amount - customer_receipt_setoff_data.paid_amount - customer_receipt_setoff_data.set_off_amount ) AS balance,
+        ((SELECT debtors_ledgers.amount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1) - (SELECT debtors_ledgers.paidamount  FROM debtors_ledgers WHERE customer_receipt_setoff_data.reference_external_number = debtors_ledgers.external_number LIMIT 1)) AS balance,
         customer_receipt_cheques.amount,
         banks.bank_name,
         bank_branches.bank_branch_name
@@ -80,7 +79,7 @@ class ChequeAuditReportController2 extends Controller
         LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
         LEFT JOIN banks ON customer_receipt_cheques.bank_id = banks.bank_id
         LEFT JOIN bank_branches ON customer_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id' . $query_modify;
-           // dd($qry);
+            //dd($qry);
             $result = DB::select($qry);
             //dd($result);
             $resulcustomer = DB::select('select customer_receipts.customer_receipt_id,customers.customer_name,CRC.cheque_number 

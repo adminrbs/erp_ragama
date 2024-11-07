@@ -19,7 +19,7 @@ use Modules\Sc\Entities\location;
 use Modules\Sc\Entities\supply_group;
 use RepoEldo\ELD\ReportViewer;
 
-class ItemHistoryController extends Controller
+class ItemHistoryController0611 extends Controller
 {
     //load data to item history tabe
     public function getItemHistory()
@@ -109,16 +109,8 @@ class ItemHistoryController extends Controller
             LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
             LEFT JOIN items ON item_history_set_offs.item_id = items.item_id
             LEFT JOIN locations ON item_history_set_offs.location_id = locations.location_id'; */
-            $query = ' SELECT
-	items.Item_code,
-	items.item_Name,
-	SUM(
-		item_history_set_offs.quantity - item_history_set_offs.setoff_quantity 
-	) AS quantity,
-	items.unit_of_measure,
-	items.category_level_1_id
-FROM
-	items
+            $query = ' SELECT items.Item_code, items.item_Name, SUM(item_history_set_offs.quantity) AS quantity, items.unit_of_measure,items.category_level_1_id
+            FROM items
             LEFT JOIN item_history_set_offs ON items.item_id = item_history_set_offs.item_id
             LEFT JOIN branches ON item_history_set_offs.branch_id  = branches.branch_id 
             LEFT JOIN locations ON item_history_set_offs.location_id = locations.location_id';
@@ -195,7 +187,7 @@ FROM
                 }               
                 if ($quryModify != "") {
                     $quryModify = rtrim($quryModify, 'AND OR ');
-                    $query = $query . " where item_history_set_offs.quantity>0 AND " . $quryModify . 'GROUP BY items.Item_id';
+                    $query = $query . " where " . $quryModify . 'GROUP BY items.Item_code';
                 }
                 //dd($query);
                 $result = DB::select($query);

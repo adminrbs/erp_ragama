@@ -64,11 +64,11 @@ try{
         $quryModify2 = " AND ";
         $quryModify3 =" Where I.is_active=1";
         if ( $todate != null) {
-            $quryModify .= " transaction_date<= '" . $todate . "'  AND ";
+           // $quryModify .= " transaction_date<= '" . $todate . "'  AND ";
           //  $quryModify2 .= " '" . $todate . "' AND";
 
         }
-
+        
         if ($selecteBranch != null) {
             if (count($selecteBranch) > 1) {
                 $quryModify .= " branch_id IN ('" . implode("', '", $selecteBranch) . "') AND";
@@ -110,16 +110,16 @@ try{
             $quryModify2 = rtrim($quryModify2, 'AND OR ');
         }
 
-
+        $stock_where_clause = "transaction_date <= CURDATE()";
 
 
         $query = "  SELECT  I.Item_code, I.item_Name ,I.package_unit, S.avg_sales , ROUND((S.avg_sales * 80) / 100, 0) AS required, L.qty_in_hand ,  
         CASE 
         WHEN (ROUND((S.avg_sales * 80) / 100, 0) - L.qty_in_hand) <= 0 THEN NULL 
         ELSE ROUND((ROUND((S.avg_sales * 80) / 100, 0) - L.qty_in_hand), 0) 
-    END AS reoder,  I.supply_group_id , SG.supply_group,L.branch_id , B.branch_name , I.item_id
+    END AS reoder,  I.supply_group_id , SG.supply_group,L.branch_id , B.branch_name , I.item_id,I.category_level_1_id
                     FROM 
-                    ( SELECT branch_id , item_id , SUM(quantity) AS  qty_in_hand  From item_historys IH WHERE  $quryModify AND $locatin_query
+                    ( SELECT branch_id , item_id , SUM(quantity) AS  qty_in_hand  From item_historys IH WHERE $stock_where_clause AND  $quryModify AND $locatin_query
                     GROUP BY branch_id , item_id   
                     )  L   
                     INNER JOIN items I ON I.item_id = L.item_id 
@@ -143,8 +143,8 @@ try{
         //dd($result);
         // $reportViwer = new ReportViewer();
         // $reportViwer->addParameter("StockBalance_tabaledata", $result);
-        $resulsupplygroup = DB::select('select supply_groups.supply_group_id ,supply_groups.supply_group from supply_groups');
-
+        //$resulsupplygroup = DB::select('select supply_groups.supply_group_id ,supply_groups.supply_group from supply_groups');
+        $resulsupplygroup = DB::select('SELECT category_level_1,item_category_level_1_id FROM item_category_level_1s ');
                 $supplygrouparray = [];
                 $table = [];
                 $titel = [];
@@ -157,7 +157,7 @@ try{
                     foreach ($result as $supplygroupdata) {
 
 
-                        if ($supplygroupdata->supply_group_id == $supplygroupid->supply_group_id) {
+                        if ($supplygroupdata->category_level_1_id == $supplygroupid->item_category_level_1_id) {
 
                             array_push($table, $supplygroupdata);
                         }
@@ -170,7 +170,7 @@ try{
                         array_push($supplygrouparray, $table);
 
 
-                        array_push($titel, $supplygroupid->supply_group);
+                        array_push($titel, $supplygroupid->category_level_1);
 
                         $reportViwer->addParameter('abc', $titel);
                     }

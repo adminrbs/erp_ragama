@@ -194,6 +194,15 @@
                                         "width": 80,
                                         "visible":false
                                     }
+                                ],
+                                [
+                                    {
+                                        "text": "category1",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 80,
+                                        "visible":false
+                                    }
                                 ]
                             ],
                             "body": "@_$tabale_data",
