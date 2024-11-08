@@ -68,7 +68,7 @@ class ChequeAuditReportController2 extends Controller
 		customer_receipt_setoff_data.return_amount AS total_return,
          (SELECT SUM(sales_return_debtor_setoffs.setoff_amount) FROM sales_return_debtor_setoffs WHERE sales_return_debtor_setoffs.external_number = debtors_ledgers.external_number),
         customer_receipt_setoff_data.set_off_amount,
-        ( customer_receipt_setoff_data.Amount - customer_receipt_setoff_data.paid_amount - customer_receipt_setoff_data.set_off_amount ) AS balance,
+        (customer_receipt_setoff_data.Amount - customer_receipt_setoff_data.paid_amount - customer_receipt_setoff_data.set_off_amount ) AS balance,
         customer_receipt_cheques.amount,
         banks.bank_name,
         bank_branches.bank_branch_name
