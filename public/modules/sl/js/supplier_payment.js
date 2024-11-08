@@ -1272,7 +1272,7 @@ function loadSetoffTable(sup_id) {
                     var description = '<label id="lblDescription' + i + '">' + tableData[i].description + '</label>';
                     var amount = '<label id="lblSetoffAmount' + i + '">' + parseFloat(tableData[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var paid_amount = '<label id="lblPaidAmount' + i + '">' + parseFloat(tableData[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
-                    var return_amount = '<label id="lblReturnAmount' + i + '">0.00</label>';
+                    var return_amount = '<label id="lblReturnAmount' + i + '">'+parseFloat(tableData[i].return_amount)+'</label>';
                     var balance = '<label id="lblBalance' + i + '">' + parseFloat(tableData[i].balance_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString() + '</label>';
                     var setoff = '<input type="number" id="txtSetoff' + i + '" class="form-control form-control-sm math-abs"  style="text-align:right;max-width: 80px;" oninput="setoffAmountOnInput(' + str_id + ')" value="0">';
                    // var age = '<label id="lblAge' + i + '">0.00</label>';

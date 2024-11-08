@@ -332,7 +332,12 @@ $(document).ready(function () {
 
     $("input[type='radio']").click(function () {
 
-        report = this.id;
+       // report = this.id;
+        if ($(this).is(':checked')) {
+            let report_type = $(this).attr('id');
+            report = report_type;
+            hideFilters(report_type);
+        }
 
     });
 
@@ -634,6 +639,21 @@ function getSalesrep() {
     });
 
 }
+
+function hideFilters(report) {
+    if (report == 'poHelpReport') {
+        $('#txtFromDate').prop('disabled', true);
+       
+    } else if (report == 'good_receive_summery_report') {
+        $('#txtFromDate').prop('disabled', false);
+       
+
+    } else if (report == 'goods_return_summery_report') {
+        $('#txtFromDate').prop('disabled', false);
+       
+    }
+}
+
 
 
 

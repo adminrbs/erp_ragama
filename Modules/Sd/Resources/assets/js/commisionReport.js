@@ -262,7 +262,7 @@ $(document).ready(function () {
     $('#viewReport').on('click', function () {
 
         //alert(report);
-        if(!$('#chkdate').prop('disabled')){
+        if(!$('#chkdate').prop('checked')){
             showWarningMessage("Please select the date range")
         }else{
         
