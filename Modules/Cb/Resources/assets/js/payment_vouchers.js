@@ -526,6 +526,8 @@ function loadPayee() {
 
 
 function saveVoucher(collection) {
+    console.log(referanceID);
+    
 var payee = true
 
     if (parseInt(collection.length) <= 0) {
@@ -578,6 +580,7 @@ var payee = true
                     $('#btnSave').prop('disabled', false);
                     if(response.success){
                         showSuccessMessage("Successfuly saved");
+                        window.location.href = "/cb/payment_voucher_list";
                     }else{
                         showWarningMessage("Unable to save");
                     }
@@ -637,6 +640,7 @@ function updateVoucher(collection) {
                 $('#btnSave').prop('disabled', false);
                 if(response.success){
                     showSuccessMessage("Successfuly updated");
+                    window.location.href = "/cb/payment_voucher_list";
                 }else{
                     showWarningMessage("Unable to update");
                 }

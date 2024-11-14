@@ -31,6 +31,7 @@ use Modules\Cb\Http\Controllers\PaymentVoucherController;
 use Modules\Cb\Http\Controllers\ReturnChequesController;
 use Modules\Cb\Http\Controllers\SfaCashBundleReportController;
 use Modules\Cb\Http\Controllers\SfaChequeCollectionListController;
+use Modules\Cb\Http\Controllers\SFAChequeCollectionReportController;
 use Modules\Cb\Http\Controllers\SfaChqueReportController;
 use Modules\Cb\Http\Controllers\SfaReceiptsManageController;
 
@@ -317,5 +318,5 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     return view("cb::sfa_cheque_collection");
    });
    Route::get('/load_cheque_collection',[SfaChequeCollectionListController::class,'load_sfa_cheque_collection_list']);
-   Route::get('/printSFAChequeBundle/{id}',[SfaChqueReportController::class,'printSFAChequeBundle']);
+   Route::get('/printSFAChequeBundle/{id}',[SFAChequeCollectionReportController::class,'printSFAChequeBundle']);
 });

@@ -602,7 +602,7 @@ Route::post('/updatePayee/{id}',[PayeeController::class,'updatePayee']);
 Route::delete('/deletePayee',[PayeeController::class,'deletePayee']);
 
 
-/**GL Account */
+/**GL Account ANalysis*/
 Route::get('/gl_account_analysis',function(){
     return view('md::gl_account_analysis');
 });

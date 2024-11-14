@@ -206,6 +206,7 @@
 
                                             <a href="/md/account_group_level" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Account Level</a>
                                             <a href="/md/payee" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payee</a>
+                                            <a href="/md/gl_account_analysis" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Account Analysis</a>
                                         
                                         </div>
                                     </div>

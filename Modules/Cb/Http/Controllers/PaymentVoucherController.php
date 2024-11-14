@@ -97,6 +97,7 @@ class PaymentVoucherController extends Controller
             $PaymentVoucher->remarks = $request->input('remarks');
             $PaymentVoucher->description = $request->input('description');
             $PaymentVoucher->status = 0;
+            $total_amount = 0;
             if ($PaymentVoucher->save()) {
 
                 foreach ($collection as $i) {
@@ -110,8 +111,14 @@ class PaymentVoucherController extends Controller
                     $PaymentVoucherItems->description = $item->description;
                     $PaymentVoucherItems->amount = $item->amount;
                     $PaymentVoucherItems->save();
+
+                    $total_amount += $item->amount;
                 }
             }
+            $PaymentVoucher->total_amount = $total_amount;
+            $PaymentVoucher->update();
+
+
 
             return response()->json(['success' => true]);
         } catch (Exception $ex) {
@@ -123,7 +130,7 @@ class PaymentVoucherController extends Controller
     public function getGRNdata()
     {
         try {
-            $qry = "SELECT PV.payment_voucher_id,PV.external_number,PV.transaction_date,PV.total_amount,S.supplier_name,P.payee_name,B.branch_name FROM payment_vouchers PV LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN branches B ON PV.branch_id = b.branch_id";
+            $qry = "SELECT PV.payment_voucher_id,PV.external_number,PV.transaction_date,PV.total_amount,S.supplier_name,P.payee_name,B.branch_name FROM payment_vouchers PV LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN branches B ON PV.branch_id = B.branch_id";
             $result = DB::select($qry);
             if ($result) {
                 return response()->json(['success' => true, 'data' => $result]);

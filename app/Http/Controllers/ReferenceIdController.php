@@ -1239,8 +1239,9 @@ LIMIT 1";  */
         try {
 
             $branch_id = $request->input('id');
+            //dd($doc_number);
             $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
-
+          
             $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' AND branch_id = '" . $branch_id . "'  ORDER BY payment_voucher_id DESC LIMIT 1";
             // dd($query);
             $result = DB::select($query);
