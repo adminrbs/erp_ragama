@@ -154,7 +154,7 @@ class PaymentVoucherController extends Controller
             }
 
             // $pv_item = PatmentVoucherItems::where("payment_voucher_id","=",$id)->get();
-            $pv_item = DB::select("SELECT GL.account_code,PVI.description,PVI.amount,PVI.gl_account_analysis_id FROM payment_voucher_items PVI INNER JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id WHERE PVI.payment_voucher_id = $id");
+            $pv_item = DB::select("SELECT GL.account_code,PVI.description,PVI.amount,PVI.gl_account_analysis_id FROM payment_voucher_items PVI LEFT JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id WHERE PVI.payment_voucher_id = $id");
 
             if ($pv) {
                 return response()->json(['success' => true, 'pv' => $pv, 'pv_item' => $pv_item, 'sup_code' => $s_code]);

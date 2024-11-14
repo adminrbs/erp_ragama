@@ -38,7 +38,7 @@ FROM
 	INNER JOIN employees E ON CR.collector_id = E.employee_id 
 WHERE
 	CC.cheque_collection_id =".$id;
-
+    //dd($qry);
     $result = DB::select($qry);
 
     DB::select($qry);
@@ -46,7 +46,7 @@ WHERE
 	DL.external_number,
 	C.customer_name,
 	CR.customer_receipt_id,
-	CRC.cheque_number,
+	CRC.cheque_number
 	
 FROM
 	cheque_collections CC

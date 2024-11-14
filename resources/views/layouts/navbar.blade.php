@@ -266,6 +266,10 @@
                                             @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office (SR)</a>
                                             @endif
+
+                                           
+                                            <a href="/cb/sfa_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>SFA Cheque Collection List</a>
+                                           
                                         
                                           
 
