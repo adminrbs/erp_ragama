@@ -24,9 +24,14 @@ use Modules\Cb\Http\Controllers\ReportController;
 use Modules\Cb\Http\Controllers\ChequesBankedController;
 use Modules\Cb\Http\Controllers\ChquesToBeBankedController;
 use Modules\Cb\Http\Controllers\DashboardDataController;
+use Modules\Cb\Http\Controllers\DirectCashBundleReportController;
+use Modules\Cb\Http\Controllers\DirectChequeBundleReportController;
 use Modules\Cb\Http\Controllers\DirectChequeController;
 use Modules\Cb\Http\Controllers\PaymentVoucherController;
 use Modules\Cb\Http\Controllers\ReturnChequesController;
+use Modules\Cb\Http\Controllers\SfaCashBundleReportController;
+use Modules\Cb\Http\Controllers\SfaChequeCollectionListController;
+use Modules\Cb\Http\Controllers\SfaChqueReportController;
 use Modules\Cb\Http\Controllers\SfaReceiptsManageController;
 
 /*
@@ -135,7 +140,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::get('/loadcashBundle_receipt',[CashBundleController::class,'getCashBundle_receipt']);
     Route::post('/create_rcpt',[CashBundleController::class,'create_rcpt']);
     Route::get('/loadInvoices_cus_rcpt/{id}',[CashBundleController::class,'loadInvoices_recipt']);
-
+    Route::get('/printSfaCashBundle/{id}',[SfaCashBundleReportController::class,'printSfaCashBundle']);
     /**customer receipts cheque */
     Route::post('/create_rcpt_cheque',[CashBundleController::class,'create_rcpt_cheque']);
     
@@ -251,7 +256,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
         return view('cb::direct_cash_bundle_ho_received');
    });
    Route::post('/received_direct_Bundle_head_office',[DirectReceiptController::class,'received_direct_Bundle_head_office']);
-
+   Route::get('/printCashBundle/{id}',[DirectCashBundleReportController::class,'printCashBundle']);
    //Direct cheque collection
    Route::get('/dirct_cheque_collection',function(){
         return view('cb::direct_cheque_collection');
@@ -268,7 +273,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    });
    Route::get('/loadDirectChequeReciptsToModal/{id}',[DirectChequeController::class,'loadDirectChequeReciptsToModal']);
    Route::post('/received_direct_cheque_collection_head_office',[DirectChequeController::class,'received_direct_cheque_collection_head_office']);
-
+   Route::get('/printChequeBundle/{id}',[DirectChequeBundleReportController::class,'printChequeBundle']);
 
    //Dashboard
    Route::get('/cashDashBoard',function(){
@@ -305,4 +310,12 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
 
    /**Payment voucher receipt */
    Route::get('/paymentVoucher_Receipt/{id}',[PaymentVoucherController::class,'paymentVoucher_Receipt']);
+
+
+   /**SFA Cheque Collection List */
+   Route::get('/sfa_cheque_collection_list',function(){
+    return view("cb::sfa_cheque_collection");
+   });
+   Route::get('/load_cheque_collection',[SfaChequeCollectionListController::class,'load_sfa_cheque_collection_list']);
+   Route::get('/printSFAChequeBundle/{id}',[SfaChqueReportController::class,'printSFAChequeBundle']);
 });

@@ -63,14 +63,14 @@ class ChquesToBeBankedController extends Controller
  LEFT JOIN customers ON customer_receipts.customer_id = customers.customer_id
  LEFT JOIN banks ON customer_receipt_cheques.bank_id = banks.bank_id
  LEFT JOIN bank_branches ON customer_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id
- LEFT JOIN sales_invoices ON sales_invoices.internal_number=debtors_ledgers.internal_number ' . $query_modify;
+ LEFT JOIN sales_invoices ON sales_invoices.internal_number=debtors_ledgers.internal_number ' . $query_modify . 'ORDER BY customer_receipt_cheques.banking_date ASC';
 
 
 
         $result = DB::select($qry);
 
         $reportViwer = new ReportViewer();
-        $title = "Cheques to be banked";
+        $title = "Customer's Cheques to be banked";
         if ($fromDate && $toDate) {
             $title .= " From : " . $fromDate . " To : " . $toDate;
         }

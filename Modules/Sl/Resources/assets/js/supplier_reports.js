@@ -471,25 +471,29 @@ $(document).ready(function () {
 
         if (report == "suplier_Ledger") { //supplier ledger
 
-
-
-            var requestData = [
-                { selectSupplier: selectSupplier },
-                { selectSupplygroup: selectSupplygroup },
-                { selecteBranch: selecteBranch },
-                { cmbgreaterthan: cmbgreaterthan },
-                { fromdate: fromdate },
-                { todate: todate },
-                { fromAge: fromAge },
-                { toAge: toAge },
-            ];
-
-
-
-
-
-
-            $('#pdfContainer').attr('src', '/sl/supplier_Ledger_reports/' + JSON.stringify(requestData));
+            if($('#chkdate').prop('checked')){
+                var requestData = [
+                    { selectSupplier: selectSupplier },
+                    { selectSupplygroup: selectSupplygroup },
+                    { selecteBranch: selecteBranch },
+                    { cmbgreaterthan: cmbgreaterthan },
+                    { fromdate: fromdate },
+                    { todate: todate },
+                    { fromAge: fromAge },
+                    { toAge: toAge },
+                ];
+    
+    
+    
+    
+    
+    
+                $('#pdfContainer').attr('src', '/sl/supplier_Ledger_reports/' + JSON.stringify(requestData));
+            }else{
+                //$('#chkdate').prop('checked',true);
+                showWarningMessage("Please select date")
+            }
+            
 
 
         }

@@ -123,7 +123,7 @@ $(document).ready(function () {
 
             var Password = $('#txtPassword').val();
             var confirmPassword = $('#txtConformPassword').val();
-            if (Password == confirmPassword) {
+            /* if (Password == confirmPassword) { */
 
                 var id = $('#id').val();
                 formData.append('txtname', $('#txtname').val());
@@ -181,9 +181,9 @@ $(document).ready(function () {
 
             });
 
-            } else {
+           /*  } else {
                 showErrorMessage('Password does not match');
-            }
+            } */
 
 
 

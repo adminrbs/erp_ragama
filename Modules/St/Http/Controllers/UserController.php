@@ -124,7 +124,7 @@ public function updateUser(Request $request, $id)
 
         $inputPassword = $request->get('txtPassword');
         //dd($request->get('txtPassword'));
-        if (Hash::check($inputPassword, $user->password)){
+       /*  if (Hash::check($inputPassword, $user->password)){ */
       // if ($inputPassword) {
             if ($user) {
                 $user->name = $request->input('txtname');
@@ -150,9 +150,9 @@ public function updateUser(Request $request, $id)
                 return response()->json(['error' => 'User not found']);
             }
 
-        } else {
+       /*  } else {
             return response()->json(['status' => false]);
-        }
+        } */
 
 
     } catch (Exception $ex) {

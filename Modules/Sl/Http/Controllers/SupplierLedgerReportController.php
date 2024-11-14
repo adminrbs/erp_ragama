@@ -16,7 +16,7 @@ class SupplierLedgerReportController extends Controller
     {
         try {
 
-
+            //dd($search);
 
             $searchOption = json_decode($search);
             $selectSupplier = $searchOption[0]->selectSupplier;
@@ -65,26 +65,26 @@ class SupplierLedgerReportController extends Controller
                 DB::select("SET @prev_supplier_id := NULL;");
 
                 $query = "SELECT
-            D.trans_date,
-            D.external_number,
-            D.description,
-            D.supplier_id,
-            IF(D.amount > 0, D.amount, 0) AS Debit,
-            IF(D.amount < 0, -D.amount, 0) AS Credit,
-            CASE
-                WHEN D.supplier_id = @prev_supplier_id THEN
-                    ABS(@running_total := @running_total + IF(D.amount > 0, D.amount, 0) - IF(D.amount < 0, -D.amount, 0))
+                D.trans_date,
+                D.external_number,
+                D.description,
+                D.supplier_id,
+                IF(D.amount > 0, D.amount, 0) AS Debit,
+                IF(D.amount < 0, -D.amount, 0) AS Credit,
+                CASE
+                    WHEN D.supplier_id = @prev_supplier_id THEN
+                        ABS(@running_total := @running_total + IF(D.amount > 0, D.amount, 0) - IF(D.amount < 0, -D.amount, 0))
                 ELSE
                     ABS(@running_total := IF(D.amount > 0, D.amount, 0) - IF(D.amount < 0, -D.amount, 0))
-            END AS RunningTotal,
-            (@prev_supplier_id := D.supplier_id) AS prev_supplier_id
-        FROM (
-            SELECT
+                END AS RunningTotal,
+                (@prev_supplier_id := D.supplier_id) AS prev_supplier_id
+            FROM (
+                SELECT
                 C.*,
                 C.supplier_id AS supplier_id_alias
             FROM creditors_ledger C
-            INNER JOIN suppliers S ON C.supplier_id = S.supplier_id
-            INNER JOIN branches B ON C.branch_id = B.branch_id";
+                INNER JOIN suppliers S ON C.supplier_id = S.supplier_id
+                INNER JOIN branches B ON C.branch_id = B.branch_id";
 
                 $quryModify = "";
 
@@ -102,9 +102,9 @@ class SupplierLedgerReportController extends Controller
 
                 if ($selectSupplier != null) {
                     if (count($selectSupplier) > 1) {
-                        $quryModify .= "S.supplier_id IN ('" . implode("', '", $selecteBranch) . "') AND ";
+                        $quryModify .= "S.supplier_id IN ('" . implode("', '", $selectSupplier) . "') AND ";
                     }else{
-                        $quryModify .= "S.supplier_id = '" . $selecteBranch[0] . "' AND ";
+                        $quryModify .= "S.supplier_id = '" . $selectSupplier[0] . "' AND ";
                     }
                 }
 
@@ -130,7 +130,7 @@ class SupplierLedgerReportController extends Controller
 
 
 
-                //dd($query);
+               // dd($query);
                 $result = DB::select($query);
 
                 $resulcustomer = DB::select('select supplier_id,supplier_name,supplier_code from suppliers');
@@ -162,7 +162,7 @@ class SupplierLedgerReportController extends Controller
                         array_push($customerablearray, $table);
 
 
-                        array_push($titel, $customerid->supplier_code . '   ' . ' - ' . $customerid->supplier_name);
+                        array_push($titel, '<h3>'.$customerid->supplier_code . '   ' . ' - ' . $customerid->supplier_name.'</h3>');
 
 
                         $reportViwer->addParameter('abc', $titel);
@@ -180,7 +180,7 @@ class SupplierLedgerReportController extends Controller
             $reportViwer->addParameter('companyName', CompanyDetailsController::CompanyName());
             $reportViwer->addParameter('companyAddress', CompanyDetailsController::CompanyAddress());
             $reportViwer->addParameter('companyNumber', CompanyDetailsController::CompanyNumber());
-            $reportViwer->addParameter("total_difference", "<br>Total Balance : " . number_format(($debit_total - $credit_total), 2));
+            $reportViwer->addParameter("total_difference", "<br>Total Balance : " . number_format(($credit_total - $debit_total), 2));
 
             return $reportViwer->viewReport('supplier_ledger.json');
         } catch (Exception $ex) {

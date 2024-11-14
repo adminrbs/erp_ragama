@@ -65,7 +65,7 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     Route::get('/supplier_receipt/getReceiptMethod',[supplierPaymentController::class,'getReceiptMethod']);
     Route::get('/supplier_pyment_list/getReceiptList',[supplierPaymentController::class,'getReceiptList']);
     Route::get('/supplierReceiptReport/{id}',[supplierPaymentController::class,'supplierReceiptReport']);
-
+    Route::get('/supplier_payment/getReceipt/{id}',[supplierPaymentController::class,'getReceipt']);
 
     /**Transaction allocation */
     Route::get('/supplier_transaction_allocation',function(){

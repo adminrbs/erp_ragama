@@ -29,7 +29,7 @@ class DebtorReportsController extends Controller
     {
         try {
 
-            $data = Customer::all();
+            $data = Customer::orderBy('customer_name', 'asc')->get();
             return response()->json($data);
         } catch (Exception $ex) {
             return $ex;

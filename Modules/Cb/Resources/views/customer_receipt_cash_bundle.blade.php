@@ -76,7 +76,7 @@
                                 <th style="text-align: right;">Amount</th>
                                 <th>Number of</th>
                                 <th>Info</th>
-                                <th>Create</th>
+                                <th>Action</th>
                                 <th>Status</th>
                                 
                                 

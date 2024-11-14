@@ -144,9 +144,10 @@ function loadcashBundle_receipt(){
                 var data = [];
                 for (var i = 0; i < dt.length; i++) {
                     var count = dt[i].cash_bundles_datas_count;
-                   var create_button = '<button class="btn btn-primary" type="button" id="btnrcpt_' +"_"+dt[i].cash_bundles_id + '" onclick="confirm_create(this)">Create Receipt</button>';
+                   var create_button = '<button class="btn btn-primary" title="Create Button" type="button" id="btnrcpt_' +"_"+dt[i].cash_bundles_id + '" onclick="confirm_create(this)">Create Receipt</button>';
                     var badge_status = '<label class="badge badge-pill bg-warning" id='+dt[i].cash_bundles_id+'>Pending</label>';
-                   /*  if(dt[i].receipt_status == 1){
+                   var print_button = '<button class="btn btn-secondary" title="Print" type="button" id="btnrcptPrint_' +"_"+dt[i].cash_bundles_id + '" onclick="printBundle('+dt[i].cash_bundles_id+')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                    /*  if(dt[i].receipt_status == 1){
                     cash_check_box = '<input class="form-check-input" type="checkbox" id="cash_branch' +"_"+dt[i].customer_receipt_id + '" onchange="update_status_calculation(this)" checked>';
                    } */
                     data.push({
@@ -156,7 +157,7 @@ function loadcashBundle_receipt(){
                         "amount":parseFloat(dt[i].total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                         "no_of":count,
                         "info":'<button class="btn btn-success btn-sm" onclick="showModel(this)" id="'+dt[i].internal_number+'"><i class="fa fa-info-circle" aria-hidden="true"></i></button>',
-                        "action": create_button,
+                        "action": create_button +" "+print_button,
                         "status":badge_status         
                        
                     });  
@@ -177,7 +178,10 @@ function loadcashBundle_receipt(){
 
 }
 
-
+function printBundle(id){
+    let url = '/cb/printSfaCashBundle/'+id;
+    window.open(url, '_blank');
+}
 
 /* //locad branches
 function getBranches() {

@@ -49,7 +49,7 @@ const DatatableFixedColumns = function () {
                     orderable: false
                 },
                 {
-                    width: 100,
+                    width: 200,
                     targets: 3,
                     orderable: false
                 },
@@ -146,13 +146,13 @@ function load_direct_cheque_collection(br_id) {
             for (var i = 0; i < dt.length; i++) {
                 console.log(dt[i].book);
                 btn_info = '<button class="btn btn-success btn-sm tooltip-target" title="Info" onclick="showModal(' +dt[i].direct_cheque_collection_id+')"><i class="fa fa-info-circle" aria-hidden="true"></i></button>';
-
+                btn_print = '<button class="btn btn-secondary btn-sm tooltip-target" title="Print" onclick="printBundle(' +dt[i].direct_cheque_collection_id+')"><i class="fa fa-print" aria-hidden="true"></i></button>'
                 data.push({
                     "date": '<div data-id="' + dt[i].direct_cheque_collection_id + '">' + dt[i].trans_date + '</div>',
                     "ref_number": '<div data-id="' + dt[i].direct_cheque_collection_id + '">' + dt[i].external_number + '</div>',
                     "amount": parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     "branch": dt[i].branch_name,
-                    "action": btn_info,
+                    "action": btn_info+' '+btn_print,
 
                 });
 
@@ -199,4 +199,11 @@ function loadDirectChequeReciptsToModal(id){
             });
         }   
     })
+}
+
+function printBundle(id){
+    let url = '/cb/printChequeBundle/'+id;
+    
+   
+    window.open(url, '_blank');
 }

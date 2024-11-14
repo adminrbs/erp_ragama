@@ -35,9 +35,6 @@ try{
         $locatin_query .= "location_id IN ('" . implode("', '", $locationIds) . "')";
     }
     
-
-
-
     $nonNullCount = 0;
 
     if ($searchOption !== null) {
@@ -62,7 +59,7 @@ try{
     if ($nonNullCount > 1) {
         $quryModify = "";
         $quryModify2 = " AND ";
-        $quryModify3 =" Where I.is_active=1";
+        $quryModify3 =" WHERE I.is_active=1";
         if ( $todate != null) {
            // $quryModify .= " transaction_date<= '" . $todate . "'  AND ";
           //  $quryModify2 .= " '" . $todate . "' AND";
@@ -97,10 +94,10 @@ try{
 
         if ($selectSupplygroup != null) {
             if (count($selectSupplygroup) > 1) {
-                $quryModify3 .= "  WHERE I.supply_group_id  IN ('" . implode("', '", $selectSupplygroup) . "')  ";
+                $quryModify3 .= " AND  I.supply_group_id  IN ('" . implode("', '", $selectSupplygroup) . "')  ";
               
             } else {
-                $quryModify3 .= "  WHERE I.supply_group_id  ='" . $selectSupplygroup[0] . "' ";
+                $quryModify3 .= " AND  I.supply_group_id  ='" . $selectSupplygroup[0] . "' ";
                
             }
 
@@ -123,7 +120,7 @@ try{
                     GROUP BY branch_id , item_id   
                     )  L   
                     INNER JOIN items I ON I.item_id = L.item_id 
-                    INNER JOIN  supply_groups  SG ON  SG.supply_group_id =I.supply_group_id 
+                    INNER JOIN  supply_groups SG ON  SG.supply_group_id =I.supply_group_id 
                     INNER JOIN  branches B ON L.branch_id=B.branch_id 
                    
                     LEFT JOIN 

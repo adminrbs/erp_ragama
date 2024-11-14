@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label class="compulsory-field">Collector</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbCollector"></select>
+                                    <select class="form-select form-control-sm compulsory-field" id="cmbCollector"></select>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label class="compulsory-field">Cashier</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbCashier"></select>
+                                    <select class="form-select form-control-sm compulsory-field" id="cmbCashier"></select>
                                 </div>
                             </div>
                         </div>
@@ -77,10 +77,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label class="compulsory-field">GL Account</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbGLAccount">
-                                        <option value="1">Cash Collection</option>
+                                    <select class="form-select form-control-sm compulsory-field" id="cmbGLAccount">
+                                       <!--  <option value="1">Cash Collection</option>
                                         <option value="2">Cheque In Hand</option>
-                                        <option value="3">Bank Account - 12525555</option>
+                                        <option value="3">Bank Account - 12525555</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label class="compulsory-field">Receipt Method</label>
-                                    <select class="form-control form-control-sm compulsory-field" id="cmbReceiptMethod">
+                                    <select class="form-select form-control-sm compulsory-field" id="cmbReceiptMethod">
                                         <option value="1">Not Applicable</option>
                                     </select>
                                 </div>
@@ -132,7 +132,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Branch</label>
-                                    <select class="form-control form-control-sm" id="cmbBranch"></select>
+                                    <select class="form-select form-control-sm" id="cmbBranch"></select>
                                 </div>
                                 <div class="col-md-6">
                                     <br>
@@ -241,11 +241,11 @@
                                     </div>
                                     <div class="col-md-2 mt-2">
                                         <label>Bank</label>
-                                        <select id="cmbChequeBank" class="form-control form-control-sm select2-single-checque-bank"></select>
+                                        <select id="cmbChequeBank" class="form-select form-control-sm select2-single-checque-bank"></select>
                                     </div>
                                     <div class="col-md-2 mt-2">
                                         <label>Branch</label>
-                                        <select id="cmbChequeBankBranch" class="form-control form-control-sm select2-single-checque-branch"></select>
+                                        <select id="cmbChequeBankBranch" class="form-select form-control-sm select2-single-checque-branch"></select>
                                     </div>
                                 </div>
 
@@ -299,11 +299,11 @@
                                     </div>
                                     <div class="col-md-2 mt-2">
                                         <label>Bank</label>
-                                        <select id="txtMultiChequeBank" class="form-control form-control-sm select2-multi-checque-bank"></select>
+                                        <select id="txtMultiChequeBank" class="form-select form-control-sm select2-multi-checque-bank"></select>
                                     </div>
                                     <div class="col-md-2 mt-2">
                                         <label>Branch</label>
-                                        <select id="txtMultiChequeBankBranch" class="form-control form-control-sm select2-multi-checque-branch"></select>
+                                        <select id="txtMultiChequeBankBranch" class="form-select form-control-sm select2-multi-checque-branch"></select>
                                     </div>
                                 </div>
                                 <div class="row">

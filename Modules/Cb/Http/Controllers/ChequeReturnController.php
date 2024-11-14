@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Cb\Entities\cheque_return;
 use Modules\Cb\Entities\Customer;
+use Modules\Cb\Entities\CustomerReceipt;
 use Modules\Cb\Entities\CustomerReceiptCheque;
 use Modules\Cb\Entities\DebtorsLedger;
 use Modules\Cb\Entities\DebtorsLedgerSetoff;
@@ -20,122 +21,136 @@ use Modules\Dl\Entities\debit_note;
 class ChequeReturnController extends Controller
 {
     //load cheques
-    public function load_cheques($cusID){
-        try{
+    public function load_cheques($cusID)
+    {
+        try {
             $qry = "SELECT DISTINCT CRC.customer_receipt_cheque_id,CRC.external_number,CRC.cheque_number,CR.customer_id,CR.receipt_method_id,CR.collector_id,
             CRC.amount,CR.receipt_date,CRC.banking_date,CRC.cheque_deposit_date  
             FROM customer_receipt_cheques CRC INNER JOIN customer_receipts CR 
             ON CRC.customer_receipt_id = CR.customer_receipt_id WHERE CR.receipt_method_id = 2 AND CR.customer_id = $cusID AND CRC.cheque_status = 1";
-           // dd($qry);
+            // dd($qry);
             $result = DB::select($qry);
             //dd($result);
-            if($result){
-                return response()->json(["status" => true,"data"=>$result]);
+            if ($result) {
+                return response()->json(["status" => true, "data" => $result]);
             }
-
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return $ex;
         }
     }
 
     //add chq return
-    public function add_chq_return(Request $request, $id){
+    public function add_chq_return(Request $request, $id)
+    {
         DB::beginTransaction();
-        try{
+        try {
 
             $referencenumber = $request->input('LblexternalNumber');
-           // dd($referencenumber);
-                $bR_id = $request->input('cmbBranch');
+            // dd($referencenumber);
+            $bR_id = $request->input('cmbBranch');
 
-                $data = DB::table('branches')->where('branch_id', $bR_id)->get();
+            $data = DB::table('branches')->where('branch_id', $bR_id)->get();
 
-                $EXPLODE_ID = explode("-", $referencenumber);
-                $externalNumber  = '';
-                if ($data->count() > 0) {
-                    $documentPrefix = $data[0]->prefix;
-                    
-                    $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
-                }
+            $EXPLODE_ID = explode("-", $referencenumber);
+            $externalNumber  = '';
+            if ($data->count() > 0) {
+                $documentPrefix = $data[0]->prefix;
+
+                $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+            }
             $chq_ = CustomerReceiptCheque::find($id);
-           $chq_rturn = new cheque_return(); 
-           $chq_rturn->internal_number = IntenelNumberController::getNextID();
-           $chq_rturn->external_number =  $externalNumber;
-           $chq_rturn->returned_date =  $request->input('returned_on');
-           $chq_rturn->branch_id =  $request->input('cmbBranch');
-           $chq_rturn->customer_id =  $request->input('customerID');
-           $chq_rturn->cheque_number =  $request->input('txtChqNo');
-           $chq_rturn->bank_charges =  $request->input('txtbank_charges');
-           $chq_rturn->document_number =  1900;
-           $chq_rturn->is_redeposit_allowed =  $request->input('re_deposit');
-           $chq_rturn->cheque_dishonur_reason_id =  $request->input('return_reason');
-           $chq_rturn->bank_charges_paid_by_customer =  $request->input('pay_by_customer');
-           $chq_rturn->returned_by =  Auth::user()->id;
-           $chq_rturn->customer_receipt_cheque_id = $id;
-           $chq_rturn->amount = $chq_->amount;
-           if($chq_rturn->save()){
+            $chq_rturn = new cheque_return();
+            $chq_rturn->internal_number = IntenelNumberController::getNextID();
+            $chq_rturn->external_number =  $externalNumber;
+            $chq_rturn->returned_date =  $request->input('returned_on');
+            $chq_rturn->branch_id =  $request->input('cmbBranch');
+            $chq_rturn->customer_id =  $request->input('customerID');
+            $chq_rturn->cheque_number =  $request->input('txtChqNo');
+            $chq_rturn->bank_charges =  $request->input('txtbank_charges');
+            $chq_rturn->document_number =  1900;
+            $chq_rturn->is_redeposit_allowed =  $request->input('re_deposit');
+            $chq_rturn->cheque_dishonur_reason_id =  $request->input('return_reason');
+            $chq_rturn->bank_charges_paid_by_customer =  $request->input('pay_by_customer');
+            $chq_rturn->returned_by =  Auth::user()->id;
+            $chq_rturn->customer_receipt_cheque_id = $id;
+            $chq_rturn->amount = $chq_->amount;
+            if ($chq_rturn->save()) {
                 $chq = CustomerReceiptCheque::find($id);
-                 $chq->cheque_status = 2;
-                 $chq->cheque_dishonoured_date = $request->input('returned_on');
-                 $chq->dishonoured_by = $chq_rturn->returned_by;
-                 $chq->cheque_dishonur_reason_id = $chq_rturn->cheque_dishonur_reason_id;
-                 $chq->bank_charges = $chq_rturn->bank_charges;
-                 $chq->update();
+                $chq->cheque_status = 2;
+                $chq->cheque_dishonoured_date = $request->input('returned_on');
+                $chq->dishonoured_by = $chq_rturn->returned_by;
+                $chq->cheque_dishonur_reason_id = $chq_rturn->cheque_dishonur_reason_id;
+                $chq->bank_charges = $chq_rturn->bank_charges;
+                $chq->update();
 
-                 //debtors ledger for chq return
-                 $customer = Customer::find($chq_rturn->customer_id);
-                            
-                 $customer_name = $customer->customer_name;
-                 $customer_code = $customer->customer_code;
-                            $debtors_ledger_rtn = new DebtorsLedger();
-                            $debtors_ledger_rtn->internal_number = $chq_rturn->internal_number;
-                            $debtors_ledger_rtn->external_number = $chq_rturn->external_number;
-                            $debtors_ledger_rtn->document_number = $chq_rturn->document_number;
-                            $debtors_ledger_rtn->trans_date = $chq_rturn->created_at;
-                            $debtors_ledger_rtn->description = "Cheque Return for " . $customer_name;
-                            $debtors_ledger_rtn->branch_id = $chq_rturn->branch_id;
-                            $debtors_ledger_rtn->customer_id = $chq_rturn->customer_id;
-                            $debtors_ledger_rtn->customer_code = $customer_code;
-                            $debtors_ledger_rtn->amount = $chq_rturn->amount;
-                            $debtors_ledger_rtn->employee_id =$request->input('cmbEmp');
-                          
-                            if ($debtors_ledger_rtn->save()) {
-                                $debtors_ledger_setoff_rtn = new DebtorsLedgerSetoff();
-                                $debtors_ledger_setoff_rtn->internal_number = $debtors_ledger_rtn->internal_number;
-                                $debtors_ledger_setoff_rtn->external_number = $debtors_ledger_rtn->external_number;
-                                $debtors_ledger_setoff_rtn->document_number = $debtors_ledger_rtn->document_number;
-                                $debtors_ledger_setoff_rtn->reference_internal_number = $debtors_ledger_rtn->internal_number;
-                                $debtors_ledger_setoff_rtn->reference_external_number = $debtors_ledger_rtn->external_number;
-                                $debtors_ledger_setoff_rtn->reference_document_number = $debtors_ledger_rtn->document_number;
-                                $debtors_ledger_setoff_rtn->trans_date = $debtors_ledger_rtn->trans_date;
-                                $debtors_ledger_setoff_rtn->description = $debtors_ledger_rtn->description;
-                                $debtors_ledger_setoff_rtn->branch_id = $debtors_ledger_rtn->branch_id;
-                                $debtors_ledger_setoff_rtn->customer_id = $debtors_ledger_rtn->customer_id;
-                                $debtors_ledger_setoff_rtn->customer_code = $debtors_ledger_rtn->customer_code;
-                                $debtors_ledger_setoff_rtn->amount = $debtors_ledger_rtn->amount;
-                                $debtors_ledger_setoff_rtn->save();
-                                    
-                                
-                            }
+                //debtors ledger for chq return
+                $customer = Customer::find($chq_rturn->customer_id);
 
-                 //debit note for the customer
-                 if($request->input('pay_by_customer') == 1){
+                $customer_name = $customer->customer_name;
+                $customer_code = $customer->customer_code;
+                if ($request->input('re_deposit') == 1) {
+                    $customer_receipt_cheque_id = $chq_rturn->customer_receipt_cheque_id;
+                    $CustomerReceiptCheque = CustomerReceiptCheque::find($customer_receipt_cheque_id);
+                    $CustomerReceiptCheque->cheque_status = 0;
+                    if ($CustomerReceiptCheque->update()) {
+                        $receipt_id = $CustomerReceiptCheque->customer_receipt_id;
+                        $receipt = CustomerReceipt::find($receipt_id);
+                        $receipt->receipt_status = 0;
+                        $receipt->update();
+                    }
+                }
+
+                if ($request->input('re_deposit') != 1) {
+                    $debtors_ledger_rtn = new DebtorsLedger();
+                    $debtors_ledger_rtn->internal_number = $chq_rturn->internal_number;
+                    $debtors_ledger_rtn->external_number = $chq_rturn->external_number;
+                    $debtors_ledger_rtn->document_number = $chq_rturn->document_number;
+                    $debtors_ledger_rtn->trans_date = $chq_rturn->created_at;
+                    $debtors_ledger_rtn->description = "Cheque Return for " . $customer_name;
+                    $debtors_ledger_rtn->branch_id = $chq_rturn->branch_id;
+                    $debtors_ledger_rtn->customer_id = $chq_rturn->customer_id;
+                    $debtors_ledger_rtn->customer_code = $customer_code;
+                    $debtors_ledger_rtn->amount = $chq_rturn->amount;
+                    $debtors_ledger_rtn->employee_id = $request->input('cmbEmp');
+
+                    if ($debtors_ledger_rtn->save()) {
+                        $debtors_ledger_setoff_rtn = new DebtorsLedgerSetoff();
+                        $debtors_ledger_setoff_rtn->internal_number = $debtors_ledger_rtn->internal_number;
+                        $debtors_ledger_setoff_rtn->external_number = $debtors_ledger_rtn->external_number;
+                        $debtors_ledger_setoff_rtn->document_number = $debtors_ledger_rtn->document_number;
+                        $debtors_ledger_setoff_rtn->reference_internal_number = $debtors_ledger_rtn->internal_number;
+                        $debtors_ledger_setoff_rtn->reference_external_number = $debtors_ledger_rtn->external_number;
+                        $debtors_ledger_setoff_rtn->reference_document_number = $debtors_ledger_rtn->document_number;
+                        $debtors_ledger_setoff_rtn->trans_date = $debtors_ledger_rtn->trans_date;
+                        $debtors_ledger_setoff_rtn->description = $debtors_ledger_rtn->description;
+                        $debtors_ledger_setoff_rtn->branch_id = $debtors_ledger_rtn->branch_id;
+                        $debtors_ledger_setoff_rtn->customer_id = $debtors_ledger_rtn->customer_id;
+                        $debtors_ledger_setoff_rtn->customer_code = $debtors_ledger_rtn->customer_code;
+                        $debtors_ledger_setoff_rtn->amount = $debtors_ledger_rtn->amount;
+                        $debtors_ledger_setoff_rtn->save();
+                    }
+                }
+
+
+                //debit note for the customer
+                if ($request->input('pay_by_customer') == 1) {
                     try {
-                     //   DB::beginTransaction();
+                        //   DB::beginTransaction();
                         $referencenumber = $request->input('LblexternalNumber');
                         $bR_id = $request->input('cmbBranch');
-            
+
                         $data = DB::table('branches')->where('branch_id', $bR_id)->get();
-            
+
                         $EXPLODE_ID = explode("-", $referencenumber);
                         $externalNumber  = '';
                         if ($data->count() > 0) {
                             $documentPrefix = $data[0]->prefix;
                             $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
                         }
-            
+
                         $debit_note =  new debit_note();
                         $debit_note->internal_number = IntenelNumberController::getNextID();
-                        $debit_note->external_number = $data[0]->prefix.'-'.$this->createExternal_number();
+                        $debit_note->external_number = $data[0]->prefix . '-' . $this->createExternal_number();
                         $debit_note->branch_id = $bR_id;
                         $debit_note->customer_id = $request->input('customerID');
                         $debit_note->employee_id = $request->input('cmbEmp');
@@ -148,10 +163,10 @@ class ChequeReturnController extends Controller
                         $debit_note->cheque_returns_id = $chq_rturn->cheque_returns_id;
                         if ($debit_note->save()) {
                             $customer = Customer::find($debit_note->customer_id);
-                            
+
                             $customer_name = $customer->customer_name;
                             $customer_code = $customer->customer_code;
-            
+
                             $debtors_ledger = new DebtorsLedger();
                             $debtors_ledger->internal_number = $debit_note->internal_number;
                             $debtors_ledger->external_number = $debit_note->external_number;
@@ -163,7 +178,7 @@ class ChequeReturnController extends Controller
                             $debtors_ledger->customer_code = $customer_code;
                             $debtors_ledger->amount = $debit_note->amount;
                             $debtors_ledger->employee_id = $debit_note->employee_id;
-                          
+
                             if ($debtors_ledger->save()) {
                                 $debtors_ledger_setoff = new DebtorsLedgerSetoff();
                                 $debtors_ledger_setoff->internal_number = $debtors_ledger->internal_number;
@@ -179,29 +194,26 @@ class ChequeReturnController extends Controller
                                 $debtors_ledger_setoff->customer_code = $debtors_ledger->customer_code;
                                 $debtors_ledger_setoff->amount = $debtors_ledger->amount;
                                 $debtors_ledger_setoff->save();
-                                    
-                                
                             }
-            
+
                             DB::commit();
                             return response()->json(["status" => true]);
                         }
-                        
                     } catch (Exception $ex) {
                         DB::rollBack();
                         return $ex;
                     }
-                 }
+                }
 
                 /*  if($request->input('re_deposit') == 1){
 
 
                  } */
-           }
+            }
 
-           DB::commit();
-           return response()->json(["status" => true]);
-        }catch(Exception $ex){
+            DB::commit();
+            return response()->json(["status" => true]);
+        } catch (Exception $ex) {
             DB::rollBack();
             return $ex;
         }
@@ -213,7 +225,7 @@ class ChequeReturnController extends Controller
     {
         /* $exter_num = $this->reference_number->CustomerReceipt_referenceID('customer_receipts', 500); */
         $exter_num = ReferenceIdController::newReferenceNumber_chqReturn_new('debit_notes', 1600);
-       // dd($exter_num);
+        // dd($exter_num);
         $id_ = $exter_num['id'];
         $prefix_ = $exter_num['prefix'];
 
@@ -249,41 +261,55 @@ class ChequeReturnController extends Controller
      ORDER BY CRC.customer_receipt_cheque_id DESC 
      LIMIT 1;  
      ";
-     $result = DB::select($qry);
+            $result = DB::select($qry);
 
-     if ($result) {
-        return response()->json(["status" => true, "data"=>$result]);
-    } else {
-        return response()->json(["status" => false, "data" => []]);
-    }
-           
+            if ($result) {
+                return response()->json(["status" => true, "data" => $result]);
+            } else {
+                return response()->json(["status" => false, "data" => []]);
+            }
         } catch (Exception $ex) {
             return $ex;
         }
     }
 
 
-    public function cancel_return($id){
-        try{
-           
+    public function cancel_return($id)
+    {
+        try {
+            DB::beginTransaction();
             $return = cheque_return::find($id);
-            if($return->is_cancelled == 0){
+            if ($return->is_cancelled == 0) {
                 $return->is_cancelled = 1;
                 $return->update();
+                if($return->update()){
+                    $customer_receipt_cheque_id = $return->customer_receipt_cheque_id;
+                    $CustomerReceiptCheque = CustomerReceiptCheque::find($customer_receipt_cheque_id);
+                    $CustomerReceiptCheque->cheque_status = 1;
+                    $CustomerReceiptCheque->update();
+                   /*  if($CustomerReceiptCheque->update()){
+                        $receipt_id = $CustomerReceiptCheque->customer_receipt_id;
+                        $receipt = CustomerReceipt::find($receipt_id);
+                        $receipt->receipt_status = 0;
+                        $receipt->update();
+                    }
+ */
+                }
+                DB::commit();
                 return response()->json(["status" => true]);
-            }else{
-                return response()->json(["msg"=>"used","status" => false]);
+            } else {
+                DB::rollBack();
+                return response()->json(["msg" => "used", "status" => false]);
             }
-            
-           
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
 
             return $ex;
         }
     }
 
-    public function load_dishonoured_cheques_canceled(){
-        try{
+    public function load_dishonoured_cheques_canceled()
+    {
+        try {
             $qry = "SELECT
             CR.cheque_returns_id,
             CR.external_number,
@@ -324,50 +350,43 @@ class ChequeReturnController extends Controller
             } else {
                 return response()->json(["status" => false, "data" => []]);
             }
-            
-            
-           
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
 
             return $ex;
         }
     }
 
 
-    public function approve_return_cancelation($id,$type){
-        try{
-           
-            $return = cheque_return::find($id);
-            if($type == 1){
-                if($return->is_cancelled == 1){
-                    $debtors_ledger = DebtorsLedger::where("internal_number","=",$return->internal_number)->first();
-                   //dd($debtors_ledger);
-                    $debtors_ledger_setoff = DebtorsLedgerSetoff::where("internal_number","=",$return->internal_number)->first();
-                   // dd($debtors_ledger->amount - $debtors_ledger->paidamount);
-                    if(($debtors_ledger->amount - $debtors_ledger->paidamount) == $debtors_ledger->amount){
-                        
-                       $debtors_ledger->delete();
-                       $debtors_ledger_setoff->delete();
-                       $debit_n = debit_note::where("cheque_returns_id","=",$id)->first();
-                       $debit_n->amount = 0;
-                       $debit_n->update();
-                       return response()->json(["status" => true]);
-                    }
-                    
-                }else{
-                   
-                    return response()->json(["msg"=>"used","status" => false]);
-                }
-                
+    public function approve_return_cancelation($id, $type)
+    {
+        try {
 
-            }else{
+            $return = cheque_return::find($id);
+            if ($type == 1) {
+                if ($return->is_cancelled == 1) {
+                    $debtors_ledger = DebtorsLedger::where("internal_number", "=", $return->internal_number)->first();
+                    //dd($debtors_ledger);
+                    $debtors_ledger_setoff = DebtorsLedgerSetoff::where("internal_number", "=", $return->internal_number)->first();
+                    // dd($debtors_ledger->amount - $debtors_ledger->paidamount);
+                    if (($debtors_ledger->amount - $debtors_ledger->paidamount) == $debtors_ledger->amount) {
+
+                        $debtors_ledger->delete();
+                        $debtors_ledger_setoff->delete();
+                        $debit_n = debit_note::where("cheque_returns_id", "=", $id)->first();
+                        $debit_n->amount = 0;
+                        $debit_n->update();
+                        return response()->json(["status" => true]);
+                    }
+                } else {
+
+                    return response()->json(["msg" => "used", "status" => false]);
+                }
+            } else {
                 $return->is_cancelled = 0;
                 $return->update();
-                return response()->json(["msg"=>"rejected","status" => true]);
+                return response()->json(["msg" => "rejected", "status" => true]);
             }
-            
-           
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
 
             return $ex;
         }

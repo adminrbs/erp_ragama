@@ -161,7 +161,7 @@
                                                     </div>
                                                     <div class="col-4">
                                                         <div class="col-12">
-                                                            <div class="row">
+                                                            <div class="row" style="display:none;">
                                                                 <div class="col-9">
                                                                 <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Pay By Customer</span></label>
                                                                 </div>

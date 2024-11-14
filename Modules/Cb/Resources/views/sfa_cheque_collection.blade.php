@@ -20,21 +20,21 @@
     <div class="card mt-2">
         <div class="card">
             <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-                <h5 class="mb-0">Direct Cash Bundle List</h5>
+                <h5 class="mb-0">SFA Chque Collection List</h5>
             </div>
-            <div class="col-md-3" style="margin-left: 10px;margin-top:5px">
-                <a href="/cb/direct_cash_bundle" class="btn btn-primary">
+           <!--  <div class="col-md-3" style="margin-left: 10px;margin-top:5px">
+                <a href="/cb/dirct_cheque_collection" class="btn btn-primary">
                     <i class="fa fa-plus">&nbsp;Create New</i>
                 </a>
-            </div>
+            </div> -->
             <div class="row" id="top_border">
                  
-                <div class="col-md-2" style="margin-left: 10px;margin-top: 10px">
+               <!--  <div class="col-md-2" style="margin-left: 10px;margin-top: 10px">
                     <select class="form-select" id="cmbBranch">
                         <option>Select Branch</option>
                     </select>
 
-                </div>
+                </div> -->
 
 
                
@@ -44,15 +44,13 @@
 
                 <div class="col-md-12">
 
-                    <table class="table datatable-fixed-both table-striped" id="direct_cash_bundle_list" style="table-layout:fixed">
+                    <table class="table datatable-fixed-both table-striped" id="direct_cheque_bundle_list" style="table-layout:fixed">
                         <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Reference #</th>
-                                <th style="text-align:right;">Amount</th>
-                                <th>Branch</th>
+                                <th>Amount</th>
                                 <th>Action</th>
-                               <!--  <th>Print</th> -->
 
 
                             </tr>
@@ -75,7 +73,7 @@
 
 </div>
 <!-- /content area -->
-@include('cb::direct_cash_bundle_info_modal')
+@include('cb::direct_cheque_collection_info_modal')
 
 @endsection
 @section('center-scripts')
@@ -88,6 +86,6 @@
 @endsection
 @section('scripts')
 <script src="{{URL::asset('assets/js/id_gen.js')}}?random=<?php echo uniqid(); ?>"></script>
-<script src="{{Module::asset('cb:js/direct_Cash_bundle_list.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('cb:js/sfa_cheque_collection_list.js')}}?random=<?php echo uniqid(); ?>"></script>
 
 @endsection

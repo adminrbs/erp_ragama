@@ -146,7 +146,7 @@ class FreeissuedReportController extends Controller
                     $query = $query . " where " . $quryModify;
                 }
 
-                $query .= ' ORDER BY
+                $query .= 'AND (sales_with_sales_returns1.free_quantity <> 0)  ORDER BY
                items1.item_id;';
 
                 //$query = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query);

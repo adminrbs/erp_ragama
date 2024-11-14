@@ -11,6 +11,7 @@ $(document).ready(function () {
     getBank();
     getBranch();
     getReceiptMethod();
+    loadAccounts();
 
     $("#tab-single-cheque").attr("hidden", true);
     $("#tab-bank-slip").attr("hidden", true);
@@ -1903,14 +1904,19 @@ function getAutoSelectBankBranch(bank_code, branch_code) {
             $('#cmbChequeBankBranch').val(0).trigger('change');
             if (response.status) {
                 var bank_branch = response.data;
-                console.log(bank_branch);
                 var bank_id = bank_branch.bank_id;
                 getBankBranch(bank_id);
+               
+               
                 var bank_name = bank_branch.bank_name;
                 var branch_id = bank_branch.branch_id;
                 var branch_name = bank_branch.branch_name;
                 $('.select2-single-checque-bank').val(bank_id).trigger('change');
-                $('#cmbChequeBankBranch').val(branch_id).trigger('change');
+               // Set branch_id and trigger change event after 2 seconds
+                setTimeout(function() {
+                    $('#cmbChequeBankBranch').val(branch_id).trigger('change');
+                }, 2000); // 2000 milliseconds = 2 seconds
+
             }
 
         },
@@ -1940,4 +1946,32 @@ function lockInputsSetoff() {
 
 function dataChooserShowEventListener(event) {
 
+}
+
+function loadAccounts() {
+    var list = [];
+    $.ajax({
+        url: '/cb/loadAccounts',
+        type: 'get',
+        async: false,
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                list = response.data;
+
+            }
+            console.log(response.data);
+            $.each(response.data, function (index, value) {
+                //console.log(value.hidden_id);
+
+                $('#cmbGLAccount').append('<option value="' + value.hidden_id + '">' + value.id + '</option>');
+
+            })
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+   
 }

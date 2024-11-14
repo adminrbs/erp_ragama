@@ -438,24 +438,26 @@ class supplierPaymentController extends Controller
         try {
             $supplier_receipt = supplier_payments::find($id);
             $cashier_id = $supplier_receipt->cashier_id;
-            $cashier_user_id_qry = DB::select('SELECT user_id FROM users WHERE id =' . $cashier_id);
-            $cashier_user_id = $cashier_user_id_qry[0]->user_id;
+           // dd($cashier_id);
+           // $cashier_user_id_qry = DB::select('SELECT user_id FROM users WHERE id =' . $cashier_id);
+           // dd($cashier_user_id_qry);
+          //  $cashier_user_id = $cashier_user_id_qry[0]->user_id;
 
             if ($supplier_receipt) {
                 $supplier_receipt->receipt_cheque = supplier_payment_cheques::where('supplier_payment_id', '=', $id)->get();
                 $supplier_receipt->receipt_data = $this->getCustomerReceiptSetoffData($supplier_receipt->customer_id, $id);//
-                $supplier_receipt->customer_name = "";
-                $supplier_receipt->customer_code = "";
-                $supplier_receipt->cashier_user_id = $cashier_user_id;
-                $customer = Customer::find($supplier_receipt->customer_id);
-                if ($customer) {
-                    $supplier_receipt->customer_code = $customer->customer_code;
-                    $supplier_receipt->customer_name = $customer->customer_name;
+                $supplier_receipt->supplier_name = "";
+                $supplier_receipt->supplier_code = "";
+                $supplier_receipt->cashier_user_id = 0;
+                $supplier = supplier::find($supplier_receipt->supplier_id);
+                if ($supplier) {
+                    $supplier_receipt->supplier_code = $supplier->supplier_code;
+                    $supplier_receipt->supplier_name = $supplier->supplier_name;
                 }
             }
             return response()->json(["status" => true, "data" => $supplier_receipt]);
         } catch (Exception $ex) {
-            return response()->json(["status" => false, "exception" => $ex]);
+            return $ex;
         }
     }
 

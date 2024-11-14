@@ -32,7 +32,7 @@ class CustomerReceiptController extends Controller
 
         $customer_source = [];
         try {
-            $qry = 'SELECT customers.customer_id AS hidden_id, customers.customer_code AS value, customers.customer_name AS id FROM customers';
+            $qry = 'SELECT customers.customer_id AS hidden_id, customers.customer_code AS value, customers.customer_name AS id FROM customers ORDER BY customers.customer_name ASC';
             $customer_source = DB::select($qry);
         } catch (Exception $ex) {
             return response()->json(["status" => false, "exception" => $ex]);
@@ -186,7 +186,7 @@ class CustomerReceiptController extends Controller
             A.debtors_ledger_id,
             COALESCE(A.return_amount, 0) AS return_amount,
             (A.amount - A.paidamount)AS balance_amount   
-            FROM  debtors_ledgers AS A  WHERE  A.amount<> A.paidamount AND A.customer_id='" . $customer_id . "' AND (A.document_number = '210' OR A.document_number = '1600')";
+            FROM debtors_ledgers AS A  WHERE  A.amount <> A.paidamount AND A.customer_id='" . $customer_id . "' AND (A.document_number = '210' OR A.document_number = '1600')";
             $data = DB::select($query);
             return response()->json(["status" => true, "data" => $data]);
         } catch (Exception $ex) {

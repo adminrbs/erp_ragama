@@ -49,7 +49,7 @@ const DatatableFixedColumns = function () {
                     orderable: false
                 },
                 {
-                    width: 30,
+                    width: '100%',
                     targets: 3,
                     orderable: false
                 },

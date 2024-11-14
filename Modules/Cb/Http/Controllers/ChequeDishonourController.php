@@ -153,19 +153,19 @@ class ChequeDishonourController extends Controller
             CDR.cheque_dishonur_reason
         FROM
             cheque_returns CR
-        INNER JOIN
+        LEFT JOIN
             customer_receipt_cheques CRC ON CR.customer_receipt_cheque_id = CRC.customer_receipt_cheque_id
-        INNER JOIN
+        LEFT JOIN
             banks B ON CRC.bank_id = B.bank_id
-        INNER JOIN
+        LEFT JOIN
             customer_receipts C_rec ON CRC.customer_receipt_id = C_rec.customer_receipt_id
-        INNER JOIN
+        LEFT JOIN
             customers C ON CR.customer_id = C.customer_id
-        INNER JOIN
+        LEFT JOIN
             bank_branches BB ON CRC.bank_branch_id = BB.bank_branch_id
         LEFT JOIN
             users U ON CR.returned_by = U.id
-        INNER JOIN
+        LEFT JOIN
             cheque_dishonur_reasons CDR ON CR.cheque_dishonur_reason_id = CDR.cheque_dishonur_reason_id;
             
         ";

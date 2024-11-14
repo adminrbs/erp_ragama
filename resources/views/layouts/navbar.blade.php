@@ -229,7 +229,7 @@
                                             <a href="/cb/direcet_cash_bundle_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office</a>
                                             @endif
 
-                                            <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct check bundle</a> <!-- direct check bulk create -->
+                                            <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct cheque bundle</a> <!-- direct check bulk create -->
 
                                             <a href="/cb/direct_cheque_collection_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office</a> <!-- direct check bulk recive from head office -->
 

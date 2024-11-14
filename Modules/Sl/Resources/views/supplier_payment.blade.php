@@ -78,9 +78,9 @@
                                 <div class="col-md-12">
                                     <label class="compulsory-field">GL Account</label>
                                     <select class="form-control form-control-sm compulsory-field" id="cmbGLAccount">
-                                        <option value="1">Cash Collection</option>
+                                       <!--  <option value="1">Cash Collection</option>
                                         <option value="2">Cheque In Hand</option>
-                                        <option value="3">Bank Account - 12525555</option>
+                                        <option value="3">Bank Account - 12525555</option> -->
                                     </select>
                                 </div>
                             </div>

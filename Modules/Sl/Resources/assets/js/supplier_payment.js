@@ -11,6 +11,7 @@ $(document).ready(function () {
     getBank();
     getBranch();
     getReceiptMethod();
+    loadAccounts();
     //newReferanceID('supplier_payments', 2500);
     $("#tab-single-cheque").attr("hidden", true);
     $("#tab-bank-slip").attr("hidden", true);
@@ -41,8 +42,11 @@ $(document).ready(function () {
             $('#txtRound_up').prop('disabled',true);
             $('#cmbBranch').prop('disabled',true);
             $('#checkAdvancePayment').prop('disabled',true);
-            $('.hide_col').hide();
+           /*  $('.hide_col').hide(); */
            
+          /*  if(){
+            $("#tab-single-cheque").attr("hidden", false);
+           } */
         } else if (action == 'edit') {
             hidden_columns = "";
             $('#btnAction').show();
@@ -1701,8 +1705,8 @@ function getCustomerReceipt(id) {
             console.log(result);
             $('#txtRefNo').val(result.external_number);
             $('#txtDate').val(result.receipt_date);
-            $('#txtCustomerID').val(result.customer_code);
-            $('#txtCustomerName').val(result.customer_name);
+            $('#txtCustomerID').val(result.supplier_code);
+            $('#txtCustomerName').val(result.supplier_name);
             $('#txtCustomerID').attr('data-id', result.customer_id);
             $('#cmbCollector').val(result.collector_id);
          //   $('#cmbCashier').val(result.cashier_user_id);
@@ -1714,7 +1718,7 @@ function getCustomerReceipt(id) {
             $('#txtRound_up').val(result.round_up);
             $('#cmbBranch').val(result.branch_id);
 
-            if (result.receipt_method_id == '3') {
+            if (result.receipt_method_id == '2') {
                 $("#tab-single-cheque").attr("hidden", false);
             }
             var cashier_user = result.cashier_user_id;
@@ -1723,14 +1727,17 @@ function getCustomerReceipt(id) {
 
             var receipt_cheque = result.receipt_cheque;
             for (var i = 0; i < receipt_cheque.length; i++) {
-                $('#txtChequeRefNo').val(receipt_cheque[i].cheque_referenceNo);
-                $('#txtChequeNo').val(receipt_cheque[i].cheque_number);
-                $('#txtBankCode').val(receipt_cheque[i].bank_code);
-                $('#txtChequeValidDate').val(receipt_cheque[i].banking_date);
-                $('#txtChequeAmount').val(receipt_cheque[i].amount);
-                $('#cmbChequeBank').val(receipt_cheque[i].bank_id);
-                getBankBranch(receipt_cheque[i].bank_id);
-                $('#cmbChequeBankBranch').val(receipt_cheque[i].bank_branch_id);
+                $('#txtChequeRefNo').val(receipt_cheque[i].cheque_referenceNo).prop('disabled',true);
+                $('#txtChequeNo').val(receipt_cheque[i].cheque_number).prop('disabled',true);
+                $('#txtBankCode').val(receipt_cheque[i].bank_code).prop('disabled',true);
+                $('#txtChequeValidDate').val(receipt_cheque[i].banking_date).prop('disabled',true);
+                $('#txtChequeAmount')
+                .val(Math.abs(receipt_cheque[i].amount).toLocaleString())
+                .prop('disabled', true);
+            
+                $('#cmbChequeBank').val(receipt_cheque[i].bank_id).prop('disabled',true);
+                getBankBranch(receipt_cheque[i].bank_id)
+                $('#cmbChequeBankBranch').val(receipt_cheque[i].bank_branch_id).prop('disabled',true);
 
             }
 
@@ -1813,16 +1820,15 @@ function appendReceiptData(hidden_col, date, document_ref_no, description, amoun
     $('#tblCustomerReceiptSetoff').append(row);
 
     $('.math-abs').keypress(function (event) {
-        // Get the current input value
+        
         var inputValue = $(this).val();
 
-        // Check if the pressed key is a number, decimal point, or backspace
-        if (
+        if(
             (event.which != 46 || inputValue.indexOf('.') != -1) &&
             (event.which < 48 || event.which > 57) &&
             event.which != 8
-        ) {
-            event.preventDefault(); // Prevent the keypress event
+        ){
+            event.preventDefault(); 
         }
     });
 }
@@ -1940,4 +1946,32 @@ function loadSupplierOtherDetails(id) {
         },
 
     })
+}
+
+function loadAccounts() {
+    var list = [];
+    $.ajax({
+        url: '/cb/loadAccounts',
+        type: 'get',
+        async: false,
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                list = response.data;
+
+            }
+            console.log(response.data);
+            $.each(response.data, function (index, value) {
+                
+
+                $('#cmbGLAccount').append('<option value="' + value.hidden_id + '">' + value.id + '</option>');
+
+            })
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+   
 }

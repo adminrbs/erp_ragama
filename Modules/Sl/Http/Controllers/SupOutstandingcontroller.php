@@ -659,7 +659,7 @@ class SupOutstandingcontroller extends Controller
 
     public function getSupplier(){
         try{
-            $data = supplier::all();
+            $data = supplier::orderBy("supplier_name","asc")->get();
             return response()->json($data);
         }catch(Exception $ex){
             return $ex;

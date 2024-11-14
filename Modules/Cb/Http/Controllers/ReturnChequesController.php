@@ -68,7 +68,7 @@ class ReturnChequesController extends Controller
         $result = DB::select($qry);
 
         $reportViwer = new ReportViewer();
-        $title = "Return Cheques";
+        $title = " Customer's Return Cheques";
         if ($fromDate && $toDate) {
             $title .= " From : " . $fromDate . " To : " . $toDate;
         }
