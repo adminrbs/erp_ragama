@@ -114,18 +114,48 @@ WHERE
     //load cash bundles
     public function load_direct_cash_bundles($br_id)
     {
-        $qry = "SELECT DCB.direct_cash_bundle_id,DCB.external_number, 
-        DCB.trans_date,SUM(DCBD.amount) AS amount,B.branch_name FROM direct_cash_bundles DCB 
-        LEFT JOIN direct_cash_bundle_datas DCBD ON DCBD.direct_cash_bundles_id = DCB.direct_cash_bundle_id 
-			LEFT JOIN branches B ON DCB.branch_id = B.branch_id WHERE ho_Received = 0";
+        $qry = "SELECT 
+    DCB.direct_cash_bundle_id, 
+    DCB.external_number, 
+    DCB.trans_date, 
+    SUM(DCBD.amount) AS amount, 
+    B.branch_name, 
+    (
+        SELECT 
+            E.employee_name 
+        FROM 
+            direct_cash_bundle_datas DCBData
+        INNER JOIN 
+            employees E 
+        ON 
+            DCBData.collector_id = E.employee_id 
+        WHERE 
+            DCBData.direct_cash_bundles_id = DCB.direct_cash_bundle_id 
+        LIMIT 1
+    ) AS collector
+FROM 
+    direct_cash_bundles DCB
+LEFT JOIN 
+    direct_cash_bundle_datas DCBD 
+ON 
+    DCBD.direct_cash_bundles_id = DCB.direct_cash_bundle_id
+LEFT JOIN 
+    branches B 
+ON 
+    DCB.branch_id = B.branch_id
+WHERE 
+    DCB.ho_Received = 0";
 
 
         if ($br_id > 0) {
 
             $qry .= " AND DCB.branch_id = $br_id ";
         }
-        $qry .= " GROUP BY direct_cash_bundle_id ORDER BY trans_date ASC";
-        // dd($qry);
+        $qry .= " GROUP BY  DCB.direct_cash_bundle_id, 
+                    DCB.external_number, 
+                    DCB.trans_date 
+                     ORDER BY trans_date ASC";
+         //dd($qry);
         $result = DB::select($qry);
         if ($result) {
             return response()->json(["status" => true, "data" => $result]);

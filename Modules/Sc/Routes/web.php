@@ -22,6 +22,7 @@ use Modules\Sc\Http\Controllers\DispatchToBranchController;
 use Modules\Sc\Http\Controllers\ReverseDevisionTransferController;
 use Modules\Sc\Http\Controllers\SampleDispatchController;
 use Modules\Sc\Http\Controllers\StockAdjustmentController;
+use Modules\Sc\Http\Controllers\TrancationAllocationReportController;
 use Modules\Sc\Http\Controllers\UpdateBatchPriceController;
 
 /*
@@ -291,4 +292,8 @@ Route::prefix('sc')->middleware(['is.logged'])->group(function () {
     Route::get('/get_filter_data', [UpdateBatchPriceController::class, 'get_filter_data']);
     Route::get('/getBatchData/{filters}', [UpdateBatchPriceController::class, 'getBatchData']);
     Route::put('/updateBatchPrice/{item_setoff_id}', [UpdateBatchPriceController::class, 'updateBatchPrice']);
+
+    /**Customer transaction allocation */
+    Route::get('/loadUsers',[TrancationAllocationReportController::class,'loadUsers']);
+    Route::get('/customer_transaction_allocation_report/{filters}',[TrancationAllocationReportController::class,'customer_transaction_allocation_report']);
 });

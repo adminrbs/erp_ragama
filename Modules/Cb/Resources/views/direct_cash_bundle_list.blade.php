@@ -50,6 +50,7 @@
                                 <th>Date</th>
                                 <th>Reference #</th>
                                 <th style="text-align:right;">Amount</th>
+                                <th>Collector</th>
                                 <th>Branch</th>
                                 <th>Action</th>
                                <!--  <th>Print</th> -->

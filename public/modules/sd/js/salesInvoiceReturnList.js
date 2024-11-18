@@ -71,7 +71,7 @@ const DatatableFixedColumns = function () {
             "order": [],
             "columns": [
                 /* { "data": "manual_number" }, */
-                { "data": "external_number" },
+                { "data": "invoice_item" },
                 { "data": "order_date" },
                 { "data": "info" },
                 { "data": "customer_name" },
@@ -87,7 +87,7 @@ const DatatableFixedColumns = function () {
             
 
         });
-
+        table.column(2).visible(false);
         
 
 
@@ -284,7 +284,7 @@ function shortenString(inputString, maxLength) {
 
 //open info model (use when sales return created without direct invoice)
 function viewInfo(return_id){
-    $('#exampleModal').modal('show');
+    $('#infoModal').modal('show');
     
     loadReturnSetoffData(return_id);
 }
@@ -344,4 +344,9 @@ function getBranches() {
 
         },
     })
+}
+
+
+function openInfo(id){
+
 }

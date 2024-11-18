@@ -71,7 +71,7 @@ const DatatableFixedColumns = function () {
             "order": [],
             "columns": [
                 /* { "data": "manual_number" }, */
-                { "data": "external_number" },
+                { "data": "invoice_item" },
                 { "data": "order_date" },
                 { "data": "info" },
                 { "data": "customer_name" },
@@ -87,7 +87,7 @@ const DatatableFixedColumns = function () {
             
 
         });
-
+        table.column(2).visible(false);
         
 
 
@@ -284,7 +284,7 @@ function shortenString(inputString, maxLength) {
 
 //open info model (use when sales return created without direct invoice)
 function viewInfo(return_id){
-    $('#exampleModal').modal('show');
+    $('#infoModal').modal('show');
     
     loadReturnSetoffData(return_id);
 }
@@ -303,7 +303,7 @@ function loadReturnSetoffData(return_id){
         beforeSend: function () { },
         success: function (response) {
             var dt = response.data;
-
+            var allocation_data = response.allocation;
            
           
 
@@ -317,6 +317,20 @@ function loadReturnSetoffData(return_id){
                 var row = $('<tr>');
                 row.append($('<td>').append(info));
                 row.append($('<td>').append($('<label>').attr('data-id', item.manual_number).text(item.setoff_amount)));
+                table.append(row);
+            });
+
+
+            $.each(allocation_data, function (index, item) {
+                
+                var row = $('<tr>');
+                //row.append($('<td>').append($('<label>').attr('data-id', item.manual_number).text(item.setoff_amount)));
+                row.append($('<td>').text(item.external_number));
+                row.append($('<td>').text(item.setoff_record));
+                row.append($('<td>').text(item.customer_name));
+                row.append($('<td>').text(item.paidamount));
+                row.append($('<td>').text(item.paidamount));
+                row.append($('<td>').text(item.name));
                 table.append(row);
             });
 
@@ -344,4 +358,9 @@ function getBranches() {
 
         },
     })
+}
+
+
+function openInfo(id){
+
 }

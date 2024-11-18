@@ -66,7 +66,7 @@
 
 </div>
 <!-- /content area -->
-@include('sd::sales_return_debtor_ledger_setoff_info_model');
+@include('sd::sales_return_setoff_info_model');
 
 
 @endsection

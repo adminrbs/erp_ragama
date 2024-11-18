@@ -453,7 +453,11 @@ class SalesReturnController extends Controller
            // $buttons = '<button class="btn btn-primary btn-sm" id="btnEdit_' . $item->sales_invoice_Id . '" onclick="btnEdit_(' . $item->sales_order_Id . ', \'' . $status . '\')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160';
             $buttons = '<button class="btn btn-success btn-sm" onclick="view(' . $item->sales_return_Id . ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160';
             $buttons .= '<button class="btn btn-secondary btn-sm" onclick="generateSalesReturnReport('  . $item->sales_return_Id . ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
-        
+            $invoice_item = '<a href="#" onclick="event.preventDefault(); viewInfo(' . $item->sales_return_Id . ');" class="text-info">&nbsp;' . $item->external_number . '<i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>';
+
+
+
+            $item->invoice_item = $invoice_item;
             $item->buttons = $buttons;
             $statusLabel = '<label class="badge badge-pill bg-success">' . $status . '</label>';
             $item->statusLabel = $statusLabel;
@@ -1743,9 +1747,26 @@ ORDER BY sales_returns.order_date DESC;
     //load return set off data
     public function loadReturnSetoffData($id){
         try{
-            $result = DB::select('SELECT SI.external_number as manual_number,SRD.setoff_amount FROM sales_return_debtor_setoffs SRD INNER JOIN sales_invoices SI ON SRD.external_number = SI.external_number WHERE SRD.sales_return_Id ='.$id);
-            if($result){
-                return response()->json(['status' => true, 'data' => $result]);
+            $result = DB::select('SELECT SI.external_number as manual_number,FORMAT(SRD.setoff_amount,2) AS setoff_amount FROM sales_return_debtor_setoffs SRD INNER JOIN sales_invoices SI ON SRD.external_number = SI.external_number WHERE SRD.sales_return_Id ='.$id);
+            $set_off_query_result = DB::select("SELECT
+	C.customer_name,
+	CTA.customer_transaction_alocation_id,
+	CTA.external_number,
+	DL_SETOFF.external_number AS setoff_record,
+	DL_SETOFF_FROM.paidamount,
+    U.name 
+FROM
+	customer_transaction_alocations CTA
+	INNER JOIN customer_transaction_alocations_setoffs CTAS ON CTA.customer_transaction_alocation_id = CTAS.customer_transaction_alocation_id
+	INNER JOIN customers C ON CTA.customer_id = C.customer_id
+	INNER JOIN debtors_ledgers DL_SETOFF ON CTAS.debtor_ledger_id = DL_SETOFF.debtors_ledger_id
+	INNER JOIN debtors_ledgers DL_SETOFF_FROM ON CTAS.reference_debtor_ledger_id = DL_SETOFF_FROM.debtors_ledger_id
+	INNER JOIN sales_returns SR ON DL_SETOFF_FROM.external_number = SR.external_number
+    INNER JOIN users U ON CTA.created_by = U.id
+WHERE
+	SR.sales_return_Id = ".$id);
+            if($result || $set_off_query_result){
+                return response()->json(['status' => true, 'data' => $result, 'allocation'=>$set_off_query_result]);
              }else{
                 return response()->json(['status' => false, 'data' => []]);
              }

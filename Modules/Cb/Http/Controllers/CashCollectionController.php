@@ -335,16 +335,14 @@ class CashCollectionController extends Controller
             cheque_collections.page_no,
             CONCAT(books.book_name,'-',books.book_number) AS book
      FROM sfa_receipts
-     INNER JOIN sfa_receipt_cheques ON sfa_receipts.customer_receipt_id = sfa_receipt_cheques.customer_receipt_id
-     INNER JOIN customers ON sfa_receipts.customer_id = customers.customer_id
+     LEFT JOIN sfa_receipt_cheques ON sfa_receipts.customer_receipt_id = sfa_receipt_cheques.customer_receipt_id
+     LEFT JOIN customers ON sfa_receipts.customer_id = customers.customer_id
      LEFT JOIN cheque_collections ON cheque_collections.cheque_collection_id = sfa_receipts.cheque_collection_id
      LEFT JOIN books ON cheque_collections.book_id = books.book_id
      LEFT JOIN banks ON sfa_receipt_cheques.bank_id = banks.bank_id
      LEFT JOIN bank_branches ON sfa_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id
-     WHERE sfa_receipts.received_branch_id = $branchId AND sfa_receipts.receipt_status = 2 AND sfa_receipts.receipt_method_id = 2 AND sfa_receipt_cheques.chq_ho_received = 0;
-
-     ";
-    
+     WHERE sfa_receipts.received_branch_id = $branchId AND sfa_receipts.receipt_status = 2 AND sfa_receipts.receipt_method_id = 2 AND sfa_receipt_cheques.chq_ho_received = 0;";
+   // dd($query);
             $result = DB::select($query);
             if ($result) {
                 return response()->json(["status" => true, "data" => $result]);

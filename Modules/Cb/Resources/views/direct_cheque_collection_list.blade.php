@@ -51,6 +51,7 @@
                                 <th>Reference #</th>
                                 <th>Amount</th>
                                 <th>Branch</th>
+                                <th>Collector</th>
                                 <th>Action</th>
 
 

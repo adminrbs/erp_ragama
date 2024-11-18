@@ -104,6 +104,13 @@
                                         Customer Outstanding - Invoice Wise
                                     </label>
                                 </li>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="invoiceWise" id="customerTransactionAllocationReport" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Customer Transaction Allocation
+                                    </label>
+                                </li>
                                 <br>
                             </ul>
 
@@ -227,13 +234,23 @@
 
                                                 <input id="chkfromtoAge" type="checkbox" style="margin-top: 30px;">
                                             </div>
-                                        </div><div class="row">
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Supply Group</label>
                                                 <select multiple="multiple" class="form-select select " id="cmbSupplyGroup" data-placeholder="Select customer Group"></select>
                                             </div>
                                             <div class="col-md-1 mt-0">
                                                 <input id="chkSupplyGroup" type="checkbox" style="margin-top: 30px;">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-11 mb-0 ">
+                                                <label style="font-weight: bold;"> User</label>
+                                                <select multiple="multiple" class="form-select select " id="cmbUser" data-placeholder="Select created user"></select>
+                                            </div>
+                                            <div class="col-md-1 mt-0">
+                                                <input id="chkUser" type="checkbox" style="margin-top: 30px;">
                                             </div>
                                         </div>
                                         <div class="row">

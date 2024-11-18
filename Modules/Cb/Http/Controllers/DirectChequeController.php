@@ -113,11 +113,13 @@ WHERE
 	DCC.external_number,
 	DCC.trans_date,
 	SUM( CR.amount ) AS amount,
-	B.branch_name 
+	B.branch_name,
+    E.employee_name 
 FROM
 	direct_cheque_collections DCC
 INNER JOIN customer_receipts CR ON DCC.direct_cheque_collection_id = CR.cheque_collection_id
-INNER JOIN branches B ON DCC.branch_id = B.branch_id 
+INNER JOIN branches B ON DCC.branch_id = B.branch_id
+INNER JOIN employees E ON CR.collector_id = E.employee_id 
 WHERE
 	DCC.ho_Received = 0";
 

@@ -21,6 +21,7 @@ var selecteBranch = null;
 var cmbgreaterthan = null;
 var selectSupplyGroup = null;
 var selectCollector = null;
+var selectUser = null;
 //var cmbSalesrep = null;
 
 
@@ -32,6 +33,7 @@ var chechid;
 var PRINT_STATUS = false;
 
 $(document).ready(function () {
+    
     $('#crdReportSearch').hide();
     $('#pdfContainer').hide();
 
@@ -271,7 +273,7 @@ $(document).ready(function () {
     getSalesrep();
     getSupplyGroup();
     getCollectors();
-
+    loadUsers();
 
 
     $('#btn-collapse-search').on('click', function () {
@@ -542,6 +544,19 @@ $(document).ready(function () {
         } else {
             selectSalesrep = null
             selected5 = null
+        }
+
+    });
+    $('#chkUser').on('change', function () {
+
+        if (this.checked) {
+            selectUser = $('#cmbUser').val();
+            $('#cmbUser').change(function () {
+                selectUser = $('#cmbUser').val();
+            })
+        } else {
+            selectUser = null
+            //selected5 = null
         }
 
     })
@@ -957,6 +972,27 @@ $(document).ready(function () {
             $('#pdfContainer').attr('src', '/sc/debtor_reports_invoiceWise/' + JSON.stringify(requestData));
 
 
+        }if(report == "customerTransactionAllocationReport"){
+            if(!$('#chkdate').prop('checked')){
+                showWarningMessage("Please select a date range");
+                return false;
+            }
+
+            var requestData = [
+              
+               
+                { fromdate: fromdate },
+                { todate: todate },
+                { selecteCustomer: selecteCustomer },
+                { selectUser: selectUser }
+
+            ];
+
+
+          
+
+       
+            $('#pdfContainer').attr('src', '/sc/customer_transaction_allocation_report/' + JSON.stringify(requestData));
         }
         if (report == null || report == undefined) {
 
@@ -1199,4 +1235,24 @@ function getSupplyGroup() {
 
     });
 
+}
+
+function loadUsers(){
+    $.ajax({
+        type:'get',
+        url:'/sc/loadUsers',
+        async:false,
+        success:function(data){
+            console.log(data);
+            
+            $.each(data, function (key, value) {
+
+                data = data + "<option id='' value='" + value.id + "'>" + value.name + "<input type='checkbox'></option>";
+
+
+            })
+
+            $('#cmbUser').html(data);
+        }
+    });
 }
