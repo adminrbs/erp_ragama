@@ -1753,7 +1753,7 @@ ORDER BY sales_returns.order_date DESC;
 	CTA.customer_transaction_alocation_id,
 	CTA.external_number,
 	DL_SETOFF.external_number AS setoff_record,
-	DL_SETOFF_FROM.paidamount,
+	CTAS.set_off_amount AS paidamount,
     U.name 
 FROM
 	customer_transaction_alocations CTA

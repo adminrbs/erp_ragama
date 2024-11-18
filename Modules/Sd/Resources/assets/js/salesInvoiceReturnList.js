@@ -292,9 +292,11 @@ function viewInfo(return_id){
 //load return set off data
 function loadReturnSetoffData(return_id){
     var table = $('#gettable');
-    
+    var table_two = $('#transaction_set_off_table');
+    var table_two_body = $('#transaction_set_off_table tbody');
     var tableBody = $('#gettable tbody');
     tableBody.empty();
+    table_two_body.empty();
     $.ajax({
         url:'/sd/loadReturnSetoffData/'+return_id,
         type:'get',
@@ -328,10 +330,15 @@ function loadReturnSetoffData(return_id){
                 row.append($('<td>').text(item.external_number));
                 row.append($('<td>').text(item.setoff_record));
                 row.append($('<td>').text(item.customer_name));
-                row.append($('<td>').text(item.paidamount));
-                row.append($('<td>').text(item.paidamount));
+                row.append(
+                    $('<td style="text-align:right">').text(
+                        Math.abs(item.paidamount).toLocaleString('en-US')
+                    )
+                );
+                
+           /*      row.append($('<td>').text(item.paidamount)); */
                 row.append($('<td>').text(item.name));
-                table.append(row);
+                table_two.append(row);
             });
 
           
