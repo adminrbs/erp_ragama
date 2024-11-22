@@ -1102,7 +1102,7 @@
 
         <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
 
-            <span style="font-weight: 400;color:#FFD648">Customer Support +94 70 766 2728 / +94 70 161 0001 / +94 71 187 0575</span>
+            <span style="font-weight: 400;color:#FFD648">Customer Support +94 70 161 0001/ +94 70 722 3020 / +94 70 766 2728 / +94 71 187 0575</span>
         </div>
 
         <ul class="nav flex-row justify-content-end order-1 order-lg-2">

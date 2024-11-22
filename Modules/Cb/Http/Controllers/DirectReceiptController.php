@@ -25,11 +25,13 @@ class DirectReceiptController extends Controller
     C.customer_name,
 	CR.amount,
 	B.branch_name,
-    E.employee_name as name 
+    E.employee_name as name,
+    E_collectors.employee_name AS collector 
 FROM
 	customer_receipts CR
 	LEFT JOIN branches B ON CR.branch_id = B.branch_id
 	LEFT JOIN employees E ON CR.cashier_id = E.employee_id
+    LEFT JOIN employees E_collectors ON CR.collector_id = E_collectors.employee_id
     LEFT JOIN customers C ON CR.customer_id = C.customer_id
 WHERE
 	CR.receipt_method_id = 1 

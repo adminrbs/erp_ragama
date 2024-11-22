@@ -67,6 +67,7 @@
                                 <th>Reference #</th>
                                 <th>Customer Name</th>
                                 <th>Cashier</th>
+                                <th>Collector</th>
                                 <th>Amount</th>
                                 <th>Branch</th>
                                 <th>Action</th>

@@ -192,6 +192,7 @@ function load_direct_cheque_create_to_bundle(br_id) {
                     "banK_branch":dt[i].bank_branch_name,
                     "chequeNo":dt[i].cheque_number,
                     "Cashier": dt[i].name,
+                    "Collector":dt[i].collector_name,
                     "amount": '<div style="text-align:right">'+parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>',
                     "branch": dt[i].branch_name,
                     "action": cheque_check_box,

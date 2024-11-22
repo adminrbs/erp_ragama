@@ -76,6 +76,7 @@ const DatatableFixedColumns = function () {
                 { "data": "ref_number" },
                 { "data": "amount" },
                 { "data": "branch" },
+                { "data": "collector" },
                 { "data": "action" }
 
             ],
@@ -152,6 +153,7 @@ function load_direct_cheque_collection(br_id) {
                     "ref_number": '<div data-id="' + dt[i].direct_cheque_collection_id + '">' + dt[i].external_number + '</div>',
                     "amount": parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     "branch": dt[i].branch_name,
+                    "collector":dt[i].employee_name,
                     "action": btn_info+' '+btn_print,
 
                 });

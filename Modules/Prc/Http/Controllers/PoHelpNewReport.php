@@ -107,7 +107,7 @@ try{
             $quryModify2 = rtrim($quryModify2, 'AND OR ');
         }
 
-        $stock_where_clause = "transaction_date <= CURDATE()";
+        $stock_where_clause = "transaction_date <= ".$todate;
 
 
         $query = "  SELECT  I.Item_code, I.item_Name ,I.package_unit, S.avg_sales , ROUND((S.avg_sales * 80) / 100, 0) AS required, L.qty_in_hand ,  

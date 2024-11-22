@@ -153,7 +153,7 @@ function load_direct_cash_bundles(br_id) {
                     "date": '<div data-id="' + dt[i].direct_cash_bundle_id + '">' + dt[i].trans_date + '</div>',
                     "ref_number": '<div data-id="' + dt[i].direct_cash_bundle_id + '">' + dt[i].external_number + '</div>',
                     "amount": '<div style="text-align:right;">'+parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>',
-                    "collector":"",
+                    "collector":dt[i].collector,
                     "branch": dt[i].branch_name,
                     "action": btn_info +' '+btn_print,
 
