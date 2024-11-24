@@ -34,7 +34,7 @@ FROM
 	customer_receipts CR
 	INNER JOIN branches B ON CR.branch_id = B.branch_id
 	INNER JOIN employees E ON CR.cashier_id = E.employee_id
-    INNER JOIN employees E_Collector ON CR.collector_id = E.employee_id
+    LEFT JOIN employees E_Collector ON CR.collector_id = E_Collector.employee_id
 	LEFT JOIN customer_receipt_cheques CRC ON CR.customer_receipt_id = CRC.customer_receipt_id
 	LEFT JOIN banks BK ON CRC.bank_id = BK.bank_id
 	LEFT JOIN bank_branches BB ON CRC.bank_branch_id = BB.bank_branch_id

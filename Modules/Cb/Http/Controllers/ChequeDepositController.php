@@ -73,7 +73,12 @@ class ChequeDepositController extends Controller
             foreach ($check_box_array as $i) {
                 $receipt = CustomerReceiptCheque::find($i);
                 $receipt->cheque_status = 1;
-                $receipt->cheque_deposit_date = date('Y-m-d');
+                if($receipt->is_returned == 0){
+                    $receipt->cheque_deposit_date = date('Y-m-d');
+                }else{
+                    $receipt->rebanked_date = date('Y-m-d');
+                }
+                
                 $receipt->gl_account_id = $id;
                 $receipt->deposited_by = Auth::user()->id;
                 $receipt->update();

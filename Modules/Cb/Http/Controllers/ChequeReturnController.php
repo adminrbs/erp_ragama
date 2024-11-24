@@ -81,6 +81,7 @@ class ChequeReturnController extends Controller
                 $chq->dishonoured_by = $chq_rturn->returned_by;
                 $chq->cheque_dishonur_reason_id = $chq_rturn->cheque_dishonur_reason_id;
                 $chq->bank_charges = $chq_rturn->bank_charges;
+                $chq->is_returned = 1;
                 $chq->update();
 
                 //debtors ledger for chq return

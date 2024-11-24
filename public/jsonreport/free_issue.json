@@ -139,10 +139,10 @@
                                 
                                 [
                                     {
-                                        "text": "ProductName",
+                                        "text": "Product Name",
                                         "align": "left",
                                         "format": "text",
-                                        "width":120
+                                        "width":200
                                     }
                                 ],
                                 [
@@ -150,12 +150,13 @@
                                         "text": "PackSize",
                                         "align": "left",
                                         "format": "text",
+                                        "visible":false,
                                         "width":60
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Invoice Date",
+                                        "text": "Inv Date",
                                         "align": "center",
                                         "format": "text",
                                         "width":80
@@ -187,11 +188,12 @@
                                         "align": "right",
                                         "format": "number",
                                         "width":60
+                                        
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Free Issues",
+                                        "text": "Free",
                                         "align": "right",
                                         "format": "number",
                                         "width":60
@@ -207,15 +209,16 @@
                                 ],
                                 [
                                     {
-                                        "text": "Invoice qty Amount",
+                                        "text": "Inv qty Amount",
                                         "align": "right",
                                         "format": "number",
-                                        "width":130
+                                        "width":120,
+                                        "visible":false
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Free Issued qtyAmount",
+                                        "text": "Value",
                                         "align": "right",
                                         "format": "number",
                                         "width":140

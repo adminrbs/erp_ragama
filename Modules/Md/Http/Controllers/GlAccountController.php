@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Md\Entities\gl_account;
 use Modules\Md\Entities\gl_account_type;
+use Modules\Md\Entities\GlAccountAnalysis;
 
 class GlAccountController extends Controller
 {
@@ -76,6 +77,7 @@ class GlAccountController extends Controller
     public function updateglAccount(Request $request, $id)
     {
         try {
+           
             $sent_account_code = $request->get('txtAccountCode');
             $qry_code = DB::select("SELECT COUNT(*) as count FROM gl_accounts WHERE gl_accounts.account_code = '" . $sent_account_code . "'");
             if ($qry_code[0]->count == 1) {
@@ -91,6 +93,17 @@ class GlAccountController extends Controller
 
 
             if ($glaccount->update()) {
+
+                $analisys_name = $request->input('analysisName');
+                if($analisys_name){
+                    foreach($analisys_name as $name){
+                        $Acc = new GlAccountAnalysis();
+                        $Acc->account_id = $id;
+                        $Acc->gl_account_analyse_name = $request->$name;
+                        $Acc->save();
+                    }
+                }
+
                 return response()->json(["status" => true]);
             } else {
                 return response()->json(["status" => false]);

@@ -82,6 +82,7 @@ const DatatableFixedColumns = function () {
                 { "data": "banK_branch" },
                 { "data": "chequeNo" },
                 { "data": "Cashier" },
+                { "data": "Collector" },
                 { "data": "amount" },
                 { "data": "branch" },
                 { "data": "action" }
