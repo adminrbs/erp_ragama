@@ -71,6 +71,7 @@ class PaymentVoucherController extends Controller
             $data = DB::table('branches')->where('branch_id', $bR_id)->get();
 
             $EXPLODE_ID = explode("-", $referencenumber);
+           // dd($referencenumber);
             $externalNumber  = '';
             if ($data->count() > 0) {
                 $documentPrefix = $data[0]->prefix;
