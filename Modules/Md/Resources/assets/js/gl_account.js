@@ -127,15 +127,17 @@ $(document).ready(function () {
 
     });
     $('#BtnGlAccountAnalysis').on('click', function () {
-        addAnalysis();
+        //addAnalysis();
+        addglAccountAnalysis();
+
     });
-/* 
-    $('#txtGlAccountAnalysis').on('change', function () {
+    /* 
+        $('#txtGlAccountAnalysis').on('change', function () {
+    
+            searchTable($(this).val());
+        }); */
 
-        searchTable($(this).val());
-    }); */
-
-    $('#btnglaccount').on('click',function(){
+    $('#btnglaccount').on('click', function () {
         $('.analysis').hide();
     });
     $('#btnsave').on('click', function () {
@@ -254,7 +256,7 @@ function allglaccountdata() {
                         "account_code": dt[i].account_code,
                         "accounttitel": dt[i].account_title,
                         "accounttype": dt[i].gl_account_type,
-                        "action": '<button title="Edit" class="btn btn-primary  btn-sm lonmodel" data-bs-toggle="modal" data-bs-target="#modalNonproprietary" onclick="edit(' + dt[i].account_id + ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160<button class="btn btn-success btn-sm loneview" data-bs-toggle="modal" data-bs-target="#modalNonproprietary"  onclick="getcontributeview(' + dt[i].account_id + ')" title="View"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].account_id + ')" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>',
+                        "action": '<button class="btn btn-secondary btn-sm loneview" data-bs-toggle="modal" data-bs-target="#analysisModal"  onclick="getAndUpdateGl_account_anlysis(' + dt[i].account_id + ')" title="GL Account Analysis"><i class="fa fa-cog" aria-hidden="true"></i></button>&nbsp' + '<button title="Edit" class="btn btn-primary  btn-sm lonmodel" data-bs-toggle="modal" data-bs-target="#modalNonproprietary" onclick="edit(' + dt[i].account_id + ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160<button class="btn btn-success btn-sm loneview" data-bs-toggle="modal" data-bs-target="#modalNonproprietary"  onclick="getcontributeview(' + dt[i].account_id + ')" title="View"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].account_id + ')" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>',
 
                     });
                 }
@@ -274,7 +276,7 @@ function allglaccountdata() {
 }
 function edit(id) {
     $('#btnsave').text('Update');
-    $('.analysis').show().prop('disabled',false);
+    $('.analysis').show().prop('disabled', false);
     $.ajax({
         url: '/md/getglaccount/' + id,
         method: 'get',
@@ -299,13 +301,13 @@ function edit(id) {
 function updateglAccount() {
     var id = $('#id').val();
 
-    
-    
+
+
 
     formData.append('txtAccountCode', $('#txtAccountCode').val());
     formData.append('txtAccountTitle', $('#txtAccountTitle').val());
     formData.append('cmdAccountType', $('#cmdAccountType').val());
-    formData.append('analysisName',getFirstColumnTexts());
+    // formData.append('analysisName',getFirstColumnTexts());
 
     $.ajax({
         type: "POST",
@@ -352,6 +354,109 @@ function updateglAccount() {
     });
 
 }
+function getAndUpdateGl_account_anlysis(id) {
+    $('#id_').val(id);
+    loadAnalysisAcc(id);
+}
+
+function addglAccountAnalysis() {
+    var id = $('#id_').val();
+
+    if ($('#txtGlAccountAnalysis').val().length < 0) {
+        showWarningMessage("Please enter analysis name");
+    } else {
+        var analisys_name = $('#txtGlAccountAnalysis').val();
+
+
+        if (!existRecord(analisys_name)) {
+
+            formData.append('txtGlAccountAnalysis', $('#txtGlAccountAnalysis').val());
+            console.log(id);
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: '/md/addglAccountAnalysis/' + id,
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 800000,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                timeout: 800000,
+                beforeSend: function () {
+                    $('#BtnGlAccountAnalysis').prop('disabled', true);
+                },
+                success: function (response) {
+                    $('#BtnGlAccountAnalysis').prop('disabled', false);
+                    if (response.status) {
+                        loadAnalysisAcc(id)
+                    }
+
+
+
+                },
+                error: function (error) {
+                    showErrorMessage('Something went wrong');
+
+                },
+                complete: function () {
+
+                }
+
+            });
+        } else {
+            showWarningMessage("Record already exist");
+        }
+    }
+
+}
+
+function loadAnalysisAcc(id) {
+    $.ajax({
+        url: '/md/loadAnalysisAcc/' + id,
+        method: 'GET',
+        success: function (response) {
+            console.log(response.data);
+
+            // Clear existing rows
+            $('#analysisTable tbody').empty();
+
+            // Append rows dynamically
+            $.each(response.data, function (index, item) {
+                const row = $('<tr>', { style: 'border: none;' }).append(
+                    $('<td>').text(item.gl_account_analyse_name),
+                    $('<td>').append(
+                        $('<button>', {
+                            type: 'button',
+                            class: 'remove-btn', // Optional for styling
+                            style: 'border: none; background-color: transparent;',
+                        })
+                            .append(
+                                $('<i>', {
+                                    class: 'fa fa-times',
+                                    'aria-hidden': 'true',
+                                    style: 'color: red !important;',
+                                })
+                            )
+                            .on('click', function () {
+                                remove_line(this, item.gl_account_analyse_id);
+                            })
+                    )
+                );
+
+                // Append the row to the table
+                $('#analysisTable tbody').append(row);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error('Failed to load analysis accounts:', error);
+        }
+    });
+}
+
 
 function getFirstColumnTexts() {
     var firstColumnTexts = []; // Initialize an empty array to store the texts
@@ -359,10 +464,10 @@ function getFirstColumnTexts() {
     // Iterate through each row of the table body
     $('#analysisTable tbody tr').each(function () {
         var firstColumnText = $(this).find('td').eq(0).text().trim(); // Get text from the first column
-        if(firstColumnText != ''){
+        if (firstColumnText != '') {
             firstColumnTexts.push(firstColumnText); // Push the text into the array
         }
-       
+
     });
 
     return firstColumnTexts; // Return the array with first column texts
@@ -372,7 +477,7 @@ function getFirstColumnTexts() {
 
 function getcontributeview(id) {
     $('#btnsave').hide();
-    $('.analysis').show().prop('disabled',true);
+    $('.analysis').show().prop('disabled', true);
 
     $('input[type="text"]').prop('disabled', true);
     $('select').prop('disabled', true);
@@ -555,7 +660,39 @@ function searchTable(analysis_name) {
 }
 
 
-function remove_line(button) {
+function remove_line(button, id) {
+    /* var row = button.closest('tr');
+    row.remove(); */
+    if (id > 0) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/md/delete_analysys/' + id,
+            data: {
+                _token: $('input[name=_token]').val()
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+
+
+            beforeSend: function () {
+
+            }, success: function (response) {
+
+
+
+                showSuccessMessage("Successfully Delete");
+
+
+
+            }, error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+
     var row = button.closest('tr');
     row.remove();
+
 }

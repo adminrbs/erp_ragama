@@ -94,7 +94,86 @@ Dashboard
                 <div class="modal-body p-4 bg-white">
                     <form id="" class="needs-validation" novalidate>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
+                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>Account Code</label>
+                                <input type="text" name="accountcode" id="txtAccountCode" class="form-control validate" autocomplete="off">
+                                <span class="text-danger font-weight-bold Nonproprietary"></span>
+
+
+                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>Account Title</label>
+                                <input type="text" name="accountTitle" id="txtAccountTitle" class="form-control validate" autocomplete="off">
+                                <span class="text-danger font-weight-bold Nonproprietary"></span>
+
+
+                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>Account Type</label>
+                                <select name="accounttype" id="cmdAccountType" class="form-select" type="select"></select>
+                                <span class="text-danger font-weight-bold Nonproprietary"></span>
+
+                                <!-- <div class="analysis">
+                                <label for="fname"><i class="fa fa-address-card-o fa-lg text-info " aria-hidden="true">&#160</i>GL Account Analysis</label>
+                                </div> -->
+                                <!-- <div class="row analysis">
+                                    <div class="col-9">
+                                        <input type="text" class="form-control validate analysis" id="txtGlAccountAnalysis">
+                                    </div>
+                                    <div class="col-2">
+
+                                        <button type="button" class="btn btn-success analysis" id="BtnGlAccountAnalysis">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div> -->
+                               <!--  <span class="text-danger font-weight-bold"></span> -->
+                            </div>
+                          <!--   <div class="col-6">
+                                <table class="table" id="analysisTable" style="border-collapse: collapse; border: none;">
+                                 
+                                    <tbody id="analysisTabletbody">
+                                        <tr>
+                                            <td style="border: none;"></td>
+                                            <td style="border: none;"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div> -->
+                        </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="id">
+
+                <button type="button" id="btnCloseupdate" class="btn btn-secondary">Close</button>
+                <button type="button" id="btnsave" class="btn btn-primary ">Save</button>
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+{{--........End.Model.......--}}
+
+<!-- Analysis modal -->
+<div class="modal fade" id="analysisModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">GL Accounts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body p-4 bg-white">
+                    <form id="" class="needs-validation" novalidate>
+                        <div class="row">
+                            <!-- <div class="col-6">
                                 <label for="fname"><i class="fa fa-address-card-o fa-lg text-info" aria-hidden="true">&#160</i>Account Code</label>
                                 <input type="text" name="accountcode" id="txtAccountCode" class="form-control validate" autocomplete="off">
                                 <span class="text-danger font-weight-bold Nonproprietary"></span>
@@ -124,19 +203,30 @@ Dashboard
                                     </div>
                                 </div>
                                 <span class="text-danger font-weight-bold"></span>
-                            </div>
-                            <div class="col-6">
-                                <table class="table" id="analysisTable" style="border-collapse: collapse; border: none;">
-                                  <!--   <thead>
+                            </div> -->
+                            <div class="col-12">
+                            <div class="row analysis">
+                                    <div class="col-9">
+                                        <input type="text" class="form-control validate analysis" id="txtGlAccountAnalysis">
+                                    </div>
+                                    <div class="col-2">
+
+                                        <button type="button" class="btn btn-success analysis" id="BtnGlAccountAnalysis">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <table class="table table-striped" id="analysisTable" style="border-collapse: collapse; border: none;">
+                                    <thead>
                                         <tr>
-                                            <th style="border: none;"></th>
-                                            <th style="border: none;"></th>
+                                            <th style="">GL Acoount Analysis</th>
+                                            <th style="">Action</th>
                                         </tr>
-                                    </thead> -->
+                                    </thead>
                                     <tbody id="analysisTabletbody">
                                         <tr>
-                                            <td style="border: none;"></td>
-                                            <td style="border: none;"></td>
+                                            <td style=""></td>
+                                            <td style=""></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -150,10 +240,10 @@ Dashboard
 
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="id">
+                <input type="hidden" id="id_">
 
                 <button type="button" id="btnCloseupdate" class="btn btn-secondary">Close</button>
-                <button type="button" id="btnsave" class="btn btn-primary ">Save</button>
+               <!--  <button type="button" id="btnsave" class="btn btn-primary ">Save</button> -->
 
             </div>
             </form>

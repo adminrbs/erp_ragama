@@ -83,7 +83,7 @@ WHERE
             $cheque_collection =  new DirectChequeCollection();
             $cheque_collection->internal_number = IntenelNumberController::getNextID();
             $cheque_collection->external_number = $externalNumber;
-            $cheque_collection->document_number = 900;
+            $cheque_collection->document_number = 950;
             $cheque_collection->trans_date = date('Y-m-d H:i:s');
             $cheque_collection->branch_id = $bR_id;
             $cheque_collection->created_by = Auth::user()->id;

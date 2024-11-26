@@ -94,7 +94,7 @@ class GlAccountController extends Controller
 
             if ($glaccount->update()) {
 
-                $analisys_name = $request->input('analysisName');
+                /* $analisys_name = $request->input('analysisName');
                 if($analisys_name){
                     foreach($analisys_name as $name){
                         $Acc = new GlAccountAnalysis();
@@ -102,7 +102,7 @@ class GlAccountController extends Controller
                         $Acc->gl_account_analyse_name = $request->$name;
                         $Acc->save();
                     }
-                }
+                } */
 
                 return response()->json(["status" => true]);
             } else {
@@ -112,6 +112,39 @@ class GlAccountController extends Controller
 
             return response()->json(["error" => $ex]);
         }
+    }
+
+    public function addglAccountAnalysis($id, Request $request){
+        try{
+            $Acc = new GlAccountAnalysis();
+            $Acc->account_id = $id;
+            $Acc->gl_account_analyse_name = $request->input('txtGlAccountAnalysis');
+            return response()->json(["status" => $Acc->save()]);
+
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function loadAnalysisAcc($id){
+        try{
+            $Acc = GlAccountAnalysis::all();
+            if($Acc){
+                return response()->json(["data" => $Acc]);  
+            }
+
+           
+
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
+
+    public function delete_analysys($id){
+        $gl_account_analysis = GlAccountAnalysis::findOrFail($id);
+        
+
+        return response()->json(["status" =>$gl_account_analysis->delete()]);
     }
     public function  glAccounDelete($id)
     {

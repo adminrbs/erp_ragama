@@ -505,6 +505,9 @@ Route::get('/allglaccountdata',[GlAccountController::class,'allglaccountdata']);
 Route::get('/getglaccount/{id}',[GlAccountController::class,'getglaccount']);
 Route::post('/updateglAccount/{id}',[GlAccountController::class,'updateglAccount']);
 Route::delete('/glAccounDelete/{id}',[GlAccountController::class,'glAccounDelete']);
+Route::post('/addglAccountAnalysis/{id}',[GlAccountController::class,'addglAccountAnalysis']);
+Route::get('/loadAnalysisAcc/{id}',[GlAccountController::class,'loadAnalysisAcc']);
+Route::delete('/delete_analysys/{id}',[GlAccountController::class,'delete_analysys']);
 
 /**books */
 Route::get('/book',function(){

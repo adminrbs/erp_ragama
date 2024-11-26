@@ -1179,7 +1179,7 @@ LIMIT 1";  */
                direct_cheque_collection_id DESC 
            LIMIT 1
        ";
-            //dd($query);
+          //  dd($query);
             $result = DB::select($query);
 
             $id = 1;
