@@ -13,7 +13,7 @@ $(document).ready(function(){
     });
 
     $('#btnClosePayee',function(){
-        $('#modelPayee').hide();
+        $('#modelPayee').modal('hide');
     });
 });
 
@@ -41,7 +41,7 @@ function savePayee(){
                 $('#btnSavePayee').prop('disabled', false);
                 if(response.status){
                     showSuccessMessage('Record saved successfuly');
-                    $('#modelPayee').hide();
+                    $('#modelPayee').modal('hide');
                     loadPayee();
                 }else{
                     showWarningMessage('Unable to save');
@@ -78,7 +78,7 @@ function updatePayee(){
                 $('#btnSavePayee').prop('disabled', false);
                 if(response.status){
                     showSuccessMessage('Record updated successfuly');
-                    $('#modelPayee').hide();
+                    $('#modelPayee').modal('hide');
                     loadPayee();
                 }else{
                     showWarningMessage('Unable to update');
@@ -100,7 +100,7 @@ function edit(id){
     $('#modelPayee').modal('show');
     $('#btnSavePayee').text('Update');
     loadEachPayee(id,'edit')
-    $('#Payeehidden').val($id)
+    $('#Payeehidden').val(id)
 }
 
 function loadEachPayee(id,type) {

@@ -42,7 +42,13 @@ class GlAccountController extends Controller
 
             if ($glaccoun->save()) {
 
-                return response()->json(['status' => true]);
+                $Acc = new GlAccountAnalysis();
+                $Acc->account_id = $glaccoun->account_id;
+                $Acc->gl_account_analyse_name = "Not Applicable";
+                
+
+                return response()->json(['status' => $Acc->save()]);
+
             } else {
 
                 return response()->json(['status' => false]);
@@ -128,7 +134,7 @@ class GlAccountController extends Controller
 
     public function loadAnalysisAcc($id){
         try{
-            $Acc = GlAccountAnalysis::all();
+            $Acc = GlAccountAnalysis::where("account_id","=",$id)->get();
             if($Acc){
                 return response()->json(["data" => $Acc]);  
             }
@@ -142,9 +148,13 @@ class GlAccountController extends Controller
 
     public function delete_analysys($id){
         $gl_account_analysis = GlAccountAnalysis::findOrFail($id);
-        
+        if($gl_account_analysis->gl_account_analyse_name != 'Not Applicable'){
+            return response()->json(["status" =>$gl_account_analysis->delete()]);
+        }else{
+            return response()->json(["msg"=>"unabletoDelete"]);
+        }
 
-        return response()->json(["status" =>$gl_account_analysis->delete()]);
+        
     }
     public function  glAccounDelete($id)
     {

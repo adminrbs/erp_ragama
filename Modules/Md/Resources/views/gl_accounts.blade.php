@@ -164,7 +164,7 @@ Dashboard
     <div class="modal-dialog">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">GL Accounts</h5>
+                <h5 class="modal-title" id="analysisModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -242,7 +242,7 @@ Dashboard
             <div class="modal-footer">
                 <input type="hidden" id="id_">
 
-                <button type="button" id="btnCloseupdate" class="btn btn-secondary">Close</button>
+                <button type="button" id="btnCloseANalysisModal" class="btn btn-secondary">Close</button>
                <!--  <button type="button" id="btnsave" class="btn btn-primary ">Save</button> -->
 
             </div>

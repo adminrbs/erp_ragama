@@ -302,12 +302,13 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    })->middleware(['is.logged','can:cb_payment_voucher']);
    Route::get('/loadPayee',[PaymentVoucherController::class,'loadPayee']);
    Route::get('/loadAccounts',[PaymentVoucherController::class,'loadAccounts']);
-   Route::get('/loadAccountAnalysisData',[PaymentVoucherController::class,'loadAccountAnalysisData']);
+   Route::get('/loadAccountAnalysisData/{id}',[PaymentVoucherController::class,'loadAccountAnalysisData']);
    Route::post('/saveVoucher',[PaymentVoucherController::class,'saveVoucher']);
    Route::get('/getGRNdata',[PaymentVoucherController::class,'getGRNdata']);
    Route::get('/getEachPaymentVoucher/{id}',[PaymentVoucherController::class,'getEachPaymentVoucher']);
    Route::post('/updateVoucher/{id}',[PaymentVoucherController::class,'updateVoucher']);
    Route::delete('/deleteVOucher/{id}',[PaymentVoucherController::class,'deleteVOucher']);
+   Route::get('/get_gl_account_name/{id}',[PaymentVoucherController::class,'get_gl_account_name']);
 
    /**Payment voucher receipt */
    Route::get('/paymentVoucher_Receipt/{id}',[PaymentVoucherController::class,'paymentVoucher_Receipt']);

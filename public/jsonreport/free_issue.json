@@ -233,7 +233,7 @@
                             "size": "5",
                             "margin-top": "0",
                             "sum": [
-                                "Inv Qty","Free Issues","Invoice qty Amount","Free Issued qtyAmount"
+                                "Inv Qty","Free Issues","Invoice qty Amount","Free Issued qtyAmount","Free","Value"
                             ],
                             "layout": "fixed"
                         }

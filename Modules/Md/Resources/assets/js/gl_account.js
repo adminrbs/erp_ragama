@@ -131,6 +131,18 @@ $(document).ready(function () {
         addglAccountAnalysis();
 
     });
+
+    $('#analysisModal').on('hide.bs.modal', function (e) {
+       $('#txtGlAccountAnalysis').val("");
+    });
+    
+    $('#analysisModal').on('show.bs.modal',function(e){
+        $('.analysis').show();
+    });
+
+    $('#btnCloseANalysisModal').on('click',function(){
+        $('#analysisModal').modal('hide');
+    });
     /* 
         $('#txtGlAccountAnalysis').on('change', function () {
     
@@ -256,7 +268,11 @@ function allglaccountdata() {
                         "account_code": dt[i].account_code,
                         "accounttitel": dt[i].account_title,
                         "accounttype": dt[i].gl_account_type,
-                        "action": '<button class="btn btn-secondary btn-sm loneview" data-bs-toggle="modal" data-bs-target="#analysisModal"  onclick="getAndUpdateGl_account_anlysis(' + dt[i].account_id + ')" title="GL Account Analysis"><i class="fa fa-cog" aria-hidden="true"></i></button>&nbsp' + '<button title="Edit" class="btn btn-primary  btn-sm lonmodel" data-bs-toggle="modal" data-bs-target="#modalNonproprietary" onclick="edit(' + dt[i].account_id + ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160<button class="btn btn-success btn-sm loneview" data-bs-toggle="modal" data-bs-target="#modalNonproprietary"  onclick="getcontributeview(' + dt[i].account_id + ')" title="View"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].account_id + ')" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>',
+                        "action": '<button class="btn btn-secondary btn-sm loneview" data-bs-toggle="modal" data-bs-target="#analysisModal" onclick="getAndUpdateGl_account_anlysis(' + dt[i].account_id + ', \'' + dt[i].account_title + '\')" title="GL Account Analysis"><i class="fa fa-cog" aria-hidden="true"></i></button>&nbsp' + 
+          '<button title="Edit" class="btn btn-primary btn-sm lonmodel" data-bs-toggle="modal" data-bs-target="#modalNonproprietary" onclick="edit(' + dt[i].account_id + ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160' + 
+          '<button class="btn btn-success btn-sm loneview" data-bs-toggle="modal" data-bs-target="#modalNonproprietary" onclick="getcontributeview(' + dt[i].account_id + ')" title="View"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + 
+          '<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].account_id + ')" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>'
+
 
                     });
                 }
@@ -354,9 +370,11 @@ function updateglAccount() {
     });
 
 }
-function getAndUpdateGl_account_anlysis(id) {
+function getAndUpdateGl_account_anlysis(id,title) {
     $('#id_').val(id);
-    loadAnalysisAcc(id);
+   console.log(title);
+   
+    loadAnalysisAcc(id,title);
 }
 
 function addglAccountAnalysis() {
@@ -414,7 +432,8 @@ function addglAccountAnalysis() {
 
 }
 
-function loadAnalysisAcc(id) {
+function loadAnalysisAcc(id,title) {
+    
     $.ajax({
         url: '/md/loadAnalysisAcc/' + id,
         method: 'GET',
@@ -455,6 +474,7 @@ function loadAnalysisAcc(id) {
             console.error('Failed to load analysis accounts:', error);
         }
     });
+    $('#analysisModalLabel').html(title);
 }
 
 
@@ -663,6 +683,7 @@ function searchTable(analysis_name) {
 function remove_line(button, id) {
     /* var row = button.closest('tr');
     row.remove(); */
+    let isNotApplicable = false;
     if (id > 0) {
         $.ajax({
             type: 'DELETE',
@@ -680,8 +701,17 @@ function remove_line(button, id) {
             }, success: function (response) {
 
 
+                if(response.msg == "unabletoDelete"){
+                    showWarningMessage("This record can not be deleted");
+                    isNotApplicable = true;
+                    return false;
+                }
 
-                showSuccessMessage("Successfully Delete");
+                if(response.status){
+                    showSuccessMessage("Record deleted successfully");
+                }else{
+                    showWarningMessage("Unable to delete record")
+                }
 
 
 
@@ -692,7 +722,10 @@ function remove_line(button, id) {
     }
 
 
-    var row = button.closest('tr');
-    row.remove();
+    if(!isNotApplicable){
+        var row = button.closest('tr');
+        row.remove();
+    }
+    
 
 }

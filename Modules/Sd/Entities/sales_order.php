@@ -3,6 +3,7 @@
 namespace Modules\Sd\Entities;
 
 use App\Traits\LedgerActionListener;
+use App\Traits\UserActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ use Spatie\Activitylog\LogOptions;
 
 class sales_order extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity,UserActivityLog;
 
     protected $primaryKey =  'sales_order_Id';
     protected $fillable = [];
@@ -30,6 +31,28 @@ class sales_order extends Model
         return LogOptions::defaults()
             ->logOnly(['*']);
         // Chain fluent methods for configuration options
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            // Log activity after the sales order is created
+            $model->logActivity($model,'created');
+        });
+
+        static::updated(function ($model) {
+            // Log activity after the sales order is updated
+            $model->logActivity($model,'updated');
+        });
+
+        static::deleted(function ($model) {
+            // Log activity after the sales order is deleted
+            $model->logActivity($model,'deleted');
+        });
+
+      
     }
 
     /* public function save(array $options = [])

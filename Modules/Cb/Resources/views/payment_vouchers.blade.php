@@ -146,7 +146,7 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>GL Account</span></label>
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Charted Accounts</span></label>
                                     <select class="select2 form-control validate" data-live-search="true" id="cmbGlAccount"></select>
                                 </div>
 
@@ -192,6 +192,12 @@
                             <li class="nav-item rbs-nav-item">
                                 <a href="#Item" class="nav-link active" aria-selected="true">Accounts</a>
                             </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a id="tab-single-cheque" href="#single_cheque" class="nav-link single_cheque" aria-selected="false">Single Cheque</a>
+                            </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a id="tab-bank-slip" href="#bankSlip" class="nav-link bankSlip" aria-selected="false" hidden>Bank Slip</a>
+                            </li>
                             <!-- <li class="nav-item rbs-nav-item">
                                 <a href="#rtn" class="nav-link" aria-selected="true">Return Request</a>
                             </li> -->
@@ -199,7 +205,7 @@
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="Item">
+                            <div class="tab-pane fade show active Item" id="Item">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input type="hidden" id="rowIndex">
@@ -209,6 +215,7 @@
                                                     <tr>
 
                                                         <th>GL Accounts</th>
+                                                        <th>Acc Name</th>
                                                         <th>Description</th>
                                                         <th>Amount</th>
                                                         <th>Analysis</th>
@@ -223,6 +230,65 @@
 
                                     </div>
                                 </div>
+                            </div>
+
+
+                            <div class="tab-pane fade Item" id="single_cheque" class="single_cheque">
+
+                                <div class="row">
+                                    <div class="col-md-2 mt-2">
+                                        <label>Ref No</label>
+                                        <input type="text" id="txtChequeRefNo" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label>Cheque No</label>
+                                        <input type="text" id="txtChequeNo" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <label>Bank Code</label>
+                                        <input type="text" id="txtBankCode" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label>Banking date</label>
+                                        <input type="date" id="txtChequeValidDate" class="form-control form-control-sm" name="chequeValidDate">
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <label>Amount</label>
+                                        <input type="number" id="txtChequeAmount" class="form-control form-control-sm math-abs" style="text-align: right;">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label>Bank</label>
+                                        <select id="cmbChequeBank" class="form-select form-control-sm select2-single-checque-bank"></select>
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label>Branch</label>
+                                        <select id="cmbChequeBankBranch" class="form-select form-control-sm select2-single-checque-branch"></select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End of Single Cheuq tab -->
+
+                            <!-- Bank slip -->
+                            <div class="tab-pane fade" id="bankSlip" class="bankSlip">
+
+                                <div class="row">
+                                    <div class="col-md-2 mt-2">
+                                        <label>Ref No</label>
+                                        <input type="text" id="txtSlipRef" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label for="time" class="form-label">Time</label>
+                                        <input type="time" class="form-control" id="tmSliptime" name="time" step="3600" style="height: 30px;">
+                                    </div>
+
+                                    <div class="col-md-3 mt-2">
+                                        <label for="slipDate" class="form-label">Slip Date</label>
+                                        <input type="date" id="dtSLipDate" name="slipDate" class="form-control form-control-sm">
+                                    </div>
+
+                                </div>
+
                             </div>
 
                             <!-- <div class="tab-pane fade show " id="rtn">
