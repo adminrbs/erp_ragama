@@ -28,7 +28,7 @@ Dashboard
 <div class="content">
     <div class="card">
         <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-            <h5 class="mb-0">GL Accounts</h5>
+            <h5 class="mb-0">Chart Of Accounts</h5>
             <div class="d-inline-flex ms-auto"></div>
         </div>
 
@@ -85,7 +85,7 @@ Dashboard
     <div class="modal-dialog">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">GL Accounts</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Chart Of Accounts</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

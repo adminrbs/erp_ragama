@@ -26,6 +26,7 @@
         .zebra-table tbody tr:hover {
             background-color: #b0e0e6; /* Slightly darker light blue on hover */
         }
+        
 </style>
 
 <!-- Content area -->

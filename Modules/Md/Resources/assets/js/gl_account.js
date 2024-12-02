@@ -705,10 +705,10 @@ function remove_line(button, id) {
                     showWarningMessage("This record can not be deleted");
                     isNotApplicable = true;
                     return false;
-                }
-
-                if(response.status){
+                }else if(response.status){
                     showSuccessMessage("Record deleted successfully");
+                    var row = button.closest('tr');
+                    row.remove();
                 }else{
                     showWarningMessage("Unable to delete record")
                 }
@@ -722,10 +722,7 @@ function remove_line(button, id) {
     }
 
 
-    if(!isNotApplicable){
-        var row = button.closest('tr');
-        row.remove();
-    }
+   
     
 
 }

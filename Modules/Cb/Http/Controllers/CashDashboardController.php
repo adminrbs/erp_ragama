@@ -61,7 +61,7 @@ WHERE
 	SR.receipt_status = 1 
 	AND SR.receipt_method_id = 2");
 
-            $direct_cash_with_Cashier_qry = DB::select("SELECT
+            /* $direct_cash_with_Cashier_qry = DB::select("SELECT
 	SUM( DCBD.amount ) AS total_direct_cash_with_cashier,
 	SUM(
 	IF
@@ -70,7 +70,18 @@ FROM
 	direct_cash_bundles DCB
 	INNER JOIN direct_cash_bundle_datas DCBD ON DCB.direct_cash_bundle_id = DCBD.direct_cash_bundles_id 
 WHERE
-	DCB.`status` = 0");
+	DCB.`status` = 0"); */
+
+    $direct_cash_with_Cashier_qry = DB::select("SELECT
+	SUM( DCBD.amount ) AS total_direct_cash_with_cashier,
+	SUM(
+	IF
+	( DATEDIFF( CURDATE(), DCBD.cash_bundle_date ) > 2, DCBD.amount, 0 )) AS direct_late_cash_with_cashier 
+FROM
+	direct_cash_bundles DCB
+	INNER JOIN direct_cash_bundle_datas DCBD ON DCB.direct_cash_bundle_id = DCBD.direct_cash_bundles_id 
+WHERE
+	DCB.ho_Received = 0");
 
             $direct_cheque_with_qry = DB::select("SELECT
 	SUM( amount ) AS total_direct_cheque,

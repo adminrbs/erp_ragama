@@ -146,7 +146,7 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Charted Accounts</span></label>
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Bank Accounts</span></label>
                                     <select class="select2 form-control validate" data-live-search="true" id="cmbGlAccount"></select>
                                 </div>
 

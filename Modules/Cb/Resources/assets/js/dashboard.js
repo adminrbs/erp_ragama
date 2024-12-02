@@ -29,8 +29,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Cash With Rep'}</td>
-                        <td>${total_cash}</td>
-                        <td>${total_late}</td>
+                        <td style="text-align: right;">${total_cash}</td>
+                        <td style="text-align: right;">${total_late}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);
@@ -43,8 +43,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Cheques With Rep'}</td>
-                        <td>${total_cheque}</td>
-                        <td>${total_late}</td>
+                        <td style="text-align: right;">${total_cheque}</td>
+                        <td style="text-align: right;">${total_late}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);
@@ -57,8 +57,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Cash with cashier (Rep)'}</td>
-                        <td>${total_rep_cash_with_cashier}</td>
-                        <td>${total_late_rep_cash_with_cashier}</td>
+                        <td style="text-align: right;">${total_rep_cash_with_cashier}</td>
+                        <td style="text-align: right;">${total_late_rep_cash_with_cashier}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);
@@ -71,8 +71,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Cheque with cashier (Rep)'}</td>
-                        <td>${total_rep_cheque_with_cashier}</td>
-                        <td>${total_late_rep_cheque_with_cashier}</td>
+                        <td style="text-align: right;">${total_rep_cheque_with_cashier}</td>
+                        <td style="text-align: right;">${total_late_rep_cheque_with_cashier}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);
@@ -85,8 +85,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Direct cash with cashier (Office)'}</td>
-                        <td>${total_direct_cash_with_cashier}</td>
-                        <td>${direct_late_cash_with_cashier}</td>
+                        <td style="text-align: right;">${total_direct_cash_with_cashier}</td>
+                        <td style="text-align: right;">${direct_late_cash_with_cashier}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);
@@ -99,8 +99,8 @@ function loadDatatoDashboard() {
                 var row = `
                     <tr>
                         <td>${'Direct Cheque with cashier (Office)'}</td>
-                        <td>${total_direct_cheque_with_cashier}</td>
-                        <td>${direct_late_cheque_with_cashier}</td>
+                        <td style="text-align: right;">${total_direct_cheque_with_cashier}</td>
+                        <td style="text-align: right;">${direct_late_cheque_with_cashier}</td>
                     </tr>
                 `;
                 $('#all_cash tbody').append(row);

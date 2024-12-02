@@ -180,7 +180,7 @@
                                             <a href="/sd/routeList" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Route</a>
                                             @endif
                                             @if(Auth::user()->can('md_gl_account') && Auth::user()->hasModulePermission('Master Data'))
-                                            <a href="/md/gl_account" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Account</a>
+                                            <a href="/md/gl_account" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Chart Of Accounts</a>
                                             @endif
                                             @if(Auth::user()->can('md_book') && Auth::user()->hasModulePermission('Master Data'))
                                             <a href="/md/book" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Book</a>
@@ -206,7 +206,7 @@
 
                                             <a href="/md/account_group_level" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Account Level</a>
                                             <a href="/md/payee" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payee</a>
-                                            <a href="/md/gl_account_analysis" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Account Analysis</a>
+                                            <!-- <a href="/md/gl_account_analysis" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>GL Account Analysis</a> -->
                                         
                                         </div>
                                     </div>

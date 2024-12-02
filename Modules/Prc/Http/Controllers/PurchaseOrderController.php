@@ -438,7 +438,9 @@ class PurchaseOrderController extends Controller
             deliver_date_time, 
               purchase_order_notes.discount_percentage,
             'Original' AS status,
-            FORMAT(SUM(purchase_order_note_items.price), 0) AS total_sum
+           FORMAT(SUM(purchase_order_note_items.price * purchase_order_note_items.quantity), 2) AS total_sum
+
+
         FROM 
             purchase_order_notes 
         INNER JOIN 
