@@ -1,6 +1,3 @@
-
-
-
 var selectSupplier = null;
 var selectSupplygroup = null;
 
@@ -10,11 +7,7 @@ var fromAge = null;
 var toAge = null;
 var selecteBranch = null;
 var cmbgreaterthan = null;
-
 //var cmbSalesrep = null;
-
-
-
 var length;
 var selectedCheckboxes = [];
 var checkboxId;
@@ -530,6 +523,41 @@ $(document).ready(function () {
 
             //getviewReport()
             $('#pdfContainer').attr('src', '/sl/printsupoutstandinReport/' + JSON.stringify(requestData));
+
+        }
+        if (report === "supplier_cash_audit_report") {
+
+
+
+            if (report == null || report == undefined || report == "") {
+                showWarningMessage("Select Filter Option");
+                console.log(report);
+            }
+
+
+            var requestData = [
+
+                //{ selected6: selected6 },
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
+                { selecteBranch: selecteBranch },
+                { cmbgreaterthan: cmbgreaterthan },
+                { fromdate: fromdate },
+                { todate: todate },
+                { fromAge: fromAge },
+                { toAge: toAge },
+
+
+
+
+            ];
+
+
+            console.log(requestData);
+
+
+            //getviewReport()
+            $('#pdfContainer').attr('src', '/sl/supplier_cash_audit_report/' + JSON.stringify(requestData));
 
         }
         if (report == null || report == undefined) {

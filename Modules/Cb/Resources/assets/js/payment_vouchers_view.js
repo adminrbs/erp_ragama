@@ -1,3 +1,118 @@
+
+
+const DatatableFixedColumns = function () {
+
+
+    //
+    // Setup module components
+    //
+
+    // Basic Datatable examples
+    const _componentDatatableFixedColumns = function () {
+        if (!$().DataTable) {
+            console.warn('Warning - datatables.min.js is not loaded.');
+            return;
+        }
+
+        // Setting datatable defaults
+        $.extend($.fn.dataTable.defaults, {
+            columnDefs: [{
+                orderable: false,
+                width: 100,
+                targets: [2]
+            }],
+            dom: '<"datatable-header"fl><"datatable-scroll datatable-scroll-wrap"t><"datatable-footer"ip>',
+            language: {
+                search: '<span class="me-3">Filter:</span> <div class="form-control-feedback form-control-feedback-end flex-fill">_INPUT_<div class="form-control-feedback-icon"><i class="ph-magnifying-glass opacity-50"></i></div></div>',
+                searchPlaceholder: 'Type to filter...',
+                lengthMenu: '<span class="me-3">Show:</span> _MENU_',
+                paginate: { 'first': 'First', 'last': 'Last', 'next': document.dir == "rtl" ? '&larr;' : '&rarr;', 'previous': document.dir == "rtl" ? '&rarr;' : '&larr;' }
+            }
+        });
+
+
+
+        // Left and right fixed columns
+        var table = $('#tblData').DataTable({
+            columnDefs: [
+
+                {
+                    orderable: false,
+                    targets: 2
+                },
+                {
+                    width: 100,
+                    targets: 0
+                },
+                {
+                    width: 300,
+                    targets: 1
+                },
+                {
+                    width: 50,
+                    targets: [2]
+                },
+                {
+                    width: 50,
+                    targets: 3
+                }
+                
+
+
+            ],
+            scrollX: true,
+            //scrollY: 350,
+            scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 0,
+                rightColumns: 0
+            },
+            autoWidth: false,
+            "pageLength": 100,
+            "order": [],
+            "columns": [
+                { "data": "glAccount" },
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "amount" },
+                { "data": "analysis" },
+              
+                
+              
+
+            ], "stripeClasses": ['odd-row', 'even-row'],
+        });
+
+
+        //
+        // Fixed column with complex headers
+        //
+
+    };
+
+
+    //
+    // Return objects assigned to module
+    //
+
+    return {
+        init: function () {
+            _componentDatatableFixedColumns();
+        }
+    }
+}();
+
+
+// Initialize module
+document.addEventListener('DOMContentLoaded', function () {
+    DatatableFixedColumns.init();
+});
+
+
+
+
+
+
 var formData = new FormData();
 var tableData = undefined;
 var tableDataOther = undefined;
@@ -70,7 +185,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#txtBankCode').on('keyup', function (event) {
+   /*  $('#txtBankCode').on('keyup', function (event) {
 
         if ($(this).val().length >= 8) {
             //$(this).val($(this).val().substr(0, $(this).val().length - 1));
@@ -82,7 +197,7 @@ $(document).ready(function () {
         }
 
 
-    });
+    }); */
 
     //setting datat to data chooser -supplier
     $('#txtSupplier').on('focus', function () {
@@ -112,24 +227,7 @@ $(document).ready(function () {
         saveVoucher(collection);
     });
 
-    tableData = $('#tblData').transactionTable({
-        "columns": [
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:200;" },
-            { "type": "text", "class": "transaction-inputs", "value": commonDiscription, "style": "width:370px;" },
-            { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
-            { "type": "select", "class": "transaction-inputs", "value": "", "style": "width:150px;", "event": "", },
-
-            { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
-
-        ],
-        "auto_focus": 0,
-        "hidden_col": []
-
-    });
-
-    tableData.addRow();
-    table_ = tableData;
+    
 
     if (window.location.search.length > 0) {
 
@@ -215,10 +313,15 @@ function getEachPaymentVoucher(id) {
         type: 'get',
         async: false,
         success: function (data) {
-            console.log(data.pv_item);
+            var response = data;
+            console.log(response);
+            
+            console.log(data.pv);
             $('#LblexternalNumber').val(data.pv.external_number);
             $('#invoice_date_time').val(data.pv.transaction_date);
             $('#cmbBranch').val(data.pv.branch_id);
+            $('#lblNetTotal').val(data.pv.total_amount);
+            $('#cmbPaymentMethod').val(data.pv.payment_method_id);
 
             if (data.pv.supplier_id == null) {
                 $('#rdoPayee').prop('checked', true);
@@ -229,49 +332,61 @@ function getEachPaymentVoucher(id) {
                 $('#txtSupplier').attr('data-id', data.pv.supplier_id);
             }
 
+            if(data.pv.payee_id == 1){
+                $('#txtNotApplicalePayee').val(data.pv.payee_name);
+            }
             $('#txtDescription').val(data.pv.description);
             $('#txtRemarks').val(data.pv.remarks);
 
 
 
-            var dataSource = [];
+          
+            var dataArray = [];
             $.each(data.pv_item, function (index, value) {
+                dataArray.push({
+                    "glAccount":value.account_code,
+                    "name":value.account_name,
+                    "description":value.description,
+                    "amount":value.amount,
+                    "analysis":value.gl_account_analyse_name
+                });
 
-                console.log(tableData);
-
-                dataSource.push([
-                    { "type": "text", "class": "transaction-inputs", "value": value.account_code, "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
-                    { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:200;" },
-                    { "type": "text", "class": "transaction-inputs", "value": value.description, "style": "width:370px;" },
-                    { "type": "number", "class": "transaction-inputs math-abs math-round", "value": value.amount, "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
-                    { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "selected_option": value.gl_account_analysis_id, "style": "width:150px;", "event": "", },
-                    { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
-
-                ]);
-
+                var table = $('#tblData').DataTable();
+                table.clear();
+                table.rows.add(dataArray).draw();
+               
+               /*  { "data": "glAccount" },
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "amount" },
+                { "data": "analysis" },
+ */
             });
 
-            tableData.setDataSource(dataSource);
+            console.log(response.pv);
+            
 
             if (data.pv.payment_method_id == 2) {
-                $('#txtChequeRefNo').val(data.pv_cheque.cheque_referenceNo)
-                $('#txtChequeNo').val(data.pv_cheque.cheque_number)
-                $('#txtBankCode').val(data.pv_cheque.bank_code)
-                $('#txtChequeValidDate').val(data.pv_cheque.banking_date)
-                $('#txtChequeAmount').val(data.pv_cheque.amount)
-                $('#cmbChequeBank').val(data.pv_cheque.bank_id)
-                $('#cmbChequeBankBranch').val(data.pv_cheque.bank_branch_id)
+                //alert();
+                
+                getBankBranch(data.pv_cheque[0].bank_id);
+                $('#txtChequeRefNo').val(data.pv_cheque[0].cheque_referenceNo)
+                $('#txtChequeNo').val(data.pv_cheque[0].cheque_number)
+                $('#txtBankCode').val(data.pv_cheque[0].bank_code)
+                $('#txtChequeValidDate').val(data.pv_cheque[0].banking_date)
+                $('#txtChequeAmount').val(data.pv_cheque[0].amount)
+                $('#cmbChequeBank').val(data.pv_cheque[0].bank_id)
+                $('#cmbChequeBankBranch').val(data.pv_cheque[0].bank_branch_id)
 
                 $("#tab-single-cheque").attr("hidden", false);
                 $("#tab-bank-slip").attr("hidden", true);
 
-
             }
 
             if (data.pv.payment_method_id == 7) {
-                $('#txtSlipRef').val(data.pv_slip.reference)
-                $('#tmSliptime').val(data.pv_slip.slip_time)
-                $('#dtSLipDate').val(data.pv_slip.slip_date)
+                $('#txtSlipRef').val(data.pv_slip[0].reference)
+                $('#tmSliptime').val(data.pv_slip[0].slip_time)
+                $('#dtSLipDate').val(data.pv_slip[0].slip_date)
 
                 $("#tab-single-cheque").attr("hidden", true);
                 $("#tab-bank-slip").attr("hidden", false);
@@ -662,6 +777,7 @@ function saveVoucher(collection) {
     formData.append('cmbPaymentMethod', $('#cmbPaymentMethod').val());
     formData.append('cmbGlAccount', $('#cmbGlAccount').val());
     formData.append('transDate',$('#invoice_date_time').val());
+    
     if ($('#cmbPaymentMethod').val() == 2) {
         formData.append('single_cheque', JSON.stringify(getSingleCheque()));
         if( parseFloat($('#txtChequeAmount').val().replace(/,/g, '')) !=  parseFloat($('#lblNetTotal').text().replace(/,/g, ''))) {
@@ -672,9 +788,7 @@ function saveVoucher(collection) {
     } else if ($('#cmbPaymentMethod').val() == 7) {
         formData.append("payment_slip", JSON.stringify(getSlip()));
         
-    }
-
-    if ($('#rdoPayee').prop('checked')) {
+    }if ($('#rdoPayee').prop('checked')) {
         formData.append('option', 1);
         formData.append('payee', $('#cmbPayee').val());
         if ($('#cmbPayee').val() == 1) {

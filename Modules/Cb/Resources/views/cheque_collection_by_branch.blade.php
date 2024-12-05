@@ -25,7 +25,7 @@
     <div class="card mt-2">
         <div class="card">
             <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-                <h5 class="mb-0">Receipt for cheque Collection By Branch</h5>
+                <h5 class="mb-0">Receipt For Cheque(SR)</h5>
             </div>
             <div class="row" id="top_border">
             <div class="col-md-2" style="margin-left: 10px;margin-top: 10px">

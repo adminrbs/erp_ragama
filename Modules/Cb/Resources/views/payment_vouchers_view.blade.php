@@ -219,7 +219,7 @@
                                                         <th>Description</th>
                                                         <th>Amount</th>
                                                         <th>Analysis</th>
-                                                        <th>Remove</th>
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -374,9 +374,9 @@
                                     <!--    <div class="col-md-6" style="display: none;">
                                         <button class="btn btn-primary" type="button" id="btnSaveDraft" style="width: 100%;">Save Draft</button>
                                     </div> -->
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <button class="btn btn-info" type="button" style="width: 100%;" id="btnSave">Save and Send</button>
-                                    </div>
+                                    </div> -->
                                     <!-- <div class="col-md-6">
                                         <button class="btn btn-danger" type="button" style="width: 100%;" id="btnReject">Reject</button>
                                     </div>
@@ -451,7 +451,7 @@
 <script src="{{URL::asset('assets/rbs-js/transaction_table.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/id_gen.js')}}?random=<?php echo uniqid(); ?>"></script>
 
-<script src="{{Module::asset('cb:js/payment_vouchers.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('cb:js/payment_vouchers_view.js')}}?random=<?php echo uniqid(); ?>"></script>
 
 
 

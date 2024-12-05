@@ -25,6 +25,7 @@ use Modules\Sd\Entities\sales_order;
 use Modules\Sd\Entities\SalesInvoiceItemSetoff;
 use Modules\Sd\Entities\supplierPaymentMethod;
 use Illuminate\Support\Facades\Session;
+use Modules\Cb\Entities\CustomerReceipt;
 use Modules\Sd\Entities\sales_invoice_return_request;
 use Modules\Sd\Entities\sfa_return_request_item;
 
@@ -1482,6 +1483,26 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
                 return response()->json(["status" => true, "data" => []]);
             }
         } catch (Exception $ex) {
+            return $ex;
+        }
+    }
+
+    public function saveCustomerReceipt($invoice){
+        try{
+            $br_id = $invoice->branch_id;
+            $branchdata = DB::table('branches')->where('branch_id', $br_id)->get();
+            $customer_receipt = new CustomerReceipt();
+            $customer_receipt->internal_number = IntenelNumberController::getNextID();
+            $customer_receipt->external_number = $branchdata[0]->prefix.$this->createExternal_number();
+            $customer_receipt->branch_id = $invoice->branch_id;
+            $customer_receipt->customer_id = $invoice->customer_id;
+            $customer_receipt->collector_id = Auth::user()->id;
+            $customer_receipt->cashier_id = Auth::user()->id;
+            $customer_receipt->receipt_date = date('Y-m-d');
+            $customer_receipt->receipt_method_id = $invoice->receipt_method_id;
+            $customer_receipt->gl_account_id = 0; // need to change
+         //   $customer_receipt->amount = $cus_recpt->amount;
+        }catch(Exception $ex){
             return $ex;
         }
     }

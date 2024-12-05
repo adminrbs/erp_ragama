@@ -14,16 +14,18 @@ class SfaChequeCollectionListController extends Controller
         try{
 
             $query = "SELECT
-	DATE( CC.created_at ) AS created_date,
-	CC.cheque_collection_id,
-	CC.external_number,
-	SUM( CR.amount ) AS amount 
+       DATE(CC.created_at) AS created_date,
+    CC.cheque_collection_id,
+    CC.external_number,
+    SUM(CR.amount) AS amount
 FROM
-	cheque_collections CC
-	INNER JOIN customer_receipts CR ON CC.cheque_collection_id = CR.cheque_collection_id 
+    cheque_collections CC
+INNER JOIN
+    sfa_receipts CR ON CC.cheque_collection_id = CR.cheque_collection_id
 GROUP BY
-	created_date,
-	CC.external_number;";
+    CC.internal_number
+ORDER BY
+    CC.created_at DESC;";
             $result = DB::select($query);
             if ($result) {
                 return response()->json(["status" => true, "data" => $result]);

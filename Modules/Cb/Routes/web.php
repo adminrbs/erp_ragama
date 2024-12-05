@@ -120,6 +120,7 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::post('/update_chq_ho',[CashCollectionController::class,'update_chq_ho']);
     Route::get('/load_cash_BookNumber',[CashCollectionController::class,'load_cash_BookNumber']);
     Route::get('/load_cheque_BookNumber',[CashCollectionController::class,'load_cheque_BookNumber']);
+    Route::get('/chequeCollectionReciptData/{id}',[CashCollectionController::class,'chequeCollectionReciptData']);
     /** end of cash collection */
 
     /**cash bundle */
@@ -309,6 +310,9 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    Route::post('/updateVoucher/{id}',[PaymentVoucherController::class,'updateVoucher']);
    Route::delete('/deleteVOucher/{id}',[PaymentVoucherController::class,'deleteVOucher']);
    Route::get('/get_gl_account_name/{id}',[PaymentVoucherController::class,'get_gl_account_name']);
+   Route::get('/payment_voucher_view',function(){
+    return view("cb::payment_vouchers_view");
+   });
 
    /**Payment voucher receipt */
    Route::get('/paymentVoucher_Receipt/{id}',[PaymentVoucherController::class,'paymentVoucher_Receipt']);

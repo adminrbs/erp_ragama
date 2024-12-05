@@ -147,6 +147,7 @@ GROUP BY
                                 $cheque_amount += (float)$customerdata->amount;
                                 $no_of_cheques++;
                                 $bool = false;
+                                $total_balance = $total_balance + $customerdata->amount;
                             }
                             array_push($table, $customerdata);
 
@@ -157,6 +158,7 @@ GROUP BY
                             if ($inv_amount > 0) {
                                 $inv_amount  = $inv_amount - $customerdata->Invoice_amont;
                             }
+                            //$total_balance = $total_balance + $inv_amount;
                         }
                     }
                     if (count($table) > 0) {
@@ -164,7 +166,7 @@ GROUP BY
                         $reportViwer->addParameter('abc', $titel);
                     }
                 }
-                $total_balance = $total_balance + $inv_amount;
+                /* $total_balance = $total_balance + $inv_amount; */
                 $formatted_balance = number_format($total_balance, 2, '.', ',');
             }
             //dd($titel);

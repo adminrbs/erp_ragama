@@ -47,7 +47,7 @@ class CashCollectionController extends Controller
      LEFT JOIN sales_invoices ON debtors_ledgers.external_number = sales_invoices.external_number
     LEFT JOIN employees E ON sfa_receipts.collector_id = E.employee_id
      WHERE receipt_status = 0 AND sfa_receipts.receipt_method_id = 1 ";
-            if($collector_id > 0){
+            if ($collector_id > 0) {
                 $query .= "AND sfa_receipts.collector_id = $collector_id ";
             }
             $query .= "ORDER BY sfa_receipts.customer_receipt_id DESC";
@@ -70,7 +70,7 @@ class CashCollectionController extends Controller
 
             $check_box_array = json_decode($request->input('values'));
             $branch_id = $request->input('branch_id');
-           
+
             /*  $receipt = CustomerReceipt::find($receipt_id); */
             /*   if(!$receipt){
                 return response()->json(["status" => false, "message" => 'error']);
@@ -232,10 +232,10 @@ class CashCollectionController extends Controller
        LEFT JOIN customers ON sfa_receipts.customer_id = customers.customer_id
        LEFT JOIN employees E ON sfa_receipts.collector_id = E.employee_id
        WHERE sfa_receipts.receipt_status = 0 AND sfa_receipts.receipt_method_id = 2 ";
-            if($collector_id > 0){
+            if ($collector_id > 0) {
                 $query .= " AND sfa_receipts.collector_id = $collector_id";
             }
-            
+
 
 
             $result = DB::select($query);
@@ -272,42 +272,40 @@ class CashCollectionController extends Controller
     public function update_chq_branch(Request $request)
     {
         try {
-            
+
             $referencenumber = $request->input('LblexternalNumber');
-                $bR_id = $request->input('cmbBranch');
-               
-                $data = DB::table('branches')->where('branch_id', $bR_id)->get();
-                
-                $EXPLODE_ID = explode("-",$referencenumber);
-                $externalNumber  = '';
+            $bR_id = $request->input('cmbBranch');
+
+            $data = DB::table('branches')->where('branch_id', $bR_id)->get();
+
+            $EXPLODE_ID = explode("-", $referencenumber);
+            $externalNumber  = '';
             if ($data->count() > 0) {
                 $documentPrefix = $data[0]->prefix;
-                $externalNumber  =$documentPrefix."-".$EXPLODE_ID[0]."-".$EXPLODE_ID[1];
+                $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
             }
             $cheque_collection = new cheque_collection();
             $cheque_collection->internal_number = IntenelNumberController::getNextID();
             $cheque_collection->external_number = $externalNumber;
             $cheque_collection->document_number = 950;
-           /*  $cheque_collection->book_id = $request->input('book_id');
+            /*  $cheque_collection->book_id = $request->input('book_id');
             $cheque_collection->page_no = $request->input('page_no'); */
             $cheque_collection->created_by = Auth::user()->id;
-            if($cheque_collection->save()){
+            if ($cheque_collection->save()) {
 
                 $chq_id_array = json_decode($request->get('chq_id_array'));
-            foreach ($chq_id_array as $i) {
-                $receipt = sfa_receipt::find($i);
-                if (!$receipt) {
-                    return response()->json(["status" => false, "message" => 'error']);
+                foreach ($chq_id_array as $i) {
+                    $receipt = sfa_receipt::find($i);
+                    if (!$receipt) {
+                        return response()->json(["status" => false, "message" => 'error']);
+                    }
+                    $receipt->receipt_status = 1;
+                    $receipt->cheque_collection_id = $cheque_collection->cheque_collection_id;
+                    $receipt->received_branch_id = $bR_id;
+                    $receipt->update();
                 }
-                $receipt->receipt_status = 1;
-                $receipt->cheque_collection_id = $cheque_collection->cheque_collection_id;
-                $receipt->received_branch_id = $bR_id;
-                $receipt->update();
-            }
             }
             return response()->json(["status" => true]);
-
-            
         } catch (Exception $ex) {
             return $ex;
         }
@@ -315,8 +313,8 @@ class CashCollectionController extends Controller
 
 
 
-    //load ho check data
-    public function loadCustomerReceipts_cheque_ho($branchId)
+    //load ho check data 
+    /*  public function loadCustomerReceipts_cheque_ho($branchId)
     {
         try {
             $user_id = auth()->id();
@@ -342,7 +340,41 @@ class CashCollectionController extends Controller
      LEFT JOIN banks ON sfa_receipt_cheques.bank_id = banks.bank_id
      LEFT JOIN bank_branches ON sfa_receipt_cheques.bank_branch_id = bank_branches.bank_branch_id
      WHERE sfa_receipts.received_branch_id = $branchId AND sfa_receipts.receipt_status = 2 AND sfa_receipts.receipt_method_id = 2 AND sfa_receipt_cheques.chq_ho_received = 0;";
-   // dd($query);
+   
+            $result = DB::select($query);
+            if ($result) {
+                return response()->json(["status" => true, "data" => $result]);
+            } else {
+                return response()->json(["status" => false, "data" => []]);
+            }
+        } catch (Exception $ex) {
+            return $ex;
+        }
+    } */
+
+    //changed to load cheque collections on 05/12/2024 - Sachin
+    public function loadCustomerReceipts_cheque_ho($branchId)
+    {
+        try {
+            $user_id = auth()->id();
+            $query = "SELECT
+            CC.cheque_collection_id,
+	DATE(CC.created_at) AS created_at,
+	CC.external_number,
+	SUM( SFA.amount ) AS total,
+	COUNT( SFA.external_number ) AS reciept_count 
+FROM
+	cheque_collections CC
+	INNER JOIN sfa_receipts SFA ON CC.cheque_collection_id = SFA.cheque_collection_id
+	INNER JOIN sfa_receipt_cheques SFAC ON SFA.customer_receipt_id = SFAC.customer_receipt_id 
+WHERE
+	SFA.received_branch_id = $branchId 
+	
+	AND SFA.receipt_method_id = 2 
+	AND SFAC.chq_ho_received < 1
+GROUP BY
+	CC.cheque_collection_id;";
+
             $result = DB::select($query);
             if ($result) {
                 return response()->json(["status" => true, "data" => $result]);
@@ -353,7 +385,6 @@ class CashCollectionController extends Controller
             return $ex;
         }
     }
-
 
     //update cash-ho receipt status
     public function update_status_calculation_cheque_ho(Request $request, $receipt_id)
@@ -382,7 +413,7 @@ class CashCollectionController extends Controller
     }
 
     //update chq status ho
-    public function update_chq_ho(Request $request){
+    /* public function update_chq_ho(Request $request){
         try {
             $cheque_id_array = json_decode($request->get('cheque_id_array'));
             foreach ($cheque_id_array as $i) {
@@ -400,11 +431,40 @@ class CashCollectionController extends Controller
             return $ex;
         }
 
+    } */
+
+    //Changed on 05/12/2024 - Sachin
+    public function update_chq_ho(Request $request)
+    {
+        try {
+            $collection_id_array = json_decode($request->get('cheque_id_array'));
+            
+            foreach ($collection_id_array as $i) {
+                // Get receipts associated with the current cheque_collection_id
+                $receipts = sfa_receipt::where("cheque_collection_id", "=", $i)->get();
+                
+                foreach ($receipts as $receipt) {
+                    // Fetch cheques related to the current receipt
+                    $cheques = SfaReceiptCheques::where('customer_receipt_id', '=', $receipt->customer_receipt_id)->get();
+                    
+                    foreach ($cheques as $cheque) {
+                        // Update chq_ho_received to 1
+                        $cheque->chq_ho_received = 1;
+                        $cheque->save();
+                    }
+                }
+            }
+            
+            return response()->json(["status" => true, "message" => 'success']);
+        } catch (Exception $ex) {
+            return $ex;
+        }
     }
 
 
     //load cash books
-    public function load_cash_BookNumber(){
+    public function load_cash_BookNumber()
+    {
         try {
             $qry = "SELECT CONCAT(books.book_name,'-',books.book_number) AS book_name,books.book_id FROM books WHERE books.is_active = 1 AND book_type_id = 2";
             $books = DB::select($qry);
@@ -417,12 +477,12 @@ class CashCollectionController extends Controller
         } catch (Exception $ex) {
             return $ex;
         }
-
     }
 
 
     //load cheque books
-    public function load_cheque_BookNumber(){
+    public function load_cheque_BookNumber()
+    {
         try {
             $qry = "SELECT CONCAT(books.book_name,'-',books.book_number) AS book_name,books.book_id FROM books WHERE books.is_active = 1 AND book_type_id = 3";
             $books = DB::select($qry);
@@ -435,7 +495,29 @@ class CashCollectionController extends Controller
         } catch (Exception $ex) {
             return $ex;
         }
-
     }
 
+    public function chequeCollectionReciptData($id)
+    {
+        $qry = "SELECT
+	SFA.external_number,
+	SFAC.cheque_number,
+	SFAC.amount,
+	B.bank_name,
+	BB.bank_branch_name 
+FROM
+	sfa_receipts SFA
+	INNER JOIN sfa_receipt_cheques SFAC ON SFA.customer_receipt_id = SFAC.customer_receipt_id
+	INNER JOIN banks B ON SFAC.bank_id = B.bank_id
+	INNER JOIN bank_branches BB ON SFAC.bank_branch_id = BB.bank_branch_id 
+WHERE
+	SFA.cheque_collection_id = $id";
+
+        $result = DB::select($qry);
+        if ($result) {
+            return response()->json(['status' => true, 'data' => $result]);
+        } else {
+            return response()->json(['status' => false, 'data' => []]);
+        }
+    }
 }

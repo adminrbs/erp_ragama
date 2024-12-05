@@ -97,6 +97,22 @@
                                     </label>
                                 </li>
                                 <br>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="supplier_cash_audit_report" id="supplier_cash_audit_report" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Cash Audit
+                                    </label>
+                                </li>
+                                <br>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="supplier_cash_audit_report" id="supplier_cheque_audit_report" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Cheque Audit
+                                    </label>
+                                </li>
+                                <br>
                             </ul>
 
                         </div>

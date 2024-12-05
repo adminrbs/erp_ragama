@@ -40,10 +40,10 @@ WHERE
 	CC.cheque_collection_id =".$id;
     //dd($qry);
     $result = DB::select($qry);
-
     DB::select($qry);
+
     $customerQuery = "SELECT
-	DL.external_number,
+	CR.external_number,
 	C.customer_name,
 	CR.customer_receipt_id,
 	CRC.cheque_number
@@ -60,6 +60,7 @@ FROM
 	INNER JOIN employees E ON CR.collector_id = E.employee_id 
 WHERE
 	CC.cheque_collection_id =".$id;
+
     $resulcustomer = DB::select($customerQuery);
     $chque_bundle = DB::select("SELECT external_number FROM cheque_collections WHERE cheque_collection_id = $id");
         $customerablearray = [];
@@ -82,9 +83,9 @@ WHERE
                 $bool = true;
                 array_push($receipt_number_array, $customerid->customer_receipt_id);
                 foreach ($result as $customerdata) {
-                    
+                    //dd($resulcustomer);
                     if ($customerdata->receipt_no == $customerid->external_number && $customerdata->customer_name == $customerid->customer_name ) {
-                        //dump("fff");
+                       // dd($customerdata);
                         $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Receipt No : </strong>" . $customerdata->receipt_no . " - <strong>Receipt Date : </strong>" . $customerdata->receipt_date . " <strong>Amount : </strong>" .$customerdata->amount;
                         if ($bool) {
                             array_push($titel, $title_text);
@@ -97,6 +98,7 @@ WHERE
 
                        
                     }
+                   // dd('dddd');
                 }
                 if (count($table) > 0) {
                     array_push($customerablearray, $table);
@@ -108,6 +110,7 @@ WHERE
             
            
         }
+       // dd([$customerablearray]);
         $reportViwer->addParameter("cheque_bundle_table", [$customerablearray]);
         $reportViwer->addParameter('companylogo', CompanyDetailsController::companyimage());
         $reportViwer->addParameter('companyName', CompanyDetailsController::CompanyName());

@@ -1,0 +1,300 @@
+{
+    "path": "E:\\RBS-REPORT-2023\\rbs_reportgen\\public\\jsonreport",
+    "paper": "A4",
+    "detail": [
+        {
+            "height": "100%"
+        },
+        {
+            "label": {
+                "text": "@_$companyName",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "22",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$title",
+                "align": "center",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "17",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "group": {
+                "header": [
+   
+                ],
+                "detail": [
+                    {
+                        "sub-title": {
+                            "title": [
+                                "@_$abc"
+                            ],
+                            "label": {
+                                "text": "",
+                                "align": "left",
+                                "height": "30",
+                                "width": "100%",
+                                "border-top": "0",
+                                "border-bottom": "0",
+                                "border-left": "0",
+                                "border-right": "0",
+                                "bg-color": "white",
+                                "color": "black",
+                                "x": "5",
+                                "y": "10",
+                                "padding-top": "0"
+                            }
+                        },
+                        "table": {
+                            "header": [
+                                [
+                                    {
+                                        "text": "supplier_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                               
+                               
+                               
+                                [
+                                    {
+                                        "text": "supplier_name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 40,
+                                        "visible": false
+                                    }
+                                ],
+                               
+                                [
+                                    {
+                                        "text": "Reference No",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 120
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Invoice No",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 150
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Collector",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "INV Date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Supplier Name",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 230,
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Gap",
+                                        "align": "center",
+                                        "format": "text",
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Total Paid",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Return Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                               
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Balance",
+                                        "align": "right",
+                                        "width": 100,
+                                        "format": "number"
+                                    }
+                                ]
+                            ],
+                            "body": "@_$cash_audit_tabaledata",
+                            "height": "30",
+                            "width": "100%",
+                            "x": "5",
+                            "y": "0",
+                            "margin-top": "-10",
+                            "sum": [
+                                "Paid Amount","Amount","Total Paid","Return Amount","Balance"
+                            ]
+                        }
+                    }
+                    
+                ],
+                "footer": [
+                    {
+                        "visible":true,
+                        "number": {
+                            "value": "@_$total",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "2",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "#ffffff",
+                            "color": "red",
+                            "x": "5",
+                            "y": "0",
+                            "format": "0.00",
+                            "font": {
+                                "style": "Bold",
+                                "size": "18",
+                                "name": "Tahoma"
+                            }
+                        }
+                    },
+                    {
+                        "label": {
+                            "text": "@_$total",
+                            "align": "right",
+                            "height": "30",
+                            "width": "100%",
+                            "border-top": "0",
+                            "border-bottom": "0",
+                            "border-left": "0",
+                            "border-right": "0",
+                            "bg-color": "red",
+                            "position": "fixed",
+                            "color": "#000000",
+                            "x": "5",
+                            "y": "10",
+                            "font": {
+                                "style": "Bold",
+                                "size": "15",
+                                "name": "Tahoma"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "footer": [
+        {
+            "height": 30
+        },
+        {
+            "label": {
+                "color": "black",
+                "x": 0,
+                "width": "100%",
+                "y": 1090,
+                "text": "Page",
+                "position": "",
+                "align": "center",
+                "bg-color": "white",
+                "height": 30,
+                "font": {
+                    "size": 12,
+                    "name": "Tahoma",
+                    "style": "plain"
+                }
+            }
+        }
+    ],
+    "name": "sample_report",
+    "header": [
+        {
+            "no-repeate": true,
+            "height": 100
+        }
+    ],
+    "oriantation": "PORTRAIT",
+    "title": [
+        {
+            "no-repeate": true,
+            "height": 50
+        }
+    ]
+}

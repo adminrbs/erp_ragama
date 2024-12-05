@@ -15,7 +15,7 @@ var analysisTableArray = [];
 var commonDiscription = "";
 var table_ = undefined;
 $(document).ready(function () {
-
+    getServerTime();
     $('#rdoPayee').prop('checked', true);
     $('#txtSupplier').prop('disabled', true);
     $('#cmbPayee').on('change', function () {
@@ -36,7 +36,7 @@ $(document).ready(function () {
     $("#tab-single-cheque").attr("hidden", true);
     $("#tab-bank-slip").attr("hidden", true);
 
-    getServerTime();
+    //getServerTime();
     getBranches();
     getReceiptMethod();
     loadPayee();
@@ -94,6 +94,8 @@ $(document).ready(function () {
         var arr = tableData.getDataSourceObject();
         var collection = [];
         for (var i = 0; i < arr.length; i++) {
+            if (!arr[i][4].val()) return showWarningMessage("Analysis is required"), false;
+
             collection.push(JSON.stringify({
                 "account_id": arr[i][0].attr('data-id'),
                 "description": arr[i][2].val(),
@@ -198,7 +200,7 @@ $(document).ready(function () {
         commonDiscription = $(this).val();
         var rowObjects = tableData.getDataSourceObject();
         for (var i = 0; i < rowObjects.length; i++) {
-            var desc_cell = rowObjects[i][1];
+            var desc_cell = rowObjects[i][2];
             desc_cell.val(commonDiscription);
 
         }
@@ -286,11 +288,11 @@ function calTotal(event) {
     var total_Sum = 0;
     var arr = table_.getDataSourceObject();
     for (var i = 0; i < arr.length; i++) {
-        console.log(arr[i][2].val());
+        console.log(arr[i][3].val());
 
         // total_Sum += parseFloat(arr[i][2].val().replace(/,/g, ''));
-        if (!isNaN(parseFloat(arr[i][2].val()))) {
-            total_Sum += parseFloat(arr[i][2].val());
+        if (!isNaN(parseFloat(arr[i][3].val()))) {
+            total_Sum += parseFloat(arr[i][3].val());
         }
 
     }
@@ -520,7 +522,7 @@ function dataChooserEventListener(event, id, value) {
       /*   $(row_childs[4]).empty();
         $(row_childs[4]).append('<option>Test</option>'); */
         loadAccountAnalysisData(event,item_id)
-        //$(row_childs[4]).val(loadAccountAnalysisData(item_id));
+        $(row_childs[2]).val($('#txtDescription').val());
 
 
     }
@@ -587,7 +589,8 @@ function getReceiptMethod() {
 
 }
 
-function getServerTime() {
+/* function getServerTime() {
+    alert();
     $.ajax({
         url: '/prc/getServerTime',
         type: 'get',
@@ -597,6 +600,8 @@ function getServerTime() {
             var serverDate = response.date;
             var parts = serverDate.split('/');
             var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+            console.log(formattedDate);
+            
             $('#invoice_date_time').val(formattedDate);
 
         },
@@ -605,7 +610,7 @@ function getServerTime() {
         },
 
     })
-}
+} */
 
 function optionType(event) {
     if ($(event).attr('id') == 'rdoPayee') {
@@ -656,6 +661,7 @@ function saveVoucher(collection) {
     formData.append('cmbBranch', $('#cmbBranch').val());
     formData.append('cmbPaymentMethod', $('#cmbPaymentMethod').val());
     formData.append('cmbGlAccount', $('#cmbGlAccount').val());
+    formData.append('transDate',$('#invoice_date_time').val());
     if ($('#cmbPaymentMethod').val() == 2) {
         formData.append('single_cheque', JSON.stringify(getSingleCheque()));
         if( parseFloat($('#txtChequeAmount').val().replace(/,/g, '')) !=  parseFloat($('#lblNetTotal').text().replace(/,/g, ''))) {
@@ -744,6 +750,7 @@ function updateVoucher(collection) {
     formData.append('cmbBranch', $('#cmbBranch').val());
     formData.append('cmbPaymentMethod', $('#cmbPaymentMethod').val());
     formData.append('cmbGlAccount', $('#cmbGlAccount').val());
+    formData.append('transDate',$('#invoice_date_time').val());
     if ($('#cmbPaymentMethod').val() == 2) {
         formData.append('single_cheque', JSON.stringify(getSingleCheque()));
     } else if ($('#cmbPaymentMethod').val() == 7) {
@@ -961,7 +968,7 @@ function getServerTime() {
             var parts = serverDate.split('/');
             var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
             $('#txtChequeValidDate').val(formattedDate);
-            //$('#delivery_date_time').val(formattedDate);
+            $('#invoice_date_time').val(formattedDate);
 
         },
         error: function (error) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\chequeNumberController;
 use App\Http\Controllers\CompanyDetailsController;
 use App\Http\Controllers\IntenelNumberController;
 use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -41,23 +42,23 @@ class PaymentVoucherController extends Controller
         try {
 
             $items = DB::table('gl_accounts')
-    ->select(
-        'gl_accounts.account_id',
-        'gl_accounts.account_title',
-        'gl_accounts.account_code',
-        'gl_account_types.gl_account_type_id'
-    )
-    ->join(
-        'gl_account_types',
-        'gl_accounts.account_type_id',
-        '=',
-        'gl_account_types.gl_account_type_id'
-    )
-    ->get();
+                ->select(
+                    'gl_accounts.account_id',
+                    'gl_accounts.account_title',
+                    'gl_accounts.account_code',
+                    'gl_account_types.gl_account_type_id'
+                )
+                ->join(
+                    'gl_account_types',
+                    'gl_accounts.account_type_id',
+                    '=',
+                    'gl_account_types.gl_account_type_id'
+                )
+                ->get();
 
             $collection = [];
             foreach ($items as $item) {
-                array_push($collection, ["hidden_id" => $item->account_id, "id" =>  $item->account_title, "value" =>  $item->account_code,"type_id" =>$item->gl_account_type_id, "collection" => [$item->account_id, $item->account_title, $item->account_code]]);
+                array_push($collection, ["hidden_id" => $item->account_id, "id" =>  $item->account_title, "value" =>  $item->account_code, "type_id" => $item->gl_account_type_id, "collection" => [$item->account_id, $item->account_title, $item->account_code]]);
             }
             return response()->json(['success' => true, 'data' => $collection]);
         } catch (Exception $ex) {
@@ -68,8 +69,11 @@ class PaymentVoucherController extends Controller
     public function loadAccountAnalysisData($id)
     {
         try {
-
-            $analysis = GlAccountAnalysis::where("account_id","=",$id)->get();
+            if ($id == 0) {
+                $analysis = GlAccountAnalysis::all();
+                return response()->json(['success' => true, 'data' => $analysis]);
+            }
+            $analysis = GlAccountAnalysis::where("account_id", "=", $id)->get();
             return response()->json(['success' => true, 'data' => $analysis]);
         } catch (Exception $ex) {
             return $ex;
@@ -79,7 +83,7 @@ class PaymentVoucherController extends Controller
     public function saveVoucher(Request $request)
     {
         try {
-            //dd($request);
+
             $collection = json_decode($request->input('collection'));
             $referencenumber = $request->input('LblexternalNumber');
             $bR_id = $request->input('cmbBranch');
@@ -93,15 +97,19 @@ class PaymentVoucherController extends Controller
                 $documentPrefix = $data[0]->prefix;
                 $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
             }
-            if($request->input('cmbPaymentMethod') == 2){
-                if(!chequeNumberController::validateChequeNo($request->input('cmbPaymentMethod'))){
-                    return response()->json(["cheque"=>"invalidChq"]);
+            if ($request->input('cmbPaymentMethod') == 2) {
+                if (!chequeNumberController::validateChequeNo($request->input('cmbPaymentMethod'))) {
+                    return response()->json(["cheque" => "invalidChq"]);
                 }
             }
+            $transDate = $request->input('transDate');
+            $date = new DateTime($transDate);
+            $formattedDate = $date->format('Y-m-d');
+
             $PaymentVoucher = new PaymentVoucher();
             $PaymentVoucher->internal_number = IntenelNumberController::getNextID();
             $PaymentVoucher->external_number =  $externalNumber;
-            $PaymentVoucher->transaction_date = Carbon::now();
+            $PaymentVoucher->transaction_date = $formattedDate;
             if ($request->input('option') == 1) {
                 $PaymentVoucher->payee_id = $request->input('payee');
                 if ($request->input('payee') == 1) {
@@ -179,8 +187,9 @@ class PaymentVoucherController extends Controller
         }
     }
 
-    public function saveBankSlip($data,$voucher_obj) {
-        try{
+    public function saveBankSlip($data, $voucher_obj)
+    {
+        try {
 
             $slip_data = json_decode($data);
             $slip = new PaymentVoucherBankSlip();
@@ -191,9 +200,7 @@ class PaymentVoucherController extends Controller
             $slip->slip_time = $slip_data->slip_time;
             $slip->slip_date = $slip_data->slip_date;
             $slip->save();
-
-            
-        }catch (Exception $ex){
+        } catch (Exception $ex) {
             return $ex;
         }
     }
@@ -201,7 +208,7 @@ class PaymentVoucherController extends Controller
     public function getGRNdata()
     {
         try {
-            $qry = "SELECT PV.payment_voucher_id,PV.external_number,PV.transaction_date,PV.total_amount,S.supplier_name,P.payee_name,B.branch_name FROM payment_vouchers PV LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN branches B ON PV.branch_id = B.branch_id";
+            $qry = "SELECT PV.payment_voucher_id,PV.external_number,PV.transaction_date,PV.total_amount,S.supplier_name,P.payee_name,B.branch_name,PV.payee_name AS not_applicable_payee FROM payment_vouchers PV LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN branches B ON PV.branch_id = B.branch_id";
             $result = DB::select($qry);
             if ($result) {
                 return response()->json(['success' => true, 'data' => $result]);
@@ -225,13 +232,26 @@ class PaymentVoucherController extends Controller
             }
 
             // $pv_item = PatmentVoucherItems::where("payment_voucher_id","=",$id)->get();
-            $pv_item = DB::select("SELECT GL.account_code,PVI.description,PVI.amount,PVI.gl_account_analysis_id FROM payment_voucher_items PVI LEFT JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id WHERE PVI.payment_voucher_id = $id");
+            $pv_item = DB::select("SELECT GL.account_code,GL.account_title AS account_name,GLA.gl_account_analyse_name,PVI.description,PVI.amount,PVI.gl_account_analysis_id FROM payment_voucher_items PVI LEFT JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id LEFT JOIN gl_account_analyses GLA ON GL.account_id = GLA.account_id  WHERE PVI.payment_voucher_id = $id");
 
-            $pv_cheques = DB::select("SELECT * FROM payment_voucher_cheques WHERE payment_voucher_cheques.payment_voucher_id = $id");
-            $pv_slips =  DB::select("SELECT * FROM payment_voucher_bank_slips WHERE payment_voucher_cheques.payment_voucher_id = $id");
-            
+            $pv_cheques = DB::select("SELECT
+	payment_voucher_cheques.*,
+	B.bank_name,
+	BB.bank_branch_name
+		
+FROM
+	payment_voucher_cheques
+INNER JOIN
+	banks B ON payment_voucher_cheques.bank_id = B.bank_id
+INNER JOIN 
+	bank_branches BB ON payment_voucher_cheques.bank_branch_id = payment_voucher_cheques.bank_branch_id
+
+WHERE
+	payment_voucher_cheques.payment_voucher_id = $id");
+            $pv_slips =  DB::select("SELECT * FROM payment_voucher_bank_slips WHERE payment_voucher_bank_slips.payment_voucher_id = $id");
+
             if ($pv) {
-                return response()->json(['success' => true, 'pv' => $pv, 'pv_item' => $pv_item, 'sup_code' => $s_code, 'pv_cheque' => $pv_cheques,'pv_slip' => $pv_slips]);
+                return response()->json(['success' => true, 'pv' => $pv, 'pv_item' => $pv_item, 'sup_code' => $s_code, 'pv_cheque' => $pv_cheques, 'pv_slip' => $pv_slips]);
             } else {
                 return response()->json(['success' => false, 'data' => []]);
             }
@@ -251,9 +271,14 @@ class PaymentVoucherController extends Controller
             // $PaymentVoucher->internal_number = IntenelNumberController::getNextID();
             //  $PaymentVoucher->external_number =  $externalNumber;
             //$PaymentVoucher->transaction_date = Carbon::now();
-            if($request->input('cmbPaymentMethod') == 2){
-                if(!chequeNumberController::validateChequeNo($request->input('cmbPaymentMethod'))){
-                    return response()->json(["cheque"=>"invalidChq"]);
+
+            $transDate = $request->input('transDate');
+            $date = new DateTime($transDate);
+            $formattedDate = $date->format('Y-m-d');
+
+            if ($request->input('cmbPaymentMethod') == 2) {
+                if (!chequeNumberController::validateChequeNo($request->input('cmbPaymentMethod'))) {
+                    return response()->json(["cheque" => "invalidChq"]);
                 }
             }
             if ($request->input('option') == 1) {
@@ -269,6 +294,7 @@ class PaymentVoucherController extends Controller
             $PaymentVoucher->remarks = $request->input('remarks');
             $PaymentVoucher->description = $request->input('description');
             $PaymentVoucher->status = 0;
+            $PaymentVoucher->transaction_date = $formattedDate;
             if ($PaymentVoucher->update()) {
                 $payment_voucher = PaymentVoucherItems::where("payment_voucher_id", "=", $id)->delete();
                 foreach ($collection as $i) {
@@ -284,17 +310,16 @@ class PaymentVoucherController extends Controller
                     $PaymentVoucherItems->save();
                 }
 
-                $existing_cheque = PaymentVoucherCheque::where("payment_voucher_id","=",$id)->delete();
-                $existing_slip = PaymentVoucherBankSlip::where("payment_voucher_id","=",$id);
+                $existing_cheque = PaymentVoucherCheque::where("payment_voucher_id", "=", $id)->delete();
+                $existing_slip = PaymentVoucherBankSlip::where("payment_voucher_id", "=", $id);
                 if ($PaymentVoucher->payment_method_id == 2) {
-                    
+
                     $this->saveCheque($request->input('single_cheque'), $PaymentVoucher);
                 }
 
                 if ($PaymentVoucher->payment_method_id == 7) {
                     $this->saveBankSlip($request->input('payment_slip'), $PaymentVoucher);
                 }
-
             }
 
             return response()->json(['success' => true]);
@@ -336,9 +361,9 @@ class PaymentVoucherController extends Controller
         }
     }
 
-    public function get_gl_account_name($id){
+    public function get_gl_account_name($id)
+    {
         $acc_ = gl_account::find($id);
-        return response()->json(["data"=>$acc_->account_title]);
-
+        return response()->json(["data" => $acc_->account_title]);
     }
 }

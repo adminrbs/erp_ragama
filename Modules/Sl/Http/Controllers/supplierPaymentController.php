@@ -213,9 +213,8 @@ class supplierPaymentController extends Controller
                 }
 
              
-
-                if ($setOffAmountSum < $amountFloat) {
-                   
+                //dd($amountFloat ." && ".$setOffAmountSum);
+                if (abs(floatval($setOffAmountSum) - floatval($amountFloat)) > 0.0001) {
                     return response()->json(["msg" => "advanceError"]);
                 }
             }
@@ -486,12 +485,16 @@ class supplierPaymentController extends Controller
             supplier_payment_cheques.banking_date,
             supplier_payment_cheques.cheque_number,
             suppliers.supplier_name,
-            CASE
-        WHEN supplier_payments.receipt_method_id = 1 THEN 'cash'
-        ELSE 'cheque'
-    END AS payment_mode FROM supplier_payments
+           CASE
+    WHEN supplier_payments.receipt_method_id = 1 THEN 'cash'
+    WHEN supplier_payments.receipt_method_id = 2 THEN 'cheque'
+    WHEN supplier_payments.receipt_method_id = 5 THEN 'credit card'
+    WHEN supplier_payments.receipt_method_id = 7 THEN 'bank transfer'
+    ELSE 'other'
+END AS payment_mode
+ FROM supplier_payments
             LEFT JOIN supplier_payment_cheques ON supplier_payments.supplier_payment_id = supplier_payment_cheques.supplier_payment_id
-            INNER JOIN suppliers ON supplier_payments.supplier_id = suppliers.supplier_id ORDER BY supplier_payments.external_number DESC";
+            INNER JOIN suppliers ON supplier_payments.supplier_id = suppliers.supplier_id ORDER BY supplier_payments.receipt_date DESC";
             $data = DB::select($query);
             return response()->json(["status" => true, "data" => $data]);
         } catch (Exception $ex) {

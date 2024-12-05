@@ -26,7 +26,7 @@
     <div class="card mt-2">
         <div class="card">
             <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-                <h5 class="mb-0">Cheque Collection By Head Office</h5>
+                <h5 class="mb-0">Cheque Received From Office(SR)</h5>
             </div>
             <div class="row" id="top_border">
             <div class="col-md-2" style="margin-left: 10px;margin-top: 10px">
@@ -66,15 +66,8 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Reference #</th>
-                                <th>Customer</th>
                                 <th style="text-align: right;">Amount</th>
-                                <th>CHQ No</th>
-                                <th>CHQ Date</th>
-                                <th>Bank</th>
-                                <th>Branch</th>
-                                
-                                <th>Book</th>
-                                <th>Page</th>
+                                <th>Info</th>
                                 <th>Action</th>
 
                             </tr>
@@ -95,6 +88,65 @@
 
 </div>
 <!-- /content area -->
+
+
+
+
+
+<style>
+    .highlight-row {
+        color: red !important;
+    }
+
+    .table-zebra tr:nth-child(even) {
+        background-color: #F6F6F6;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade modal-md" id="infoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <input type="hidden" id="hiddem_lbl">
+            <div class="modal-body">
+                <div class="row">
+                    <!-- First Card -->
+                    <div class="col-12 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Receipt Table</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table datatable-fixed-both-getdata table-zebra" id="gettable">
+                                    <thead>
+                                        <tr>
+                                            <th style="display:none;">Reference No</th>
+                                            <th>Bank</th>
+                                            <th>Branch</th>
+                                            <th>Cheque no</th>
+                                            <th style="text-align:right;">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Add dynamic rows here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 @section('center-scripts')
