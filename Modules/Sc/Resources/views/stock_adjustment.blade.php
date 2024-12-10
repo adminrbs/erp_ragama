@@ -177,6 +177,7 @@
                                                 <th>Avl. Qty</th>
                                                 <th>Set Off Qty</th>
                                                 <th>Set off</th>
+                                                <th>Expire Date</th>
                                                 <th style="width: 120px;">Button</th>
                                             </tr>
                                         </thead>

@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Prc\Http\Controllers\BonusClaimController;
 use Modules\Prc\Http\Controllers\BonusClaimReportController;
+use Modules\Prc\Http\Controllers\BonusClaimSummeryReportController;
 use Modules\Prc\Http\Controllers\GoodReceivedController;
 use Modules\Prc\Http\Controllers\GoodReceivedReportController;
 use Modules\Prc\Http\Controllers\GoodReceivedReturnController;
@@ -185,7 +186,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     Route::get('/poHelpReportNew/{filters}',[PoHelpNewReport::class,'poHelpReport']);
     Route::get('/good_receive_summery_report/{filters}',[GoodsReceiveSummeryReportController::class,'goods_receive_summery_report']);
     Route::get('/goods_return_summery_report/{filters}',[GoodsReturnSummeryReportController::class,'goods_return_summery_report']);
-
+    Route::get('/bonusClaimSummeryReport/{filters}',[BonusClaimSummeryReportController::class,'bonusClaimSummeryReport']);
     //bonus claim
     Route::get('/bonus_claim',function(){
         return view('prc::bonus_claim');

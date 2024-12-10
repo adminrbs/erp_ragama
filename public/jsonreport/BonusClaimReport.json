@@ -76,34 +76,25 @@
                         },
                         "table": {
                             "header": [
+                                
                                 [
                                     {
-                                        "text": "supplier_id",
+                                        "text": "id",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 40,
-                                        "visible": false
+                                        "width": 120,
+                                        "visible":false
                                     }
                                 ],
-                               
-                               
-                               
-                                [
-                                    {
-                                        "text": "supplier_name",
-                                        "align": "left",
-                                        "format": "text",
-                                        "width": 40,
-                                        "visible": false
-                                    }
-                                ],
+                              
                                
                                 [
                                     {
                                         "text": "Reference No",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 120
+                                        "width": 120,
+                                        "visible":false
                                     }
                                 ],
                                 [
@@ -111,12 +102,22 @@
                                         "text": "Date",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 80
+                                        "width": 80,
+                                        "visible":false
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Invoice No",
+                                        "text": "invoice",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 80,
+                                        "visible":false
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Item Code",
                                         "align": "left",
                                         "format": "text",
                                         "width": 150
@@ -124,28 +125,28 @@
                                 ],
                                 [
                                     {
-                                        "text": "Collector",
+                                        "text": "Item Name",
                                         "align": "left",
                                         "format": "text",
-                                        "width": 100,
-                                        "visible":false
+                                        "width": 250
+                                        
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "INV Date",
-                                        "align": "left",
-                                        "format": "text",
+                                        "text": "QTY",
+                                        "align": "right",
+                                        "format": "number",
                                         "width": 80
                                     }
                                 ],
                                 
                                 [
                                     {
-                                        "text": "Gap",
-                                        "align": "center",
-                                        "format": "text",
-                                        "width": 50
+                                        "text": "Price",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 120
                                     }
                                 ],
                                 [
@@ -153,53 +154,20 @@
                                         "text": "Amount",
                                         "align": "right",
                                         "format": "number",
-                                        "width": 100
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Total Paid",
-                                        "align": "right",
-                                        "format": "number",
-                                        "width": 100
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Return Amount",
-                                        "align": "right",
-                                        "format": "number",
-                                        "width": 100,
-                                        "visible":false
-                                    }
-                                ],
-                               
-                                [
-                                    {
-                                        "text": "Paid Amount",
-                                        "align": "right",
-                                        "width": 100,
-                                        "format": "number"
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Balance",
-                                        "align": "right",
-                                        "width": 100,
-                                        "format": "number"
+                                        "width": 120
                                     }
                                 ]
+                              
                             ],
-                            "body": "@_$cash_audit_tabaledata",
+                            "body": "@_$bonus_tabaledata",
                             "height": "30",
                             "width": "100%",
                             "x": "5",
                             "y": "0",
                             "margin-top": "-10",
                             "sum": [
-                                "Paid Amount","Amount","Total Paid","Return Amount","Balance"
-                            ]
+                               "QTY","Price","Amount"
+                            ]   
                         }
                     }
                     

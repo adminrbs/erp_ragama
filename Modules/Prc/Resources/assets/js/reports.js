@@ -466,6 +466,33 @@ $(document).ready(function () {
             }
            
 
+        }else if(report == "bonusClaimSummeryReport"){
+            var requestData = [
+                
+               
+                { fromDate: $('#txtFromDate').val()},
+                { toDate:  $('#txtToDate').val()},
+                { supplygroup:$('#cmbSupplyGroup').val()},
+                { branch: $('#cmbBranch').val()},
+               
+
+            ];
+            console.log(requestData);
+
+
+            //const jsonArray = JSON.parse(decodeURIComponent(requestData));
+
+            //getviewReport()
+            if($('input[type=checkbox]:checked').length === 0){
+                showWarningMessage('Please select a filter')
+            }else{
+                
+                $('#pdfContainer').attr('src', '/prc/bonusClaimSummeryReport/' + JSON.stringify(requestData));
+                $('#crdReportSearch').hide();
+                    $('#pdfContainer').show();
+                    PRINT_STATUS = true;
+                    $('#pdfContainer').show();
+            }
         }
 
 

@@ -120,6 +120,15 @@
                             "header": [
                                 [
                                     {
+                                        "text": "payment_id",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
                                         "text": "supplier_id",
                                         "align": "left",
                                         "format": "text",
@@ -172,15 +181,7 @@
                                         "width": 70
                                     }
                                 ],
-                                [
-                                    {
-                                        "text": "Invoice Nume=ber",
-                                        "align": "center",
-                                        "format": "text",
-                                       
-                                        "width": 100
-                                    }
-                                ],
+                                
                                
                                 [
                                     {
@@ -190,14 +191,7 @@
                                         "width": 200
                                     }
                                 ],
-                                [
-                                    {
-                                        "text": "Collector",
-                                        "align": "left",
-                                        "format": "text",
-                                        "width": 150
-                                    }
-                                ],
+                               
                                
                                 [
                                     {
@@ -232,14 +226,7 @@
                                         "width": 100
                                     }
                                 ],
-                                [
-                                    {
-                                        "text": "Return Amount",
-                                        "align": "right",
-                                        "format": "number",
-                                        "width": 100
-                                    }
-                                ],
+                              
                                 [
                                     {
                                         "text": "Paid Amount",
@@ -256,11 +243,21 @@
                                         "width": 100
                                     }
                                 ],
+                                
                                 [
                                     {
-                                        "text": "Cheque Amount",
+                                        "text": "Bank branch",
                                         "align": "right",
-                                        "format": "number",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Bank Branch branch",
+                                        "align": "right",
+                                        "format": "text",
                                         "visible": false,
                                         "width": 100
                                     }

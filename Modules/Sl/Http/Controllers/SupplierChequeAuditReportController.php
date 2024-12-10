@@ -54,7 +54,7 @@ class SupplierChequeAuditReportController extends Controller
          }
       }
 
-      $query_modify = ' WHERE  SPC.amount > 0 AND  SP.receipt_method_id = "2" AND ';
+      $query_modify = ' WHERE  SPC.amount < 0 AND  SP.receipt_method_id = "2" AND ';
       if ($fromdate != null && $todate != null) {
          $query_modify .= 'SP.receipt_date BETWEEN "' . $fromdate . '" AND "' . $todate . '" AND';
       }
@@ -73,6 +73,7 @@ class SupplierChequeAuditReportController extends Controller
       }
       $query_modify = preg_replace('/\W\w+\s*(\W*)$/', '$1', $query_modify);
       $qry = 'SELECT
+      SP.supplier_payment_id,
       SP.supplier_id,
 	    S.supplier_name,
 	    SP.external_number,
@@ -80,29 +81,33 @@ class SupplierChequeAuditReportController extends Controller
 		SPC.banking_date,
 		SPC.cheque_number,
 	   SPSD.reference_external_number AS invoice_no,
-	    E.employee_name,
+	    
         CL.trans_date,
 	    DATEDIFF( SP.receipt_date, CL.trans_date ) AS gap,
-	    CL.amount,
+	    ABS(CL.amount),
 	    ( SELECT CL.paidamount FROM creditors_ledger CL WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) AS total_paid,
-	    CL.return_amount,
+	    
 	    SPSD.set_off_amount,
-	    (
-		    ( SELECT CL.amount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) - ( SELECT CL.paidamount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) 
-	    ) AS balance,
-		SPC.amount	
+	    ABS(
+    (SELECT ABS(CL.amount) FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+    -
+    (SELECT CL.paidamount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+) AS balance,
+		SPC.amount,
+      B.bank_name,
+      BB.bank_branch_name	
     FROM
 	    supplier_payments SP
     LEFT JOIN supplier_payment_setoff_data SPSD ON SP.supplier_payment_id = SPSD.supplier_payments_id
     LEFT JOIN suppliers S ON SP.supplier_id = S.supplier_id
-    LEFT JOIN employees E ON SP.collector_id = E.employee_id
+
     LEFT JOIN creditors_ledger CL ON SPSD.creditors_ledger_id = CL.creditors_ledger_id
 		LEFT JOIN supplier_payment_cheques SPC ON SP.supplier_payment_id = SPC.supplier_payment_id
 		LEFT JOIN banks B ON SPC.bank_id = B.bank_id
-		LEFT JOIN bank_branches BB ON SPC.bank_branch_id' . $query_modify;
-dd($qry);
+		LEFT JOIN bank_branches BB ON SPC.bank_branch_id = BB.bank_branch_id' . $query_modify;
+//dd($qry);
       $result = DB::select($qry);
-
+//dd($result );
       $resultsupplier = DB::select("SELECT
 	SP.supplier_payment_id,
 	S.supplier_name,
@@ -139,7 +144,7 @@ FROM
             array_push($cheque_number_array, $supplierid->cheque_number);
             foreach ($result as $supplierdata) {
                //dd($result);
-               if ($supplierdata->cheque_number == $supplierid->cheque_number && $supplierdata->customer_receipt_id == $supplierid->customer_receipt_id) {
+               if ($supplierdata->cheque_number == $supplierid->cheque_number && $supplierdata->supplier_payment_id == $supplierid->supplier_payment_id) {
                   $cheque_amount += (float)$supplierdata->amount;
                   $title_text =  "<strong>Supplier Name : </strong>" . $supplierid->supplier_name . " - <strong>Ref No : </strong>" . $supplierdata->external_number . " - <strong>Receipt Date : </strong>" . $supplierdata->receipt_date . " <br> <strong>Bank : </strong>" . $supplierdata->bank_name . " - <strong>Branch : </strong>" . $supplierdata->bank_branch_name . " - <strong>Cheque No : </strong>" . $supplierdata->cheque_number . " - <strong>Banking Date : </strong>" . $supplierdata->banking_date . " - <strong>Cheque Amount :</strong>" . number_format($cheque_amount, 2);
                   if ($bool) {

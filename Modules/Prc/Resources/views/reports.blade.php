@@ -105,6 +105,14 @@
                                         Goods Return Summary
                                     </label>
                                 </li>
+
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" name="bonusClaimSummeryReport" value="bonusClaimSummeryReport" id="bonusClaimSummeryReport" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                       Bonus Claim Summery
+                                    </label>
+                                </li>
                             </ul>
 
                         </div>

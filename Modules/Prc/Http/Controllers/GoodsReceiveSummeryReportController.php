@@ -49,6 +49,7 @@ class GoodsReceiveSummeryReportController extends Controller
             }
            
         }
+        
         if ($nonNullCount > 1) {
             $query = "SELECT DISTINCT GRN.external_number AS invoice_number ,
             GRN.goods_received_date_time AS Date ,
