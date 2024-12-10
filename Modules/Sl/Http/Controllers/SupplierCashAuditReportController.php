@@ -13,6 +13,7 @@ class SupplierCashAuditReportController extends Controller
 {
     public function supplier_cash_audit_report($search)
     {
+        //dd($search);
         $searchOption = json_decode($search);
         $selectSupplier = $searchOption[0]->selectSupplier;
         $selectSupplygroup = $searchOption[1]->selectSupplygroup;
@@ -79,20 +80,23 @@ class SupplierCashAuditReportController extends Controller
 	    E.employee_name,
         CL.trans_date,
 	    DATEDIFF( SP.receipt_date, CL.trans_date ) AS gap,
-	    CL.amount,
+	    ABS(CL.amount) AS amount,
 	    ( SELECT CL.paidamount FROM creditors_ledger CL WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) AS total_paid,
 	    CL.return_amount,
 	    SPSD.set_off_amount,
-	    (
-		    ( SELECT CL.amount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) - ( SELECT CL.paidamount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) 
-	    ) AS balance 
+	    ABS(
+    (SELECT ABS(CL.amount) FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+    -
+    (SELECT CL.paidamount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+) AS balance
     FROM
 	    supplier_payments SP
-    INNER JOIN supplier_payment_setoff_data SPSD ON SP.supplier_payment_id = SPSD.supplier_payments_id
-    INNER JOIN suppliers S ON SP.supplier_id = S.supplier_id
-    INNER JOIN employees E ON SP.collector_id = E.employee_id
-    INNER JOIN creditors_ledger CL ON SPSD.creditors_ledger_id = CL.creditors_ledger_id;' . $query_modify;
+    LEFT JOIN supplier_payment_setoff_data SPSD ON SP.supplier_payment_id = SPSD.supplier_payments_id
+    LEFT JOIN suppliers S ON SP.supplier_id = S.supplier_id
+    LEFT JOIN employees E ON SP.collector_id = E.employee_id
+    LEFT JOIN creditors_ledger CL ON SPSD.creditors_ledger_id = CL.creditors_ledger_id ' . $query_modify;
 
+//dd($qry);
         $result = DB::select($qry);
 
         $resulsupplier = DB::select('select supplier_id,supplier_name from suppliers');
@@ -101,7 +105,7 @@ class SupplierCashAuditReportController extends Controller
         $customerablearray = [];
         $titel = [];
         $reportViwer = new ReportViewer();
-        $title = "Cash Audit";
+        $title = "Supplier Cash Audit";
         if ($fromdate && $todate) {
             $title .= " From : " . $fromdate . " To : " . $todate;
         }

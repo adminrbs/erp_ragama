@@ -83,9 +83,19 @@ class ChequeAuditReportController2 extends Controller
            // dd($qry);
             $result = DB::select($qry);
             //dd($result);
-            $resulcustomer = DB::select('select customer_receipts.customer_receipt_id,customers.customer_name,CRC.cheque_number 
-            from customer_receipts INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id
-						INNER JOIN customer_receipt_cheques CRC ON customer_receipts.customer_receipt_id = CRC.customer_receipt_id');
+            $resulcustomer = DB::select('SELECT
+	customer_receipts.customer_receipt_id,
+	customers.customer_name,
+	CRC.cheque_number,
+	banks.bank_name,
+	banks.bank_code,
+	bank_branches.bank_branch_code
+FROM
+	customer_receipts
+	INNER JOIN customers ON customer_receipts.customer_id = customers.customer_id
+	INNER JOIN customer_receipt_cheques CRC ON customer_receipts.customer_receipt_id = CRC.customer_receipt_id
+	LEFT JOIN banks ON CRC.bank_id = banks.bank_id
+	LEFT JOIN bank_branches ON CRC.bank_branch_id = bank_branches.bank_branch_id');
             //$resulcustomer = DB::select("SELECT CRC.customer_receipt_id,C.customer_name FROM customer_receipt_cheques CRC INNER JOIN customer_receipts CR ON CRC.customer_receipt_id = CR.customer_receipt_id INNER JOIN customers C ON CR.customer_id = C.customer_id");
             /* $resulcustomer = DB::select("SELECT DISTINCT
 	CRC.external_number,
@@ -115,6 +125,7 @@ GROUP BY
 
             $customerablearray = [];
             $cheque_number_array = [];
+            $cheque_bank_array = [];
             $titel = [];
             $reportViwer = new ReportViewer();
             $title = "Cheque Audit";
@@ -129,9 +140,10 @@ GROUP BY
             $total_balance = 0;
 
             foreach ($resulcustomer as $customerid) {
+                $cheque_data = $customerid->bank_code."-".$customerid->bank_branch_code."-".$customerid->cheque_number;
+                //dd($cheque_data);
 
-
-                if (!in_array($customerid->cheque_number,$cheque_number_array,true)) {
+                if (!in_array($cheque_data,$cheque_number_array,true)) {
                     $table = [];
                     $cheque_amount = 0;
                     $inv_amount = 0;
@@ -139,7 +151,7 @@ GROUP BY
                     array_push($cheque_number_array, $customerid->cheque_number);
                     foreach ($result as $customerdata) {
                         //dd($result);
-                        if ($customerdata->cheque_number == $customerid->cheque_number && $customerdata->customer_receipt_id == $customerid->customer_receipt_id) {
+                        if ($customerdata->cheque_number == $customerid->cheque_number && $customerdata->customer_receipt_id == $customerid->customer_receipt_id && $customerdata->bank_name == $customerid->bank_name) {
                             $cheque_amount += (float)$customerdata->amount;
                             $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Ref No : </strong>" . $customerdata->external_number . " - <strong>Receipt Date : </strong>" . $customerdata->receipt_date . " <br> <strong>Bank : </strong>" . $customerdata->bank_name . " - <strong>Branch : </strong>" . $customerdata->bank_branch_name . " - <strong>Cheque No : </strong>" . $customerdata->cheque_number . " - <strong>Banking Date : </strong>" . $customerdata->banking_date . " - <strong>Cheque Amount :</strong>" . number_format($cheque_amount, 2);
                             if ($bool) {

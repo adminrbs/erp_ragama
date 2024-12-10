@@ -171,7 +171,7 @@ class StockAdjustmentController extends Controller
 
         if ($st_adjustment_item->quantity > 0) {
 
-
+           
 
             $itemhistory_setOff = new item_history_setOff();
             $itemhistory_setOff->internal_number = $st_adjustment->internal_number;
@@ -186,6 +186,10 @@ class StockAdjustmentController extends Controller
             $itemhistory_setOff->whole_sale_price = $st_adjustment_item->whole_sale_price;
             $itemhistory_setOff->retial_price = $st_adjustment_item->retial_price;
             $itemhistory_setOff->cost_price = $st_adjustment_item->cost_price;
+            $itemhistory_setOff->transaction_date = now();
+            $itemhistory_setOff->reference_internal_number = $st_adjustment->internal_number;
+            $itemhistory_setOff->reference_external_number = $st_adjustment->external_number;
+            $itemhistory_setOff->reference_document_number = $st_adjustment->document_number;
             $itemhistory_setOff->save();
         }
     }
@@ -194,7 +198,7 @@ class StockAdjustmentController extends Controller
     {
         $ref_ih_id = $setOff->item_history_setoff_id;
         $reference_ih = item_history_setOff::find($ref_ih_id);
-
+        //dd($reference_ih);
         $itemhistory_setOff = new item_history_setOff();
         $itemhistory_setOff->internal_number = $st_adjustment->internal_number;
         $itemhistory_setOff->external_number = $st_adjustment->external_number;
@@ -209,7 +213,7 @@ class StockAdjustmentController extends Controller
         $itemhistory_setOff->whole_sale_price = $setOff->whole_sale_price;
         $itemhistory_setOff->retial_price = $setOff->retial_price;
         $itemhistory_setOff->cost_price = $setOff->cost_price;
-
+        $itemhistory_setOff->transaction_date = now();
         $itemhistory_setOff->reference_internal_number = $reference_ih->internal_number;
         $itemhistory_setOff->reference_external_number = $reference_ih->external_number;
         $itemhistory_setOff->reference_document_number = $reference_ih->document_number;

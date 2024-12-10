@@ -70,7 +70,8 @@ class TrancationAllocationReportController extends Controller
 				CTAS.reference_external_number AS setoff_from_record,
 				DL_SETOFF.amount, 
 				CTAS.set_off_amount,
-				DL_SETOFF.amount - CTAS.set_off_amount AS balance
+				DL_SETOFF.amount - CTAS.set_off_amount AS balance,
+				DATE(CTA.created_at) AS created_date
 				
 			FROM
 				customer_transaction_alocations CTA
@@ -115,7 +116,7 @@ class TrancationAllocationReportController extends Controller
                         //dd($result);
                         if ($customerdata->customer_transaction_alocation_id == $customerid->customer_transaction_alocation_id && $customerdata->customer_id == $customerid->customer_id) {
                            // $cheque_amount += (float)$customerdata->amount;
-                            $title_text =  "<strong>Ref No : </strong>" . $customerid->external_number . " - <strong>Customer : </strong>" . $customerdata->customer_name . " - <strong>Created By : </strong>" . $customerdata->name ." <strong>Amount :</strong>".$customerdata->receipt_amount;
+                            $title_text =  "<strong>Ref No : </strong>" . $customerid->external_number . " <strong>Date :</strong>".$customerdata->created_date." - <strong>Customer : </strong>" . $customerdata->customer_name . " - <strong>Created By : </strong>" . $customerdata->name ." <strong>Amount :</strong>".$customerdata->receipt_amount;
                             if ($bool) {
                                 array_push($titel, $title_text);
                                // $cheque_amount += (float)$customerdata->amount;

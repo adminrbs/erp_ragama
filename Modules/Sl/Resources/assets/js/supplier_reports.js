@@ -547,9 +547,6 @@ $(document).ready(function () {
                 { fromAge: fromAge },
                 { toAge: toAge },
 
-
-
-
             ];
 
 
@@ -558,6 +555,38 @@ $(document).ready(function () {
 
             //getviewReport()
             $('#pdfContainer').attr('src', '/sl/supplier_cash_audit_report/' + JSON.stringify(requestData));
+
+        }
+        if (report === "supplier_cheque_audit_report") {
+
+
+
+            if (report == null || report == undefined || report == "") {
+                showWarningMessage("Select Filter Option");
+                console.log(report);
+            }
+
+
+            var requestData = [
+
+                //{ selected6: selected6 },
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
+                { selecteBranch: selecteBranch },
+                { cmbgreaterthan: cmbgreaterthan },
+                { fromdate: fromdate },
+                { todate: todate },
+                { fromAge: fromAge },
+                { toAge: toAge },
+
+            ];
+
+
+            console.log(requestData);
+
+
+            //getviewReport()
+            $('#pdfContainer').attr('src', '/sl/supplier_cheque_audit_report/' + JSON.stringify(requestData));
 
         }
         if (report == null || report == undefined) {

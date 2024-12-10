@@ -47,7 +47,48 @@
                 }
             }
         },
-    
+        {
+            "label": {
+                "text": "@_$no_of_cheques",
+                "align": "left",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "16",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
+            "label": {
+                "text": "@_$balance",
+                "align": "left",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "16",
+                    "name": "Tahoma"
+                }
+            }
+        },
         {
             "group": {
                 "header": [
@@ -79,43 +120,7 @@
                             "header": [
                                 [
                                     {
-                                        "text": "customer_id",
-                                        "align": "center",
-                                        "format": "text",
-                                        "visible": false,
-                                        "width": 50
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "customer_name",
-                                        "align": "center",
-                                        "format": "text",
-                                        "visible": false,
-                                        "width": 50
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "receipt_amount",
-                                        "align": "center",
-                                        "format": "text",
-                                        "visible": false,
-                                        "width": 50
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "user",
-                                        "align": "center",
-                                        "format": "text",
-                                        "visible": false,
-                                        "width": 50
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "customer_transaction_alocation_id",
+                                        "text": "supplier_id",
                                         "align": "left",
                                         "format": "text",
                                         "visible": false,
@@ -124,48 +129,123 @@
                                 ],
                                 [
                                     {
-                                        "text": "Reference No",
+                                        "text": "supplier_name",
                                         "align": "center",
                                         "format": "text",
                                         "visible": false,
-                                        "width": 150
+                                        "width": 50
                                     }
                                 ],
-                                
+                                [
+                                    {
+                                        "text": "external_number",
+                                        "align": "right",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 50
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "receipt_date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "banking_date",
+                                        "align": "left",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 120
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "cheque_number",
+                                        "align": "center",
+                                        "format": "text",
+                                        "visible": false,
+                                        "width": 70
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Invoice Nume=ber",
+                                        "align": "center",
+                                        "format": "text",
+                                       
+                                        "width": 100
+                                    }
+                                ],
                                
                                 [
                                     {
-                                        "text": "Set Off Record",
+                                        "text": "Invoice Number",
                                         "align": "left",
                                         "format": "text",
-                                        "visible": true,
-                                        "width": 150
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Set Off From",
-                                        "align": "left",
-                                        "format": "text",
-                                        "visible": true,
-                                        "width": 150
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Amount",
-                                        "align": "right",
-                                        "format": "number",
-                                        "visible": true,
-                                        "width": 150
-                                    }
-                                ],
-                                [
-                                    {
-                                        "text": "Setoff Amount",
-                                        "align": "right",
-                                        "format": "number",
                                         "width": 200
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Collector",
+                                        "align": "left",
+                                        "format": "text",
+                                        "width": 150
+                                    }
+                                ],
+                               
+                                [
+                                    {
+                                        "text": "Invoice Date",
+                                        "align": "right",
+                                        "format": "text",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Age",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Invoice Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                               
+                                [
+                                    {
+                                        "text": "Total Paid",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Return Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
+                                    }
+                                ],
+                                [
+                                    {
+                                        "text": "Paid Amount",
+                                        "align": "right",
+                                        "format": "number",
+                                        "width": 100
                                     }
                                 ],
                                 [
@@ -173,28 +253,28 @@
                                         "text": "Balance",
                                         "align": "right",
                                         "format": "number",
-                                        "width": 200
+                                        "width": 100
                                     }
                                 ],
                                 [
                                     {
-                                        "text": "Date",
-                                        "align": "center",
-                                        "format": "text",
+                                        "text": "Cheque Amount",
+                                        "align": "right",
+                                        "format": "number",
                                         "visible": false,
-                                        "width": 150
+                                        "width": 100
                                     }
                                 ]
                                
                             ],
-                            "body": "@_$allocation_table",
+                            "body": "@_$cheque_audit_tabaledata",
                             "height": "30",
                             "width": "100%",
                             "x": "5",
                             "y": "0",
                             "margin-top": "-10",
                             "sum": [
-                                "Amount","Setoff Amount","Balance"
+                                "Paid Amount","Amount","Total Paid","Return Amount","Balance"
                             ],
                             "group-sum": "@_$route_total",
                             "layout": "fixed"

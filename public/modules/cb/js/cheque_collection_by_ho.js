@@ -40,60 +40,33 @@ const DatatableFixedColumns = function () {
                 },
                 {
                     orderable: false,
-                    width: 80,
+                    width: '100%',
                     targets: 1
                 },
                 {
                     orderable: false,
                     width: 80,
-                    targets: 2
+                    targets: 3
                 },
                 {
                     orderable: false,
                     width: 50,
                     targets: 4
                 },
-                {
-                    orderable: false,
-                    width: 80,
-                    targets: 5
-                },
-                {
-                    orderable: false,
-                    width: 25,
-                    targets: 6
-                },
-                {
-                    orderable: false,
-                    width: 50,
-                    targets: 7,
-
-
-                },
-                {
-                    orderable: false,
-                    width: 25,
-                    targets: 8
-                },
+              
+              
+              
                 {
                     orderable: false,
                     width: 100,
-                    targets: 3,
+                    targets: 2,
                     render: function (data, type, row, meta) {
                         return type === 'display' ? '<div class="text-right">' + data + '</div>' : data;
                     }
 
-                },
-                {
-                    orderable: false,
-                    width: 10,
-                    targets: 9
-                },
-                {
-                    orderable: false,
-                    width: 20,
-                    targets: 10
-                },
+                }
+                
+               
 
             ],
             scrollX: true,
@@ -109,21 +82,13 @@ const DatatableFixedColumns = function () {
 
                 { "data": "date" },
                 { "data": "ref_number" },
-                { "data": "customer" },
                 { "data": "amount" },
-                { "data": "cheque_no" },
-                { "data": "chq_date" },
-                { "data": "bank" },
-                { "data": "branch" },
-
-                { "data": "book" },
-                { "data": "page" },
+                { "data": "info" },
                 { "data": "action" },
             ],
             "stripeClasses": ['odd-row', 'even-row'],
         });
-        table.column(8).visible(false);
-        table.column(9).visible(false);
+       
     };
 
     return {
@@ -154,7 +119,8 @@ $(document).ready(function () {
 
 
     $('#cmbBranch').on('change', function () {
-        loadCustomerReceipts_cheque_ho($(this).val());
+       // loadCustomerReceipts_cheque_ho($(this).val());
+       loadCustomerReceipts_cheque_ho_bundle($(this).val())
         $('#sum_label').text('0.00').addClass('h4');
         $('#row_count').text('0');
     })
@@ -198,7 +164,7 @@ $(document).ready(function () {
 });
 
 //load customer receipts for cash collecion by branch list
-function loadCustomerReceipts_cheque_ho(br_id) {
+/* function loadCustomerReceipts_cheque_ho(br_id) {
     console.log(br_id);
     $.ajax({
         url: '/cb/loadCustomerReceipts_cheque_ho/' + br_id,
@@ -241,9 +207,85 @@ function loadCustomerReceipts_cheque_ho(br_id) {
         complete: function () { }
     })
 
+} */
+
+    //changed to load cheque bundles on 05/12/2024 - Sachin
+    function loadCustomerReceipts_cheque_ho_bundle(br_id) {
+        console.log(br_id);
+        $.ajax({
+            url: '/cb/loadCustomerReceipts_cheque_ho/' + br_id,
+            type: 'get',
+            cache: false,
+            timeout: 800000,
+            beforeSend: function () { },
+            success: function (response) {
+                var dt = response.data;
+    
+                var data = [];
+                for (var i = 0; i < dt.length; i++) {
+                    var cash_check_box = '<input class="form-check-input" type="checkbox" id="' + dt[i].cheque_collection_id + '" onchange="update_status_calculation_cheque_ho(this)">';
+                    var info = '<a href="#" onclick="event.preventDefault(); viewInfo(' + dt[i].cheque_collection_id + ');" class="text-info"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>';
+
+
+                    data.push({
+                        "date": dt[i].created_at,
+                        "ref_number": '<div data-id="' + dt[i].cheque_collection_id + '">' + dt[i].external_number + '</div>',
+                        "amount": parseFloat(dt[i].total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                        "info":info +" "+ dt[i].reciept_count,
+                        "action": cash_check_box,
+    
+                    });
+
+                   
+    
+                }
+    
+                var table = $('#cheque_collection_by_ho_table').DataTable();
+                table.clear();
+                table.rows.add(data).draw();
+    
+            },
+            error: function (error) {
+                console.log(error);
+            },
+            complete: function () { }
+        })
+    
+    }
+
+ function viewInfo(id){
+    $('#infoModal').modal('show');
+    chequeCollectionReciptData(id)
+ }   
+
+function chequeCollectionReciptData(id){
+    var table = $('#gettable');
+    var tableBody = $('#gettable tbody');
+    tableBody.empty()
+    $.ajax({
+        url: '/cb/chequeCollectionReciptData/'+id,
+        type: 'get',
+        async: false,
+        success: function (response) {
+            var dt = response.data;
+            $.each(dt, function (index, item) {
+              
+                var row = $('<tr>');
+                row.append($('<td style="display:none;">').text(item.external_number));
+                row.append($('<td>').text(item.bank_name));
+                row.append($('<td>').text(item.bank_branch_name));
+                row.append($('<td>').text(item.cheque_number));
+                row.append(
+                    $('<td style="text-align:right;">').text(
+                        new Intl.NumberFormat('en-US').format(item.amount)
+                    )
+                );
+                
+                table.append(row);
+            });
+        },
+    })
 }
-
-
 function getBranches() {
     $.ajax({
         url: '/getBranches',
@@ -258,7 +300,7 @@ function getBranches() {
                 });
                 $('#cmbBranch').html(htmlContent);
                 $('#cmbBranch').prop('disabled', true);
-                loadCustomerReceipts_cheque_ho($('#cmbBranch').val());
+                loadCustomerReceipts_cheque_ho_bundle($('#cmbBranch').val());
 
             } else if (data.length > 1) {
                 htmlContent += "<option value=''>Select branch</option>";
@@ -302,10 +344,10 @@ function update_status_calculation_cheque_ho(event) {
     var $div = $second_cell.find('div');
     var receipt_id = $div.data('id');
 
-    var third_cell = $row.find('td:eq(3)');
+    var third_cell = $row.find('td:eq(2)');
     var _amount = third_cell.text();
 
-    var status_cell = $row.find('td:eq(5) input[type="checkbox"]');
+    var status_cell = $row.find('td:eq(4) input[type="checkbox"]');
     var status = status_cell.is(':checked') ? 1 : 0;
 
     if ($(event).prop('checked')) {
@@ -396,7 +438,7 @@ function update_chq_ho() {
             var message = response.message;
             if (response.status) {
                 showSuccessMessage('Record updated');
-                loadCustomerReceipts_cheque_ho($('#cmbBranch').val());
+                loadCustomerReceipts_cheque_ho_bundle($('#cmbBranch').val());
                 $('#sum_label').text(0.00).addClass('h4');
                 $('#row_count').text(0);
             } else {

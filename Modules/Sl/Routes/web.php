@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Sl\Http\Controllers\CreditorAgeAnalysisController;
 use Modules\Sl\Http\Controllers\SupOutstandingcontroller;
 use Modules\Sl\Http\Controllers\SupplierCashAuditReportController;
+use Modules\Sl\Http\Controllers\SupplierChequeAuditReportController;
 use Modules\Sl\Http\Controllers\SupplierCreditController;
 use Modules\Sl\Http\Controllers\SupplierDebitNoteController;
 use Modules\Sl\Http\Controllers\SupplierLedgerReportController;
@@ -91,4 +92,5 @@ Route::prefix('sl')->middleware(['is.logged'])->group(function() {
     Route::get('/supplier_Ledger_reports/{filters}',[SupplierLedgerReportController::class,'supplier_Ledger_reports']);
     Route::get('/creditorAgeAnalysisReport/{filters}',[CreditorAgeAnalysisController::class,'creditorAgeAnalysisReport']);
     Route::get('/supplier_cash_audit_report/{filters}',[SupplierCashAuditReportController::class,'supplier_cash_audit_report']);
+    Route::get('/supplier_cheque_audit_report/{filters}',[SupplierChequeAuditReportController::class,'supplier_cheque_audit_report']);
 });

@@ -347,7 +347,22 @@ WHERE
     public function paymentVoucher_Receipt($id)
     {
         try {
-            $header_qry = DB::select("SELECT PV.external_number,PV.transaction_date, B.branch_name,P.payee_name,S.supplier_name,CPM.customer_payment_method FROM payment_vouchers PV INNER JOIN branches B ON PV.branch_id = B.branch_id LEFT JOIN payees P ON PV.payee_id = P.payee_id LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id INNER JOIN customer_payment_modes CPM ON PV.payment_method_id = CPM.customer_payment_method_id WHERE PV.payment_voucher_id = $id");
+            $header_qry = DB::select("SELECT
+    PV.external_number,
+    PV.transaction_date,
+    IFNULL(PV.payee_name, P.payee_name) AS payee_name,
+    B.branch_name,
+    S.supplier_name,
+    CPM.customer_payment_method 
+FROM
+    payment_vouchers PV
+    INNER JOIN branches B ON PV.branch_id = B.branch_id
+    LEFT JOIN payees P ON PV.payee_id = P.payee_id
+    LEFT JOIN suppliers S ON PV.supplier_id = S.supplier_id
+    INNER JOIN customer_payment_modes CPM ON PV.payment_method_id = CPM.customer_payment_method_id 
+WHERE
+    PV.payment_voucher_id = $id
+");
             $item_qry = DB::select("SELECT GL.account_code,PVI.description,PVI.amount FROM payment_voucher_items PVI INNER JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id WHERE PVI.payment_voucher_id = $id");
             return response()->json([
                 'header' => $header_qry,

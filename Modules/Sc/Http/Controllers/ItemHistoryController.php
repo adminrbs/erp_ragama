@@ -195,7 +195,7 @@ FROM
                 }               
                 if ($quryModify != "") {
                     $quryModify = rtrim($quryModify, 'AND OR ');
-                    $query = $query . " where item_history_set_offs.quantity>0 AND " . $quryModify . 'GROUP BY items.Item_id';
+                    $query = $query . " where item_history_set_offs.quantity>0 AND " . $quryModify . ' GROUP BY items.Item_id ORDER BY items.Item_code ASC';
                 }
                 //dd($query);
                 $result = DB::select($query);
