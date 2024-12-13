@@ -3,6 +3,9 @@
 namespace Modules\Sd\Http\Controllers;
 
 use App\Http\Controllers\IntenelNumberController;
+use App\Http\Controllers\ReferenceIdController;
+use App\Models\DebtorsLedger;
+use App\Models\DebtorsLedgerSetoff;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -25,7 +28,9 @@ use Modules\Sd\Entities\sales_order;
 use Modules\Sd\Entities\SalesInvoiceItemSetoff;
 use Modules\Sd\Entities\supplierPaymentMethod;
 use Illuminate\Support\Facades\Session;
+use Modules\Cb\Entities\Customer;
 use Modules\Cb\Entities\CustomerReceipt;
+use Modules\Cb\Entities\CustomerReceiptSetoffData;
 use Modules\Sd\Entities\sales_invoice_return_request;
 use Modules\Sd\Entities\sfa_return_request_item;
 
@@ -419,6 +424,10 @@ class SalesInvoiceController extends Controller
                         $S_order->order_status_id = 2;
                         $S_order->update();
                     }
+
+                    if($Sales_invoice->payment_method_id == 2){
+                        $this->saveCustomerReceipt($Sales_invoice);
+                    }   
                     DB::commit();
                     return response()->json(["status" => true, "primaryKey" => $Sales_invoice->sales_invoice_Id]);
                 } else {
@@ -491,67 +500,6 @@ class SalesInvoiceController extends Controller
         }
     }
 
-
-
-
-
-    //update sales invoice draft
-    public function updateSalesInvoiceDraft(Request $request, $id)
-    {
-        try {
-
-
-            $collection = json_decode($request->input('collection'));
-            $Sales_invoice = sales_Invoice_draft::find($id);
-            $Sales_invoice->internal_number = 0000;
-            $Sales_invoice->external_number = $request->input('LblexternalNumber'); // need to change 
-            $Sales_invoice->order_date_time = $request->input('invoice_date_time');
-            $Sales_invoice->branch_id = $request->input('cmbBranch');
-            $Sales_invoice->location_id = $request->input('cmbLocation');
-            $Sales_invoice->employee_id = $request->input('cmbEmp');
-            $Sales_invoice->customer_id = $request->input('customerID');
-            $Sales_invoice->total_amount = $request->input('grandTotal');
-            /* $Purchase_order->Approval_status = $request->input('Approval_status'); */
-            $Sales_invoice->discount_percentage = $request->input('txtDiscountPrecentage');
-            $Sales_invoice->discount_amount = $request->input('txtDiscountAmount');
-            $Sales_invoice->payment_term_id = $request->input('cmbPaymentTerm');
-            $Sales_invoice->remarks = $request->input('txtRemarks');
-            $Sales_invoice->delivery_instruction = $request->input('txtDeliveryInst');
-
-
-            if ($Sales_invoice->update()) {
-                $deleteRequestItem = sales_Invoice_item_draft::where("sales_invoice_Id", "=", $id)->delete();
-                //looping array
-                foreach ($collection as $i) {
-                    /*  $date = date('Y-m-d H:i:s'); */
-                    $item = json_decode($i);
-                    $SI_item = new sales_Invoice_item_draft();
-                    $SI_item->sales_invoice_Id = $Sales_invoice->sales_invoice_Id;
-                    $SI_item->internal_number = 0000;
-                    $SI_item->external_number = $Sales_invoice->external_number; // need to change
-                    $SI_item->item_id = $item->item_id;
-                    $SI_item->item_name = $item->item_name;
-                    $SI_item->quantity = -$item->qty;
-                    $SI_item->free_quantity = -$item->free_quantity;
-                    $SI_item->unit_of_measure = $item->uom;
-                    $SI_item->package_unit = $item->PackUnit;
-                    $SI_item->package_size = $item->PackSize;
-                    $SI_item->price = $item->price;
-                    $SI_item->discount_percentage = $item->discount_percentage;
-                    $SI_item->discount_amount = $item->discount_amount;
-
-                    $SI_item->save();
-                }
-
-
-                return response()->json(["status" => true]);
-            } else {
-                return response()->json(["status" => false]);
-            }
-        } catch (Exception $ex) {
-            return $ex;
-        }
-    }
 
     //get invoice data
     /* public function getSalesInvoiceData(Request $request)
@@ -1487,13 +1435,14 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
         }
     }
 
-    public function saveCustomerReceipt($invoice){
-        try{
+    public function saveCustomerReceipt($invoice)
+    {
+        try {
             $br_id = $invoice->branch_id;
             $branchdata = DB::table('branches')->where('branch_id', $br_id)->get();
             $customer_receipt = new CustomerReceipt();
             $customer_receipt->internal_number = IntenelNumberController::getNextID();
-            $customer_receipt->external_number = $branchdata[0]->prefix.$this->createExternal_number();
+            $customer_receipt->external_number = $branchdata[0]->prefix . $this->createExternal_number($invoice->branch_id);
             $customer_receipt->branch_id = $invoice->branch_id;
             $customer_receipt->customer_id = $invoice->customer_id;
             $customer_receipt->collector_id = Auth::user()->id;
@@ -1501,9 +1450,95 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
             $customer_receipt->receipt_date = date('Y-m-d');
             $customer_receipt->receipt_method_id = $invoice->receipt_method_id;
             $customer_receipt->gl_account_id = 0; // need to change
-         //   $customer_receipt->amount = $cus_recpt->amount;
-        }catch(Exception $ex){
+            $customer_receipt->amount = $invoice->total_amount;
+            $customer_receipt->discount = 0;
+
+            $customer_receipt->round_up = 0;
+            $customer_receipt->advance = 0;
+            $customer_receipt->document_number = 500;
+
+
+           
+            if ($customer_receipt->save()) {
+               
+               
+                    /* $dl = DebtorsLedger::find($data->debtors_ledger_id);
+                    $dl_amount = $dl->amount; */
+                    //$bal_amount = floatval($data->dl_amount) - floatval($data->paidamount);
+                 /*    $bal_amount = floatval($dl_amount) - floatval($data->set_off_amount); */
+                    $dl_id = DebtorsLedger::where("external_number","=",$invoice->external_number);
+                    $customer_receipt_set_off_data = new CustomerReceiptSetoffData();
+                    $customer_receipt_set_off_data->customer_receipt_id = $customer_receipt->customer_receipt_id;
+                    $customer_receipt_set_off_data->internal_number = $customer_receipt->internal_number;
+                    $customer_receipt_set_off_data->external_number = $customer_receipt->external_number;
+                    $customer_receipt_set_off_data->reference_internal_number = $invoice->internal_number; //debtors leger details
+                    $customer_receipt_set_off_data->reference_external_number = $invoice->external_number;
+                    $customer_receipt_set_off_data->reference_document_number = $invoice->document_number;
+                    $customer_receipt_set_off_data->amount = $invoice->total_amount; 
+                    $customer_receipt_set_off_data->paid_amount = $invoice->total_amount;  
+                    $customer_receipt_set_off_data->balance = $customer_receipt_set_off_data->amount - $customer_receipt_set_off_data->paid_amount;  
+                    $customer_receipt_set_off_data->set_off_amount = $invoice->total_amount; 
+                    $customer_receipt_set_off_data->debtors_ledger_id = $dl_id->debtors_ledger_id;
+                    $customer_receipt_set_off_data->date = date('Y-m-d');
+
+                    //update dl paid amount
+                    if ($customer_receipt_set_off_data->save()) {
+                        $dl_id->paidamount = $dl_id->paidamount +  $customer_receipt_set_off_data->set_off_amount;
+                        $dl_id->update();
+
+
+                        //add new dl record
+                        $customer = Customer::find($customer_receipt->customer_id);
+                        $deb_ledger = new DebtorsLedger();
+                        $deb_ledger->internal_number =  $customer_receipt->internal_number;
+                        $deb_ledger->external_number = $customer_receipt->external_number;
+                        $deb_ledger->document_number = $customer_receipt->document_number;
+                        $deb_ledger->trans_date = $customer_receipt->receipt_date;
+                        $deb_ledger->description = "Customer Receipt";
+                        $deb_ledger->branch_id = $customer_receipt->branch_id;
+                        $deb_ledger->customer_id = $customer_receipt->customer_id;
+                        $deb_ledger->customer_code = $customer->customer_code;
+                        /*  $deb_ledger->amount = -$cus_recpt->amount;
+                                    $deb_ledger->paidamount = -$cus_recpt->amount; */
+                        if ($deb_ledger->save()) {
+                            $deb_ledger_setOff = new DebtorsLedgerSetoff();
+                            $deb_ledger_setOff->internal_number =  $customer_receipt->internal_number;
+                            $deb_ledger_setOff->external_number = $customer_receipt->external_number;
+                            $deb_ledger_setOff->document_number = $customer_receipt->document_number;
+                            $deb_ledger_setOff->reference_internal_number = $customer_receipt_set_off_data->reference_internal_number;
+                            $deb_ledger_setOff->reference_external_number = $customer_receipt_set_off_data->reference_external_number;
+                            $deb_ledger_setOff->reference_document_number = $customer_receipt_set_off_data->reference_document_number;
+                            $deb_ledger_setOff->trans_date = $deb_ledger->trans_date;
+                            $deb_ledger_setOff->description = $deb_ledger->description;
+                            $deb_ledger_setOff->branch_id =  $deb_ledger->branch_id;
+                            $deb_ledger_setOff->customer_id = $deb_ledger->customer_id;
+                            $deb_ledger_setOff->customer_code = $deb_ledger->customer_code;
+                            $deb_ledger_setOff->amount = -$customer_receipt_set_off_data->set_off_amount;
+                            $deb_ledger_setOff->save();
+                        }
+                    }
+                
+            }
+        } catch (Exception $ex) {
             return $ex;
         }
+    }
+
+    public function createExternal_number($branch)
+    {
+        /* $exter_num = $this->reference_number->CustomerReceipt_referenceID('customer_receipts', 500); */
+        $exter_num = ReferenceIdController::CustomerReceipt_referenceID_sales_invoice_cash('customer_receipts', 500, $branch);
+        $id_ = $exter_num['id'];
+        $prefix_ = $exter_num['prefix'];
+
+        $pattern = [
+            1 => "0000",
+            2 => "000",
+            3 => "00",
+            4 => "0",
+
+        ];
+        $id_len = strlen($id_);
+        return $prefix_ . $pattern[$id_len] . $id_;
     }
 }

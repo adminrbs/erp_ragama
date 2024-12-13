@@ -23,7 +23,7 @@ use Modules\Cb\Entities\sfa_receipt;
 use Modules\Cb\Entities\SfaReceiptCheques;
 use Modules\Cb\Entities\SfaReceiptSetOffData;
 
-class CashBundleController extends Controller
+class CashBundleControllerOld extends Controller
 {
 
 
@@ -218,7 +218,9 @@ class CashBundleController extends Controller
                     $customer_receipt->collector_id = $cus_recpt->collector_id;
                     $customer_receipt->cashier_id = Auth::user()->id;
                     $customer_receipt->receipt_date = date('Y-m-d');
-                    $customer_receipt->receipt_method_id = $cus_recpt->receipt_method_id;
+                    
+                            foreach ($cus_recpt_data as $data) {
+                                $dl = DebtorsLedger::find($data->$customer_receipt->receipt_method_id = $cus_recpt->receipt_method_id;
                     $customer_receipt->gl_account_id = 0; // need to change
                     $customer_receipt->amount = $cus_recpt->amount;
                     if ($cus_recpt->discount) {
@@ -237,9 +239,7 @@ class CashBundleController extends Controller
                     if ($customer_receipt->save()) {
 
                         /* $customer_receipt->receipt_status = 0; */
-                       
-                            foreach ($cus_recpt_data as $data) {
-                                $dl = DebtorsLedger::find($data->debtors_ledger_id);
+                        if ($customer_receipt->save()) {debtors_ledger_id);
                                 $dl_amount = $dl->amount;
                                 //$bal_amount = floatval($data->dl_amount) - floatval($data->paidamount);
                                 $bal_amount = floatval($dl_amount) - floatval($data->set_off_amount);
@@ -295,7 +295,7 @@ class CashBundleController extends Controller
                                     }
                                 }
                             }
-                        
+                        }
                     }
                 }
 

@@ -39,7 +39,7 @@ and open the template in the editor.
 
                 <div class="mb-4 mt-3" style="text-align: center;">
                     <h1>Pharma ERP</h1>
-                    <small>- Kandana Food and Drugs -</small>
+                    <small></small>
                 </div>
 
 

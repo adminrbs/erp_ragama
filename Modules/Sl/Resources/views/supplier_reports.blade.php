@@ -113,6 +113,13 @@
                                     </label>
                                 </li>
                                 <br>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="bank_transfer_report" id="bank_transfer_report" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Bank Transfer Report
+                                    </label>
+                                </li>
                             </ul>
 
                         </div>

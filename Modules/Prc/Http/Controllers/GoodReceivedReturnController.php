@@ -823,6 +823,7 @@ class GoodReceivedReturnController extends Controller
             IT.package_unit,
             IT.previouse_purchase_price,
             IT.manage_batch,
+            IT.manage_expire_date,
             (SELECT IF(ISNULL(SUM(quantity-setoff_quantity)), 0, SUM(quantity-setoff_quantity)) FROM item_history_set_offs WHERE item_id='" . $item_id . "' AND branch_id='" . $branch_id . "' AND location_id='" . $location_id . "' AND quantity>0  AND price_status = 0) AS Balance
         FROM
             items IT

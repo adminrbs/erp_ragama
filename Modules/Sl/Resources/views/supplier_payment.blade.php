@@ -59,16 +59,16 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                <label>Balance to be set off</label>
-                                <input type="number" class="form-control form-control-sm math-abs" id="txtBalanceToSetoff" style="text-align: right;" value="0.00" disabled>
+                                    <label>Balance to be set off</label>
+                                    <input type="number" class="form-control form-control-sm math-abs" id="txtBalanceToSetoff" style="text-align: right;" value="0.00" disabled>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                <label>Branch</label>
-                                <select class="form-control form-control-sm" id="cmbBranch"></select>
+                                    <label>Branch</label>
+                                    <select class="form-control form-control-sm" id="cmbBranch"></select>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                 <div class="col-md-12">
                                     <label class="compulsory-field">GL Account</label>
                                     <select class="form-control form-control-sm compulsory-field" id="cmbGLAccount">
-                                       <!--  <option value="1">Cash Collection</option>
+                                        <!--  <option value="1">Cash Collection</option>
                                         <option value="2">Cheque In Hand</option>
                                         <option value="3">Bank Account - 12525555</option> -->
                                     </select>
@@ -101,17 +101,17 @@
                                     <input type="number" class="form-control form-control-sm compulsory-field math-abs" id="txtAmount" style="text-align: right;" value="0.00">
                                 </div>
                                 <div class="col-md-3">
-                                            <label>Discount</label>
-                                            <input type="number" class="form-control form-control-sm math-abs" id="txtDiscount" style="text-align: right;" value="0.00">
-                                        </div>
-                                        <div class="col-md-2">
-                                        <label>Round up</label>
-                                        <input type="number" class="form-control form-control-sm" id="txtRound_up" style="text-align: right;" value="0.00">
-                                        </div>
-                                        <div class="col-md-1">
-                                            <br>
-                                        <input type="checkbox" id="checkAdvancePayment" name="advancePayment">Advance Payment
-                                        </div>
+                                    <label>Discount</label>
+                                    <input type="number" class="form-control form-control-sm math-abs" id="txtDiscount" style="text-align: right;" value="0.00">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Round up</label>
+                                    <input type="number" class="form-control form-control-sm" id="txtRound_up" style="text-align: right;" value="0.00">
+                                </div>
+                                <div class="col-md-1">
+                                    <br>
+                                    <input type="checkbox" id="checkAdvancePayment" name="advancePayment">Advance Payment
+                                </div>
                             </div>
                         </div>
 
@@ -120,15 +120,15 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-12">
-                                           
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
-                                        
+
                                         <div class="col-md-6">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -138,11 +138,11 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    
+
                                 </div>
                                 <div class="col-md-6">
                                     <br>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -163,6 +163,9 @@
                             </li>
                             <li class="nav-item rbs-nav-item">
                                 <a href="#cheques" class="nav-link" aria-selected="false" hidden>Multiple Cheques</a>
+                            </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a id="tab-bank-slip" href="#bankSlip" class="nav-link" aria-selected="false" hidden>Bank Slip</a>
                             </li>
 
 
@@ -303,6 +306,29 @@
 
                             </div>
                             <!-- End of Cheques tab -->
+
+                            <!-- Bank slip -->
+                            <div class="tab-pane fade" id="bankSlip">
+
+                                <div class="row">
+                                    <div class="col-md-2 mt-2">
+                                        <label>Ref No</label>
+                                        <input type="text" id="txtSlipRef" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <label for="time" class="form-label">Time</label>
+                                        <input type="time" class="form-control" id="tmSliptime" name="time" step="3600" style="height: 30px;">
+                                    </div>
+
+                                    <div class="col-md-3 mt-2">
+                                        <label for="slipDate" class="form-label">Slip Date</label>
+                                        <input type="date" id="dtSLipDate" name="slipDate" class="form-control form-control-sm">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- End slip -->
 
                         </div>
                         <div class="row">

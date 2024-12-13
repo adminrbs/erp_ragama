@@ -411,7 +411,8 @@ function getorderItems(cus_,id, date) {
                 row.append($('<td>').css('width', '250px').append('<div>' + item.item_name + '</div>'));
                 row.append($('<td>').text(item.Balance));
                 row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;" onchange="cal_model_foc('+cus_+','+item.item_id+',this)">').attr('type', 'text').val(item.quantity)));
-                row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;" disabled>').attr('type', 'text').val(item.free_quantity)));
+                /* row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;" disabled>').attr('type', 'text').val(item.free_quantity))); changed foc to system foc. not order foc  changed by mr janaka on 09/12/2024*/
+                row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;" disabled>').attr('type', 'text').val(item.system_free_quantity)));
                 row.append($('<td>').text(item.unit_of_measure));
                 
                 row.append($('<td style="text-align:right;">').text(item.price));

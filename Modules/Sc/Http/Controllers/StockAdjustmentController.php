@@ -81,6 +81,7 @@ class StockAdjustmentController extends Controller
                     $st_adjustment_item->whole_sale_price = $item->whole_sale_price;
                     $st_adjustment_item->retial_price = $item->retial_price;
                     $st_adjustment_item->batch_number = $item->batch_number;
+                    $st_adjustment_item->expire_date = $item->expire_date;
 
                     $st_adjustment_item->save();
                     //$this->createAndSaveItemHistory($st_adjustment, $st_adjustment_item);

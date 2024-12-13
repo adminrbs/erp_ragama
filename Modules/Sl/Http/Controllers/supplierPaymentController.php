@@ -26,6 +26,7 @@ use Modules\Sl\Entities\supplier;
 use Modules\Sl\Entities\supplier_payment_cheques;
 use Modules\Sl\Entities\supplier_payment_setoff_data;
 use Modules\Sl\Entities\supplier_payments;
+use Modules\Sl\Entities\SupplierPaymentBankSlips;
 use Modules\Sl\Entities\supplierPaymentMethod;
 
 class supplierPaymentController extends Controller
@@ -255,9 +256,14 @@ class supplierPaymentController extends Controller
                 //$this->saveSupplierReceiptData($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $receipt->receipt_date, $receipt->branch_id, $receipt->supplier_id, $request->get('supplier_code'), $receipt_data);
                 //  dd($request->get('single_cheque'));
                 $single_cheque = json_decode($request->get('single_cheque'));
+                $payment_slip = json_decode($request->get('payment_slip'));
                 //dd($single_cheque);
                 if ($request->get('receipt_method_id') == 2) {
                     $this->saveSupplierReceiptCheque($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
+                }
+
+                if ($request->get('receipt_method_id') == 4) {
+                    $this->supplierReceiptsaveBankSLip($receipt, $payment_slip);
                 }
 
 
@@ -273,6 +279,28 @@ class supplierPaymentController extends Controller
     }
 
 
+    public function supplierReceiptsaveBankSLip($receipt,$paymentSlip){
+        try{
+          //  DB::beginTransaction();
+            
+          
+                
+                //$slip_data = json_decode($data);
+                //dd($$data);
+                $slip = new SupplierPaymentBankSlips();
+                $slip->customer_receipt_id = $receipt->customer_receipt_id;
+                $slip->internal_number = $receipt->internal_number;
+                $slip->external_number = $receipt->external_number;
+                $slip->reference = $paymentSlip->cheque_referenceNo;
+                $slip->slip_time = $paymentSlip->slip_time;
+                $slip->slip_date = $paymentSlip->slip_date;
+                $slip->save();
+          // DB::commit(); 
+        }catch (Exception $ex) {
+          //  DB::rollBack();
+            array_push($this->response_data, $ex);
+        }
+    }
 
 
     public function saveSupplierReceiptData($cl,$receipt_id, $internal_number, $external_number, $trans_date, $branch_id, $supplier_id, $supplier_code, $receiptData)

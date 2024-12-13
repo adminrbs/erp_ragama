@@ -180,7 +180,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" }
         ],
         "auto_focus": 0,
-        "hidden_col": [5,9,13,14,17,18,19,20]
+        "hidden_col": [5,9,13,17,18,19,20]
 
     });
 

@@ -127,11 +127,10 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:50px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:55px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "button", "class": "btn btn-primary", "value": "Batch", "style": "max-height:30px;margin-right:20px;", "event": "setOffbybuton(this)", "width": 45 },
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:55px;text-align:right;", "event": "", "width": "*", },
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;text-align:right;margin-left:5px;", "event": "", "width": "*", "disabled": "disabled"},
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);calculation();", "width": 30 }
         ],
         "auto_focus": 0,
-
         "hidden_col": hiddem_col_array,
 
     });
@@ -226,6 +225,7 @@ $(document).ready(function () {
                         "batch_number": arr[i][8].val(),
                         "avl_qty": arr[i][9].val(),
                         "sett_off_qty": arr[i][10].val(),
+                        "expire_date": arr[i][12].val()
 
 
                     }));
@@ -243,6 +243,7 @@ $(document).ready(function () {
                     "batch_number": arr[i][8].val(),
                     "avl_qty": arr[i][9].val(),
                     "sett_off_qty": arr[i][10].val(),
+                    "expire_date": arr[i][12].val()
 
 
                 }));
@@ -517,6 +518,12 @@ function dataChooserEventListener(event, id, value) {
                 $(row_childs[8]).val(response[0].Item_code);
             }
 
+            var expireDateManage = response[0].manage_expire_date;
+            //var batchManage = response[0].manage_batch;
+            if (expireDateManage == 1) {
+               
+                $(row_childs[12]).removeAttr('disabled');
+            }
             $(row_childs[1]).val(response[0].item_Name);
             $(row_childs[3]).val(response[0].package_unit);
             $(row_childs[9]).val(response[0].Balance);

@@ -172,7 +172,8 @@ FROM
             }
          }
          /* $total_balance = $total_balance + $inv_amount; */
-         $formatted_balance = number_format($total_balance, 2, '.', ',');
+         //$formatted_balance = number_format($total_balance, 2, '.', ',');
+         $formatted_balance = number_format(abs($total_balance), 2, '.', ',');
       }
       //dd($titel);
       $reportViwer->addParameter("no_of_cheques", "No of cheques :" . $no_of_cheques);
