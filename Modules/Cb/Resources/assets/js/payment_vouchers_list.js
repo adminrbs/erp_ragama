@@ -210,7 +210,7 @@ function getPaymentVouchers() {
                    "payee": dt[i].payee_name !== null ? dt[i].payee_name : dt[i].not_applicable_payee,
                     "branch": dt[i].branch_name,
                     "amount": '<div style="text-align:right;">' + parseFloat(dt[i].total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }) + '</div>',
-                    "action": '&#160<button class="btn btn-success btn-sm" onclick="view(' + dt[i].payment_voucher_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + btnDlt + '&#160' + btnPrint,
+                    "action": btnEdit+ ' &#160<button class="btn btn-success btn-sm" onclick="view(' + dt[i].payment_voucher_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + btnDlt + '&#160' + btnPrint,
                 });
 
             }

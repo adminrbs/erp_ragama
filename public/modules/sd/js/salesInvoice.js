@@ -19,6 +19,7 @@ var foc_qty_threshold_from_pick_orders; // using to assign foc qty on pick order
 var branchID;
 var whole_sale_count = 0;
 var return_request_collection = [];
+var invoiceNetBalance = 0;
 //show batch model
 $(document).keyup(function (event) {
 
@@ -1214,6 +1215,7 @@ function loadCustomerOtherDetails(id, value) {
             tableBody.empty();
             console.log(tableBody);
             loadReturnRequest(cusID);
+            loadSalesReturns(cusID);//Only for united pharma
 
 
         },
@@ -2293,3 +2295,40 @@ function check_all(event) {
     }
 }
 
+
+//load sales returns
+function loadSalesReturns(customerId){
+    var tableObj = $('#salesReturnTable');
+    $.ajax({
+        url: '/sd/loadSalesReturns/' + customerId,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            var res = data.data;
+
+            $.each(res, function (index, item) {
+
+                var row = $('<tr>');
+                row.append($('<td>').attr('data-id', item.debtors_ledger_id).text(item.trans_date));
+                row.append($('<td>').text(item.external_number));
+                row.append($('<td>').text(item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')));;
+                row.append($('<td>').text(item.balance));
+                row.append($('<td>').text(item.balance));
+                row.append($('<td>').append($('<input class="form-control" type="text" onchange="manageReturns(this)"> ').attr('id',item.debtors_ledger_id)));
+                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" onchange="manageReturns(this)"> ').attr('id',item.debtors_ledger_id)));
+                row.append($('</tr>'))
+                tableObj.append(row);
+            });
+
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+
+}
+// 16/12/2024 - Allow to move onto payment side even returns are exist.
+function manageReturns(event){
+       
+}

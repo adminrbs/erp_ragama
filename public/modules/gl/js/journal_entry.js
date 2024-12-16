@@ -1,6 +1,7 @@
 var ItemList = [];
 var analysisTableArray = [];
 var tableData = undefined;
+var narration = [{ "text": "Credits", "value": 1 }, { "text": "Debit", "value": 2 }];
 $(document).ready(function () {
 
     $('.approval').hide();
@@ -9,6 +10,11 @@ $(document).ready(function () {
     } else if (action == 'approval') {
         $('.action').hide();
         $('.approval').show();
+        $('#txtReferanceNo').addClass("disabled");
+        $('#journal_date').addClass("disabled");
+        $('#cmbBranch').addClass("disabled");
+        $('#tblData').addClass("disabled");
+        $('#txtRemarks').addClass("disabled");
     }
 
     ItemList = loadAccounts();
@@ -88,7 +94,7 @@ $(document).ready(function () {
             callback: function (result) {
                 console.log(result);
                 if (result) {
-                   approvalJournal(journal_id,1);
+                    approvalJournal(journal_id, 1);
 
                 } else {
 
@@ -122,7 +128,7 @@ $(document).ready(function () {
             callback: function (result) {
                 console.log(result);
                 if (result) {
-                   approvalJournal(journal_id,2);
+                    approvalJournal(journal_id, 2);
 
                 } else {
 
@@ -150,9 +156,9 @@ function initTable() {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:200;" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:370px;" },
+            { "type": "select", "class": "transaction-inputs", "value": narration, "style": "width:150px;", "event": "", },
             { "type": "number", "class": "transaction-inputs math-abs math-round", "value": "", "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
             { "type": "select", "class": "transaction-inputs", "value": "", "style": "width:150px;", "event": "", },
-
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
 
         ],
@@ -204,13 +210,26 @@ function initTableView() {
             { "data": "glAccount" },
             { "data": "name" },
             { "data": "description" },
+            { "data": "narration" },
             { "data": "amount" },
             { "data": "analysis" },
 
 
 
 
-        ], "stripeClasses": ['odd-row', 'even-row'],
+        ],
+        columnDefs: [
+            {
+                targets: 3, // The 'amount' column
+                className: 'narration'
+            },
+            {
+                targets: 4, // The 'amount' column
+                className: 'amount'
+            }
+        ],
+        destroy: true, // Ensures reinitialization doesn't conflict
+        "stripeClasses": ['odd-row', 'even-row'],
     });
 }
 
@@ -301,7 +320,7 @@ function dataChooserEventListener(event, id, value) {
     })
     console.log(row_childs[4]);
     loadAccountAnalysisData(event, item_id)
-    $(row_childs[2]).val($('#txtDescription').val());
+    $(row_childs[2]).val($('#txtRemarks').val());
 
 
 }
@@ -322,7 +341,7 @@ function loadAccountAnalysisData(event, id) {
             $.each(analysis, function (index, value) {
 
 
-                $(row_childs[4]).append('<option value="' + value.gl_account_analyse_id + '">' + value.gl_account_analyse_name + '</option>');
+                $(row_childs[5]).append('<option value="' + value.gl_account_analyse_id + '">' + value.gl_account_analyse_name + '</option>');
             });
         },
     })
@@ -381,8 +400,9 @@ function getFormData() {
             collection.push(JSON.stringify({
                 "account_id": parseInt(arr[i][0].attr('data-id')),
                 "description": arr[i][2].val(),
-                "amount": parseFloat(arr[i][3].val()),
-                "analysis": parseInt(arr[i][4].val()),
+                "narration": parseFloat(arr[i][3].val()),
+                "amount": parseFloat(arr[i][4].val()),
+                "analysis": parseInt(arr[i][5].val()),
 
             }));
         }
@@ -390,9 +410,10 @@ function getFormData() {
     console.log(collection);
 
     var formData = new FormData();
+    formData.append("reference_no", $('#txtReferanceNo').val());
     formData.append("date", $('#journal_date').val());
     formData.append("branch", $('#cmbBranch').val());
-    formData.append("description", $('#txtDescription').val());
+    formData.append("remark", $('#txtRemarks').val());
     formData.append("created_by", 0);
     formData.append("approved_by", 0);
     formData.append("approval_status", 0);
@@ -405,11 +426,16 @@ function calTotal(event) {
     var total_Sum = 0;
     var arr = tableData.getDataSourceObject();
     for (var i = 0; i < arr.length; i++) {
-        console.log(arr[i][3].val());
+        console.log(arr[i][4].val());
 
         // total_Sum += parseFloat(arr[i][2].val().replace(/,/g, ''));
-        if (!isNaN(parseFloat(arr[i][3].val()))) {
-            total_Sum += parseFloat(arr[i][3].val());
+        if (!isNaN(parseFloat(arr[i][4].val()))) {
+            if (arr[i][3].val() == 2) {
+                total_Sum -= parseFloat(arr[i][4].val());
+            } else {
+                total_Sum += parseFloat(arr[i][4].val());
+            }
+
         }
 
     }
@@ -430,14 +456,16 @@ function getJournalEntry(id) {
         success: function (data) {
             console.log(data);
             var header = data.header;
+            $('#txtReferanceNo').val(header.reference_no)
             $('#journal_date').val(header.transaction_date);
             $('#cmbBranch').val(header.branch_id);
-            $('#txtDescription').val(header.description);
+            $('#txtRemarks').val(header.remark);
 
 
             var items = data.items;
             if (action == 'view') {
                 appendTableItemsView(items);
+                calculateViewTotal();
             } else {
                 appendTableItems(items);
                 calTotal(null);
@@ -451,10 +479,15 @@ function getJournalEntry(id) {
 function appendTableItemsView(items) {
     var dataArray = [];
     $.each(items, function (index, value) {
+        var narration = "Debit";
+        if (value.narration == 1) {
+            narration = "Credits";
+        }
         dataArray.push({
             "glAccount": value.account_code,
             "name": value.account_name,
             "description": value.descriptions,
+            "narration": narration,
             "amount": value.amount,
             "analysis": value.gl_account_analyse_name
         });
@@ -478,6 +511,7 @@ function appendTableItems(items) {
             { "type": "text", "class": "transaction-inputs", "value": value.account_code, "data_id": value.account_id, "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
             { "type": "text", "class": "transaction-inputs", "value": value.account_name, "style": "width:200;" },
             { "type": "text", "class": "transaction-inputs", "value": value.descriptions, "style": "width:370px;" },
+            { "type": "select", "class": "transaction-inputs", "value": narration, "selected_option": value.narration, "style": "width:150px;", "event": "calTotal(this)", },
             { "type": "number", "class": "transaction-inputs math-abs math-round", "value": value.amount, "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
             { "type": "select", "class": "transaction-inputs", "value": value.analysisTableArray, "selected_option": value.gl_account_analysis_id, "style": "width:150px;", "event": "", },
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
@@ -487,6 +521,10 @@ function appendTableItems(items) {
     });
 
     tableData.setDataSource(dataSource);
+
+    if (items.length == 0) {
+        tableData.addRow();
+    }
 }
 
 
@@ -553,6 +591,25 @@ function approvalJournal(id, status) {
             $('#btnSave').prop('disabled', false);
         }
     })
+}
+
+function calculateViewTotal() {
+    let total = 0;
+    const narrations = document.querySelectorAll('#tblData .narration');
+    const amounts = document.querySelectorAll('#tblData .amount');
+
+    amounts.forEach((cell, index) => {
+        const amount = parseFloat(cell.textContent) || 0;
+        const narration = narrations[index].textContent.trim();  // Get the narration for the current row
+
+        if (narration === "Credits") {
+            total += amount;
+        } else {
+            total -= amount;
+        }
+    });
+    $('#lblGrossTotal').text(parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
+    $('#lblNetTotal').text(parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
 }
 
 

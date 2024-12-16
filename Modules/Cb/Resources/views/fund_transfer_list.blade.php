@@ -20,21 +20,21 @@
     <div class="card mt-2">
         <div class="card">
             <div class="card-header bg-dark text d-flex align-items-center" style="color: white;">
-                <h5 class="mb-0">Journal Entries</h5>
+                <h5 class="mb-0">Fund Transfer</h5>
             </div>
             <div class="col-md-3" style="margin-left: 10px;margin-top:5px">
-                <a href="/gl/journal_entry" class="btn btn-primary">
+                <a href="/cb/fund_transfer" class="btn btn-primary">
                     <i class="fa fa-plus">&nbsp;Create New</i>
                 </a>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table datatable-button-html5-name table-striped" id="journal_entry">
+                    <table class="table datatable-button-html5-name table-striped" id="fund_transfer">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Remarks</th>
+                                <th>Descriptions</th>
                                 <th>Created By</th>
                                 <th>Branch</th>
                                 <th>Action</th>
@@ -69,6 +69,6 @@
 @endsection
 @section('scripts')
 <script src="{{URL::asset('assets/demo/pages/form_validation_library.js')}}"></script>
-<script src="{{Module::asset('gl:js/journal_entry_list.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('cb:js/fund_transfer_list.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/components_modals.js')}}"></script>
 @endsection

@@ -233,18 +233,20 @@ function getEachPaymentVoucher(id) {
             $('#txtRemarks').val(data.pv.remarks);
 
 
-
+            var analysisList = data.analysisArray;
+            console.log(analysisList);
+            
             var dataSource = [];
             $.each(data.pv_item, function (index, value) {
 
-                console.log(tableData);
+                console.log(value.gl_account_analysis_id);
 
                 dataSource.push([
                     { "type": "text", "class": "transaction-inputs", "value": value.account_code, "style": "width:100px;", "event": "", "valuefrom": "datachooser", "thousand_seperator": false, "disabled": "" },
                     { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:200;" },
                     { "type": "text", "class": "transaction-inputs", "value": value.description, "style": "width:370px;" },
                     { "type": "number", "class": "transaction-inputs math-abs math-round", "value": value.amount, "style": "width:120px;text-align:right;", "event": "calTotal(this)", },
-                    { "type": "select", "class": "transaction-inputs", "value": analysisTableArray, "selected_option": value.gl_account_analysis_id, "style": "width:150px;", "event": "", },
+                    { "type": "select", "class": "transaction-inputs", "value": analysisList, "selected_option": "", "style": "width:150px;", "event": "", },
                     { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);", "width": 30 },
 
                 ]);

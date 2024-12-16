@@ -52,6 +52,10 @@
                             <div class="row mb-1">
 
 
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Reference No</span></label>
+                                    <input type="text" class="form-control" id="txtReferanceNo">
+                                </div>
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
@@ -66,7 +70,16 @@
 
                             </div>
 
+
                             <div class="row mb-1">
+
+
+
+
+
+                            </div>
+
+                            <!--<div class="row mb-1">
                                 <div class="col-md-8">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
                                         <span>Description</span>
@@ -76,7 +89,7 @@
 
                                     </div>
                                 </div>
-                            </div>
+                            </div>!-->
                         </div>
 
                         <hr>
@@ -106,6 +119,7 @@
                                                         <th>GL Accounts</th>
                                                         <th>Acc Name</th>
                                                         <th>Description</th>
+                                                        <th>Narration</th>
                                                         <th>Amount</th>
                                                         <th>Analysis</th>
                                                         <th>Remove</th>
@@ -126,10 +140,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-8 mt-2">
-                                <!--<div class="col-md-12">
+                                <div class="col-md-12">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Remarks</span></label>
                                     <textarea rows="4" name="remarks" id="txtRemarks" class="form-control form-control-sm" autocomplete="off"></textarea>
-                                </div>!-->
+                                </div>
 
                             </div>
 

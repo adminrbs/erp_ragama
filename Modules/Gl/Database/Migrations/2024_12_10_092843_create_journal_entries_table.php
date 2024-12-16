@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('journal_entries', function (Blueprint $table) {
             $table->id('gl_journal_id');
+            $table->string('reference_no')->nullable();
             $table->date('transaction_date');
-            $table->string('description')->nullable();
+            $table->string('remark')->nullable();
             $table->integer('branch_id')->index()->default(0);
             $table->integer('created_by')->index()->default(0);
             $table->integer('approved_by')->index();

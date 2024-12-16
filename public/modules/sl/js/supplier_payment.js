@@ -297,6 +297,11 @@ $(document).ready(function () {
             $("#tab-bank-slip").attr("hidden", false);
 
             $("#tab-single-cheque").attr("hidden", true);
+        } else if($(this).val() == '4'){
+           // alert();
+           $("#tab-single-cheque").attr("hidden", true);
+           $("#bankSlip").attr("hidden", false);
+           $("#tab-bank-slip").attr("hidden", false);
         } else {
             $("#tab-single-cheque").attr("hidden", true);
             $("#tab-setoff").trigger('click');
@@ -801,7 +806,7 @@ function saveReceipt() {
         }
     }
 
-    if ($('#cmbReceiptMethod').val() == '3') {
+    if ($('#cmbReceiptMethod').val() == '2') {
 
         if ($('#txtBankCode').val().trim().length > 0) {
             if ($('#txtChequeRefNo').val().trim().length === 0) {
@@ -910,6 +915,7 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
             "receipt_data": receipt_data_set,
             "receipt_data": JSON.stringify(getSetoffTableData()),
             "single_cheque": JSON.stringify(getSingleCheque()),
+            "payment_slip": JSON.stringify(getSlip()),
            /*  "your_ref": $('#txtYourReference').val(), */
             "total_set_off_amount": total_set_off_Amount
 
@@ -947,6 +953,21 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
         
         showWarningMessage('Amount mismatch');
     } */
+}
+
+function getSlip() {
+    if ($('#cmbReceiptMethod').val() == '4') {
+        if ($('#txtSlipRef').val() == '') {
+            showWarningMessage('Please enter reference details');
+        } else {
+            return {
+                "cheque_referenceNo": $('#txtSlipRef').val(),
+                "slip_time": $('#tmSliptime').val(),
+                "slip_date": $('#dtSLipDate').val(),
+            }
+        }
+    }
+
 }
 
 function updateReceipt() {

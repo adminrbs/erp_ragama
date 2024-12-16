@@ -14,6 +14,9 @@
         user-select: none;
         /* Prevent text selection */
     }
+    .amount{
+        text-align: right;
+    }
 </style>
 
 @endsection
@@ -53,31 +56,44 @@
                             <div class="row mb-1">
 
 
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Refferance No</span></label>
+                                    <input type="text" class="form-control" id="txtReferanceNo">
+                                </div>
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
-                                    <input type="date" class="form-control disabled" id="journal_date">
+                                    <input type="date" class="form-control" id="journal_date">
                                 </div>
 
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Branch</span></label>
-                                    <select class="form-select disabled" id="cmbBranch"></select>
+                                    <select class="form-select " id="cmbBranch"></select>
                                 </div>
 
                             </div>
+
 
                             <div class="row mb-1">
-                                <div class="col-md-8">
-                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
-                                        <span>Description</span>
-                                    </label>
-                                    <div class="d-flex align-items-center">
-                                        <textarea id="txtDescription" class="form-control mr-2"></textarea> &nbsp;
 
-                                    </div>
-                                </div>
+
+
+
+
                             </div>
+
+                            <!--<div class="row mb-1">
+    <div class="col-md-8">
+        <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;">
+            <span>Description</span>
+        </label>
+        <div class="d-flex align-items-center">
+            <textarea id="txtDescription" class="form-control mr-2"></textarea> &nbsp;
+
+        </div>
+    </div>
+</div>!-->
                         </div>
 
                         <hr>
@@ -107,6 +123,7 @@
                                                         <th>GL Accounts</th>
                                                         <th>Acc Name</th>
                                                         <th>Description</th>
+                                                        <th>Narration</th>
                                                         <th>Amount</th>
                                                         <th>Analysis</th>
 
@@ -127,10 +144,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-8 mt-2">
-                                <!--<div class="col-md-12">
+                                <div class="col-md-12">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Remarks</span></label>
                                     <textarea rows="4" name="remarks" id="txtRemarks" class="form-control form-control-sm" autocomplete="off"></textarea>
-                                </div>!-->
+                                </div>
 
                             </div>
 

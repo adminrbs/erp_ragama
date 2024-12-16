@@ -806,7 +806,7 @@ function saveReceipt() {
         }
     }
 
-    if ($('#cmbReceiptMethod').val() == '3') {
+    if ($('#cmbReceiptMethod').val() == '2') {
 
         if ($('#txtBankCode').val().trim().length > 0) {
             if ($('#txtChequeRefNo').val().trim().length === 0) {

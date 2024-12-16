@@ -19,10 +19,10 @@ class JournalEntryController extends Controller
     {
 
         try {
-
+            $reference_no = $request->get("reference_no");
             $date = $request->get("date");
             $branch = $request->get("branch");
-            $description = $request->get("description");
+            $remark = $request->get("remark");
             $created_by = $request->get("created_by");
             $collection = json_decode($request->get("collection"));
 
@@ -34,8 +34,9 @@ class JournalEntryController extends Controller
             $approval_status = $request->get("approval_status");
 
             $journalEntry = new JournalEntry();
+            $journalEntry->reference_no = $reference_no;
             $journalEntry->transaction_date = $date;
-            $journalEntry->description = $description;
+            $journalEntry->remark = $remark;
             $journalEntry->branch_id = $branch;
             $journalEntry->created_by = $created_by;
             $journalEntry->approved_by = $approved_by;
@@ -48,7 +49,11 @@ class JournalEntryController extends Controller
                     $jurnalItem->gl_journal_id = $journalEntry->gl_journal_id;
                     $jurnalItem->gl_account_id = $dt->account_id;
                     $jurnalItem->gl_account_analyse_id = $dt->analysis;
-                    $jurnalItem->amount = $dt->amount;
+                    if ($dt->narration == 1) {
+                        $jurnalItem->amount = $dt->amount;
+                    }else if ($dt->narration == 2) {
+                        $jurnalItem->amount = ($dt->amount * -1);
+                    }
                     $jurnalItem->descriptions = $dt->description;
                     $jurnalItem->save();
                 }
@@ -67,10 +72,10 @@ class JournalEntryController extends Controller
     {
 
         try {
-
+            $reference_no = $request->get("reference_no");
             $date = $request->get("date");
             $branch = $request->get("branch");
-            $description = $request->get("description");
+            $remark = $request->get("remark");
             $created_by = $request->get("created_by");
             $collection = json_decode($request->get("collection"));
 
@@ -83,8 +88,9 @@ class JournalEntryController extends Controller
 
             $journalEntry =  JournalEntry::find($id);
             if ($journalEntry) {
+                $journalEntry->reference_no = $reference_no;
                 $journalEntry->transaction_date = $date;
-                $journalEntry->description = $description;
+                $journalEntry->remark = $remark;
                 $journalEntry->branch_id = $branch;
                 $journalEntry->created_by = $created_by;
                 $journalEntry->approved_by = $approved_by;
@@ -98,7 +104,11 @@ class JournalEntryController extends Controller
                         $jurnalItem->gl_journal_id = $journalEntry->gl_journal_id;
                         $jurnalItem->gl_account_id = $dt->account_id;
                         $jurnalItem->gl_account_analyse_id = $dt->analysis;
-                        $jurnalItem->amount = $dt->amount;
+                        if ($dt->narration == 1) {
+                            $jurnalItem->amount = $dt->amount;
+                        }else if ($dt->narration == 2) {
+                            $jurnalItem->amount = ($dt->amount * -1);
+                        }
                         $jurnalItem->descriptions = $dt->description;
                         $jurnalItem->save();
                     }
@@ -167,7 +177,7 @@ class JournalEntryController extends Controller
 
             $query = "SELECT journal_entries.gl_journal_id,
             journal_entries.transaction_date,
-            journal_entries.description,
+            journal_entries.remark,
             branches.branch_name,
             employees.employee_name AS created_by,
             journal_entries.approval_status
@@ -194,7 +204,8 @@ class JournalEntryController extends Controller
             GL.account_title AS account_name,
             GLA.gl_account_analyse_name,
             JEI.descriptions,
-            JEI.amount,
+            IF(JEI.amount < 0,2,1) AS narration,
+            ABS(JEI.amount) AS amount,
             JEI.gl_account_analyse_id,
             '' AS analysisTableArray
             FROM journal_entry_items JEI 

@@ -1541,4 +1541,33 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
         $id_len = strlen($id_);
         return $prefix_ . $pattern[$id_len] . $id_;
     }
+
+    public function loadSalesReturns($customerID){
+        try{
+            $return_query = "SELECT
+            DL.debtors_ledger_id,
+	DL.external_number,
+	DL.trans_date,
+	DL.amount,
+	DL.debtors_ledger_id,
+	( DL.amount - DL.paidamount ) AS balance 
+FROM
+	debtors_ledgers DL
+	
+WHERE
+	DL.amount <> DL.paidamount AND DL.document_number = 220
+	AND DL.customer_id = $customerID";
+
+            $result = DB::select($return_query);
+
+            if($result){
+                return response()->json([
+                    "status"=>true,
+                    "data"=>$result
+                ]);
+            }
+        }catch(Exception $ex){
+            return $ex;
+        }
+    }
 }

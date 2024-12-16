@@ -233,7 +233,12 @@ class PaymentVoucherController extends Controller
 
             // $pv_item = PatmentVoucherItems::where("payment_voucher_id","=",$id)->get();
             $pv_item = DB::select("SELECT GL.account_code,GL.account_title AS account_name,GLA.gl_account_analyse_name,PVI.description,PVI.amount,PVI.gl_account_analysis_id FROM payment_voucher_items PVI LEFT JOIN gl_accounts GL ON PVI.gl_account_id = GL.account_id LEFT JOIN gl_account_analyses GLA ON GL.account_id = GLA.account_id  WHERE PVI.payment_voucher_id = $id");
-
+            $array = array();
+            foreach ($pv_item as $res) {
+             
+                array_push($array, ["text" => $res->gl_account_analyse_name, "value" => $res->gl_account_analysis_id]);
+            }
+          
             $pv_cheques = DB::select("SELECT
 	payment_voucher_cheques.*,
 	B.bank_name,
@@ -251,7 +256,7 @@ WHERE
             $pv_slips =  DB::select("SELECT * FROM payment_voucher_bank_slips WHERE payment_voucher_bank_slips.payment_voucher_id = $id");
 
             if ($pv) {
-                return response()->json(['success' => true, 'pv' => $pv, 'pv_item' => $pv_item, 'sup_code' => $s_code, 'pv_cheque' => $pv_cheques, 'pv_slip' => $pv_slips]);
+                return response()->json(['success' => true, 'pv' => $pv, 'pv_item' => $pv_item, 'sup_code' => $s_code, 'pv_cheque' => $pv_cheques, 'pv_slip' => $pv_slips, 'analysisArray' => $array]);
             } else {
                 return response()->json(['success' => false, 'data' => []]);
             }

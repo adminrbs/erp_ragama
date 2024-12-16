@@ -19,6 +19,7 @@ var foc_qty_threshold_from_pick_orders; // using to assign foc qty on pick order
 var branchID;
 var whole_sale_count = 0;
 var return_request_collection = [];
+var invoiceNetBalance = null;
 //show batch model
 $(document).keyup(function (event) {
 
@@ -40,7 +41,7 @@ $(document).keyup(function (event) {
             // console.log(ItemID);
             $('#hiddenItem').val(ItemID);
             TemprorySave(ItemID);
-            getItemHistorySetoffBatch(branchID, ItemID,locationID);
+            getItemHistorySetoffBatch(branchID, ItemID, locationID);
 
             $('#batchModel').modal('show');
 
@@ -66,7 +67,7 @@ function TemprorySave(ItemID) {
 function setOff() {
 
     var rowObjects = tableData.getDataSourceObject();
-    
+
     console.log(hash_map);
     for (var i = 0; i < rowObjects.length; i++) {
         var item_id = rowObjects[i][0].attr('data-id');
@@ -74,7 +75,7 @@ function setOff() {
         var qty_ = rowObjects[i][2].val();
         var foc = rowObjects[i][3].val();
 
-        
+
         var row_ = ($($(rowObjects[i][0]).parent()).parent());
         checkWholeSalePrice(row_)
         if (isNaN(foc)) {
@@ -95,7 +96,7 @@ function setOff() {
             if (isNaN(parseFloat(foc))) {
                 foc = 0;
             }
-           
+
 
             var item = hash_map.get(item_id);
             if (item) {
@@ -118,7 +119,7 @@ function setOff() {
 
                 }
                 var total_qty = parseFloat(qty_) + parseFloat(foc);
-                
+
                 if (parseFloat(avl_qty) < parseFloat(setoff_quantity)) {
                     showWarningMessage("Set off quantity should be same to the total quantity");
                     /* setoffObject.setSetoffQuantity(parseFloat(avl_qty)); */
@@ -129,19 +130,19 @@ function setOff() {
                     // alert(setWholesalePrice_temp);
                     /*  setoffObject.setSetoffQuantity(parseFloat(total_qty)); */
                     setWholesalePrice = parseFloat(setWholesalePrice_temp);
-                    
+
 
                 }
 
                 if (parseFloat(total_qty) != parseFloat(setoff_quantity)) {
                     //alert(setoff_quantity);
-                   // alert();
+                    // alert();
                     /* showWarningMessage("Batch is not selected properly"); */
                     /*  setoffObject.setSetoffQuantity(parseFloat(0)); */
                     return;
 
                 } else {
-                    
+
                     /*  alert(setWholesalePrice_temp); */
                     var disc_amount = parseFloat((setWholesalePrice * qty_)) * parseFloat(disc_precen / 100);
                     var value = (parseFloat(qty_) * parseFloat(setWholesalePrice)) - parseFloat(disc_amount);
@@ -154,10 +155,10 @@ function setOff() {
                 }
             }
         }
-      /*   var cell = rowObjects.find('td');
-        var batch_btn = $($(cell[13]).children()[0]); */
-        
-       
+        /*   var cell = rowObjects.find('td');
+          var batch_btn = $($(cell[13]).children()[0]); */
+
+
     }
     calculation();
 }
@@ -247,13 +248,13 @@ function setOffbybuton(event) {
     branchID = $('#cmbBranch').val();
     locationID = $('#cmbLocation').val();
 
-    
+
 
     checkWholeSalePrice(event);
 
     $('#batchModelTitle').text("Item Set Off Quantity" + " " + totalQty);
     TemprorySave(ItemID);
-    getItemHistorySetoffBatch(branchID, ItemID,locationID);
+    getItemHistorySetoffBatch(branchID, ItemID, locationID);
     autoSetOff(ItemID);
     autoSetOff_wrong_qty(qty_obj);
 
@@ -284,7 +285,7 @@ function autoSetOff_wrong_qty(event) {
 
 //check different whole sale prices
 function checkWholeSalePrice(event) {
-    
+
     var whole_sale_array = [];
     var row = $($(event).parent()).parent();
     var rowIndex = row.index();
@@ -373,9 +374,9 @@ $(document).ready(function () {
     $('#btnSaveDraft').hide(); // need to edit
     ItemList = loadItems(0);
     //DataChooser.addCollection("item",['Item', 'Code', 'Supply Group', '',''], ItemList);
-    
+
     loadPamentTerm();
-    
+
     getServerTime();
     getPaymentMethods();
     /* $('#btnBack').hide(); */
@@ -391,13 +392,13 @@ $(document).ready(function () {
 
     customers = loadCustomerTOchooser();
 
-    DataChooser.addCollection("Customer",['Customer Name', 'Customer Code', 'Town', 'Route',''], customers);
+    DataChooser.addCollection("Customer", ['Customer Name', 'Customer Code', 'Town', 'Route', ''], customers);
     //DataChooser.addCollection("item",['', '', '', '',''], ItemList);
-    
-    $('#cmbSalesAnalysist').on('change',function(){
+
+    $('#cmbSalesAnalysist').on('change', function () {
 
         ItemList = loadItems($(this).val());
-        DataChooser.addCollection("item",['Item Name', 'Item Code', 'Avl Qty', '',''], ItemList);
+        DataChooser.addCollection("item", ['Item Name', 'Item Code', 'Avl Qty', '', ''], ItemList);
     });
 
     loadSupplyGroupsAsSalesAnalyst();
@@ -405,10 +406,10 @@ $(document).ready(function () {
     $('#cmbBranch').on('change', function () {
         var branch_id_ = $(this).val();
         get_branch_code(branch_id_);
-        if($(this).val() == ""){
-            $('#si_model_btn').prop('disabled',true);
-        }else{
-            $('#si_model_btn').prop('disabled',false);
+        if ($(this).val() == "") {
+            $('#si_model_btn').prop('disabled', true);
+        } else {
+            $('#si_model_btn').prop('disabled', false);
         }
     });
 
@@ -434,8 +435,8 @@ $(document).ready(function () {
 
     });
 
-      //getting rep code 
-      $('#cmbEmp').on('change', function () {
+    //getting rep code 
+    $('#cmbEmp').on('change', function () {
         var rep_id = $(this).val();
         get_rep_code(rep_id);
     });
@@ -458,15 +459,15 @@ $(document).ready(function () {
         
     }) */
 
-    $('#warningClose').on('click',function(){
-       
-       
+    $('#warningClose').on('click', function () {
+
+
         $('#warning_alert').removeClass('show');
     });
 
 
 
-   
+
 
 
     //gross total
@@ -475,17 +476,17 @@ $(document).ready(function () {
 
     });
 
-    $('#si_model_btn').on('click',function(){
+    $('#si_model_btn').on('click', function () {
         $('#warning_alert').removeClass('show');
         $('#lblCount').text("");
         var table = $('#gettable tbody');
-            table.empty();
+        table.empty();
     });
 
 
     $('#txtCustomerID').on('focus', function () {
         DataChooser.commitData();
-        DataChooser.showChooser($(this),$(this),"Customer");
+        DataChooser.showChooser($(this), $(this), "Customer");
         $('#data-chooser-modalLabel').text('Customers');
 
 
@@ -505,7 +506,7 @@ $(document).ready(function () {
     });
 
 
-    var hiddem_col_array = [5, 9,16];
+    var hiddem_col_array = [5, 9, 16];
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
         var param = sPageURL.split('?');
@@ -547,7 +548,7 @@ $(document).ready(function () {
             $('#btnReject').hide();
             $('#btnBack').show();
             $('#si_model_btn').hide();
-            hiddem_col_array = [5, 9, 14, 13, 12, 11,16];
+            hiddem_col_array = [5, 9, 14, 13, 12, 11, 16];
             disableComponents();
 
         }
@@ -585,7 +586,7 @@ $(document).ready(function () {
     });
 
     tableData.addRow();
-   
+
 
     $('#tblData').on('input', 'input[type="text"]', function () {
         // Remove any consecutive dots
@@ -610,21 +611,21 @@ $(document).ready(function () {
         var collection = [];
         for (var i = 0; i < arr.length; i++) {
             if (arr[i][0].attr('data-id') == "undefined") {
-                if(arr.length == 1){
+                if (arr.length == 1) {
                     showWarningMessage("Please select a correct Item");
                     arr[i][0].focus();
                     return;
-                }else if(arr.length > 1){
-                    if(parseFloat(arr[i][2].val().replace(/,/g, '')) > 0){
+                } else if (arr.length > 1) {
+                    if (parseFloat(arr[i][2].val().replace(/,/g, '')) > 0) {
                         showWarningMessage("Please select a correct Item");
                         arr[i][0].focus();
                         return;
-                    }else{
+                    } else {
                         continue;
                     }
-                    
+
                 }
-               
+
             } else if (arr[i][7].val() == "" || arr[i][7].val() == "0" || arr[i][7].val() == "undefined" || arr[i][7].val() == "null" || parseFloat(arr[i][7].val()) == 0) {
                 showWarningMessage("Price must be greter than 0");
                 return;
@@ -647,19 +648,19 @@ $(document).ready(function () {
         }
 
         var tableBody = $('#rtn_item tbody');
-        tableBody.find('tr').each(function() {
+        tableBody.find('tr').each(function () {
             var row = $(this);
             var checkbox = row.find('input[type="checkbox"]');
-    
+
             if (checkbox.is(':checked')) {
                 var rowData = {
-                    
+
                     sfa_return_request_items_id: row.find('td:first').attr('data-id'),
                     rep_id: row.find('td').eq(1).attr('data-id'),
                     item_id: row.find('td').eq(2).attr('data-id'),
                     qty: row.find('td').eq(5).text()
                 };
-    
+
                 return_request_collection.push(rowData);
             }
         });
@@ -685,7 +686,7 @@ $(document).ready(function () {
                 if (result) {
                     if ($('#btnSave').text() == 'Save and Send') {
                         newReferanceID('sales_invoices', '210');
-                        addSalesInvoice(collection, Invoice_id,return_request_collection);
+                        addSalesInvoice(collection, Invoice_id, return_request_collection);
                     } else if ($('#btnSave').text() == 'Update') {
                         updateSI(collection, Invoice_id);
 
@@ -861,7 +862,7 @@ function getBranches() {
         type: 'get',
         async: false,
         success: function (data) {
-            if(data.length > 1){
+            if (data.length > 1) {
                 $('#cmbBranch').append('<option value="">Select Branch</option>');
             }
             $.each(data, function (index, value) {
@@ -895,7 +896,7 @@ function getLocation(id) {
 
 
 //add SI
-function addSalesInvoice(collection, id,return_request_collection) {
+function addSalesInvoice(collection, id, return_request_collection) {
     var order_id = $('#LblexternalNumber').attr('data-id');
 
     /* var is_block = checkBlockStatus($('#cmbEmp').val(),$('#lblCustomerName').data('id'),order_id);
@@ -905,7 +906,7 @@ function addSalesInvoice(collection, id,return_request_collection) {
         return;
     } */
 
-    
+
 
     if (parseInt(collection.length) <= 0) {
         showWarningMessage('Unable to save without an item');
@@ -921,7 +922,7 @@ function addSalesInvoice(collection, id,return_request_collection) {
         return;
     } else {
         var total_amount = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
-        formData.append('return_request_collection',JSON.stringify(return_request_collection));
+        formData.append('return_request_collection', JSON.stringify(return_request_collection));
         formData.append('collection', JSON.stringify(collection));
         formData.append('setOffArray', createSetoffCollection());
         formData.append('LblexternalNumber', referanceID); //external number
@@ -943,11 +944,11 @@ function addSalesInvoice(collection, id,return_request_collection) {
         formData.append('txtYourReference', $('#txtYourReference').val());
         formData.append('code', $('#invoice_date_time').data('id'));
         formData.append('branch_code', $('#cmbBranch').data('id'));
-        formData.append('sales_analyst_id',$('#cmbSalesAnalysist').val());
-        if(!isNaN(parseInt(order_id))){
+        formData.append('sales_analyst_id', $('#cmbSalesAnalysist').val());
+        if (!isNaN(parseInt(order_id))) {
             formData.append('order_id', order_id);
         }
-       
+
 
         $.ajax({
             url: '/sd/addSalesInvoice/' + id,
@@ -963,14 +964,14 @@ function addSalesInvoice(collection, id,return_request_collection) {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function () {
-               // $('#btnSave').prop('disabled', true);
+                // $('#btnSave').prop('disabled', true);
             }, success: function (response) {
                 //console.log(response);
-               // $('#btnSave').prop('disabled', false);
+                // $('#btnSave').prop('disabled', false);
                 var status = response.status
                 var msg = response.message
                 var primaryKey = response.primaryKey;
-                if(msg == 'no order'){
+                if (msg == 'no order') {
                     showWarningMessage("Sales Order already completed");
                     return;
                 }
@@ -990,9 +991,9 @@ function addSalesInvoice(collection, id,return_request_collection) {
                 }
                 if (status) {
                     showSuccessMessage("Successfully saved");
-                    
+
                     updateStatusOfOrder(order_id);
-                 
+
                     hash_map = new HashMap();
                     url = "/sd/salesInvoiceList";
                     window.location.href = url;
@@ -1086,7 +1087,7 @@ function addSalesInvoiceDraft(collection) {
 function showTransactionDataChooser(event, visible) {
     if (visible) {
         DataChooser.commitData();
-        DataChooser.showChooser(event, event,"item");
+        DataChooser.showChooser(event, event, "item");
         $('#data-chooser-modalLabel').text('Items');
     }
 }
@@ -1113,32 +1114,32 @@ function showTransactionDataChooser(event, visible) {
     return list;
 } */
 
-    function loadItems(id) {
-        var list = [];
-        var branch = $('#cmbBranch').val();
-        var location = $('#cmbLocation').val();
-        $.ajax({
-            url: '/sd/loadItemsforsalesinvoice/'+id,
-            type: 'get',
-            async: false,
-            data:{
-                branch :branch,
-                location :location
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    list = response.data;
-    
-                }
-            },
-            error: function (error) {
-                console.log(error);
-            },
-    
-        });
-        return list;
-    }
+function loadItems(id) {
+    var list = [];
+    var branch = $('#cmbBranch').val();
+    var location = $('#cmbLocation').val();
+    $.ajax({
+        url: '/sd/loadItemsforsalesinvoice/' + id,
+        type: 'get',
+        async: false,
+        data: {
+            branch: branch,
+            location: location
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                list = response.data;
+
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+    return list;
+}
 //load item
 /* function loadCustomerTOchooser() {
 
@@ -1214,6 +1215,7 @@ function loadCustomerOtherDetails(id, value) {
             tableBody.empty();
             console.log(tableBody);
             loadReturnRequest(cusID);
+            loadSalesReturns(cusID);//Only for united pharma
 
 
         },
@@ -1248,7 +1250,7 @@ function loadPamentTerm() {
 function loademployeesAccordingToBranch(branch_id) {
     $('#cmbEmp').empty();
     $.ajax({
-        url: '/sd/loademployeesAccordingToBranch/'+branch_id,
+        url: '/sd/loademployeesAccordingToBranch/' + branch_id,
         type: 'get',
         dataType: 'json',
         async: false,
@@ -1379,7 +1381,7 @@ function foc_calculation_threshold(event) {
     var cus_id = $('#lblCustomerName').attr('data-id');
 
     $.ajax({
-        url: '/sd/getItem_foc_threshold_ForInvoice/'+cus_id +"/"+ item_id + "/" + formatted_entered_qty + "/" + date,
+        url: '/sd/getItem_foc_threshold_ForInvoice/' + cus_id + "/" + item_id + "/" + formatted_entered_qty + "/" + date,
         type: 'get',
         success: function (response) {
             // console.log(response);
@@ -1404,17 +1406,17 @@ function foc_calculation_threshold(event) {
 }
 
 //foc calculation threshold (pick order insertion)
-function foc_calculation_threshold_pick_order(cus_id,item_id, entered_qty) {
+function foc_calculation_threshold_pick_order(cus_id, item_id, entered_qty) {
     var date = $('#invoice_date_time').val();
 
 
     $.ajax({
-        url: '/sd/getItem_foc_threshold_ForInvoice/'+cus_id + "/" + item_id + "/" + entered_qty + "/" + date,
+        url: '/sd/getItem_foc_threshold_ForInvoice/' + cus_id + "/" + item_id + "/" + entered_qty + "/" + date,
         type: 'get',
         async: false,
         success: function (response) {
             $.each(response, function (index, value) {
-                
+
                 foc_qty_threshold_from_pick_orders = value.Offerd_quantity;
 
 
@@ -1880,7 +1882,7 @@ function getServerTime() {
 
 function newReferanceID(table, doc_number) {
     referanceID = newID("../newReferenceNumber_SalesInvoice", table, doc_number);
-   
+
 }
 
 
@@ -2042,7 +2044,7 @@ function getPaymentMethods() {
                 $('#cmbPaymentMethod').append('<option value="' + value.customer_payment_method_id + '">' + value.customer_payment_method + '</option>');
 
             });
-           // $('#cmbPaymentMethod').val(value.customer_payment_method_id);
+            // $('#cmbPaymentMethod').val(value.customer_payment_method_id);
 
         },
         error: function (error) {
@@ -2107,29 +2109,29 @@ function get_branch_code(id) {
 
 function openModalWithDelay() {
     // Add a delay of 1000 milliseconds (1 second) before opening the modal
-    setTimeout(function() {
+    setTimeout(function () {
         // Trigger the modal to open
         $('#exampleModal').modal('show');
     }, 1000);
 }
 
-function check_foc_qty(event){
+function check_foc_qty(event) {
     var row = $($(event).parent()).parent();
     var rowIndex = row.index();
     var cell = row.find('td');
-    if($(cell[15]).children().eq(0).val() == ""){
+    if ($(cell[15]).children().eq(0).val() == "") {
         showWarningMessage("Please enter quantitty first")
-    }else{
+    } else {
         var row_foc = parseFloat($(cell[15]).children().eq(0).val());
-        if(parseFloat($(event).val()) > row_foc){
-            showWarningMessage('FOC should be less than '+row_foc);
+        if (parseFloat($(event).val()) > row_foc) {
+            showWarningMessage('FOC should be less than ' + row_foc);
             $(event).val(row_foc)
 
         }
 
     }
-   
-  
+
+
 }
 
 /* function loadSupplyGroupsAsSalesAnalyst(){
@@ -2178,27 +2180,27 @@ function loadSupplyGroupsAsSalesAnalyst() {
 
 function showInfoModel() {
     //$('#block_id_hidden_lbl').val(id);
-   
+
     //load_block_info(id);
     $cus = $('#lblCustomerName').attr('data-id');
-    if($cus != undefined){
+    if ($cus != undefined) {
         $('#block_customer_model_info').modal('show');
         loadOutstandingDataToTable($cus);
-    }else{
+    } else {
         showWarningMessage('Please select a customer');
     }
-    
-   
+
+
 }
 
 
-function loadOutstandingDataToTable(id){
+function loadOutstandingDataToTable(id) {
     var table = $('#outstandingTable');
     var tableBody = $('#outstandingTable tbody');
     tableBody.empty();
     var br_id = $('#cmbBranch').val();
     $.ajax({
-        url: '/sd/loadOutstandingDataToTable/' + id +'/'+br_id,
+        url: '/sd/loadOutstandingDataToTable/' + id + '/' + br_id,
         method: 'get',
         processData: false,
         contentType: false,
@@ -2219,7 +2221,7 @@ function loadOutstandingDataToTable(id){
                 row.append($('<td>').text(item.external_number));
                 row.append($('<td style="text-align:right">').text(parseFloat(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
                 row.append($('<td style="text-align:right">').text(parseFloat(item.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
-                row.append($('<td>').text(item.age));      
+                row.append($('<td>').text(item.age));
                 table.append(row);
             });
             $('body').css('cursor', 'default');
@@ -2256,12 +2258,12 @@ function loadReturnRequest(customer_id) {
 
                 var row = $('<tr>');
                 row.append($('<td>').attr('data-id', item.sfa_return_request_items_id).text(item.request_date_time));
-                row.append($('<td>').attr('data-id',item.employee_id).text(item.employee_name));
-                row.append($('<td>').attr('data-id',item.item_id).text(item.Item_code));
+                row.append($('<td>').attr('data-id', item.employee_id).text(item.employee_name));
+                row.append($('<td>').attr('data-id', item.item_id).text(item.Item_code));
                 row.append($('<td>').text(item.item_Name));
                 row.append($('<td>').text(item.package_unit));
                 row.append($('<td>').text(Math.round(item.quantity)));
-                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" checked> ').attr('id',item.sfa_return_request_items_id)));
+                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" checked> ').attr('id', item.sfa_return_request_items_id)));
 
 
 
@@ -2280,16 +2282,141 @@ function loadReturnRequest(customer_id) {
 
 function check_all(event) {
     var table = $('#rtn_item');
-    if($(event).prop('checked')) {
-        
+    if ($(event).prop('checked')) {
+
         table.find('tr:has(td)').each(function () {
             $(this).find('input[type="checkbox"]').prop('checked', true);
         });
     } else {
-        
+
         table.find('tr:has(td)').each(function () {
             $(this).find('input[type="checkbox"]').prop('checked', false);
         });
     }
 }
 
+
+//load sales returns
+function loadSalesReturns(customerId) {
+    var tableObj = $('#salesReturnTable');
+    tableObj.empty();
+    $.ajax({
+        url: '/sd/loadSalesReturns/' + customerId,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            var res = data.data;
+
+            $.each(res, function (index, item) {
+
+                var row = $('<tr>');
+                row.append($('<td>').attr('data-id', item.debtors_ledger_id).text(item.trans_date));
+                row.append($('<td>').text(item.external_number));
+                row.append($('<td>').text(formatNumber(item.amount)));
+                row.append($('<td>').text(formatNumber(item.balance)));
+                row.append($('<td>').text(formatNumber(item.balance)));
+                row.append($('<td>').append($('<input class="form-control" type="text" oninput="manageReturns(this)"> ').attr('id', item.debtors_ledger_id)));
+                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" onchange="manageReturns(this)"> ').attr('id', item.debtors_ledger_id)));
+                row.append($('</tr>'))
+                tableObj.append(row);
+            });
+
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+
+}
+
+// Helper function to format numbers
+function formatNumber(value) {
+
+    return Math.abs(value) // Remove the minus sign (absolute value)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add thousand separators
+}
+
+
+// 16/12/2024 - Allow to move onto payment side even returns are exist
+function manageReturns(event) {
+
+
+    //getting sum of payment side values (cash/cheque/bank/card)
+    var paymentSideTotal = getSumOfPayments();
+
+    var row = $(event).closest('tr');
+    var tableSum = getSumOfTable(row)
+    if (invoiceNetBalance == null) {
+        invoiceNetBalance = $('#lblNetTotal').text();
+        invoiceNetBalance = parseFloat(invoiceNetBalance.replace(/,/g, ''));
+    }
+
+    var remainingBalanceCell = row.find('td').eq(2);
+    var setOffCell = row.find('td').eq(3).find('input[type="text"]');
+
+    //Checking for the html element. checkbox or textbox
+    if (event.type == 'checkbox') {
+        if ($(event).prop('checked')) {
+
+            var remainingBalance = parseFloat(remainingBalanceCell.text().replace(/,/g, ''));
+            /*  var tableOtherSetoffValues =  */
+            if (invoiceNetBalance >= (remainingBalance + paymentSideTotal + tableSum)) {
+                setOffCell.val(remainingBalance);
+                invoiceNetBalance = invoiceNetBalance - (paymentSideTotal + remainingBalance + tableSum);
+                remainingBalanceCell.text('0.00');
+            } else {
+                setOffCell.val(invoiceNetBalance);
+                var remeaining_bal = remainingBalance - invoiceNetBalance
+                invoiceNetBalance = invoiceNetBalance - (invoiceNetBalance + paymentSideTotal + tableSum)
+                remainingBalanceCell.text(remeaining_bal);
+            }
+        } else {
+            remainingBalanceCell.text(parseFloat(remainingBalanceCell.text().replace(/,/g, '')) + setOffCell.val());
+            invoiceNetBalance = invoiceNetBalance + parseFloat(setOffCell.val().replace(/,/g, ''));
+            setOffCell.val(0);
+        }
+    } else {
+        if(!$(event).hasClass('paymentInput')){
+
+        }else{
+
+        }
+    }
+
+}
+
+//getting payment side values
+function getSumOfPayments() {
+    let sumOfPaymentSide = 0;
+    $('.paymentInput').each(function () {
+        let value = parseFloat($(this).val().replace(/,/g, '')) || 0;
+        sumOfPaymentSide += value;
+    });
+
+    return sumOfPaymentSide;
+}
+
+function getSumOfTable(row) {
+    let tableOtherSetoffValues = 0;
+    let currentRow = row;
+    $('#salesReturnTable tr').each(function () {
+        let row = $(this);
+        console.log(row);
+        
+        // Skip the current row
+        if (row.is(currentRow)) {
+            return;
+        }
+
+        // Get the setoff cell value (4th column, index 3)
+        let setOffCell = row.find('td').eq(3).find('input[type="text"]');
+       
+        // Parse the value, remove thousand separators, and add to the sum
+        let value = parseFloat(setOffCell.val().replace(/,/g, '')) || 0; // Default to 0 if invalid
+        tableOtherSetoffValues += value;
+    });
+
+    return tableOtherSetoffValues;
+}

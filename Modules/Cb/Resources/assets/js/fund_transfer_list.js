@@ -28,7 +28,7 @@ const DatatableFixedColumns = function () {
 
 
         // Left and right fixed columns
-        var table = $('#journal_entry').DataTable({
+        var table = $('#fund_transfer').DataTable({
             buttons: {
                 dom: {
                     button: {
@@ -91,7 +91,7 @@ const DatatableFixedColumns = function () {
             "order": [],
             "columns": [
                 { "data": "date" },
-                { "data": "remark" },
+                { "data": "description" },
                 { "data": "created_by" },
                 { "data": "branch" },
                 { "data": "action" },
@@ -124,84 +124,16 @@ document.addEventListener('DOMContentLoaded', function () {
     DatatableFixedColumns.init();
 });
 
-
-$(document).ready(function () {
-    getJournalEntries();
-
-    var reuqestID;
-    if (window.location.search.length > 0) {
-        var sPageURL = window.location.search.substring(1);
-        var param = sPageURL.split('?');
-        var reuqestID = param[0].split('=')[1].split('&')[0];
-        var status = param[0].split('=')[2].split('&')[0];
-        action = param[0].split('=')[3].split('&')[0];
-
-        if (action == 'edit') {
-            $('#btnSave').text('Update');
-        } else if (action == 'view') {
-            $('#btnSave').hide();
-        }
-
-
-    }
+$(document).ready(function(){
+    getAllFundTransfer();
 });
 
-function _delete(id, status) {
-    bootbox.confirm({
-        title: 'Delete confirmation',
-        message: '<div class="d-flex justify-content-center align-items-center mb-3"><i class="fa fa-times fa-5x text-danger" ></i></div><div class="d-flex justify-content-center align-items-center "><p class="h2">Are you sure?</p></div>',
-        buttons: {
-            confirm: {
-                label: '<i class="fa fa-check"></i>&nbsp;Yes',
-                className: 'btn-Danger'
-            },
-            cancel: {
-                label: '<i class="fa fa-times"></i>&nbsp;No',
-                className: 'btn-link'
-            }
-        },
-        callback: function (result) {
-            console.log(result);
-            if (result) {
-                deleteJournal(id);
-            } else {
-
-            }
-        }
-    });
-    $('.bootbox').find('.modal-header').addClass('bg-danger text-white');
-}
-
-function edit(id, status) {
-
-    url = "/gl/journal_entry/" + id + "/edit";
-    window.location.href = url;
-
-}
-
-function approval(id) {
-
-    url = "/gl/journal_entry/" + id + "/approval";
-    window.location.href = url;
-
-}
-
-function view(id, status) {
-
-    url = "/gl/journal_entry_view/" + id;
-    window.location.href = url;
-}
-
-function printVoucher(id) {
-    paymentVoucher_Receipt(id);
-}
 
 
-//load data to table
-function getJournalEntries() {
+function getAllFundTransfer() {
     $.ajax({
         type: "GET",
-        url: "/gl/getJournalEntries",
+        url: "/cb/getAllFundTransfer",
         cache: false,
         timeout: 800000,
         beforeSend: function () { },
@@ -217,10 +149,10 @@ function getJournalEntries() {
                 if (approval_status == 0) {
                     is_approved = "";
                 }
-                var btnEdit = '<button class="btn btn-primary btn-sm" id="btnEdit_' + dt[i].gl_journal_id + '" onclick="edit(' + dt[i].gl_journal_id + ')" ' + disabled + '" ' + is_approved + '><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
-                var btnDlt = '<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].gl_journal_id + ')"' + is_approved + '><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                var btnPrint = '<button class="btn btn-secondary btn-sm" onclick="printVoucher(' + dt[i].gl_journal_id + ')"><i class="fa fa-print" aria-hidden="true"></i></button>'
-                var btnApproval = '<button class="btn btn-primary btn-sm" onclick="approval(' + dt[i].gl_journal_id + ')" ' + is_approved + '><i class="fa fa-check-square-o" aria-hidden="true"></i></button>'
+                var btnEdit = '<button class="btn btn-primary btn-sm" id="btnEdit_' + dt[i].fund_transfer_id + '" onclick="edit(' + dt[i].fund_transfer_id + ')" ' + disabled + '" ' + is_approved + '><i class="fa fa-pencil-square-o" aria-hidden="true" ></i></button>';
+                var btnDlt = '<button class="btn btn-danger btn-sm" onclick="_delete(' + dt[i].fund_transfer_id + ')"' + is_approved + '><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                var btnPrint = '<button class="btn btn-secondary btn-sm" onclick="printVoucher(' + dt[i].fund_transfer_id + ')"><i class="fa fa-print" aria-hidden="true"></i></button>'
+                var btnApproval = '<button class="btn btn-primary btn-sm" onclick="approval(' + dt[i].fund_transfer_id + ')" ' + is_approved + '><i class="fa fa-check-square-o" aria-hidden="true"></i></button>'
 
                 var created_by = "Admin";
                 if (dt[i].created_by != null) {
@@ -229,15 +161,15 @@ function getJournalEntries() {
 
                 data.push({
                     "date": dt[i].transaction_date,
-                    "remark": dt[i].remark,
+                    "description": dt[i].description,
                     "created_by": created_by,
                     "branch": dt[i].branch_name,
-                    "action": btnEdit + '&#160<button class="btn btn-success btn-sm" onclick="view(' + dt[i].gl_journal_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + btnDlt + '&#160' + '&#160' + btnApproval,
+                    "action": btnEdit + '&#160<button class="btn btn-success btn-sm" onclick="view(' + dt[i].fund_transfer_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + btnDlt + '&#160' + '&#160' + btnApproval,
                 });
 
             }
 
-            var table = $('#journal_entry').DataTable();
+            var table = $('#fund_transfer').DataTable();
             table.clear();
             table.rows.add(data).draw();
 
@@ -253,31 +185,22 @@ function getJournalEntries() {
 
 
 
-function deleteJournal(id) {
-    console.log(id);
-    $.ajax({
-        url: '/gl/deleteJournal/' + id,
-        type: 'delete',
-        data: {
-            _token: $('input[name=_token]').val()
-        },
-        beforeSend: function () {
+function edit(id, status) {
 
-        }, success: function (response) {
-            var status = response.success;
-            if (status) {
-                showSuccessMessage("Successfully deleted");
-
-            } else {
-                showErrorMessage("Something went wrong")
-            }
-
-            getJournalEntries();
-        }, error: function (xhr, status, error) {
-            console.log(xhr.responseText);
-        }
-    })
+    url = "/cb/fund_transfer/" + id + "/edit";
+    window.location.href = url;
 
 }
 
+function approval(id) {
 
+    url = "/cb/fund_transfer/" + id + "/approval";
+    window.location.href = url;
+
+}
+
+function view(id, status) {
+
+    url = "/cb/fund_transfer_view/" + id;
+    window.location.href = url;
+}

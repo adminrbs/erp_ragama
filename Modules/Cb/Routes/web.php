@@ -27,6 +27,7 @@ use Modules\Cb\Http\Controllers\DashboardDataController;
 use Modules\Cb\Http\Controllers\DirectCashBundleReportController;
 use Modules\Cb\Http\Controllers\DirectChequeBundleReportController;
 use Modules\Cb\Http\Controllers\DirectChequeController;
+use Modules\Cb\Http\Controllers\FundTransferController;
 use Modules\Cb\Http\Controllers\PaymentVoucherController;
 use Modules\Cb\Http\Controllers\ReturnChequesController;
 use Modules\Cb\Http\Controllers\SfaCashBundleReportController;
@@ -324,4 +325,28 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
    });
    Route::get('/load_cheque_collection',[SfaChequeCollectionListController::class,'load_sfa_cheque_collection_list']);
    Route::get('/printSFAChequeBundle/{id}',[SFAChequeCollectionReportController::class,'printSFAChequeBundle']);
+
+    /**Fund Transfer */
+    Route::get('/fund_transfer_list', function () {
+        return view("cb::fund_transfer_list");
+    });
+    Route::get('/fund_transfer', function () {
+        $id = null;
+        $action = "create";
+        return view("cb::fund_transfer",compact('id','action'));
+    });
+    Route::get('/fund_transfer/{id}/{action}', function ($id,$action) {
+        return view('cb::fund_transfer', compact('id', 'action'));
+    });
+    Route::get('/fund_transfer_view/{id}', function ($id) {
+        $action = "view";
+        return view('cb::fund_transfer_view', compact('id', 'action'));
+    });
+    Route::get('/getGLAccounts', [FundTransferController::class, 'getGLAccounts']);
+    Route::get('/getBranches', [FundTransferController::class, 'getBranches']);
+    Route::get('/getAllFundTransfer', [FundTransferController::class, 'getAllFundTransfer']);
+    Route::get('/getFundTransfer/{id}', [FundTransferController::class, 'getFundTransfer']);
+    Route::post('/saveFundTransfer', [FundTransferController::class, 'saveFundTransfer']);
+    Route::post('/updateFundTransfer/{id}', [FundTransferController::class, 'updateFundTransfer']);
+    Route::put('/approvalFundTransfer/{id}', [FundTransferController::class, 'approvalFundTransfer']);
 });

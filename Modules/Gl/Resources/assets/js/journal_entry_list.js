@@ -91,7 +91,7 @@ const DatatableFixedColumns = function () {
             "order": [],
             "columns": [
                 { "data": "date" },
-                { "data": "description" },
+                { "data": "remark" },
                 { "data": "created_by" },
                 { "data": "branch" },
                 { "data": "action" },
@@ -229,7 +229,7 @@ function getJournalEntries() {
 
                 data.push({
                     "date": dt[i].transaction_date,
-                    "description": dt[i].description,
+                    "remark": dt[i].remark,
                     "created_by": created_by,
                     "branch": dt[i].branch_name,
                     "action": btnEdit + '&#160<button class="btn btn-success btn-sm" onclick="view(' + dt[i].gl_journal_id + ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160' + btnDlt + '&#160' + '&#160' + btnApproval,
