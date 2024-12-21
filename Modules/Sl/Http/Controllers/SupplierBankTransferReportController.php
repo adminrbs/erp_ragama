@@ -82,7 +82,7 @@ class SupplierBankTransferReportController extends Controller
         CL.trans_date,
 	    DATEDIFF( SP.receipt_date, CL.trans_date ) AS gap,
 	    ABS(CL.amount) AS amount,
-	    ( SELECT CL.paidamount FROM creditors_ledger CL WHERE SPSD.reference_external_number = CL.external_number LIMIT 1 ) AS total_paid,
+	    SPSD.paid_amount,
 	    CL.return_amount,
 	    SPSD.set_off_amount,
 	    ABS(
@@ -99,9 +99,36 @@ class SupplierBankTransferReportController extends Controller
 
 //dd($qry);
         $result = DB::select($qry);
-
-        $resulsupplier = DB::select('select supplier_id,supplier_name from suppliers');
-       
+//dd($result);
+       // $resulsupplier = DB::select('select supplier_id,supplier_name from suppliers');
+       $resulsupplier = DB::select($qry = ' SELECT
+       SPBS.reference AS bank_slip_reference,
+       SPBS.slip_date,
+       SPBS.slip_time,
+       SP.supplier_id,
+       S.supplier_name,
+       SP.external_number,
+       SP.receipt_date,
+       SPSD.reference_external_number AS invoice_no,
+       E.employee_name,
+       CL.trans_date,
+       DATEDIFF( SP.receipt_date, CL.trans_date ) AS gap,
+       ABS(CL.amount) AS amount,
+       SPSD.paid_amount,
+       CL.return_amount,
+       SPSD.set_off_amount,
+       ABS(
+   (SELECT ABS(CL.amount) FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+   -
+   (SELECT CL.paidamount FROM creditors_ledger WHERE SPSD.reference_external_number = CL.external_number LIMIT 1)
+) AS balance
+   FROM
+       supplier_payments SP
+   LEFT JOIN supplier_payment_setoff_data SPSD ON SP.supplier_payment_id = SPSD.supplier_payments_id
+   LEFT JOIN supplier_payment_bank_slips  SPBS ON SP.supplier_payment_id = SPBS.supplier_payment_id
+   LEFT JOIN suppliers S ON SP.supplier_id = S.supplier_id
+   LEFT JOIN employees E ON SP.collector_id = E.employee_id
+   LEFT JOIN creditors_ledger CL ON SPSD.creditors_ledger_id = CL.creditors_ledger_id ' . $query_modify);
 
         $customerablearray = [];
         $titel = [];
@@ -131,8 +158,8 @@ class SupplierBankTransferReportController extends Controller
 
                 array_push($customerablearray, $table);
 
-
-                array_push($titel, $customerId->supplier_name);
+                
+                array_push($titel, "<strong>Supplier Name</strong> :".$customerId->supplier_name." <strong>Slip date</strong> :".$customerId->slip_date."   <strong>Slip time</strong> :".$customerId->slip_time." <strong>Bank Slip Reference</strong> :".$customerId->bank_slip_reference);
 
                 $reportViwer->addParameter('abc', $titel);
             }

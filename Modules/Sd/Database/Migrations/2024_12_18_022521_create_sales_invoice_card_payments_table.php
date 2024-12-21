@@ -13,17 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('supplier_payment_bank_slips', function (Blueprint $table) {
-            $table->id('supplier_payment_bank_slip_id')->index();
-            $table->integer('supplier_payment_id')->index();
+        Schema::create('sales_invoice_card_payments', function (Blueprint $table) {
+            $table->id('sales_invoice_card_payment_id');
+            $table->integer('sales_invoice_id');
             $table->integer('internal_number');
-            $table->string('external_number');
-            $table->string('reference');
-            $table->time('slip_time');
-            $table->date('slip_date');
-
-
-
+            $table->string('external_number',200);
+            $table->decimal('amount',12,2);
+            $table->integer('card_no');
+            $table->integer('card_bank_id');
+            $table->string('cardType',50);
             $table->timestamps();
         });
     }
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supplier_receipt_bank_slips');
+        Schema::dropIfExists('sales_invoice_card_payments');
     }
 };

@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment_voucher_bank_slips', function (Blueprint $table) {
-            $table->id('payment_voucher_bank_slip_id');
-            $table->integer('payment_voucher_id');
+        Schema::create('sales_invoice_bank_transfers', function (Blueprint $table) {
+            $table->id('sales_invoice_bank_transfer_id');
+            $table->integer('sales_invoice_id');
             $table->integer('internal_number');
-            $table->string('external_number',200);
-            $table->string('reference',255);
-            $table->time('slip_time');
-            $table->date('slip_date');
+            $table->integer('external_number');
+            $table->decimal('amount',12,2);
+            $table->date('bank_transfer_date');
+            $table->string('bank_transfer_reference');
+
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_voucher_bank_slips');
+        Schema::dropIfExists('sales_invoice_bank_transfers');
     }
 };

@@ -59,7 +59,8 @@ class GoodsReturnSummeryReportController extends Controller
                 GRN.total_amount 
                FROM goodreceivereturns  GRN
                INNER JOIN suppliers S ON S.supplier_id=GRN.supplier_id
-               INNER JOIN branches B ON B.branch_id = GRN.branch_id";
+               INNER JOIN branches B ON B.branch_id = GRN.branch_id
+               INNER JOIN supply_groups SG ON S.supply_group_id = SG.supply_group_id";
     
     
                 $quryModify = "";
@@ -74,9 +75,9 @@ class GoodsReturnSummeryReportController extends Controller
                 if ($supplygroup != null) {
     
                     if (count($supplygroup) > 1) {
-                        $quryModify .= " GRN.supplier_id IN ('" . implode("', '", $supplygroup) . "') AND ";
+                        $quryModify .= " SG.supply_group_id IN ('" . implode("', '", $supplygroup) . "') AND ";
                     } else {
-                        $quryModify .= " GRN.supplier_id ='" . $supplygroup[0] . "' AND ";
+                        $quryModify .= " SG.supply_group_id ='" . $supplygroup[0] . "' AND ";
                     }
                 }
     

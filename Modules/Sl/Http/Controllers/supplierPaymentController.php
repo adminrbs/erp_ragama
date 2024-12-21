@@ -257,7 +257,7 @@ class supplierPaymentController extends Controller
                 //  dd($request->get('single_cheque'));
                 $single_cheque = json_decode($request->get('single_cheque'));
                 $payment_slip = json_decode($request->get('payment_slip'));
-                //dd($single_cheque);
+           // dd($request);
                 if ($request->get('receipt_method_id') == 2) {
                     $this->saveSupplierReceiptCheque($receipt->supplier_payment_id, $receipt->internal_number, $receipt->external_number, $single_cheque);
                 }
@@ -269,6 +269,7 @@ class supplierPaymentController extends Controller
 
 
                 array_push($this->response_data, true);
+                //dd($this->response_data);
                 //DB::commit();
                 return response()->json(["data" => $this->response_data]);
             }
@@ -286,12 +287,12 @@ class supplierPaymentController extends Controller
           
                 
                 //$slip_data = json_decode($data);
-                //dd($$data);
+              //  dd($paymentSlip);
                 $slip = new SupplierPaymentBankSlips();
-                $slip->customer_receipt_id = $receipt->customer_receipt_id;
+                $slip->supplier_payment_id = $receipt->supplier_payment_id;
                 $slip->internal_number = $receipt->internal_number;
                 $slip->external_number = $receipt->external_number;
-                $slip->reference = $paymentSlip->cheque_referenceNo;
+                $slip->reference = $paymentSlip->slip_referenceNo;
                 $slip->slip_time = $paymentSlip->slip_time;
                 $slip->slip_date = $paymentSlip->slip_date;
                 $slip->save();
@@ -517,7 +518,7 @@ class supplierPaymentController extends Controller
     WHEN supplier_payments.receipt_method_id = 1 THEN 'cash'
     WHEN supplier_payments.receipt_method_id = 2 THEN 'cheque'
     WHEN supplier_payments.receipt_method_id = 5 THEN 'credit card'
-    WHEN supplier_payments.receipt_method_id = 7 THEN 'bank transfer'
+    WHEN supplier_payments.receipt_method_id = 4 THEN 'bank transfer'
     ELSE 'other'
 END AS payment_mode
  FROM supplier_payments
@@ -535,11 +536,13 @@ END AS payment_mode
         try{
             $recptData = [];
             $supplierData = [];
-            $recptData = DB::select("SELECT SR.external_number, SRSD.reference_external_number,CL.trans_date,CL.amount,CL.paidamount,SRSD.amount as receipt_amount,(CL.amount - CL.paidamount) AS balance FROM supplier_payments SR INNER JOIN supplier_payment_setoff_data SRSD ON SR.supplier_payment_id = SRSD.supplier_payments_id INNER JOIN creditors_ledger CL ON SRSD.reference_external_number = CL.external_number WHERE SR.supplier_payment_id = $id");
+            
+$recptData = DB::select("SELECT SR.external_number,SR.receipt_date, SRSD.reference_external_number, CL.trans_date, ABS(CL.amount) as amount, SRSD.paid_amount, SRSD.set_off_amount as receipt_amount, (ABS(CL.amount) - CL.paidamount) AS balance FROM supplier_payments SR INNER JOIN supplier_payment_setoff_data SRSD ON SR.supplier_payment_id = SRSD.supplier_payments_id INNER JOIN creditors_ledger CL ON SRSD.reference_external_number = CL.external_number WHERE SR.supplier_payment_id = $id");
             $supplierData = DB::select("SELECT S.supplier_name, S.primary_address FROM suppliers S INNER JOIN supplier_payments SR ON S.supplier_id = SR.supplier_id WHERE SR.supplier_payment_id = $id");
             $branch = DB::select("SELECT B.branch_name FROM branches B INNER JOIN supplier_payments SR ON B.branch_id = SR.branch_id WHERE SR.supplier_payment_id = $id");
             $companyDetails = CompanyDetailsController::CompanyName();
-            return response()->json(["status" => true, "supplierData" => $supplierData, "recptData" => $recptData, "branch"=>$branch, "companyName" => $companyDetails]);
+            $companyAddess = CompanyDetailsController::CompanyAddress();
+            return response()->json(["status" => true, "supplierData" => $supplierData, "recptData" => $recptData, "branch"=>$branch, "companyName" => $companyDetails, "address" => $companyAddess]);
         }catch(Exception $ex){
             return response()->json(["status" => false, "exception" => $ex]);
         }

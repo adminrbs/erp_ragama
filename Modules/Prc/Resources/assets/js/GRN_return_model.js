@@ -1195,8 +1195,8 @@ function create_table(array) {
 
                         item_code = dt[0].Item_code;
                         item_name = dt[0].item_Name;
-                        uom = dt[0].package_unit;
-                        pack_size = dt[0].unit_of_measure;
+                        uom = dt[0].unit_of_measure;
+                        pack_size = dt[0].package_unit;
 
                     });
 

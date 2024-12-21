@@ -115,6 +115,19 @@
                                             Reference</span></label>
                                     <input type="text" id="txtYourReference" class="form-control">
                                 </div>
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Supplier Code</span></label>
+                                    <input type="text" id="txtSupplier" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Supplier Name</span></label>
+                                    <label class="form-control" id="lblSupplierName">Supplier Name</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Address</span></label>
+                                    <input type="text" class="form-control" id="lblSupplierAddress" value="" disabled>
+                                </div>
                                 <!--   <div class="col-md-2" style="margin-top: 30px;">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="rdoWholeSalePrice">

@@ -9,8 +9,9 @@
 @section('page-header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
-input::placeholder {
-      text-align: left; /* Align the placeholder text to the left */
+    input::placeholder {
+        text-align: left;
+        /* Align the placeholder text to the left */
     }
 </style>
 @endsection
@@ -183,11 +184,12 @@ input::placeholder {
                                 <a href="#rtn" class="nav-link" aria-selected="true">Return Request</a>
                             </li>
                             <li class="nav-item rbs-nav-item">
-                                <a href="#payment" class="nav-link" aria-selected="true">Payment</a>
-                            </li>
-                            <li class="nav-item rbs-nav-item">
                                 <a href="#salesReturn" class="nav-link" aria-selected="true">Return</a>
                             </li>
+                            <li class="nav-item rbs-nav-item" id="tabPayment" onclick="calDueBalance()">
+                                <a href="#payment" class="nav-link" aria-selected="true">Payment</a>
+                            </li>
+                            
 
                         </ul>
 
@@ -288,9 +290,15 @@ input::placeholder {
                                                     <label for="card" class="form-label">Card</label>
                                                     <input type="text" id="txtcard" class="form-control paymentInput" placeholder="Card Amount" style="text-align: right;">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label for="cardNo" class="form-label">Card No (Last 4/5 digits)</label>
                                                     <input type="text" id="txtcardNo" class="form-control" style="text-align: right;">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="cardNo" class="form-label">Bank</label>
+                                                    <select id="cmbCardIssueBank" class="form-select">
+                                                        <option value="">Select Bank</option>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label for="type" class="form-label">Type</label>
@@ -309,30 +317,41 @@ input::placeholder {
 
                                             <!-- Cheque Row -->
                                             <div class="row mb-2">
-                                                <div class="col-md-7">
-                                                    <label for="chequeDetails" class="form-label">Cheque Details</label>
+                                                <label for="chequeDetails" class="form-label">Cheque Details</label>
+                                                <div class="col-md-12">
                                                     <div class="row">
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <input type="text" id="txtchqAmount" class="form-control paymentInput" placeholder="Cheque Amount" style="text-align: right;">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <input type="text" id="chequeNo" class="form-control" placeholder="Cheque No" style="text-align: right;">
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <input type="date" id="validDate" class="form-control" placeholder="Valid Date">
+                                                        <div class="col-md-2">
+                                                            <input type="date" id="chqDate" class="form-control" placeholder="Valid Date">
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <input type="text" id="bank" class="form-control" placeholder="Bank and branch">
+                                                        <div class="col-md-2">
+                                                            <input type="text" id="txtbank" class="form-control" placeholder="Bank and branch">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select id="cmbBank" class="form-select">
+                                                                <option value="">Select Bank</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select id="cmbBankBranch" class="form-select">
+                                                                <option value="">Select Branch</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <!-- Bank Transfer Row -->
                                             <div class="row mb-2">
                                                 <div class="col-md-6">
 
                                                     <div class="row">
-                                                    <div class="col-md-4">
+                                                        <div class="col-md-4">
                                                             <label for="txtBankReference" class="form-label">Bank Transfer Amount</label>
                                                             <input type="text" id="txtBankTransferAmount" class="form-control paymentInput" placeholder="Amount" style="text-align: right;">
                                                         </div>
@@ -348,19 +367,34 @@ input::placeholder {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- credit field -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="txtCredit" class="form-label">Credit</label>
+                                                            <input type="text" id="txtCredit" class="form-control" placeholder="Credit Amount" style="text-align: right;" disabled>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <!-- Balance Fields Row -->
                                             <div class="row mb-2">
                                                 <div class="col-md-2">
                                                     <label for="dueBalance" class="form-label">Due Balance</label>
-                                                    <input type="text" id="dueBalance" class="form-control bg-success text-white" value="0.00" readonly>
+                                                    <input type="text" id="txtdueBalance" class="form-control bg-success text-white" value="0.00" style="text-align: right;" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     <label for="cashBalance" class="form-label">Cash Balance</label>
-                                                    <input type="text" id="cashBalance" class="form-control bg-warning" value="0.00" readonly>
+                                                    <input type="text" id="cashBalance" class="form-control bg-warning" value="0.00" readonly style="text-align: right;">
                                                 </div>
                                             </div>
 

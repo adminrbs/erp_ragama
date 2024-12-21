@@ -8,7 +8,7 @@ var GRNID = null;
 var reuqestID;
 var action = undefined;
 var referanceID;
-var ItemList;
+var ItemList = [];
 var got_from_pickOrder = false;
 var value_for_radio_button = undefined;
 
@@ -49,12 +49,15 @@ $(document).ready(function () {
   
     getBranches();
     $('#cmbBranch').change();
-    ItemList =  loadItems();
+    //ItemList =  loadItems();
     loadPamentType();
     getServerTime();
-    suppliers = loadSupplierTochooser();
+    //suppliers = loadSupplierTochooser();
 
     //DataChooser.addCollection("supplier",['', '', '', '',''], suppliers);
+    suppliers = loadSupplierTochooser();
+
+    DataChooser.addCollection("supplier",['Supplier', 'Code', '', '',''], suppliers);
     DataChooser.addCollection("item",['', '', '', '',''], ItemList);
 
 
@@ -82,28 +85,39 @@ $(document).ready(function () {
         inputValue = formatNumberWithCommas(inputValue);
         $(this).val(inputValue);
     });
+
+    /* $('#txtSupplier').on('change', function() {
+        var id = $(this).attr('data-id');
+           
+            ItemList = loadItems(id);
+            DataChooser.addCollection("item",['', '', '', '',''], ItemList);
+        
+    }); */     
    
+    $('#txtSupplier').on('focus', function () {
+        DataChooser.showChooser($(this),$(this),"supplier");
+        $('#data-chooser-modalLabel').text('Suppliers');
+
+       
+
+        var upArrowEvent = $.Event('keydown', { keyCode: 38 });
+    });
+
+    
 
 
-    //setting datat to data chooser -supplier
-    // $('#txtSupplier').on('focus', function () {
-    //     DataChooser.showChooser($(this),$(this),"supplier");
-    //     $('#data-chooser-modalLabel').text('Suppliers');
-    // });
-
-
-    $.ajax({
+  /*   $.ajax({
         url: '/prc/txtSupplier',
         type: 'get',
         async: false,
         success: function (data) {
-console.log(data);
+//console.log(data);
             // $('#txtSupplier').val(data[0].supplier_code);
             //  $('#lblSupplierName').val(data[0].supplier_name);
             // $('#lblSupplierAddress').val(data[0].primary_address);
 
         },
-    })
+    }) */
 
 
 
@@ -820,24 +834,25 @@ function addBonusClaim(collection, id) {
 //     })
 // }
 //load item
-function loadItems() {
-    var list = [];
+function loadItems(id) {
+    var list = []
+    
     $.ajax({
-        url: '/prc/loadItems',
+        url: '/prc/loadItemsPurchaseOrder/'+id,
         type: 'get',
-        async:false,
+        async: false,
         dataType: 'json',
         success: function (response) {
             if (response.success) {
                 list = response.data;
-                /* DataChooser.setDataSourse(itemData); */
+
             }
         },
         error: function (error) {
             console.log(error);
         },
 
-    })
+    });
     return list;
 }
 
@@ -880,7 +895,8 @@ function loadSupplierOtherDetails(id) {
             $('#lblSupplierAddress').val(txt[0].primary_address);
             $('#lblSupplierName').attr('data-id',supID);
             $('#txtSupplierInvoiceNumber').focus();
-
+            ItemList = loadItems(supID);
+            DataChooser.addCollection("item",['', '', '', '',''], ItemList);
         },
         error: function (error) {
             console.log(error);

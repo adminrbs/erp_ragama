@@ -285,7 +285,7 @@ Route::prefix('sd')->middleware(['is.logged'])->group(function () {
     Route::get('/get_branch_code/{id}',[SalesInvoiceController::class,'get_branch_code']);
     Route::get('/loadItemsforsalesinvoice/{id}',[SalesInvoiceController::class,'loadItemsforsalesinvoice']);    
     Route::get('/loadSalesReturns/{customerID}',[SalesInvoiceController::class,'loadSalesReturns']);
-
+    Route::get('/loadBankData',[SalesInvoiceController::class,'loadBankData']);
     /**invoice re-print */
     Route::get('/invoice_reprint',function(){
         return view('sd::sales_invoice_reprint_approval');

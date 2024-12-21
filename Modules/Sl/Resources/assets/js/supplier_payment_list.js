@@ -63,17 +63,17 @@ const DatatableFixedColumns = function () {
                 
                 {
                     orderable: false,
-                    width: 100,
+                    width: 120,
                     targets: 0
                 },
                 {
                     orderable: false,
-                    width: 80,
+                    width: 100,
                     targets: 1
                 },
                 {
                     orderable: false,
-                    width: 200,
+                    width: '100%',
                     targets: 2
                 },
 
@@ -149,7 +149,7 @@ function getReceiptList() {
 
                     "ref_number": result[i].external_number,
                     "date": result[i].receipt_date,
-                    "customer":'<div title="'+result[i].supplier_name+'">'+shortenString(result[i].supplier_name,27)+'</div',
+                    "customer":'<div title="'+result[i].supplier_name+'">'+shortenString(result[i].supplier_name,100)+'</div',
                     "amount": parseFloat(result[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString(),
                     "chq_no":result[i].cheque_number,
                     "banking_date": result[i].banking_date,

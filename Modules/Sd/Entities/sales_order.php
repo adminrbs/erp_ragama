@@ -33,27 +33,27 @@ class sales_order extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected static function boot()
+    /* protected static function boot()
     {
         parent::boot();
 
         static::created(function ($model) {
-            // Log activity after the sales order is created
+           
             $model->logActivity($model,'created');
         });
 
         static::updated(function ($model) {
-            // Log activity after the sales order is updated
+            
             $model->logActivity($model,'updated');
         });
 
         static::deleted(function ($model) {
-            // Log activity after the sales order is deleted
+           
             $model->logActivity($model,'deleted');
         });
 
       
-    }
+    } */
 
     /* public function save(array $options = [])
     {

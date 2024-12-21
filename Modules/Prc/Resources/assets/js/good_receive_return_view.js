@@ -274,7 +274,7 @@ function getEachproduct(id) {
                     "itemCode": dt[i].Item_code,
                     "name": dt[i].item_name,
                     "qty": Math.abs(dt[i].quantity),
-                    "foc": dt[i].free_quantity,
+                    "foc": Math.abs(dt[i].free_quantity),
                     "uom": dt[i].unit_of_measure,
                     //"packagesize":dt[i].package_size,
                     "packsize": dt[i].package_unit,
