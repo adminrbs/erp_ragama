@@ -68,7 +68,8 @@ class CustomerReceiptListController extends Controller
                     DB::raw("CASE 
                                 WHEN customer_receipts.receipt_method_id = 1 THEN 'Cash'
                                 WHEN customer_receipts.receipt_method_id = 2 THEN 'Cheque'
-                                ELSE 'Bank Slip'
+                                WHEN customer_receipts.receipt_method_id = 7 THEN 'Bank Slip'
+                                ELSE 'Card Payments'
                             END AS payment_mode"),
                     DB::raw("GROUP_CONCAT(debtors_ledgers.external_number SEPARATOR ', ') AS invoice_numbers") // Concatenate the values to avoid duplicates
                 )

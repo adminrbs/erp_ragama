@@ -186,7 +186,7 @@
                             <li class="nav-item rbs-nav-item">
                                 <a href="#salesReturn" class="nav-link" aria-selected="true">Return</a>
                             </li>
-                            <li class="nav-item rbs-nav-item" id="tabPayment" onclick="calDueBalance()">
+                            <li class="nav-item rbs-nav-item" id="tabPayment" onclick="calCredit()">
                                 <a href="#payment" class="nav-link" aria-selected="true">Payment</a>
                             </li>
                             
