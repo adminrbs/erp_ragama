@@ -149,7 +149,7 @@
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Method Of Payment</span></label>
-                                    <select class="form-select" id="cmbPaymentMethod"></select>
+                                    <select class="form-select" id="cmbPaymentMethod" disabled></select>
                                 </div>
 
                                 <div class="col-md-4">

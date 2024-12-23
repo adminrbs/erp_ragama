@@ -127,6 +127,15 @@
                             <li class="nav-item rbs-nav-item">
                                 <a href="#Item" class="nav-link active" aria-selected="true">Product</a>
                             </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a href="#rtn" class="nav-link" aria-selected="true">Return Request</a>
+                            </li>
+                            <li class="nav-item rbs-nav-item">
+                                <a href="#salesReturn" class="nav-link" aria-selected="true">Return</a>
+                            </li>
+                            <li class="nav-item rbs-nav-item" id="tabPayment" onclick="">
+                                <a href="#payment" class="nav-link" aria-selected="true">Payment</a>
+                            </li>
 
                         </ul>
 
@@ -166,6 +175,208 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-pane fade show " id="rtn">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="rowIndex">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-striped" id="rtn_item">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Request Date</th>
+                                                        <th>Sales Rep</th>
+                                                        <th>Item Code</th>
+                                                        <th>Item Name</th>
+                                                        <th>Pack Size</th>
+                                                        <th>QTY</th>
+                                                        <th><input type="checkbox" class="form-check-input" onchange="check_all(this)" id="chk_selectAll" checked></th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show" id="payment">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="rowIndex">
+
+                                        <!-- Payment Section -->
+                                        <div class="p-3 border rounded" style="background-color: #f0f8ff;">
+                                            <!-- Tender Row -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-2">
+                                                    <label for="tender" class="form-label">Tender</label>
+                                                    <input type="text" id="txttender" class="form-control" style="text-align: right;">
+                                                </div>
+                                            </div>
+
+                                            <!-- Cash Row -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-2">
+                                                    <label for="cash" class="form-label">Cash</label>
+                                                    <input type="text" id="txtcash" class="form-control paymentInput" style="text-align: right;">
+                                                </div>
+                                            </div>
+
+                                            <!-- Card Row -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-2">
+                                                    <label for="card" class="form-label">Card</label>
+                                                    <input type="text" id="txtcard" class="form-control paymentInput" placeholder="Card Amount" style="text-align: right;">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="cardNo" class="form-label">Card No (Last 4/5 digits)</label>
+                                                    <input type="text" id="txtcardNo" class="form-control" style="text-align: right;">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="cardNo" class="form-label">Bank</label>
+                                                    <select id="cmbCardIssueBank" class="form-select">
+                                                        <option value="">Select Bank</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="type" class="form-label">Type</label>
+                                                    <div class="d-flex align-items-center">
+                                                        <select id="type" class="form-select me-2">
+                                                            <option value="Other">Other</option>
+                                                            <option value="Visa">Visa</option>
+                                                            <option value="Mastercard">Mastercard</option>
+                                                            <option value="Amex">Amex</option>
+                                                        </select>
+                                                        <img id="cardLogo" src="" alt="Card Logo" style="height: 30px; display: none;">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- Cheque Row -->
+                                            <div class="row mb-2">
+                                                <label for="chequeDetails" class="form-label">Cheque Details</label>
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <input type="text" id="txtchqAmount" class="form-control paymentInput" placeholder="Cheque Amount" style="text-align: right;">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="text" id="chequeNo" class="form-control" placeholder="Cheque No" style="text-align: right;">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="date" id="chqDate" class="form-control" placeholder="Valid Date">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="text" id="txtbank" class="form-control" placeholder="Bank and branch">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select id="cmbBank" class="form-select">
+                                                                <option value="">Select Bank</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <select id="cmbBankBranch" class="form-select">
+                                                                <option value="">Select Branch</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bank Transfer Row -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="txtBankReference" class="form-label">Bank Transfer Amount</label>
+                                                            <input type="text" id="txtBankTransferAmount" class="form-control paymentInput" placeholder="Amount" style="text-align: right;">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="txtBankReference" class="form-label">Bank Transfer Reference</label>
+                                                            <input type="text" id="txtBankReference" class="form-control" placeholder="Reference">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="dtBankTransferDate" class="form-label">Bank Transfer Date</label>
+                                                            <input type="date" id="dtBankTransferDate" class="form-control" placeholder="Valid Date">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- credit field -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="txtCredit" class="form-label">Credit</label>
+                                                            <input type="text" id="txtCredit" class="form-control" placeholder="Credit Amount" style="text-align: right;" disabled>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Balance Fields Row -->
+                                            <div class="row mb-2">
+                                                <div class="col-md-2">
+                                                    <label for="dueBalance" class="form-label">Due Balance</label>
+                                                    <input type="text" id="txtdueBalance" class="form-control bg-success text-white" value="0.00" style="text-align: right;" readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="cashBalance" class="form-label">Cash Balance</label>
+                                                    <input type="text" id="cashBalance" class="form-control bg-warning" value="0.00" readonly style="text-align: right;">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show " id="salesReturn">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- <input type="hidden" id="rowIndex"> -->
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-striped" id="salesReturnTable">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Date</th>
+                                                        <th>Reference</th>
+                                                        <th>Return Amount</th>
+                                                        <!-- <th>Balance</th> -->
+                                                        <!-- th>Remaining Balance</th> -->
+                                                        <th>Set Off</th>
+                                                       <!--  <th>Select</th> -->
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
 
 
 
