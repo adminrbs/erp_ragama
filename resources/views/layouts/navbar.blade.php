@@ -89,6 +89,18 @@
                                             </a>
                                         </li>
                                         @endif
+
+                                        <li class="nav-item">
+                                            <a href="#tab_navbars_demo_cash_managment" class="nav-link rounded" data-bs-toggle="tab">
+                                                <i class="ph-rows me-2"></i>
+                                                Cash Managment
+                                                <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
+                                            </a>
+                                        </li>
+
+
+
+
                                         @if(Auth::user()->hasModulePermission('Master Data'))
                                         <li class="nav-item">
 
