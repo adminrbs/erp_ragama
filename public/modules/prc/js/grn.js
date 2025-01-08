@@ -46,6 +46,7 @@ $(document).ready(function () {
     $('#btnApprove').hide();
     $('#btnReject').hide();
     $('#btnSaveDraft').hide();
+    $('#btnRevise').hide();
   
     getBranches();
     $('#cmbBranch').change();
@@ -112,11 +113,14 @@ $(document).ready(function () {
             $('#btnSave').hide();
             $('#btnSaveDraft').hide();
             $('#btnApprove').show();
+            $('#btnRevise').show();
             $('#btnReject').show();
             $('#btnSaveDraft').hide();
             $('#btnPickOrders').hide();
             $('#btnBack').show();
             $('#alert_div').hide();
+           $('.form-control').attr('disabled', 'disabled');
+           $('.form-select').attr('disabled', 'disabled');
            
         }
         else if (action == 'edit' && status == 'Original') {
@@ -126,6 +130,7 @@ $(document).ready(function () {
             $('#btnReject').hide();
             $('#btnPickOrders').hide();
             $('#btnBack').show();
+            $('#btnRevise').hide();
 
         } else if (action == 'edit' && status == 'Draft') {
             $('#btnSave').text('Save and Send');
@@ -135,11 +140,13 @@ $(document).ready(function () {
             $('#btnReject').hide();
             $('#btnPickOrders').hide();
             $('#btnBack').show();
+            $('#btnRevise').hide();
 
         } else if (action == 'view') {
             $('#btnSave').hide();
             $('#btnSaveDraft').hide();
             $('#btnApprove').hide();
+            $('#btnRevise').hide();
             $('#btnReject').hide();
             $('#btnPickOrders').hide();
             $('#btnBack').show();
@@ -164,7 +171,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:60px;", "event": "clickx(1)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:100px;", "event": "clickx(1)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs math-abs", "value": "", "style": "width:80px;", "event": "clickx(1)", "width": "*", "disabled": "disabled" },
-            { "type": "text", "class": "transaction-inputs math-abs", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*","thousand_seperator":true,"disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs math-abs", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*","thousand_seperator":true, },
             { "type": "text", "class": "transaction-inputs math-abs", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*", },
             { "type": "text", "class": "transaction-inputs ", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" },
@@ -172,7 +179,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs math-abs", "value": "", "style": "width:80px;text-align:right;", "event": "", "width": "*", },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:150px;", "event": "", "width": "*","disabled": "disabled" }, //batch 13
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;", "event": "enableDate(this)", "width": "*", "disabled": "disabled" }, //date 14
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*" }, //cost added calc function on 06/08
+            { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;text-align:right;", "event": "calValueandCostPrice(this)", "width": "*","disabled":"disabled" }, //cost added calc function on 06/08
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);calculation();", "width": 30 },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;", "event": "", "width": "*", "disabled": "disabled" }, 
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "width:80px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" },
@@ -963,11 +970,13 @@ function dataChooserEventListener(event, id, value) {
 
 
 
+
         $.ajax({
             url: '/prc/getItemInfo/' + item_id,
             type: 'get',
             success: function (response) {
                 console.log(response);
+                console.log(response[0].previouse_purchase_price);
                 var expireDateManage = response[0].manage_expire_date;
                 var batchManage = response[0].manage_batch;
                 if (expireDateManage == 1) {
@@ -980,10 +989,10 @@ function dataChooserEventListener(event, id, value) {
                 }
 
                 $(row_childs[1]).val(response[0].item_Name);
-                $(row_childs[4]).val(response[0].unit_of_measure);
+                $(row_childs[4]).val('');
                 $(row_childs[6]).val(response[0].package_unit);
                 $(row_childs[5]).val(response[0].package_size);
-                $(row_childs[7]).val(response[0].average_cost_price);
+                $(row_childs[7]).val(response[0].previouse_purchase_price || '0.00');
                 $(row_childs[11]).val(response[0].whole_sale_price);
                 $(row_childs[12]).val(response[0].retial_price);
                 $(row_childs[2]).focus();
@@ -1023,7 +1032,8 @@ function calValueandCostPrice(event) {
     var discount_percentage = $($(cell[8]).children()[0]);
     var discount_amount = $($(cell[9]).children()[0]);
     var foc = $($(cell[3]).children()[0]);
-    var cost_price = $($(cell[15]).children()[0]);
+    var cost_price = parseFloat($($(cell[15]).children()[0]).val().replace(/,/g, ""));
+    var cost_price_obj = $($(cell[15]).children()[0]);
 
     var wh_price = parseFloat($($(cell[11]).children()[0]).val().replace(/,/g, ""));
     var discount = parseFloat($($(cell[8]).children()[0]).val().replace(/,/g, ""));
@@ -1038,15 +1048,21 @@ function calValueandCostPrice(event) {
         }
 
          /* var p_price = wh_price - (wh_price * (discount / 100)); */
-         var p_price = wh_price;
+         var p_price = cost_price;
         
          
+    var calculated_discount_amount = parseFloat(price.val().replace(/,/g, ""))  * (discount / 100);
+    var calculated_cost = parseFloat(price.val().replace(/,/g, "")) - calculated_discount_amount;
 
 
 
-    //var value = getDiscountAmount(qty, price, discount_percentage, discount_amount,foc,cost_price);
-   // $($(cell[10]).children()[0]).val(value);
-    $($(cell[7]).children()[0]).val(p_price.toFixed(2));
+    var value = getDiscountAmount(qty, price, discount_percentage, discount_amount,foc,cost_price_obj);
+    $($(cell[10]).children()[0]).val(value);
+    $($(cell[15]).children()[0]).val(calculated_cost.toFixed(2));
+
+
+    calcDisc(event)
+    
     calculation();
     
     /* cal_purchase_price(event) */
@@ -1054,6 +1070,23 @@ function calValueandCostPrice(event) {
 }
 
 
+function calcDisc(event){
+    var row = $($(event).parent()).parent();
+    var cell = row.find('td');
+
+    var qty = $($(cell[2]).children()[0]);
+    var price = $($(cell[11]).children()[0]);
+    var discount_percentage = $($(cell[12]).children()[0]);
+   
+    var quantity = parseFloat(qty.val().replace(/,/g, ""));
+    var unit_price = parseFloat(price.val().replace(/,/g, ""));
+    var percentage = parseFloat(discount_percentage.val().replace(/,/g, ""));
+   
+var dis_amount = quantity * unit_price * (percentage / 100);
+   
+    $($(cell[13]).children()[0]).val(dis_amount);
+  //  calculation();
+}
 //grand total
 function calculation() {
     var grossTotal = 0;
@@ -1067,6 +1100,7 @@ function calculation() {
         var price = parseFloat(arr[i][7].val().replace(/,/g, ""));
         var discount_pres = parseFloat(arr[i][8].val().replace(/,/g, ""));
         var cost_price  = parseFloat(arr[i][15].val().replace(/,/g, ""));
+        var pur_price  = parseFloat(arr[i][7].val().replace(/,/g, ""));
 
         // Check if the field values are not NaN or empty
         if (isNaN(qty)) {
@@ -1082,11 +1116,11 @@ function calculation() {
         if(isNaN(cost_price)){
             cost_price = 0;
         }
-        discount_amount = (qty * cost_price) * (discount_pres / 100);
+        discount_amount = (qty * pur_price) * (discount_pres / 100);
         /* grossTotal += (qty * price);  changed on 04/06 as instrcuted by sachin*/
         console.log(cost_price);
         //grossTotal += (qty * price);
-        grossTotal += (qty * cost_price);
+        grossTotal += (qty * pur_price);
         tableDiscount += discount_amount;
 
     }
@@ -1163,6 +1197,7 @@ function getEachGRN(id, status) {
 
 //get each product of GRN
 function getEachproduct(id, status) {
+    //alert();
     $.ajax({
         url: '/prc/getEachproductofGRN/' + id + '/' + status,
         type: 'GET',
@@ -1173,25 +1208,30 @@ function getEachproduct(id, status) {
             var dataSource = [];
             $.each(data, function (index, value) {
                 var qty = value.quantity;
-                var price = value.price;
+                var price = value.cost_price;
                 var disAmount = value.discount_amount;
                 var valueS = (qty * price) - disAmount;
+                console.log(disAmount);
+                var disableValue = '';
+                if(task == 'approval'){
+                    disableValue = 'disabled';
+                }
                 dataSource.push([
-                    { "type": "text", "class": "transaction-inputs", "value": value.Item_code, "data_id": value.item_id, "style": "width:100px;margin-right:10px;padding:5px;background-color:#EBFFFF;", "event": "","valuefrom": "datachooser"  },
+                    { "type": "text", "class": "transaction-inputs", "value": value.Item_code, "data_id": value.item_id, "style": "width:100px;margin-right:10px;padding:5px;background-color:#EBFFFF;", "event": "","valuefrom": "datachooser" ,"disabled": disableValue },
                     { "type": "text", "class": "transaction-inputs", "value": value.item_name, "style": "width:370px;", "disabled": "disabled" },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(qty).toFixed(0), "style": "width:80px;", "compulsory":true,"event":"calValueandCostPrice(this);checkPOqtyandFoc(this)" },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.free_quantity).toFixed(0), "style": "width:80px","event":"calValueandCostPrice(this)" },
-                    { "type": "text", "class": "transaction-inputs", "value": value.unit_of_measure, "style": "width:60px", "event": "", "width": "*", "disabled": "disabled" },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(qty).toFixed(0), "style": "width:80px;", "compulsory":true,"event":"calValueandCostPrice(this);checkPOqtyandFoc(this)","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.free_quantity).toFixed(0), "style": "width:80px","event":"calValueandCostPrice(this)","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs", "value": value.additional_bonus, "style": "width:60px", "event": "", "width": "*", "disabled": "disabled", },
                     { "type": "text", "class": "transaction-inputs", "value": value.package_size, "style": "width:100px;", "event": "", "width": "*", "disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs", "value": value.package_unit, "style": "width:80px", "event": "", "width": "*", "disabled": "disabled" },
-                    { "type": "text", "class": "transaction-inputs ", "value": parseFloat(value.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*","event":"calValueandCostPrice(this)" },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_percentage, "style": "width:80px;", "event": "", "width": "*","event":"calValueandCostPrice(this)" },
+                    { "type": "text", "class": "transaction-inputs ", "value": parseFloat(value.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*","event":"calValueandCostPrice(this)","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_percentage, "style": "width:80px;", "event": "", "width": "*","event":"calValueandCostPrice(this)","disabled": disableValue },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_amount, "style": "width:80px;", "event": "discountAmount(this)", "width": "*","event":"calValueandCostPrice(this)","disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs", "value": parseFloat(valueS).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*", "disabled": "disabled" },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.whole_sale_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*", },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.retial_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*", },
-                    { "type": "text", "class": "transaction-inputs", "value": value.batch_number, "style": "width:150px;", "event": "", "width": "*", },
-                    { "type": "text", "class": "transaction-inputs", "value": value.expire_date, "style": "width:80px", "event": "enableDate(this)", "width": "*", },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.whole_sale_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.retial_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px;", "event": "", "width": "*","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs", "value": value.batch_number, "style": "width:150px;", "event": "", "width": "*","disabled": disableValue },
+                    { "type": "text", "class": "transaction-inputs", "value": value.expire_date, "style": "width:80px", "event": "enableDate(this)", "width": "*","disabled": disableValue },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": parseFloat(value.cost_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "width:80px", "event": "", "width": "*", "disabled": "disabled" },
                     { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-left:10px;", "event": "removeRow(this);calculation()", "width": 30 },
                     
@@ -1528,7 +1568,7 @@ function getDiscountAmount(qty, price, discount_percentage, discount_amount,foc_
     }
     final_value = (quantity_price - percentage_price);
     var cost_value = (final_value/(quantity+foc));
-    cost_price.val(cost_value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
+   // cost_price.val(cost_value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
 
 
     

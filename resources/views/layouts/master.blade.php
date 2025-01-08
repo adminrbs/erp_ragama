@@ -98,7 +98,7 @@
     <!-- Main content -->
     <div class="content-wrapper" style="background-color: #4b98cf;margin-top: 70px;padding-top: 0px;">
 
-      <div class="toast fade position-fixed" data-bs-delay="1100" role="alert" aria-live="assertive" aria-atomic="true" style="margin: auto;">
+      <div class="toast fade position-fixed" data-bs-delay="5000" role="alert" aria-live="assertive" aria-atomic="true" style="margin: auto;">
         <div class="toast-body d-flex">
           <div class="flex-fill toast-msg">
             Hello, world! This is a toast message.

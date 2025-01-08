@@ -1156,7 +1156,7 @@ function create_table(array) {
             $(rowObjects[global_row_index][2]).val(array[0].item.getQty());
             $(rowObjects[global_row_index][3]).val(array[0].item.getFoc());
             $(rowObjects[global_row_index][13]).val(array[0].item.getSetoffQuantity());
-            $(rowObjects[global_row_index][7]).val(array[0].item.getWholesalePrice());
+            $(rowObjects[global_row_index][7]).val(array[0].item.getCostPrice());
 
             $(rowObjects[global_row_index][16]).val(array[0].item.getWholesalePrice());
             $(rowObjects[global_row_index][17]).val(array[0].item.getRetailPrice());
@@ -1219,7 +1219,7 @@ function create_table(array) {
             $(rowObjects[i][2]).val(array[i - global_row_index].item.getQty());
             $(rowObjects[i][3]).val(array[i - global_row_index].item.getFoc());
             $(rowObjects[i][13]).val(array[i - global_row_index].item.getSetoffQuantity());
-            $(rowObjects[i][7]).val(array[i - global_row_index].item.getWholesalePrice());
+            $(rowObjects[i][7]).val(array[i - global_row_index].item.getCostPrice());
 
             $(rowObjects[i][16]).val(array[i - global_row_index].item.getWholesalePrice());
             $(rowObjects[i][17]).val(array[i - global_row_index].item.getRetailPrice());
@@ -1240,12 +1240,7 @@ function create_table(array) {
 function reset_table(array) {
     var rowObjects = tableData.getDataSourceObject();
 
-    /*for (var i = (global_row_index + 1); i < (array.length + global_row_index); i++) {
-
-        if (rowObjects[i] != undefined) {
-            $(rowObjects[i][15]).trigger('click');
-        }
-    }*/
+   
 
     if ($(rowObjects[global_row_index]) != undefined && array.length == 0) {
         $(rowObjects[global_row_index][2]).val('');

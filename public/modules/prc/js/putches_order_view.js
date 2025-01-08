@@ -75,6 +75,11 @@ const DatatableFixedColumns = function () {
                     className: 'dt-body-right', 
                     targets: 7
                 },
+                {
+                    width: 100,
+                    className: 'dt-body-right', 
+                    targets: 8
+                },
 
 
 
@@ -95,7 +100,9 @@ const DatatableFixedColumns = function () {
                 { "data": "name" },
                 { "data": "qty" },
                 { "data": "foc" },
+                { "data": "add" },
                 { "data": "uom" },
+                
                 //{ "data": "packagesize" },
               /*   { "data": "packsize" }, */
                 { "data": "price" },
@@ -279,23 +286,25 @@ function getEachproduct(id, status) {
                 var price = parseFloat(dt[i].price);
                 var discountAmount = parseFloat(dt[i].discount_amount);
                 var discountpres = parseFloat(dt[i].discount_percentage);
+                var cst = parseFloat(dt[i].cost_price);
                
 
-                var value = (quantity * price) - discountAmount;
+                var value = (quantity * cst) - discountAmount;
 
                 data.push({
 
                     "itemCode": dt[i].Item_code,
                     "name": dt[i].item_name,
-                    "qty": parseInt(dt[i].quantity),
-                    "foc": parseInt(dt[i].free_quantity),
+                    "qty": '<div style="text-align:right;">'+parseInt(dt[i].quantity)+'</div>',
+                    "foc": '<div style="text-align:right;">'+parseInt(dt[i].free_quantity)+'</div>',
                     "uom": dt[i].unit_of_measure,
+                    "add":'<div style="text-align:right;">'+dt[i].additional_bonus+'</div>',
                     //"packagesize":dt[i].package_size,
                    /*  "packsize": dt[i].package_unit, */
-                    "price": parseFloat(dt[i].price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                    "Disc": dt[i].discount_percentage,
+                    "price": '<div style="text-align:right;">'+parseFloat(cst).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>',
+                    "Disc": '<div style="text-align:right;">'+dt[i].discount_percentage+'</div>',
                     //"Discamount": dt[i].discount_amount,
-                    "value": parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    "value": '<div style="text-align:right;">'+parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>',
 
 
                 });
@@ -321,7 +330,7 @@ function calculateTotals(dt) {
         if(isNaN(quantity)){
             quantity=0
         }
-        var price = parseFloat(dt[i].price);
+        var price = parseFloat(dt[i].cost_price);
         if(isNaN(price)){
             price=0
         }

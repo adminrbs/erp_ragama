@@ -72,9 +72,10 @@ function generateGR_returnReport(id) {
      var sub_Total = 0;
      for (var i = 0; i < goodrecive_item.length; i++) {
          var wsp = parseFloat(goodrecive_item[i].whole_sale_price);
+         var cst = parseFloat(goodrecive_item[i].cost_price);
          var qty = parseFloat(goodrecive_item[i].quantity);
         
-         sub_Total += wsp * qty;
+         sub_Total += cst * qty;
 
             //totalAmount += subTotal
 
@@ -111,7 +112,7 @@ for (var i = 0; i < goodrecive_item.length; i++) {
 
 console.log(disAmount);
 
-    console.log("jjj", total_Amount);
+  
 
         
     
@@ -184,7 +185,7 @@ console.log(disAmount);
                                          ],
                                          [
                                              { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: 'GOOD RETUREN REPORT', fontSize: 11, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                             { text: 'GOOD RETURN REPORT', fontSize: 11, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                          ],
@@ -203,25 +204,25 @@ console.log(disAmount);
                                          ],
  
                                          [
-                                             { text: 'Manual No :'+(goodrecive[0].internal_number || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'Supplier :'+ (goodrecive[0].supplier_name || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              //{ text: 'Currency :'+ 'LKR 1.0000' , fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: 'PO User :'+ (goodrecive[0].userName || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                             { text: 'User :'+ (goodrecive[0].userName || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                          ],
  
-                                         [
-                                             { text: 'PO No :'+ (goodrecive[0].external_number || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                        /*  [
+                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              //{ text: 'App. User :'+ 'THARAKA', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
+                                         ], */
  
-                                         [
-                                             { text: 'Supplier :'+ (goodrecive[0].supplier_name || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                      /*    [
+                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              //{ text: 'Add. User :'+ '6/6/2023', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
+                                         ], */
  
                                          [
                                              { text: 'Address:'+ (goodrecive[0].primary_address || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
@@ -349,7 +350,7 @@ console.log(disAmount);
                     ],
                     [
                         { text: 'Prepared By', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 15] },
-                        { text: 'Checkd By', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 15] },
+                        { text: 'Checked By', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 15] },
                         { text: 'Authorized By', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 15] },
                         //{ text: '30 days Credit Only.', fontSize: 20, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 15] },
                         //{ text: 'Authorized By', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 15] },
@@ -458,7 +459,7 @@ console.log(data);
  
      for (i = 0; i < data.length; i++) {
         var quantity = parseFloat(data[i].quantity);
-    var price = parseFloat(data[i].price);
+    var price = parseFloat(data[i].cost_price);
     var retial_price = parseFloat(data[i].retial_price);
 
     var whole_sale_price = parseFloat(data[i].whole_sale_price);
@@ -491,7 +492,7 @@ console.log(data);
             { text: data[i].package_unit || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: new_qty || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
 
-            { text: formattedfree_quantity, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+            { text: Math.abs(formattedfree_quantity), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: formattedPrice || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             { text: data[i].discount_percentage || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
             //{ text: formattedAmount, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },

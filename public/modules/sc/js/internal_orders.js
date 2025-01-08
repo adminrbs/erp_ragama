@@ -686,10 +686,7 @@ function dataChooserEventListener(event, id, value) {
         $.ajax({
             url: '/sc/getItemInfo_internal_order/' + item_id + '/' + from_branch_id + '/' + to_branch,
             type: 'get',
-            data: {
-                from_date: from_date,
-                to_date: to_date
-            },
+            
             success: function (response) {
                 console.log(response[0].avg_sales);
                 $(row_childs[1]).val(response[0].item_Name);

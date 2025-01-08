@@ -62,6 +62,11 @@ const DatatableFixedColumns = function () {
                     width: 250,
                     targets: 2
                 },
+                {
+                    orderable: false,
+                    width: '100%',
+                    targets: 9
+                }
 
             ],
             scrollX: true,
@@ -89,6 +94,7 @@ const DatatableFixedColumns = function () {
             ],
             "stripeClasses": ['odd-row', 'even-row'],
         });
+        table.column(8).visible(false);
 
     };
 

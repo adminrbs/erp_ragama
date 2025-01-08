@@ -70,7 +70,7 @@ $(document).ready(function () {
 
     });
 
-    var hiddem_col_array = [5, 9,16,17,18];
+    var hiddem_col_array = [4,5, 9,17,18,11,19];
     if (window.location.search.length > 0) {
         var sPageURL = window.location.search.substring(1);
         var param = sPageURL.split('?');
@@ -106,7 +106,7 @@ $(document).ready(function () {
             $('#btnApprove').hide();
             $('#btnReject').hide();
             $('#btnBack').show();
-            hiddem_col_array = [5, 9, 15, 14, 13, 12,16,17,18];
+            hiddem_col_array = [4,5, 9, 15, 14, 13, 12,17,18,11,19];
             disableComponents();
 
         }
@@ -492,7 +492,8 @@ function addGR_Return(collection, id) {
         showWarningMessage('Unable to save without an item');
         return
     }
-    var return_result = _validation($('#txtSupplier'), $('#txtSupplier'));
+   /*  var return_result = _validation($('#txtSupplier'), $('#txtSupplier')); */
+   var return_result = false;
     if (return_result) {
         showWarningMessage("Please fill all required fields");
         return;
@@ -881,7 +882,7 @@ function calValueandCostPrice(event) {
     var discount_percentage = $($(cell[8]).children()[0]);
     var discount_amount = $($(cell[9]).children()[0]);
     var foc = $($(cell[3]).children()[0]);
-    var cost_price = $($(cell[15]).children()[0]);
+    var cost_price = $($(cell[19]).children()[0]);
 
 
 

@@ -29,7 +29,10 @@ $(document).ready(function () {
     DataChooser.addCollection("supplier",['Supplier', 'Code', '', '',''], suppliers);
     DataChooser.addCollection("item",['Item', 'Code', 'Supply Group', '',''], ItemList);
 
-
+    $('#tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
 
     //gross total calculation
     $('#txtDiscountAmount').on('input', function () {
@@ -149,6 +152,7 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:150px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "button", "class": "btn btn-success", "value": '<i class="fa fa-info-circle" aria-hidden="true"></i>', "style": "max-height:30px;margin-right:10px;", "event": "showPOModel(this)", "width": 30 },
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-right:10px;", "event": "removeRow(this);calculation()", "width": 30 }
         ],
         "auto_focus": 0,
@@ -1372,4 +1376,66 @@ function validate_qty(event){
     }
     
 
+}
+
+
+//show PO model
+function showPOModel(event) {
+   
+    $('#poModel').modal('show');
+    var row = $($(event).parent()).parent();
+    var cell = row.find('td');
+    var item_id = $($(cell[0]).children()[0]).attr('data-id');
+
+
+    loadPOInfoData(item_id)
+}
+
+//load PO info data
+function loadPOInfoData(id) {
+    $.ajax({
+        url: '/prc/loadPOInfoData/' + id,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            var dt = data.data;
+            var all = dt.all;
+            $('#history_table tbody').empty(); // Clear existing data from the table
+            $('#pending_table tbody').empty();
+            for (var i = 0; i < all.length; i++) {
+                $('#history_table').append(
+                    '<tr>' +
+                    '<td>' + all[i].goods_received_date_time + '</td>' +
+                    '<td>' + all[i].supplier_name + '</td>' +
+                    '<td>' + all[i].supppier_invoice_number + '</td>' +
+                    '<td style="text-align:right;">' + all[i].quantity + '</td>' +
+                    '<td style="text-align:right;">' + all[i].free_quantity + '</td>' +
+                    '<td style="text-align:right;">' + all[i].additional_bonus + '</td>' +
+                    '<td style="text-align:right;">' + all[i].price + '</td>' +
+                    '<td style="text-align:right;">' + all[i].discount_percentage + '</td>' +
+                    '<td style="text-align:right;">' + all[i].value + '</td>' +
+                    '</tr>'
+                );
+
+                if(all[i].approval_status == 'Pending'){
+                    $('#pending_table').append(
+                        '<tr>' +
+                        '<td>' + all[i].goods_received_date_time + '</td>' +
+                        '<td>' + all[i].supplier_name + '</td>' +
+                        '<td>' + all[i].supppier_invoice_number + '</td>' +
+                        '<td style="text-align:right;">' + all[i].quantity + '</td>' +
+                        '<td style="text-align:right;">' + all[i].free_quantity + '</td>' +
+                        '<td style="text-align:right;">' + all[i].additional_bonus + '</td>' +
+                        '<td style="text-align:right;">' + all[i].price + '</td>' +
+                        '<td style="text-align:right;">' + all[i].discount_percentage + '</td>' +
+                        '<td style="text-align:right;">' + all[i].value + '</td>' +
+                        '</tr>'
+                    );
+                }
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    })
 }

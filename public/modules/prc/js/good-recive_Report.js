@@ -117,7 +117,7 @@ function printGoodResiveReportPdf(id) {
  
                              [{
                                  table: {
-                                    widths: ['*',280, '*'],
+                                    widths: [130,280, '*'],
                                      headerRows: 1,
  
                                      body: [
@@ -148,46 +148,7 @@ function printGoodResiveReportPdf(id) {
                                              //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                          ],
  
-                                         [
-                                             { text: 'Reference No :'+ (goodrecive[0].external_number || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
-                                         [
-                                             { text: 'Date :'+goodrecive[0].payment_due_date, fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: 'Branch :'+  (goodrecive[0].branch_name || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
- 
-                                         [
-                                             { text: 'Manual No :'+(goodrecive[0].internal_number || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: 'Currency :'+ 'LKR 1.0000' , fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: 'PO User :'+ (goodrecive[0].userName || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
- 
-                                         [
-                                             { text: 'PO No :'+ (goodrecive[0].external_number || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: 'App. User :'+ 'THARAKA', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: 'Sup Inv :'+ (goodrecive[0].supppier_invoice_number), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
- 
-                                         [
-                                             { text: 'Supplier :'+ (goodrecive[0].supplier_name || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: 'Add. User :'+ '6/6/2023', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
- 
-                                         [
-                                             { text: 'Address:'+ (goodrecive[0].primary_address || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             //{ text: 'App. User :'+ 'Tharaka', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                         ],
+                                       
 
  
  
@@ -206,6 +167,78 @@ function printGoodResiveReportPdf(id) {
  
  
                  },
+
+                 {
+                    table: {
+                        
+                        body: [
+
+                            [{
+                                table: {
+                                   widths: ['*',200, '*'],
+                                    headerRows: 1,
+
+                                    body: [
+                                     
+
+                                        [
+                                            { text: 'Reference No :'+ (goodrecive[0].external_number || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'Branch :'+  (goodrecive[0].branch_name || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+                                        [
+                                            { text: 'Date :'+goodrecive[0].payment_due_date, fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'User :'+ (goodrecive[0].userName || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                            //{ text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+
+                                        [
+                                           { text: 'Supplier :'+ (goodrecive[0].supplier_name || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            //{ text: 'Currency :'+ 'LKR 1.0000' , fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'Sup Inv :'+ (goodrecive[0].supppier_invoice_number), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+
+                                        [
+                                            { text: 'Address:'+ (goodrecive[0].primary_address || ''), fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            //{ text: 'App. User :'+ 'THARAKA', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+
+                                        [
+                                            { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            //{ text: 'Add. User :'+ '6/6/2023', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+
+                                        [
+                                            { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 13, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            //{ text: 'App. User :'+ 'Tharaka', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 10, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                        ],
+
+
+
+                                    ],
+                                   
+
+
+
+
+                                }, border: [false, false, false, false]
+                            }],
+                        ],
+                    },
+                    margin: [0, 10],
+
+
+
+                },
  
              ]
          }
@@ -217,7 +250,7 @@ function printGoodResiveReportPdf(id) {
          {
             
              table: {
-                 widths: ['*', 90,'*', 30, 30, '*', 50, '*',40,40,200],
+                 widths: [60, 90,40, 30, 25,30 ,25, 50, 40,40,40,'*'],
                  headerRows: 1,
                  body: reportitemBody(goodrecive_item),
              },
@@ -406,11 +439,11 @@ function printGoodResiveReportPdf(id) {
      { text: 'Pack Size', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'QTY', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'FOC', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
-     //{ text: 'Pur.Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+     { text: 'Add. Bonus', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'Dis %', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'Amount', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'WS price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
-     { text: 'Retial Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+     { text: 'Retail Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      { text: 'Cost Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      //{ text: 'Dis.value', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
      //{ text: '', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
@@ -462,7 +495,7 @@ function printGoodResiveReportPdf(id) {
              { text: formattedquantity || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
  
              { text: formattedfree_quantity || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
-            // { text: formattedPrice, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+             { text: parseInt(data[i].additional_bonus) || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              { text: data[i].discount_percentage || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              { text: formattedAmount || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              { text: formattedwhole_sale_price || '', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },

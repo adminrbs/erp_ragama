@@ -275,7 +275,7 @@ function getEachproduct(id, status) {
                     discountAmount = 0
                 }
 
-                var value = (quantity * cst) - discountAmount;
+                var value = (quantity * price) - discountAmount;
                 var p_price = '<div>'+parseFloat(dt[i].price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>';
                 var wh_price = '<div>'+parseFloat(dt[i].whole_sale_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>';
                 if(dt[i].is_new_price == 1){

@@ -218,10 +218,11 @@ function getorderItems(id){
                     row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;">').attr('type', 'text').val(item.quantity)));
                     row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;">').attr('type', 'text').val(item.PO_Foc)));
                     row.append($('<td>').append($('<input class="transaction-inputs" style="background-color:white;width:50px;">').attr('type', 'text').val(item.free_quantity)));
-                    row.append($('<td>').text(item.unit_of_measure));
+                    row.append($('<td>').text(item.additional_bonus));
+                    row.append($('<td>').text(item.package_unit));
                     /* row.append($('<td>').text(item.package_unit));
                     row.append($('<td>').text(item.package_size)); */
-                    row.append($('<td>').text(item.price));
+                    row.append($('<td>').text(item.cost_price));
                     row.append($('<td>').text(item.discount_percentage));
                     /* row.append($('<td>').text(item.discount_amount)); */
                     row.append($('<td>').text(item.Value));
@@ -309,14 +310,16 @@ function setItems(collection) {
         var package_size = collection[i].package_size;
         var price = parseFloat(collection[i].price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         var price_ = parseFloat(collection[i].price);
+        var cst = parseFloat(collection[i].cost_price);
         var discount_percentage = collection[i].discount_percentage;
         var discount_amount = collection[i].discount_amount;
-        var values = parseFloat((quantity * price_) - discount_amount).toFixed(2);
+        var values = parseFloat((quantity * cst) - discount_amount).toFixed(2);
         var whole_sale_price = collection[i].whole_sale_price;
         var retial_price = collection[i].retial_price;
         var purchase_order_item_id = collection[i].purchase_order_item_id;
         var manageBatch = collection[i].manage_batch;
         var is_new_price = collection[i].is_new_price;
+        var addBonus = collection[i].additional_bonus;
      //   var batch = "";
         var manageExpireDate = collection[i].manage_expire_date;
         if(isNaN(free_quantity)){
@@ -347,10 +350,10 @@ function setItems(collection) {
             { "type": "text", "class": "transaction-inputs", "value": item_name, "data_id": purchase_order_item_id, "style": "max-height:30px;margin-left:10px", "event": "", "style": "width:370px", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs math-abs math-round", "value": parseInt(quantity),"style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "calValueandCostPrice(this);calculation();checkPOqtyandFoc(this)" ,"compulsory":true},
             { "type": "text", "class": "transaction-inputs math-abs math-round", "value": parseInt(free_quantity), "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "calValueandCostPrice(this);checkPOqtyandFoc(this)" },
-            { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*",  },
+            { "type": "text", "class": "transaction-inputs", "value": addBonus, "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*",  },
             { "type": "text", "class": "transaction-inputs", "value": package_size, "style": "max-height:30px;text-align:right;width:100px;margin-right:10px;", "event": "clickx(1)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "value": pack_size, "style": "max-height:30px;text-align:right;width:100px;margin-right:10px;", "event": "clickx(1)", "width": "*", "disabled": "disabled" },
-            { "type": "text", "class": "transaction-inputs math-abs", "value": price,"data_id": is_new_price, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this);", "width": "*","thousand_seperator":true,"disabled":"disabled" },
+            { "type": "text", "class": "transaction-inputs math-abs", "value": price_,"data_id": is_new_price, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this);", "width": "*","thousand_seperator":true, },
             { "type": "text", "class": "transaction-inputs math-abs", "value": discount_percentage, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this);", "width": "*" },
             { "type": "text", "class": "transaction-inputs math-abs", "value": discount_amount, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*","disabled":"disabled" },
             { "type": "text", "class": "transaction-inputs", "value": parseFloat(values).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
@@ -359,7 +362,7 @@ function setItems(collection) {
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:150px;margin-right:10px;", "event":"", "width": "*","disabled":disabled_batch  },
             { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "enableDate(this)", "width": "*","disabled":disabled_expire_date  },
           
-            { "type": "text", "class": "transaction-inputs", "value": parseFloat(costPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice()", "width": "*" }, //allow edit cost price as instructed by sachin on 04/06
+            { "type": "text", "class": "transaction-inputs", "value": parseFloat(costPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice()", "width": "*","disabled": "disabled" }, //allow edit cost price as instructed by sachin on 04/06 // do not allow to edit cost price as instructed by mr.janaka on 04/06
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-right:20px;", "event": "removeRow(this);calculation();", "width": 30 },
             { "type": "text", "class": "transaction-inputs", "value": whole_sale_price, "style": "width:80px;", "event": "enableDate(this)", "width": "*", "disabled": "disabled" }, //date 14
             { "type": "text", "class": "transaction-inputs", "value": retial_price, "style": "width:80px;text-align:right;", "event": "", "width": "*", "disabled": "disabled" },
@@ -570,6 +573,7 @@ function calculatePurchasePrice(event){
 
         
       var cost_price =  (parseFloat(wh_price) / (100 + parseFloat(discount))) * 100;
+      
      // var whol_price = parseFloat(p_price) + (((parseFloat(p_price)) / 100) * parseFloat(discount));
         
      // $($(cell[11]).children()[0]).val(whol_price);
@@ -606,7 +610,7 @@ function calculatePurchasePrice(event){
        function cal_purchase_price(event){
         var row = $($(event).parent()).parent();
         var cell = row.find('td');
-        var wh_price = parseFloat($($(cell[11]).children()[0]).val().replace(/,/g, ""));
+        var wh_price = parseFloat($($(cell[15]).children()[0]).val().replace(/,/g, "")); //cost
         var discount = parseFloat($($(cell[8]).children()[0]).val().replace(/,/g, ""));
    
         // Check if the field values are not NaN or empty

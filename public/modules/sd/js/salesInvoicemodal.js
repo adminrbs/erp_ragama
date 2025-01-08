@@ -288,15 +288,7 @@ function getSalesOrderDetailsForInvice() {
             }
             
             
-            
-            
 
-            
-            
-
-          /*   var table = $('#gettable').DataTable();
-            table.clear();
-            table.rows.add(data).draw(); */
             var table = $('#gettable');
 $('body').css('cursor', 'default');
 
@@ -366,7 +358,9 @@ function getHeaderDetails(id) {
             //   $('#cmbPaymentMethod').val(res[0].payment_term_id);
 
             $('#LblexternalNumber').attr('data-id', id);
-
+            if(res[0].branch_id == 1){
+                $('#txtYourReference').val(res[0].external_number);
+            }
             loadReturnRequest(res[0].customer_id);
         },
         error: function (error) {

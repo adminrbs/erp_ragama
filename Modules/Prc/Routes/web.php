@@ -163,7 +163,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
         return view('prc::purchase_order_view');
     });
     Route::get('/loadItemsPurchaseOrder/{id}',[PurchaseOrderController::class,'loadItems_purchaseOrder']);
-
+    Route::get('/loadPOInfoData/{id}',[PurchaseOrderController::class,'loadPOInfoData']);
     /**reference number */
     
 
@@ -201,5 +201,6 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     
     
     Route::get('/printBonusClaimReportPdf/{id}',[BonusClaimReportController::class,'printBonusClaimReportPdf']);
+    
 });
 

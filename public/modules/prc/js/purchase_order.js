@@ -29,7 +29,10 @@ $(document).ready(function () {
     DataChooser.addCollection("supplier",['Supplier', 'Code', '', '',''], suppliers);
     DataChooser.addCollection("item",['Item', 'Code', 'Supply Group', '',''], ItemList);
 
-
+    $('#tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
 
     //gross total calculation
     $('#txtDiscountAmount').on('input', function () {
@@ -146,13 +149,14 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "thousand_seperator": true },
             { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "thousand_seperator": true }, // cost price
 
-            { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*","disabled":"disabled" },
+            { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:150px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "button", "class": "btn btn-success", "value": '<i class="fa fa-info-circle" aria-hidden="true"></i>', "style": "max-height:30px;margin-right:10px;", "event": "showPOModel(this)", "width": 30 },
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-right:10px;", "event": "removeRow(this);calculation()", "width": 30 }
         ],
         "auto_focus": 0,
-        "hidden_col": [8,9,12]
+        "hidden_col": [8,13,5]
 
 
     });
@@ -201,7 +205,7 @@ $(document).ready(function () {
               
                 showWarningMessage("Quantity must be greater than 0");
                 return;
-            } else if (arr[i][8].val() == "" || arr[i][8].val() == "0" || arr[i][8].val() == "undefined" || arr[i][8].val() == "null" || parseFloat(arr[i][8].val()) == 0) {
+            } else if (arr[i][10].val() == "" || arr[i][10].val() == "0" || arr[i][10].val() == "undefined" || arr[i][10].val() == "null" || parseFloat(arr[i][10].val()) == 0) {
                 showWarningMessage("Price must be gretaer than 0.00");
                 return;
             } else {
@@ -275,6 +279,46 @@ $(document).ready(function () {
     
 
     $('#btnApprove').on('click', function () {
+        var arr = tableData.getDataSourceObject();
+        var collection = [];
+
+        for (var i = 0; i < arr.length; i++) {
+
+            if (arr[i][0].attr('data-id') == "undefined") {
+                showWarningMessage("Please select a correct Item");
+                arr[i][0].focus();
+                return;
+            } else if ((arr[i][2].val() == "" && arr[i][3].val() == "") || (parseFloat(arr[i][2].val()) == "0" && parseFloat(arr[i][3].val()) == "0") || (arr[i][2].val() == "0" && arr[i][3].val() == "") || (arr[i][2].val() == "" && arr[i][3].val() == "0")) {
+              
+                showWarningMessage("Quantity must be greater than 0");
+                return;
+            } else if (arr[i][10].val() == "" || arr[i][10].val() == "0" || arr[i][10].val() == "undefined" || arr[i][10].val() == "null" || parseFloat(arr[i][10].val()) == 0) {
+                showWarningMessage("Price must be gretaer than 0.00");
+                return;
+            } else {
+                
+               
+                collection.push(JSON.stringify({
+                   "item_id": arr[i][0].attr('data-id'),
+                    "item_name": arr[i][1].val(),
+                    "qty": arr[i][2].val(),
+                    "uom": arr[i][5].val(),
+                    "PackUnit": arr[i][9].val(),
+                    "PackSize": arr[i][8].val(),
+                    "free_quantity": arr[i][3].val(),
+                    "price": parseFloat(arr[i][10].val().replace(/,/g, '')),
+                    "cost": parseFloat(arr[i][11].val().replace(/,/g, '')),
+                    "discount_percentage": arr[i][12].val(),
+                    "discount_amount": parseFloat(arr[i][13].val().replace(/,/g, '')),
+                    "addQty":arr[i][4].val()
+
+
+                }));
+
+
+            }
+        }
+        calculation();
         bootbox.confirm({
             title: 'Approval confirmation',
             message: '<div class="d-flex justify-content-center align-items-center mb-3"><i id="question-icon" class="fa fa-question fa-5x text-warning animate-question"></i></div><div class="d-flex justify-content-center align-items-center"><p class="h2">Are you sure?</p></div>',
@@ -291,7 +335,7 @@ $(document).ready(function () {
             callback: function (result) {
                 //console.log('Confirmation result:', result);
                 if (result) {
-                    approveRequestPO(PO_id);
+                    approveRequestPO(collection,PO_id);
 
                 } else {
 
@@ -673,11 +717,6 @@ function loadPamentType() {
 
 function dataChooserEventListener(event, id, value) {
 
-    
-    
-    
-
-    
 
     if ($(event.inputFiled).attr('id') == 'txtSupplier') {
         loadSupplierOtherDetails(value);
@@ -697,7 +736,6 @@ function dataChooserEventListener(event, id, value) {
         if (hash_map.includes(value)) {
 
             showErrorMessage('Already exist ' + value);
-            /* alert('Already exist '+value); */
             event.inputFiled.val('');
             return;
         }
@@ -705,7 +743,7 @@ function dataChooserEventListener(event, id, value) {
 
 
         $.ajax({
-            url: '/prc/getItemInfo/' + item_id,
+            url: '/prc/getItemInfo_purchase_order/' + item_id +'/'+$('#cmbBranch').val(),
             type: 'get',
             success: function (response) {
                 console.log(response);
@@ -718,20 +756,20 @@ function dataChooserEventListener(event, id, value) {
                 $(row_childs[5]).val(response[0].unit_of_measure);
                 $(row_childs[9]).val(response[0].package_unit);
                 $(row_childs[8]).val(response[0].package_size);
-                $(row_childs[9]).val(response[0].previouse_purchase_price);
-               // $(row_childs[11]).val(response[0].whole_sale_price);
-                //$(row_childs[12]).val(response[0].retial_price);
+                $(row_childs[10]).val(response[0].previouse_purchase_price);
+                $(row_childs[6]).val(parseInt(response[0].from_balance));
+                $(row_childs[7]).val(parseInt(response[0].avg_sales));
                 $(row_childs[2]).focus();
                 $(row_childs[2]).val('');
                 $(row_childs[3]).val('');
 
-                
-                $(row_childs[11]).val('');
+                /* var valueS = parseFloat((qty * cst) - disAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); */
+                $(row_childs[11]).val(response[0].previouse_purchase_price); //cost price. sachin 2025-01-02
                 if($('#txtDiscountPrecentage').val().length > 0){
-                    $(row_childs[11]).val($('#txtDiscountPrecentage').val());
+                    $(row_childs[12]).val($('#txtDiscountPrecentage').val());
                     
                 }else{
-                    $(row_childs[11]).removeAttr('disabled');
+                    $(row_childs[12]).removeAttr('disabled');
                 }
                
                 calculation();
@@ -772,7 +810,7 @@ function apply_discount(){
     
     for (var i = 0; i < arr.length; i++) {
         
-        var row_childs = $(arr[i][10]);
+        var row_childs = $(arr[i][12]);
         var code_text = $(arr[i][0]).val();
         if(code_text != ''){
             if($('#txtDiscountPrecentage').val().length < 1){
@@ -796,19 +834,36 @@ function calValueandCostPrice(event) {
     var cell = row.find('td');
 
     var qty = $($(cell[2]).children()[0]);
-    var price = $($(cell[9]).children()[0]);
-    var discount_percentage = $($(cell[10]).children()[0]);
-    var discount_amount = $($(cell[11]).children()[0]);
+    var price = $($(cell[11]).children()[0]);
+    var discount_percentage = $($(cell[12]).children()[0]);
+    var discount_amount = $($(cell[13]).children()[0]);
 
     var AMOUNT = getDiscountAmount(qty, price, discount_percentage, discount_amount);
-    $($(cell[12]).children()[0]).val(AMOUNT);
+    $($(cell[14]).children()[0]).val(AMOUNT);
 
-
+    calcDisc(event);
     calculation();
+    
 
 }
 
+function calcDisc(event){
+    var row = $($(event).parent()).parent();
+    var cell = row.find('td');
 
+    var qty = $($(cell[2]).children()[0]);
+    var price = $($(cell[11]).children()[0]);
+    var discount_percentage = $($(cell[12]).children()[0]);
+   
+    var quantity = parseFloat(qty.val().replace(/,/g, ""));
+    var unit_price = parseFloat(price.val().replace(/,/g, ""));
+    var percentage = parseFloat(discount_percentage.val().replace(/,/g, ""));
+   
+var dis_amount = quantity * unit_price * (percentage / 100);
+   
+    $($(cell[13]).children()[0]).val(dis_amount);
+  //  calculation();
+}
 //grand total
 function calculation() {
     var grossTotal = 0;
@@ -819,8 +874,8 @@ function calculation() {
 
     for (var i = 0; i < arr.length; i++) {
         var qty = parseFloat(arr[i][2].val().replace(/,/g, ""));
-        var price = parseFloat(arr[i][10].val().replace(/,/g, "")); // changed to cost price
-        var discount_pres = parseFloat(arr[i][11].val().replace(/,/g, ""));
+        var price = parseFloat(arr[i][11].val().replace(/,/g, "")); // changed to cost price
+        var discount_pres = parseFloat(arr[i][12].val().replace(/,/g, ""));
 
 
         // Check if the field values are not NaN or empty
@@ -923,18 +978,19 @@ function getEachproduct(id, status) {
             $.each(data, function (index, value) {
                 var qty = value.quantity;
                 var price = value.price;
+                var cst = value.cost_price;
                 var price_ = parseFloat(value.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 var disAmount = value.discount_amount;
-                var valueS = parseFloat((qty * price) - disAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                var valueS = parseFloat((qty * cst) - disAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 dataSource.push([
                     { "type": "text", "class": "transaction-inputs", "value": value.Item_code, "data_id": value.item_id, "style": "max-height:30px;width:100px;margin-right:10px;", "event": "", "valuefrom": "datachooser" },
                     { "type": "text", "class": "transaction-inputs", "value": value.item_name, "style": "max-height:30px;margin-right:10px;", "event": "clickx(1)", "style": "width:200px", "disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.quantity, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "compulsory": true, "event": "calValueandCostPrice(this)" },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.free_quantity, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "validate_qty(this);calValueandCostPrice(this)" },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.additional_bonus, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "" },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.additional_bonus, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "calValueandCostPrice(this)" },
                     { "type": "text", "class": "transaction-inputs", "value": value.unit_of_measure, "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
-                    { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
-                    { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                    { "type": "text", "class": "transaction-inputs", "value": value.from_balance, "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                    { "type": "text", "class": "transaction-inputs", "value": value.avg_sales, "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs", "value": value.package_size, "style": "max-height:30px;text-align:right;width:100px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                    
                     { "type": "text", "class": "transaction-inputs", "value": value.package_unit, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
@@ -942,7 +998,7 @@ function getEachproduct(id, status) {
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.cost_price, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },
                     
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_percentage, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", },
-                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_amount, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "discountAmount(this)", "width": "*", },
+                    { "type": "text", "class": "transaction-inputs math-abs", "value": value.discount_amount, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },
                     { "type": "text", "class": "transaction-inputs", "value": valueS, "style": "max-height:30px;text-align:right;width:150px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "disabled": "disabled" },
                     { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-right:10px;", "event": "removeRow(this);calculation()", "width": 30 }
 
@@ -1098,7 +1154,8 @@ function updatePODraft(collection, id) {
 
 
 //approve
-function approveRequestPO(id) {
+function approveRequestPO(collection,id) {
+    formData.append('collection', JSON.stringify(collection));
     $.ajax({
         url: '/prc/approveRequestPO/' + id,
         type: 'post',
@@ -1113,11 +1170,11 @@ function approveRequestPO(id) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-            /* $('#btnSave').prop('disabled', true); */
+            $('#btnSave').prop('disabled', true);
         }, success: function (response) {
-            /*   $('#btnSave').prop('disabled', false);*/
+              $('#btnSave').prop('disabled', false);
             var status = response.status;
-            var msg = response.msg;
+            var msg = response.msg; 
 
             if (msg == "no") {
                 showWarningMessage('Unable to approve');
@@ -1319,4 +1376,65 @@ function validate_qty(event){
     }
     
 
+}
+
+
+//show PO model
+function showPOModel(event) {
+   
+    $('#poModel').modal('show');
+    var row = $($(event).parent()).parent();
+    var cell = row.find('td');
+    var item_id = $($(cell[0]).children()[0]).attr('data-id');
+
+
+    loadPOInfoData(item_id)
+}
+
+//load PO info data
+function loadPOInfoData(id) {
+    $.ajax({
+        url: '/prc/loadPOInfoData/' + id,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            var dt = data.data;
+            var all = dt.all;
+            $('#history_table tbody').empty(); // Clear existing data from the table
+            for (var i = 0; i < all.length; i++) {
+                $('#history_table').append(
+                    '<tr>' +
+                    '<td>' + all[i].goods_received_date_time + '</td>' +
+                    '<td>' + all[i].supplier_name + '</td>' +
+                    '<td>' + all[i].supppier_invoice_number + '</td>' +
+                    '<td style="text-align:right;">' + all[i].quantity + '</td>' +
+                    '<td style="text-align:right;">' + all[i].free_quantity + '</td>' +
+                    '<td style="text-align:right;">' + all[i].additional_bonus + '</td>' +
+                    '<td style="text-align:right;">' + all[i].price + '</td>' +
+                    '<td style="text-align:right;">' + all[i].discount_percentage + '</td>' +
+                    '<td style="text-align:right;">' + all[i].value + '</td>' +
+                    '</tr>'
+                );
+
+                if(all[i].approval_status == 'Pending'){
+                    $('#pending_table').append(
+                        '<tr>' +
+                        '<td>' + all[i].goods_received_date_time + '</td>' +
+                        '<td>' + all[i].supplier_name + '</td>' +
+                        '<td>' + all[i].supppier_invoice_number + '</td>' +
+                        '<td style="text-align:right;">' + all[i].quantity + '</td>' +
+                        '<td style="text-align:right;">' + all[i].free_quantity + '</td>' +
+                        '<td style="text-align:right;">' + all[i].additional_bonus + '</td>' +
+                        '<td style="text-align:right;">' + all[i].price + '</td>' +
+                        '<td style="text-align:right;">' + all[i].discount_percentage + '</td>' +
+                        '<td style="text-align:right;">' + all[i].value + '</td>' +
+                        '</tr>'
+                    );
+                }
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    })
 }

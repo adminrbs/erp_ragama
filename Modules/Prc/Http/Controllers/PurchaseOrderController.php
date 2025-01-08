@@ -485,7 +485,9 @@ class PurchaseOrderController extends Controller
             supplier_name, 
             purchase_order_date_time, 
             approval_status, 
-            deliver_date_time";
+            deliver_date_time
+        ORDER BY
+            purchase_order_notes.external_number DESC";
 
             $result = DB::select($query);
             if ($result) {
@@ -817,9 +819,12 @@ class PurchaseOrderController extends Controller
             if($sup_id > 0){
                 $supplier = supplier::find($sup_id);
                 if($supplier->supply_group_id == 1){
-                    $items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name FROM items it");
+                    //dd('ggggg');
+                    $items = DB::select("SELECT DISTINCT it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
+                    LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
+                    LEFT JOIN suppliers SP ON SG.supply_group_id = SP.supply_group_id");
                 }else{
-                    $items = DB::select("SELECT it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
+                    $items = DB::select("SELECT DI it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
                     INNER JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                     INNER JOIN suppliers SP ON SG.supply_group_id = SP.supply_group_id 
                     WHERE SP.supplier_id = " . $sup_id);
@@ -827,11 +832,13 @@ class PurchaseOrderController extends Controller
                 
 
             }else{
-                $items = DB::select("SELECT it.item_id,it.Item_code,it.item_Name FROM items it");
+                $items = DB::select("SELECT DISTINCT it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
+                LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
+                LEFT JOIN suppliers SP ON SG.supply_group_id = SP.supply_group_id");
             }
             
           
-           
+           //dd($items);
             $collection = [];
             foreach ($items as $item) {
                 array_push($collection, ["hidden_id" => $item->item_id, "id" =>  $item->item_Name, "value" =>  $item->Item_code,"value2" => $item->supply_group, "collection" => [$item->item_id, $item->item_Name, $item->Item_code,$item->supply_group]]);
@@ -866,6 +873,67 @@ class PurchaseOrderController extends Controller
                 return $info;
             }
         } catch (Exception $ex) {
+            return $ex;
+        }
+    }
+
+
+    //loadPOInfoData
+    public function loadPOInfoData($itemId){
+        try{
+            $qryAll = DB::select("
+SELECT
+    GRN.goods_received_date_time,
+    S.supplier_name,
+    FORMAT(COALESCE(GRI.quantity, 0), 0) AS quantity,
+    FORMAT(COALESCE(GRI.free_quantity, 0), 0) AS free_quantity,
+    FORMAT(COALESCE(GRI.additional_bonus, 0), 0) AS additional_bonus,
+    FORMAT(COALESCE(GRI.price, 0), 2) AS price,
+    COALESCE(GRI.discount_percentage, 0) AS discount_percentage,
+    FORMAT(
+        (
+            (COALESCE(GRI.quantity, 0) * COALESCE(GRI.price, 0)) - COALESCE(GRI.discount_amount, 0)
+        ), 2
+    ) AS value,
+    GRN.approval_status,
+    GRN.supppier_invoice_number
+FROM
+    goods_received_note_items GRI
+    INNER JOIN goods_received_notes GRN ON GRN.goods_received_Id = GRI.goods_received_Id
+    INNER JOIN suppliers S ON GRN.supplier_id = S.supplier_id
+WHERE
+    GRI.item_id = $itemId
+ORDER BY
+    GRN.goods_received_date_time DESC
+");
+
+
+
+    /* $qryPending = DB::select("SELECT
+	PO.purchase_order_date_time,
+	S.supplier_name,
+    PO.supp
+	POI.quantity,
+	POI.free_quantity,
+	POI.additional_bonus,
+	POI.price,
+	POI.discount_percentage,((
+			POI.quantity * POI.price 
+			) - POI.discount_amount 
+	) AS 
+VALUE,
+PO.approval_status
+	
+FROM
+	purchase_order_note_items POI
+	INNER JOIN purchase_order_notes PO
+	INNER JOIN suppliers S ON PO.supplier_id = S.supplier_id 
+WHERE
+	POI.item_id = $itemId AND PO.approval_status = 'Pending' ORDER BY PO.purchase_order_date_time DESC"); */
+
+    return response()->json(['success' => true, 'data' => ['all' => $qryAll]]);
+
+        }catch(Exception $ex){
             return $ex;
         }
     }

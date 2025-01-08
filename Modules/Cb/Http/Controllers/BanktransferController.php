@@ -15,6 +15,7 @@ class BanktransferController extends Controller
 
     public function bankTransfer($filters)
     {
+        //dd('f');
         $filter_options = json_decode($filters);
         $fromDate = $filter_options->fromDate;
         $toDate = $filter_options->toDate;
@@ -105,15 +106,15 @@ FROM
 
         $reportViwer->addParameter("title", $title);
         foreach ($resulcustomer as $customerid) {
-            if (!in_array($customerid->reference, $reference_array, true)) {
+            if (!in_array($customerid->customer_receipt_id, $reference_array, true)) {
                 $table = [];
 
                 $bool = true;
-                array_push($reference_array, $customerid->reference);
+                array_push($reference_array, $customerid->customer_receipt_id);
                 foreach ($result as $customerdata) {
                     //dump($customerdata->customer_id);
                     //dd($result);
-                    if ($customerdata->customer_id == $customerid->customer_id && $customerdata->reference == $customerid->reference) {
+                    if ($customerdata->customer_id == $customerid->customer_id && $customerdata->reference == $customerid->reference && $customerdata->customer_receipt_id == $customerid->customer_receipt_id) {
                         $title_text =  "<strong>Customer Name : </strong>" . $customerid->customer_name . " - <strong>Reference : </strong>" . $customerdata->reference . " - <strong>Slip Date : </strong>" . $customerdata->slip_date . " - " . $customerdata->slip_time;
                         if ($bool) {
                             array_push($titel, $title_text);

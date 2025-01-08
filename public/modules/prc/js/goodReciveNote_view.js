@@ -267,6 +267,7 @@ function getEachproduct(id, status) {
 
                 var quantity = parseFloat(dt[i].quantity);
                 var price = parseFloat(dt[i].price);
+                var cst = parseFloat(dt[i].cost_price);
                 var discountAmount = parseFloat(dt[i].discount_amount);
                 var discountpres = parseFloat(dt[i].discount_percentage);
                
@@ -284,7 +285,7 @@ function getEachproduct(id, status) {
                 data.push({
 
                     "itemCode": dt[i].Item_code,
-                    "name": shortenString(dt[i].item_name,10),
+                    "name": shortenString(dt[i].item_name,20),
                     "qty": Math.abs(dt[i].quantity),
                     "foc": Math.abs(dt[i].free_quantity),
                     "addbonus": dt[i].additional_bonus,
@@ -327,7 +328,7 @@ function calculateTotals(dt) {
         if(isNaN(quantity)){
             quantity=0
         }
-        var price = parseFloat(dt[i].price);
+        var price = parseFloat(dt[i].cost_price);
         if(isNaN(price)){
             price=0
         }

@@ -171,6 +171,7 @@
                                                         <th>Disc. %</th>
                                                         <th>Disc. Amount</th>
                                                         <th>Value</th>
+                                                        <th>Info</th>
                                                         <th style="width: 120px;">Button</th>
                                                     </tr>
                                                 </thead>
@@ -279,6 +280,7 @@
 
 
 @include('datachooser.data-chooser')
+@include('prc::po_model')
 
 
 </div>
