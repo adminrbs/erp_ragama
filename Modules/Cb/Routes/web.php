@@ -349,4 +349,9 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::post('/saveFundTransfer', [FundTransferController::class, 'saveFundTransfer']);
     Route::post('/updateFundTransfer/{id}', [FundTransferController::class, 'updateFundTransfer']);
     Route::put('/approvalFundTransfer/{id}', [FundTransferController::class, 'approvalFundTransfer']);
+
+    /**Direct Bank Slip Bundle*/
+    Route::get('/direct_bank_slip_bundle', function () {
+        return view('cb::DirectSlipBundle');
+    });
 });
