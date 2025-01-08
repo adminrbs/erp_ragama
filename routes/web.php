@@ -83,7 +83,8 @@ Auth::routes();
  Route::get('/newReferenceNumber_direct_cheque_bundles/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_direct_cheque_bundles']);
  Route::get('/newReferenceNumber_sales_invoice_copy_issued/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_sales_invoice_copy_issued']);
  Route::get('/newReferenceNumber_paymentVoucher_referenceId/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_paymentVoucher_referenceId']);
- 
+ Route::get('/newReferenceNumber_JournalEntry/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_JournalEntry']);
+ Route::get('/newReferenceNumber_FundTransfer/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_FundTransfer']);
 
 
 /** Utility */

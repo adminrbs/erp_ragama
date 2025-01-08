@@ -162,10 +162,12 @@
                                                         <th>FOC</th>
                                                         <th>Add. Bonus</th>
                                                         <th>U.O.M</th>
+                                                        <th>Avl Qty</th>
+                                                        <th>Avg Sales Qty</th>
                                                         <th>Package Size</th>
                                                         <th>Pack Size</th>
                                                         <th>Wh. Price</th>
-                                                        <th>Cost Price</th>
+                                                        <th>Purchase Price</th>
                                                         <th>Disc. %</th>
                                                         <th>Disc. Amount</th>
                                                         <th>Value</th>

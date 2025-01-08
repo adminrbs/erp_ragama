@@ -40,7 +40,8 @@
                                 <th>Balance QTY</th>
                                 <th>FOC</th>
                                 <th>Balance FOC</th>
-                                <th>U.O.M</th>
+                                <th>Add. Bonus</th>
+                                <th>Pack Size</th>
                                <!--  <th>Pack Size</th>
                                 <th>Package Size</th> -->
                                 <th>Price</th>

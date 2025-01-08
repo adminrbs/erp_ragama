@@ -2,6 +2,8 @@
 
 namespace Modules\Gl\Http\Controllers;
 
+use App\Http\Controllers\IntenelNumberController;
+use App\Models\GeneralLedger;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -19,11 +21,20 @@ class JournalEntryController extends Controller
     {
 
         try {
-            $reference_no = $request->get("reference_no");
-            $date = $request->get("date");
+            $external_number = $request->get("external_number");
             $branch = $request->get("branch");
+            $data = DB::table('branches')->where('branch_id', $branch)->get();
+            $EXPLODE_ID = explode("-", $external_number);
+            if ($data->count() > 0) {
+                $documentPrefix = $data[0]->prefix;
+                $external_number  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+            }
+            //dd($external_number);
+
+            $date = $request->get("date");
             $remark = $request->get("remark");
             $created_by = $request->get("created_by");
+            $amount =  (float)$request->get("amount") * -1;
             $collection = json_decode($request->get("collection"));
 
             if (Auth::user()->user_id != null) {
@@ -34,7 +45,9 @@ class JournalEntryController extends Controller
             $approval_status = $request->get("approval_status");
 
             $journalEntry = new JournalEntry();
-            $journalEntry->reference_no = $reference_no;
+            $journalEntry->external_number = $external_number;
+            $journalEntry->internal_number = IntenelNumberController::getNextID();
+            $journalEntry->document_number = 2800;
             $journalEntry->transaction_date = $date;
             $journalEntry->remark = $remark;
             $journalEntry->branch_id = $branch;
@@ -43,6 +56,21 @@ class JournalEntryController extends Controller
             $journalEntry->approval_status = $approval_status;
 
             if ($journalEntry->save()) {
+                $general_ledger = new GeneralLedger();
+                $general_ledger->internal_number = $journalEntry->internal_number ?? null;
+                $general_ledger->external_number = $journalEntry->external_number ?? null;
+                $general_ledger->document_number = $journalEntry->document_number ?? null;
+                $general_ledger->transaction_date = $journalEntry->transaction_date ?? null;
+                $general_ledger->branch_id = $journalEntry->branch_id ?? null;
+                $general_ledger->is_bank_rec = $journalEntry->is_bank_rec ?? 0;
+                $general_ledger->bank_rec_date = $journalEntry->bank_rec_date ?? null;
+                $general_ledger->created_by = $journalEntry->created_by ?? null;
+                $general_ledger->amount = $amount;
+                $general_ledger->gl_account_id = $journalEntry->gl_account_id ?? null;
+                $general_ledger->paid_amount = $journalEntry->paid_amount ?? 0;
+                $general_ledger->gl_account_analyse_id = $journalEntry->gl_account_analyse_id ?? null;
+                $general_ledger->description = $journalEntry->description ?? null;
+                $general_ledger->save();
                 foreach ($collection as $data) {
                     $dt = json_decode($data);
                     $jurnalItem = new JournalEntryItem();
@@ -50,18 +78,35 @@ class JournalEntryController extends Controller
                     $jurnalItem->gl_account_id = $dt->account_id;
                     $jurnalItem->gl_account_analyse_id = $dt->analysis;
                     if ($dt->narration == 1) {
-                        $jurnalItem->amount = $dt->amount;
-                    }else if ($dt->narration == 2) {
                         $jurnalItem->amount = ($dt->amount * -1);
+                    } else if ($dt->narration == 2) {
+                        $jurnalItem->amount = $dt->amount;
                     }
                     $jurnalItem->descriptions = $dt->description;
-                    $jurnalItem->save();
+                    if ($jurnalItem->save()) {
+                        $general_ledger = new GeneralLedger();
+                        $general_ledger->internal_number = $journalEntry->internal_number ?? null;
+                        $general_ledger->external_number = $journalEntry->external_number ?? null;
+                        $general_ledger->document_number = $journalEntry->document_number ?? null;
+                        $general_ledger->transaction_date = $journalEntry->transaction_date ?? null;
+                        $general_ledger->is_bank_rec = $journalEntry->is_bank_rec ?? 0;
+                        $general_ledger->bank_rec_date = $journalEntry->bank_rec_date ?? null;
+                        $general_ledger->created_by = $journalEntry->created_by ?? null;
+                        $general_ledger->amount = null;
+
+                        $general_ledger->branch_id = $journalEntry->branch_id ?? null;
+                        $general_ledger->gl_account_id = $jurnalItem->account_id  ?? null;
+                        $general_ledger->paid_amount = $jurnalItem->amount  ?? 0;
+                        $general_ledger->gl_account_analyse_id = $jurnalItem->gl_account_analyse_id  ?? null;
+                        $general_ledger->description = $jurnalItem->descriptions ?? null;
+                        $general_ledger->save();
+                    }
                 }
                 return response()->json(["success" => true]);
             }
             return response()->json(["success" => false]);
         } catch (Exception $ex) {
-            //dd($ex);
+            dd($ex);
             return response()->json(["success" => false]);
         }
     }
@@ -72,12 +117,19 @@ class JournalEntryController extends Controller
     {
 
         try {
-            $reference_no = $request->get("reference_no");
+            $external_number = $request->get("external_number");
             $date = $request->get("date");
             $branch = $request->get("branch");
             $remark = $request->get("remark");
             $created_by = $request->get("created_by");
+            $amount = (float) $request->get("amount") * -1;
             $collection = json_decode($request->get("collection"));
+            $branch_data = DB::table('branches')->where('branch_id', $branch)->get();
+            $EXPLODE_ID = explode("-", $external_number);
+            if ($branch_data->count() > 0) {
+                $documentPrefix = $branch_data[0]->prefix;
+                $external_number  = $documentPrefix . "-" . $EXPLODE_ID[1] . "-" . $EXPLODE_ID[2];
+            }
 
             if (Auth::user()->user_id != null) {
                 $created_by = Auth::user()->user_id;
@@ -88,7 +140,7 @@ class JournalEntryController extends Controller
 
             $journalEntry =  JournalEntry::find($id);
             if ($journalEntry) {
-                $journalEntry->reference_no = $reference_no;
+                $journalEntry->external_number = $external_number;
                 $journalEntry->transaction_date = $date;
                 $journalEntry->remark = $remark;
                 $journalEntry->branch_id = $branch;
@@ -97,6 +149,25 @@ class JournalEntryController extends Controller
                 $journalEntry->approval_status = $approval_status;
 
                 if ($journalEntry->update()) {
+                    GeneralLedger::where([['internal_number', '=', $journalEntry->internal_number], ['external_number', '=', $journalEntry->external_number], ['document_number', '=', $journalEntry->document_number]])->delete();
+
+                    $general_ledger = new GeneralLedger();
+                    $general_ledger->internal_number = $journalEntry->internal_number ?? null;
+                    $general_ledger->external_number = $journalEntry->external_number ?? null;
+                    $general_ledger->document_number = $journalEntry->document_number ?? null;
+                    $general_ledger->transaction_date = $journalEntry->transaction_date ?? null;
+                    $general_ledger->branch_id = $journalEntry->branch_id ?? null;
+                    $general_ledger->is_bank_rec = $journalEntry->is_bank_rec ?? 0;
+                    $general_ledger->bank_rec_date = $journalEntry->bank_rec_date ?? null;
+                    $general_ledger->created_by = $journalEntry->created_by ?? null;
+                    $general_ledger->amount = $amount;
+                    $general_ledger->gl_account_id = $journalEntry->gl_account_id ?? null;
+                    $general_ledger->paid_amount = $journalEntry->paid_amount ?? 0;
+                    $general_ledger->gl_account_analyse_id = $journalEntry->gl_account_analyse_id ?? null;
+                    $general_ledger->description = $journalEntry->description ?? null;
+                    $general_ledger->save();
+
+
                     JournalEntryItem::where('gl_journal_id', '=', $id)->delete();
                     foreach ($collection as $data) {
                         $dt = json_decode($data);
@@ -105,12 +176,29 @@ class JournalEntryController extends Controller
                         $jurnalItem->gl_account_id = $dt->account_id;
                         $jurnalItem->gl_account_analyse_id = $dt->analysis;
                         if ($dt->narration == 1) {
-                            $jurnalItem->amount = $dt->amount;
-                        }else if ($dt->narration == 2) {
                             $jurnalItem->amount = ($dt->amount * -1);
+                        } else if ($dt->narration == 2) {
+                            $jurnalItem->amount = $dt->amount;
                         }
                         $jurnalItem->descriptions = $dt->description;
-                        $jurnalItem->save();
+                        if ($jurnalItem->save()) {
+                            $general_ledger = new GeneralLedger();
+                            $general_ledger->internal_number = $journalEntry->internal_number ?? null;
+                            $general_ledger->external_number = $journalEntry->external_number ?? null;
+                            $general_ledger->document_number = $journalEntry->document_number ?? null;
+                            $general_ledger->transaction_date = $journalEntry->transaction_date ?? null;
+                            $general_ledger->is_bank_rec = $journalEntry->is_bank_rec ?? 0;
+                            $general_ledger->bank_rec_date = $journalEntry->bank_rec_date ?? null;
+                            $general_ledger->created_by = $journalEntry->created_by ?? null;
+                            $general_ledger->amount = null;
+
+                            $general_ledger->branch_id = $journalEntry->branch_id ?? null;
+                            $general_ledger->gl_account_id = $jurnalItem->account_id  ?? null;
+                            $general_ledger->paid_amount = $jurnalItem->amount  ?? 0;
+                            $general_ledger->gl_account_analyse_id = $jurnalItem->gl_account_analyse_id  ?? null;
+                            $general_ledger->description = $jurnalItem->descriptions ?? null;
+                            $general_ledger->save();
+                        }
                     }
                     return response()->json(["success" => true]);
                 }
@@ -176,6 +264,7 @@ class JournalEntryController extends Controller
         try {
 
             $query = "SELECT journal_entries.gl_journal_id,
+            journal_entries.external_number,
             journal_entries.transaction_date,
             journal_entries.remark,
             branches.branch_name,
@@ -202,7 +291,6 @@ class JournalEntryController extends Controller
             $query = "SELECT GL.account_code,
             GL.account_id,
             GL.account_title AS account_name,
-            GLA.gl_account_analyse_name,
             JEI.descriptions,
             IF(JEI.amount < 0,2,1) AS narration,
             ABS(JEI.amount) AS amount,
@@ -211,8 +299,6 @@ class JournalEntryController extends Controller
             FROM journal_entry_items JEI 
             LEFT JOIN gl_accounts GL 
             ON JEI.gl_account_id = GL.account_id 
-            LEFT JOIN gl_account_analyses GLA 
-            ON GL.account_id = GLA.account_id  
             WHERE JEI.gl_journal_id = '" . $id . "'";
             $journalItems = DB::select($query);
         }

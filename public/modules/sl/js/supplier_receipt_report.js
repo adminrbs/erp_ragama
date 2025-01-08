@@ -14,7 +14,7 @@ function supplierReceiptReport(id) {
             var receiptData = data.recptData;
             var branch = data.branch;
             var companyName = data.companyName;
-            reportHeader(supplierData, receiptData,branch,companyName, 'PRINT');
+            reportHeader(supplierData, receiptData,branch,data, 'PRINT');
         }
     })
     
@@ -25,12 +25,12 @@ var total_paid = 0;
 var total_receipt = 0;
 var total_balance = 0;
 
-function reportHeader(supplierData, receiptData,branch,companyName, flag) {
+function reportHeader(supplierData, receiptData,branch,data, flag) {
    
 
     for(var i = 0; i < receiptData.length; i++){
         total_amount += receiptData[0].amount;
-        total_paid += receiptData[0].paidamount;
+        total_paid += receiptData[0].paid_amount;
         total_receipt += receiptData[0].receipt_amount;
         total_balance += receiptData[0].balance;
         
@@ -63,19 +63,27 @@ function reportHeader(supplierData, receiptData,branch,companyName, flag) {
                                      headerRows: 1,
  
                                      body: [
+                                        [
+                                            { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: data.companyName, fontSize: 11, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                           
+                                        ],
+                                        [
+                                            { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false] },
+                                            { text: data.address, fontSize: 9, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false] },
+                                            
+                                           
+                                        ],
                                          [
                                              { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false] },
-                                             { text: "Supplier Payment Receipt", fontSize: 11, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                             { text: "Supplier Payment Receipt", fontSize: 9, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false] },
                                              
                                             
                                          ],
-                                         [
-                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: companyName, fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                            
-                                         ],
+                                         
                                          [
                                              { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false] },
                                              { text: '', fontSize: 9, bold: false, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
@@ -111,7 +119,7 @@ function reportHeader(supplierData, receiptData,branch,companyName, flag) {
                                          ],
  
                                          [
-                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                             { text: 'Receipt Date: '+receiptData[0].receipt_date, fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                              { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                            
                                              { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
@@ -161,7 +169,7 @@ function reportHeader(supplierData, receiptData,branch,companyName, flag) {
  
          {
              table: {
-                 widths: [100,'*','*','*',"*"],
+                 widths: [215,'*','*','*',"*"],
                  headerRows: 0,
                 /*  total_amount += receiptData[0].amount;
                  total_paid += receiptData[0].paidamount;
@@ -173,10 +181,10 @@ function reportHeader(supplierData, receiptData,branch,companyName, flag) {
                     [
                        
                         { text: 'Total', fontSize: 10, bold: true, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                        { text: parseFloat(total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: 9, bold: false, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                        { text: parseFloat(total_paid).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: 8, bold: false, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                        { text: parseFloat(total_receipt).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: 9, bold: false, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                        { text: parseFloat(total_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: 9, bold: false, alignment: 'right', border: [false, false, false, false] },
+                        { text:'', fontSize: 9, bold: false, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                        { text: '', fontSize: 8, bold: false, alignment: 'right', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                        { text: parseFloat(total_receipt).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: 9, bold: false, alignment: 'right', border: [false, true, false, true], margin: [0, 0, 0, 0] },
+                        { text: '', fontSize: 9, bold: false, alignment: 'right', border: [false, false, false, false] },
                     ],
                     [
                       
@@ -320,7 +328,7 @@ function reportHeader(supplierData, receiptData,branch,companyName, flag) {
              { text: data[i].reference_external_number, fontSize: font_size, alignment: 'left', border: [false, false, false, false] },
              { text: data[i].trans_date, fontSize: font_size, alignment: 'left', border: [false, false, false, false] },
              { text: parseFloat(data[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
-             { text: parseFloat(data[i].paidamount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+             { text: parseFloat(data[i].paid_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              { text: parseFloat(data[i].receipt_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              { text:  parseFloat(data[i].balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }), fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
              

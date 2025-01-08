@@ -1,3 +1,5 @@
+var referanceID = undefined;
+
 $(document).ready(function () {
     getGLAccounts();
     getBranches();
@@ -39,6 +41,7 @@ $(document).ready(function () {
                     if (action == 'edit') {
                         updateFundTransfer(fund_transfer_id);
                     } else {
+                        newReferanceID('fund_transfers', '2900');
                         saveFundTransfer();
                     }
 
@@ -252,6 +255,7 @@ function updateFundTransfer(id) {
 function getFormData() {
     var formData = new FormData();
     //formData.append("reference_no", $('#txtReferanceNo').val());
+    formData.append('external_number', referanceID); 
     formData.append("date", $('#txtDate').val());
     formData.append("amount", $('#txtAmount').val());
     formData.append("source_account", $('#cmbSourceAccount').val());
@@ -274,6 +278,8 @@ function getFundTransfer(id) {
         success: function (data) {
             console.log(data);
             var header = data.header;
+            referanceID = header.external_number;
+            $('#txtReferanceNo').val(header.external_number);
             $('#txtDate').val(header.transaction_date);
             $('#txtAmount').val(header.amount);
             $('#cmbSourceAccount').val(header.destination_account_id);
@@ -316,4 +322,10 @@ function approvalFundTransfer(id, status) {
             $('#btnReject').prop('disabled', false);
         }
     })
+}
+
+
+function newReferanceID(table, doc_number) {
+    referanceID = newID("../newReferenceNumber_FundTransfer", table, doc_number);
+   
 }

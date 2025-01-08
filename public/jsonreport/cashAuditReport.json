@@ -48,6 +48,27 @@
             }
         },
         {
+            "label": {
+                "text": "@_$balance",
+                "align": "left",
+                "height": "30",
+                "width": "100%",
+                "border-top": "0",
+                "border-bottom": "0",
+                "border-left": "0",
+                "border-right": "0",
+                "bg-color": "white",
+                "color": "#000000",
+                "x": "130",
+                "y": "-150",
+                "font": {
+                    "style": "Bold",
+                    "size": "16",
+                    "name": "Tahoma"
+                }
+            }
+        },
+        {
             "group": {
                 "header": [
    

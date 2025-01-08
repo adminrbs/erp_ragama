@@ -68,7 +68,7 @@ function TemprorySave(ItemID) {
 function setOff() {
 
     var rowObjects = tableData.getDataSourceObject();
-
+    var credit = 0;
     console.log(hash_map);
     for (var i = 0; i < rowObjects.length; i++) {
         var item_id = rowObjects[i][0].attr('data-id');
@@ -153,6 +153,8 @@ function setOff() {
                     rowObjects[i][7].val(parseFloat(setWholesalePrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     rowObjects[i][10].val(parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     rowObjects[i][13].val(parseFloat(setRetailPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+                    credit = credit + (parseFloat(setoff_quantity) * parseFloat(setWholesalePrice));
+                    setCredit(credit);
                 }
             }
         }
@@ -390,7 +392,7 @@ $(document).ready(function () {
 
     });
 
-    $('#cmbBank').on('change',function(){
+    $('#cmbBank').on('change', function () {
         getBankBranch($(this).val());
     });
     //loadItems(0);
@@ -406,6 +408,13 @@ $(document).ready(function () {
         DataChooser.addCollection("item", ['Item Name', 'Item Code', 'Avl Qty', '', ''], ItemList);
     });
 
+    $('#txtcardNo ').on('input', function () {
+        if ($(this).val().length > 5) {
+            showWarningMessage("Please enter the last 4 / 5 digits of the card number");
+            return false;
+
+        }
+    });
     loadSupplyGroupsAsSalesAnalyst();
     //getting branch code
     $('#cmbBranch').on('change', function () {
@@ -441,16 +450,16 @@ $(document).ready(function () {
     });
 
     //add - to chq number
-    $('#txtbank').on('input',function(){
+    $('#txtbank').on('input', function () {
         var firtVal = $(this).val();
-        if(firtVal.length == 4){
-            $(this).val(firtVal+'-');
-        } else if(firtVal.length == 8){
-           var parts = firtVal.split('-');
-           var bankCode = parts[0];
-           var bankBranchCode = parts[1];
+        if (firtVal.length == 4) {
+            $(this).val(firtVal + '-');
+        } else if (firtVal.length == 8) {
+            var parts = firtVal.split('-');
+            var bankCode = parts[0];
+            var bankBranchCode = parts[1];
 
-           loadBankData(bankCode,bankBranchCode);
+            loadBankData(bankCode, bankBranchCode);
             return false;
         }
     });
@@ -488,12 +497,20 @@ $(document).ready(function () {
 
 
     //payment input
-    $('.paymentInput').on('input', function () {
-        calDueBalance();
+    /*  $('.paymentInput').on('change', function () {
+         calDueBalance();
+         calCredit();
+         calCashBalance();
+     }); */
+    $('.paymentInput').on('change', function () {
+        //calDueBalance();
         calCredit();
-        //calCashBalance();
+        calCashBalance();
     });
+    $('#txttender').on('input', function () {
 
+        calCashBalance();
+    });
 
     //gross total
     $('#txtDiscountAmount').on('input', function () {
@@ -711,7 +728,12 @@ $(document).ready(function () {
                 if (result) {
                     if ($('#btnSave').text() == 'Save and Send') {
                         newReferanceID('sales_invoices', '210');
-                        addSalesInvoice(collection, Invoice_id, return_request_collection);
+                        if (parseFloat($('#txtdueBalance').val().replace(/,/g, '')) == 0) {
+                            addSalesInvoice(collection, Invoice_id, return_request_collection);
+                        } else {
+                            showWarningMessage("Please check the payment details");
+                        }
+
                     } else if ($('#btnSave').text() == 'Update') {
                         updateSI(collection, Invoice_id);
 
@@ -950,20 +972,20 @@ createReturnData() */
 
     var return_result = _validation($('#txtCustomerID'), $('#lblCustomerName'));
 
-    if (1==2) {
-      /*   showWarningMessage("Please fill all required fields");
-        return; */
+    if (1 == 2) {
+        /*   showWarningMessage("Please fill all required fields");
+          return; */
     } else {
         var total_amount = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
         formData.append('return_request_collection', JSON.stringify(return_request_collection));
         formData.append('collection', JSON.stringify(collection));
         formData.append('setOffArray', createSetoffCollection());
-        formData.append('returnData',createReturnData());
-        formData.append('bankTransferData',bankTransferData());
-        formData.append('cardData',cardData());
-        formData.append('chequeData',chequeData());
-        formData.append('credit',$('#txtCredit').val());
-        formData.append('LblexternalNumber', referanceID); 
+        formData.append('returnData', createReturnData());
+        formData.append('bankTransferData', bankTransferData());
+        formData.append('cardData', cardData());
+        formData.append('chequeData', chequeData());
+        formData.append('credit', $('#txtCredit').val());
+        formData.append('LblexternalNumber', referanceID);
         formData.append('SO_number', $('#LblexternalNumber').attr('data-id'));
         formData.append('invoice_date_time', $('#invoice_date_time').val());
         formData.append('cmbBranch', $('#cmbBranch').val());
@@ -983,13 +1005,13 @@ createReturnData() */
         formData.append('code', $('#invoice_date_time').data('id'));
         formData.append('branch_code', $('#cmbBranch').data('id'));
         formData.append('sales_analyst_id', $('#cmbSalesAnalysist').val());
-        formData.append('cash',$('#txtcash').val());
-        formData.append('credit',$('#txtCredit').val())
+        formData.append('cash', $('#txtcash').val());
+        formData.append('credit', $('#txtCredit').val())
         if (!isNaN(parseInt(order_id))) {
             formData.append('order_id', order_id);
         }
 
-console.log(formData);
+        console.log(formData);
 
 
         $.ajax({
@@ -1560,8 +1582,8 @@ function calculation() {
     $('#lblTotalDiscount').text(parseFloat(totalDiscount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
     $('#lblTotaltax').text(parseFloat(tax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString()));
     $('#lblNetTotal').text(parseFloat(netTotal).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
-    setDueBalance(netTotal);
-    setCredit(netTotal);
+    //setDueBalance(netTotal);
+    //setCredit(netTotal);
 }
 
 function MainFunction(event) {
@@ -2348,38 +2370,35 @@ function check_all(event) {
 
 //load sales returns
 function loadSalesReturns(customerId) {
-    var tableObj = $('#salesReturnTable');
-    var tableObjBody = $('#salesReturnTable tbody');
-    tableObjBody.empty();
+
+
     $.ajax({
         url: '/sd/loadSalesReturns/' + customerId,
         type: 'get',
         dataType: 'json',
         success: function (data) {
+            var tableObjBody = $('#salesReturnTable tbody');
+            tableObjBody.empty(); // Clear the table body
             var res = data.data;
 
             $.each(res, function (index, item) {
-
                 var row = $('<tr>');
                 row.append($('<td>').attr('data-id', item.debtors_ledger_id).text(item.trans_date));
                 row.append($('<td>').text(item.external_number));
                 row.append($('<td>').text(formatNumber(item.amount)));
                 row.append($('<td>').text(formatNumber(item.balance)));
                 row.append($('<td>').text(formatNumber(item.balance)));
-                row.append($('<td>').append($('<input class="form-control" type="text" onchange="manageReturns(this);" oninput="calCredit();" onfocus="getExisitingsetoffValue(this)"> ').attr('id', item.debtors_ledger_id)));
-                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" onchange="manageReturns(this)" > ').attr('id', item.debtors_ledger_id)));
-                row.append($('</tr>'))
-                tableObj.append(row);
+                row.append($('<td>').append($('<input class="form-control" type="text" onchange="manageReturns(this);" oninput="calCredit();" onfocus="getExisitingsetoffValue(this)">').attr('id', item.debtors_ledger_id)));
+                row.append($('<td>').append($('<input class="form-check-input" type="checkbox" onchange="manageReturns(this)">').attr('id', item.debtors_ledger_id)));
+                tableObjBody.append(row); // Append to the table body
             });
-
         },
         error: function (error) {
             console.log(error);
-        },
-
-    })
-
+        }
+    });
 }
+
 
 // Helper function to format numbers
 function formatNumber(value) {
@@ -2396,7 +2415,7 @@ function manageReturns(event) {
 
     //getting sum of payment side values (cash/cheque/bank/card)
     var paymentSideTotal = getSumOfPayments();
-
+    var creditSum = $('#txtCredit').val().length > 0 ? parseFloat($('#txtCredit').val().replace(/,/g, '')) : 0;
     var row = $(event).closest('tr');
     var tableSum = getSumOfTable(row);
     if (invoiceNetBalance == null) {
@@ -2440,11 +2459,11 @@ function manageReturns(event) {
                 var insertValue = parseFloat($(event).val().replace(/,/g, ''));
                 var remainingBalance = parseFloat(remainingBalanceCell.text().replace(/,/g, ''));
                 console.log(parseFloat(remainingBalanceCell.text().replace(/,/g, '')));
-                console.log(remainingBalance + paymentSideTotal + tableSum);
+                console.log(remainingBalance + paymentSideTotal + tableSum + creditSum);
 
                 if (invoiceNetBalance >= (remainingBalance + paymentSideTotal + tableSum)) {
                     //setOffCell.val(remainingBalance);
-                    invoiceNetBalance = invoiceNetBalance - (paymentSideTotal + remainingBalance + tableSum);
+                    invoiceNetBalance = invoiceNetBalance - (remainingBalance + paymentSideTotal + tableSum);
                     var remBal = parseFloat(remainingBalanceCell.text().replace(/,/g, '')) - parseFloat(insertValue.replace(/,/g, ''));
                     console.log(remBal);
 
@@ -2457,7 +2476,7 @@ function manageReturns(event) {
                     console.log(invoiceNetBalance);
 
 
-                    invoiceNetBalance = invoiceNetBalance - (invoiceNetBalance + paymentSideTotal + tableSum)
+                    invoiceNetBalance = invoiceNetBalance - (remainingBalance + paymentSideTotal + tableSum)
                     remainingBalanceCell.text(remeaining_bal);
                 }
 
@@ -2566,7 +2585,7 @@ function setCredit(val) {
 }
  */
 
-function calCredit(){
+function calCredit() {
     var tableSum = 0;
     $('#salesReturnTable tr').each(function () {
         let row = $(this);
@@ -2580,13 +2599,17 @@ function calCredit(){
     });
 
     var paymentSum = getSumOfPayments();
-   // var currentCredit = parseFloat($('#txtCredit').val().replace(/,/g, ''));
+    // var currentCredit = parseFloat($('#txtCredit').val().replace(/,/g, ''));
     var total = paymentSum + tableSum;
     var balance = parseFloat($('#lblNetTotal').text().replace(/,/g, '')) - total;
     setCredit(balance);
+    calDueBalance();
 }
 //calculate due balance while seto ff returns and payment side
+
 function calDueBalance() {
+
+
     if (invoiceNetBalance == null) {
         invoiceNetBalance = $('#lblNetTotal').text();
         invoiceNetBalance = parseFloat(invoiceNetBalance.replace(/,/g, ''));
@@ -2611,22 +2634,48 @@ function calDueBalance() {
         tableSum += value;
     });
     var paymentSum = getSumOfPayments();
-    var totalDue = paymentSum + tableSum +parseFloat($('#txtCredit').val().replace(/,/g, ''));
+    var crd = parseFloat($('#txtCredit').val().replace(/,/g, '')) || 0;
+    var totalDue = 0;
+    if (crd < 0) {
+        totalDue = paymentSum + tableSum;
+    } else {
+        totalDue = paymentSum + tableSum + crd;
+    }
+    /* if(crd < 0){
+        var totalDue = paymentSum + tableSum - crd;
+    }else{
+        var totalDue = paymentSum + tableSum + crd;
+    } */
+
+
+
+    console.log(paymentSum);
+    console.log(tableSum);
+    console.log(crd);
+    console.log(totalDue);
+
+
     var val_ = parseFloat($('#lblNetTotal').text().replace(/,/g, '')) - totalDue;
 
     invoiceNetBalance = invoiceNetBalance - val_;
 
     setDueBalance(val_);
 
+    triggerPaymentMethod();
+
+
 }
 
-function calCashBalance(){
-  
+function calCashBalance() {
+
     var total = getSumOfPayments();
-    var cash = parseFloat($('#txtcash').val().replace(/,/g, ''));
-    var balance = cash - total;
-    $('#cashBalance').val(balance.toLocaleString('en-US'));
-   
+    var cash = parseFloat($('#txtcash').val().replace(/,/g, '')) || 0;
+    var balance = total - cash;
+    var tender = parseFloat($('#txttender').val().replace(/,/g, '')) || 0;
+    var tenderBalance = tender - total;
+    $('#cashBalance').val(tenderBalance.toLocaleString('en-US'));
+    // calDueBalance();
+
 }
 function getBank() {
 
@@ -2706,7 +2755,7 @@ function getBankBranch(bank_id) {
 
 }
 
-function loadBankData(bankCode,branchCode){
+function loadBankData(bankCode, branchCode) {
     $.ajax({
         type: "GET",
         url: '/sd/loadBankData/' + bankCode + '/' + branchCode,
@@ -2718,7 +2767,7 @@ function loadBankData(bankCode,branchCode){
 
         },
         success: function (response) {
-            if(response.status){
+            if (response.status) {
                 $('#cmbBank').val(response.bank);
                 $('#cmbBankBranch').val(response.branch);
             }
@@ -2762,69 +2811,145 @@ function loadBankData(bankCode,branchCode){
     return returnData;
 } */
 
-    function createReturnData() {
-        var returnData = [];
-    
-        $('#salesReturnTable tr').each(function () {
-            let row = $(this);
-          
-            if (row.find('th').length > 0) {
-                return; // Skip this iteration
-            }
-    
-            // Get the setoff cell value (5th column, index 4)
-            var setOffCell = row.find('td').eq(5).find('input[type="text"]');
-            var setOffValue = parseFloat(setOffCell.val().replace(/,/g, ''));
-            
-            if (!isNaN(setOffValue) && setOffValue !== 0) {
-                returnData.push(
-                    JSON.stringify({
-                        "amount": setOffValue,
-                        "debtors_ledger_id": setOffCell.attr('id')
-                    })
-                );       
-            }
-        });
-    
-        return JSON.stringify(returnData);
-    }
+function createReturnData() {
+    var returnData = [];
 
-function chequeData(){
+    $('#salesReturnTable tr').each(function () {
+        let row = $(this);
+
+        if (row.find('th').length > 0) {
+            return; // Skip this iteration
+        }
+
+        // Get the setoff cell value (5th column, index 4)
+        var setOffCell = row.find('td').eq(5).find('input[type="text"]');
+        var setOffValue = parseFloat(setOffCell.val().replace(/,/g, ''));
+
+        if (!isNaN(setOffValue) && setOffValue !== 0) {
+            returnData.push(
+                JSON.stringify({
+                    "amount": setOffValue,
+                    "debtors_ledger_id": setOffCell.attr('id')
+                })
+            );
+        }
+    });
+
+    return JSON.stringify(returnData);
+}
+
+function chequeData() {
     chequeDetails = [];
     var parts = $('#txtbank').val().split('-');
     chequeDetails.push(JSON.stringify({
-        "chequeAmount":$('#txtchqAmount').val(),
-        "chequeNo":$('#chequeNo').val(),
-        "chqDate":$('#chqDate').val(),
-        "bankId":$('#cmbBank').val(),
-        "bankbranchId":$('#cmbBankBranch').val(),
-        "bankCode":parts[0]
+        "chequeAmount": $('#txtchqAmount').val(),
+        "chequeNo": $('#chequeNo').val(),
+        "chqDate": $('#chqDate').val(),
+        "bankId": $('#cmbBank').val(),
+        "bankbranchId": $('#cmbBankBranch').val(),
+        "bankCode": parts[0]
     }));
 
     return chequeDetails;
 }
 
-function cardData(){
+function cardData() {
     cardDetails = [];
     cardDetails.push(JSON.stringify({
-        "cardAmount":$('#txtcard').val(),
-        "cardNo":$('#txtcardNo').val(),
-        "cardIssueBank":$('#cmbCardIssueBank').val(),
-        "type":$('#type').val()
+        "cardAmount": $('#txtcard').val(),
+        "cardNo": $('#txtcardNo').val(),
+        "cardIssueBank": $('#cmbCardIssueBank').val(),
+        "type": $('#type').val()
 
     }));
 
     return cardDetails;
 }
 
-function bankTransferData(){
+function bankTransferData() {
     bankDetails = [];
     bankDetails.push(JSON.stringify({
-        "bankAMount":$('#txtBankTransferAmount').val(),
-        "bankReference":$('#txtBankReference').val(),
-        "bankTransferDate":$('#dtBankTransferDate').val()
+        "bankAMount": $('#txtBankTransferAmount').val(),
+        "bankReference": $('#txtBankReference').val(),
+        "bankTransferDate": $('#dtBankTransferDate').val()
     }));
 
     return bankDetails;
 }
 
+function triggerPaymentMethod() {
+    var paymentTypes = [];
+    var ReturntableVal = 0;
+
+    // Check return data
+    $('#salesReturnTable tr').each(function () {
+        let row = $(this);
+        if (row.find('th').length > 0) {
+            return; // Skip this iteration
+        }
+
+       
+        // Get the setoff cell value (5th column, index 4)
+        var setOffCell = row.find('td').eq(5).find('input[type="text"]');
+
+        // Parse the value, remove thousand separators, and add to the sum
+        let value = parseFloat(setOffCell.val().replace(/,/g, '')) || 0; // Default to 0 if invalid
+        ReturntableVal += value;
+    });
+
+    if (ReturntableVal > 0) {
+        paymentTypes.push("Returns");
+    }
+
+    if (parseFloat($("#txtcash").val().replace(/,/g, '')) > 0) {
+        paymentTypes.push("Cash");
+    }
+
+    if (parseFloat($("#txtcard").val().replace(/,/g, '')) > 0) {
+        paymentTypes.push("Card");
+    }
+
+    if (parseFloat($("#txtBankTransferAmount").val().replace(/,/g, '')) > 0) {
+        paymentTypes.push("Bank Transfer");
+    }
+
+    if (parseFloat($("#txtchqAmount").val().replace(/,/g, '')) > 0) {
+        paymentTypes.push("Cheque");
+    }
+
+    if (parseFloat($("#txtCredit").val().replace(/,/g, '')) > 0) {
+        paymentTypes.push("Credit");
+    }
+
+    if (paymentTypes.length > 1) {
+        $('#cmbPaymentMethod').val(9);
+        $('#cmbPaymentMethod').trigger('change');
+    } else {
+        if (paymentTypes.length === 1) {
+            switch (paymentTypes[0]) {
+                case "Returns":
+                    $('#cmbPaymentMethod').val(1); 
+                    break;
+                case "Cash":
+                    $('#cmbPaymentMethod').val(1); 
+                    break;
+                case "Card":
+                    $('#cmbPaymentMethod').val(8); 
+                    break;
+                case "Bank Transfer":
+                    $('#cmbPaymentMethod').val(7); 
+                    break;
+                case "Cheque":
+                    $('#cmbPaymentMethod').val(2); 
+                    break;
+                case "Credit":
+                    $('#cmbPaymentMethod').val(10); 
+                    break;
+                default:
+                    $('#cmbPaymentMethod').val(1); 
+                    break;
+            }
+            $('#cmbPaymentMethod').trigger('change');
+        }
+    }
+}

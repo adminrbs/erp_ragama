@@ -70,7 +70,7 @@ function reportHeader(purchaseorder, purchaseorder_item, dt, flag) {
     var Dis_Total = 0;
     var disprecentage = 0;
     for (var i = 0; i < purchaseorder_item.length; i++) {
-        var wsp = parseFloat(purchaseorder_item[i].price);
+        var wsp = parseFloat(purchaseorder_item[i].cost_price);
         var qty = parseFloat(purchaseorder_item[i].quantity);
 
         var disprecentage = parseFloat(purchaseorder_item[i].discount_percentage);
@@ -152,32 +152,32 @@ function reportHeader(purchaseorder, purchaseorder_item, dt, flag) {
                                         ],
 
                                         [
-                                            { text: 'Manual No :' + ( purchaseorder[0].internal_number || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'Supplier :' + (purchaseorder[0].supplier_name || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             //{ text: 'Currency :'+ 'LKR 1.0000' , fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
-                                            { text: 'PO User :'+(purchaseorder[0].userName || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
+                                            { text: 'User :'+(purchaseorder[0].userName || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                         ],
 
-                                        [
-                                            { text: 'PO No :'+ (purchaseorder[0].external_number || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                      /*   [
+                                            { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             //{ text: 'App. User :'+ 'THARAKA', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                        ],
+                                        ], */
 
                                         [
-                                            { text: 'Supplier :' + (purchaseorder[0].supplier_name || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                            { text: 'Address:' + (purchaseorder[0].primary_address || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             //{ text: 'Add. User :'+ '6/6/2023', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
                                         ],
 
-                                        [
-                                            { text: 'Address:' + (purchaseorder[0].primary_address || ''), fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
+                                        /* [
+                                            { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 12, bold: true, alignment: 'center', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             //{ text: 'App. User :'+ 'Tharaka', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [0, 0, 0, 0] },
                                             { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false] },
-                                        ],
+                                        ], */
 
                                     ],
 
@@ -201,7 +201,7 @@ function reportHeader(purchaseorder, purchaseorder_item, dt, flag) {
         {
             
             table: {
-                widths: ['*', 110, '*', '*', '*', 40, '*', '*'],
+                widths: ['*', 110, '*', '*', '*','*',40, '*', '*'],
                 headerRows: 1,
                 body: reportitemBody(purchaseorder_item),
                
@@ -393,6 +393,7 @@ function reportitemBody(data) {
     { text: 'Pack Size', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
     { text: 'Quantity', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
     { text: 'Free Qty', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
+    { text: 'Add. Bonus', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
     { text: 'Pur.Price', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
     { text: 'Dis %', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
     { text: 'Amount', fontSize: font_size, bold: true, alignment: 'center', border: [true, true, true, true] },
@@ -408,7 +409,7 @@ function reportitemBody(data) {
       };
     for (i = 0; i < data.length; i++) {
         var quantity = parseFloat(data[i].quantity);
-        var price = parseFloat(data[i].price);
+        var price = parseFloat(data[i].cost_price);
         var free_quantity = parseFloat(data[i].free_quantity);
 
 
@@ -428,6 +429,7 @@ function reportitemBody(data) {
                 { text: formattedquantity, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
 
                 { text: formattedfree_quantity, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
+                { text: data[i].additional_bonus || '-', fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
                 { text: formattedPrice, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
                 { text: data[i].discount_percentage, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },
                 { text: formattedAmount, fontSize: font_size, alignment: 'right', border: [false, false, false, false] },

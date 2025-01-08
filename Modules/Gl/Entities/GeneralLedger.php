@@ -15,7 +15,7 @@ class GeneralLedger extends Model
 
     protected $fillable = [];
 
-    protected $table = "general_ledgers";
+    protected $table = "general_ledger";
     protected $primaryKey = "general_ledger_id";
 
     public function tapActivity(Activity $activity, string $eventName)

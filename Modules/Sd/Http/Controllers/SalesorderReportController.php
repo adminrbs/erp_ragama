@@ -43,11 +43,14 @@ class SalesorderReportController extends Controller
                   employees.address,
                   branches.fixed_number,
                 
-                
+
                   locations.location_name,
                   users.id,
                   users.name AS userName,
-                  users.email
+                  users.email,
+                  customers.customer_name,
+                  customers.customer_code,
+                  customers.primary_address
               FROM
                   sales_orders
               LEFT JOIN
@@ -60,6 +63,8 @@ class SalesorderReportController extends Controller
                  
                   LEFT JOIN
                   branches ON sales_orders.branch_id=branches.branch_id
+                  LEFT JOIN
+                  customers ON sales_orders.customer_id=customers.customer_id
                   WHERE
                   sales_orders.sales_order_Id ="' . $id . '"';
                   return DB::select($qry);
@@ -68,7 +73,7 @@ class SalesorderReportController extends Controller
               {
                   $qry = 'SELECT sales_order_items.*, 
                   items.*,
-                  ROUND(sales_order_items.price * sales_order_items.quantity) AS amount
+                  sales_order_items.price * sales_order_items.quantity AS amount
            FROM sales_order_items
            INNER JOIN items ON sales_order_items.item_id = items.item_id
            WHERE sales_order_items.sales_order_Id= "' . $id . '"';

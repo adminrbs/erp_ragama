@@ -138,6 +138,9 @@ $(document).ready(function () {
             { "type": "text", "class": "transaction-inputs math-abs math-round", "value": "", "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "validate_qty(this);calValueandCostPrice(this)" },
             { "type": "text", "class": "transaction-inputs math-abs math-round", "value": "", "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "validate_qty(this);calValueandCostPrice(this)" }, //additional qty
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+            
             { "type": "text", "class": "transaction-inputs", "style": "max-height:30px;text-align:right;width:100px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
             { "type": "text", "class": "transaction-inputs math-abs", "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", "thousand_seperator": true },
@@ -149,7 +152,7 @@ $(document).ready(function () {
             { "type": "button", "class": "btn btn-danger", "value": "Remove", "style": "max-height:30px;margin-right:10px;", "event": "removeRow(this);calculation()", "width": 30 }
         ],
         "auto_focus": 0,
-        "hidden_col": [6,7,11]
+        "hidden_col": [8,9,12]
 
 
     });
@@ -209,13 +212,13 @@ $(document).ready(function () {
                     "item_name": arr[i][1].val(),
                     "qty": arr[i][2].val(),
                     "uom": arr[i][5].val(),
-                    "PackUnit": arr[i][7].val(),
-                    "PackSize": arr[i][6].val(),
+                    "PackUnit": arr[i][9].val(),
+                    "PackSize": arr[i][8].val(),
                     "free_quantity": arr[i][3].val(),
-                    "price": parseFloat(arr[i][8].val().replace(/,/g, '')),
-                    "cost": parseFloat(arr[i][9].val().replace(/,/g, '')),
-                    "discount_percentage": arr[i][10].val(),
-                    "discount_amount": parseFloat(arr[i][11].val().replace(/,/g, '')),
+                    "price": parseFloat(arr[i][10].val().replace(/,/g, '')),
+                    "cost": parseFloat(arr[i][11].val().replace(/,/g, '')),
+                    "discount_percentage": arr[i][12].val(),
+                    "discount_amount": parseFloat(arr[i][13].val().replace(/,/g, '')),
                     "addQty":arr[i][4].val()
 
 
@@ -269,70 +272,7 @@ $(document).ready(function () {
 
     })
 
-    $('#btnSaveDraft').on('click', function () {
-        var arr = tableData.getDataSourceObject();
-        var collection = [];
-        for (var i = 0; i < arr.length; i++) {
-            collection.push(JSON.stringify({
-                "item_id": arr[i][0].attr('data-id'),
-                "item_name": arr[i][1].val(),
-                "qty": arr[i][2].val(),
-                "uom": arr[i][4].val(),
-                "PackUnit": arr[i][6].val(),
-                "PackSize": arr[i][5].val(),
-                "free_quantity": arr[i][3].val(),
-                "price": arr[i][7].val(),
-                "discount_percentage": arr[i][8].val(),
-                "discount_amount": arr[i][9].val(),
-            }));
-
-
-        }
-        bootbox.confirm({
-            title: 'Save confirmation',
-            message: '<div class="d-flex justify-content-center align-items-center mb-3"><i id="question-icon" class="fa fa-question fa-5x text-warning animate-question"></i></div><div class="d-flex justify-content-center align-items-center"><p class="h2">Are you sure?</p></div>',
-            buttons: {
-                confirm: {
-                    label: '<i class="fa fa-check"></i>&nbsp;Yes',
-                    className: 'btn-warning'
-                },
-                cancel: {
-                    label: '<i class="fa fa-times"></i>&nbsp;No',
-                    className: 'btn-link'
-                }
-            },
-            callback: function (result) {
-                //console.log('Confirmation result:', result);
-                if (result) {
-                    if ($('#btnSaveDraft').text() == 'Save Draft') {
-                        newReferanceID('purchase_order_note_drafts', 110);
-                        addPurchaseOrderDraft(collection);
-                        getServerTime();
-
-                    } else if ($('#btnSaveDraft').text() == 'Update Draft') {
-
-
-                        updatePODraft(collection, PO_id);
-                        getServerTime();
-
-                    }
-                } else {
-
-                }
-            },
-            onShow: function () {
-                $('#question-icon').addClass('swipe-question');
-            },
-            onHide: function () {
-                $('#question-icon').removeClass('swipe-question');
-            }
-        });
-
-        $('.bootbox').find('.modal-header').addClass('bg-warning text-white');
-
-
-
-    })
+    
 
     $('#btnApprove').on('click', function () {
         bootbox.confirm({
@@ -776,9 +716,9 @@ function dataChooserEventListener(event, id, value) {
 
                 $(row_childs[1]).val(response[0].item_Name);
                 $(row_childs[5]).val(response[0].unit_of_measure);
-                $(row_childs[7]).val(response[0].package_unit);
-                $(row_childs[6]).val(response[0].package_size);
-                $(row_childs[8]).val(response[0].previouse_purchase_price);
+                $(row_childs[9]).val(response[0].package_unit);
+                $(row_childs[8]).val(response[0].package_size);
+                $(row_childs[9]).val(response[0].previouse_purchase_price);
                // $(row_childs[11]).val(response[0].whole_sale_price);
                 //$(row_childs[12]).val(response[0].retial_price);
                 $(row_childs[2]).focus();
@@ -786,12 +726,12 @@ function dataChooserEventListener(event, id, value) {
                 $(row_childs[3]).val('');
 
                 
-                $(row_childs[10]).val('');
+                $(row_childs[11]).val('');
                 if($('#txtDiscountPrecentage').val().length > 0){
-                    $(row_childs[10]).val($('#txtDiscountPrecentage').val());
+                    $(row_childs[11]).val($('#txtDiscountPrecentage').val());
                     
                 }else{
-                    $(row_childs[10]).removeAttr('disabled');
+                    $(row_childs[11]).removeAttr('disabled');
                 }
                
                 calculation();
@@ -879,8 +819,8 @@ function calculation() {
 
     for (var i = 0; i < arr.length; i++) {
         var qty = parseFloat(arr[i][2].val().replace(/,/g, ""));
-        var price = parseFloat(arr[i][9].val().replace(/,/g, "")); // changed to cost price
-        var discount_pres = parseFloat(arr[i][10].val().replace(/,/g, ""));
+        var price = parseFloat(arr[i][10].val().replace(/,/g, "")); // changed to cost price
+        var discount_pres = parseFloat(arr[i][11].val().replace(/,/g, ""));
 
 
         // Check if the field values are not NaN or empty
@@ -993,7 +933,10 @@ function getEachproduct(id, status) {
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.free_quantity, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "validate_qty(this);calValueandCostPrice(this)" },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.additional_bonus, "style": "max-height:30px;width:80px;text-align:right;margin-right:10px;", "event": "" },
                     { "type": "text", "class": "transaction-inputs", "value": value.unit_of_measure, "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                    { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                    { "type": "text", "class": "transaction-inputs", "value": "", "style": "max-height:30px;text-align:right;width:50px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs", "value": value.package_size, "style": "max-height:30px;text-align:right;width:100px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
+                   
                     { "type": "text", "class": "transaction-inputs", "value": value.package_unit, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "", "width": "*", "disabled": "disabled" },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": price_, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },
                     { "type": "text", "class": "transaction-inputs math-abs", "value": value.cost_price, "style": "max-height:30px;text-align:right;width:80px;margin-right:10px;", "event": "calValueandCostPrice(this)", "width": "*", },

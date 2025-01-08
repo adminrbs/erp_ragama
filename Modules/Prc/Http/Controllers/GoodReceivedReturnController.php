@@ -757,7 +757,7 @@ class GoodReceivedReturnController extends Controller
         try {
             $query = "SELECT
             item_history_setoff_id,
-            batch_number,
+            CONCAT(batch_number,'-',external_number) AS batch_number,
             item_id,
             quantity - setoff_quantity AS AvlQty,
             cost_price,
@@ -790,7 +790,7 @@ class GoodReceivedReturnController extends Controller
         ini_set('max_execution_time', '0');
         $query = "SELECT
             item_history_setoff_id,
-            batch_number,
+            CONCAT(batch_number,'-',external_number) AS batch_number,
             item_id,
             quantity - setoff_quantity AS AvlQty,
             cost_price,

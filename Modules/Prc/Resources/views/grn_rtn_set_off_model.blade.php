@@ -17,7 +17,7 @@
                         <thead>
                             <tr>
                                 <!-- <th>Set off Id</th> -->
-                                <th>Batch Number</th>
+                                <th>Batch/Reference Number</th>
                                 <th>Cost Price</th>
                                 <th>Whole Sale</th>
                                 <th>Retail Price</th>

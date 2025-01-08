@@ -2,6 +2,8 @@ var ItemList = [];
 var analysisTableArray = [];
 var tableData = undefined;
 var narration = [{ "text": "Credits", "value": 1 }, { "text": "Debit", "value": 2 }];
+var referanceID = undefined;
+var amount = 0;
 $(document).ready(function () {
 
     $('.approval').hide();
@@ -57,6 +59,7 @@ $(document).ready(function () {
                     if (action == 'edit') {
                         updateJournal(journal_id);
                     } else {
+                        newReferanceID('journal_entries', '2800');
                         saveJournal();
                     }
 
@@ -377,6 +380,7 @@ function saveJournal() {
             $('#btnSave').prop('disabled', true);
         }, success: function (response) {
 
+            console.log(response);
             if (response.success) {
                 showSuccessMessage("Successfuly saved");
                 window.location.href = "/gl/journal_entries";
@@ -405,18 +409,20 @@ function getFormData() {
                 "analysis": parseInt(arr[i][5].val()),
 
             }));
+            amount += Math.abs(parseFloat(arr[i][4].val()));
         }
     }
     console.log(collection);
 
     var formData = new FormData();
-    formData.append("reference_no", $('#txtReferanceNo').val());
+    formData.append('external_number', referanceID);
     formData.append("date", $('#journal_date').val());
     formData.append("branch", $('#cmbBranch').val());
     formData.append("remark", $('#txtRemarks').val());
     formData.append("created_by", 0);
     formData.append("approved_by", 0);
     formData.append("approval_status", 0);
+    formData.append("amount", Math.abs(amount));
     formData.append('collection', JSON.stringify(collection));
     return formData;
 }
@@ -442,7 +448,7 @@ function calTotal(event) {
 
 
     $('#lblGrossTotal').text(parseFloat(total_Sum).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
-    $('#lblNetTotal').text(parseFloat(total_Sum).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
+    $('#lblNetTotal').text(parseFloat(Math.abs(total_Sum)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
 
 }
 
@@ -456,7 +462,8 @@ function getJournalEntry(id) {
         success: function (data) {
             console.log(data);
             var header = data.header;
-            $('#txtReferanceNo').val(header.reference_no)
+            referanceID = header.external_number;
+            $('#txtReferanceNo').val(header.external_number);
             $('#journal_date').val(header.transaction_date);
             $('#cmbBranch').val(header.branch_id);
             $('#txtRemarks').val(header.remark);
@@ -518,7 +525,10 @@ function appendTableItems(items) {
 
         ]);
 
+        //amount += Math.abs(value.amount);
+
     });
+
 
     tableData.setDataSource(dataSource);
 
@@ -608,6 +618,7 @@ function calculateViewTotal() {
             total -= amount;
         }
     });
+
     $('#lblGrossTotal').text(parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
     $('#lblNetTotal').text(parseFloat(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, }).toString());
 }
@@ -615,7 +626,10 @@ function calculateViewTotal() {
 
 
 
+function newReferanceID(table, doc_number) {
+    referanceID = newID("../newReferenceNumber_JournalEntry", table, doc_number);
 
+}
 
 
 

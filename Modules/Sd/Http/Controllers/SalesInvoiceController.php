@@ -682,6 +682,7 @@ return response()->json([
             $query = DB::table('sales_invoices')
                 ->select(
                     'sales_invoices.external_number',
+                    'sales_invoices.internal_number',
                     'manual_number',
                     'sales_invoice_Id',
                     'sales_invoices.order_date_time',
@@ -726,7 +727,7 @@ return response()->json([
             }
 
             // Order the results
-            $query->orderBy('external_number', 'desc');
+            $query->orderBy('internal_number', 'desc');
 
             // Paginate the results
             $results = $query->take($pageLength)->skip($skip)->get();
@@ -1025,7 +1026,7 @@ return response()->json([
     public function getheaderDetails($id)
     {
         try {
-            $query = "SELECT sales_orders.customer_id,discount_percentage,discount_amount,customers.customer_name,employee_id, customers.primary_address,customers.customer_code,location_id,sales_orders.payment_term_id FROM sales_orders INNER JOIN customers ON sales_orders.customer_id = customers.customer_id  WHERE  sales_orders.sales_order_Id = '" . $id . "'";
+            $query = "SELECT sales_orders.customer_id,sales_orders.branch_id,sales_orders.external_number,discount_percentage,discount_amount,customers.customer_name,employee_id, customers.primary_address,customers.customer_code,location_id,sales_orders.payment_term_id FROM sales_orders INNER JOIN customers ON sales_orders.customer_id = customers.customer_id  WHERE  sales_orders.sales_order_Id = '" . $id . "'";
             $result = DB::select($query);
             if ($result) {
                 return response()->json(['success' => 'Data loaded', 'data' => $result]);
@@ -1083,7 +1084,7 @@ return response()->json([
             ini_set('max_execution_time', '0'); // for infinite time of execution
             $query = "SELECT
             item_history_setoff_id,
-            batch_number,
+            CONCAT(batch_number,'/',external_number) AS batch_number,
             item_id,
             quantity - setoff_quantity AS AvlQty,
             cost_price,
@@ -1520,8 +1521,8 @@ WHERE it.is_active = 1 AND SG.supply_group_id = ?", [$branch_, $location_, $sup_
             $customer_receipt->external_number = $branchdata[0]->prefix . "-" . $this->createExternal_number($invoice->branch_id);
             $customer_receipt->branch_id = $invoice->branch_id;
             $customer_receipt->customer_id = $invoice->customer_id;
-            $customer_receipt->collector_id = Auth::user()->id;
-            $customer_receipt->cashier_id = Auth::user()->id;
+           // $customer_receipt->collector_id = Auth::user()->id;
+            $customer_receipt->cashier_id = $invoice->employee_id;
             $customer_receipt->receipt_date = date('Y-m-d');
             $customer_receipt->receipt_method_id = $type;
             $customer_receipt->gl_account_id = 0; // need to change

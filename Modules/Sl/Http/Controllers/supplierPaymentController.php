@@ -365,7 +365,7 @@ class supplierPaymentController extends Controller
             $cheque->cheque_number = $receiptCheque->cheque_number;
             $cheque->supplier_cheque_reference_number = ChequeReferenceNumberController::ChequeSupplierReferenceGenerator();
             $cheque->banking_date = $receiptCheque->banking_date;
-            $cheque->amount = -$receiptCheque->amount;
+            $cheque->amount = $receiptCheque->amount;
             $cheque->bank_id = $receiptCheque->bank_id;
             $cheque->bank_branch_id = $receiptCheque->bank_branch_id;
             $cheque->cheque_status = $receiptCheque->cheque_status;
@@ -402,7 +402,7 @@ class supplierPaymentController extends Controller
                 $ledger->branch_id = $branch_id;
                 $ledger->supplier_id = $supplier_id;
                 $ledger->supplier_code = $supplier_code;
-                $ledger->amount = -$amount;
+                $ledger->amount = $amount;
                 if ($ledger->save()) {
                     //$this->save_update_creditor_ledger($ledger, $paidamount);
                     $ledger_update =  creditors_ledger::find( $ledger_id);
@@ -438,7 +438,7 @@ class supplierPaymentController extends Controller
             $ledger->branch_id = $receipt->branch_id;
             $ledger->supplier_id = $receipt->supplier_id;
             $ledger->supplier_code = $sup_obj->supplier_code;
-            $ledger->amount = -$receipt->amount;
+            $ledger->amount = $receipt->amount;
            
             //$ledger->paidamount = $paidamount;
             $response1 =  $ledger->save();

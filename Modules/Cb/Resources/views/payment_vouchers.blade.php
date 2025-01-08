@@ -326,7 +326,7 @@
                         <div class="row">
                             <div class="col-md-8 mt-2">
                                 <div class="col-md-12">
-                                    <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Remarks</span></label>
+                                    <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Remarks</span></label>
                                     <textarea rows="4" name="remarks" id="txtRemarks" class="form-control form-control-sm" autocomplete="off"></textarea>
                                 </div>
 

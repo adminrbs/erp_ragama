@@ -139,22 +139,7 @@
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Your Reference</span></label>
                                     <input type="text" id="txtYourReference" class="form-control">
                                 </div>
-                                <!--   <div class="col-md-2" style="margin-top: 30px;">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="rdoWholeSalePrice">
-                                        <label class="form-check-label" for="rdoWholeSalePrice">
-                                            Whole Sale Price
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-2" style="margin-top: 30px;">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="rdoCostPrice">
-                                        <label class="form-check-label" for="rdoCostPrice">
-                                            Cost Price
-                                        </label>
-                                    </div>
-                                </div> -->
+                               
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Discount Precentage</span></label>
@@ -206,7 +191,7 @@
                                                 <th>Dis. Amount</th>
                                                 <th>Value</th>
                                                 <th>Whole Sale</th>
-                                                <th>Retial Price</th>
+                                                <th>Retail Price</th>
                                                 <th>Batch#</th>
                                                 <th>Expired On</th>
                                                 <th>Cost Price</th>
@@ -283,11 +268,14 @@
                             <div class="col-md-6">
                                 <button class="btn btn-info" type="button" style="width: 100%;" id="btnSave">Save and Send</button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button class="btn btn-danger" type="button" style="width: 100%;" id="btnReject">Reject</button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button class="btn btn-success" type="button" id="btnApprove" style="width: 100%;">Approve</button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" type="button" id="btnRevise" style="width: 100%;">Revise</button>
                             </div>
 
                         </div>

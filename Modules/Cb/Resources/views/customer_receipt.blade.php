@@ -196,15 +196,15 @@
                                                 <tr>
                                                     <th hidden></th>
                                                     <th style="max-width: 100px;">Date</th>
-                                                    <th style="max-width: 100px;">Invoice Number</th>
+                                                    <th style="width:300px;">Invoice Number</th>
                                                     <th style="max-width: 100%;">Description</th>
                                                     <th style="max-width: 80px;text-align: right;">Amount</th>
-                                                    <th style="max-width: 80px;text-align: left;" class="hide_col">Previouse Paid Amount</th>
-                                                    <th style="max-width: 80px;text-align: right;" class="hide_col">Return Amount</th>
-                                                    <th style="max-width: 80px;text-align: right;" class="hide_col">Balance</th>
-                                                    <th style="max-width: 100px;text-align: center;">Setoff</th>
-                                                    <th style="max-width: 80px;text-align: right;" class="hide_col">Age</th>
-                                                    <th style="max-width: 80px;text-align: right;" class=""></th>
+                                                    <th style="max-width: 80px;text-align: right;" class="hide_col">Previouse Paid Amount</th>
+                                                    <th class="hide_col">Return Amount</th>
+                                                    <th style="max-width: 80px;text-align: right;"  class="hide_col">Balance</th>
+                                                    <th style="width:200px;">Setoff</th>
+                                                    <th class="hide_col">Age</th>
+                                                    <th class=""></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblCustomerReceiptSetoff"></tbody>

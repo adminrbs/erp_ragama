@@ -4,6 +4,7 @@ namespace Modules\Cb\Http\Controllers;
 
 use App\Http\Controllers\chequeNumberController;
 use App\Http\Controllers\CompanyDetailsController;
+use App\Http\Controllers\GeneralLedgerController;
 use App\Http\Controllers\IntenelNumberController;
 use Carbon\Carbon;
 use DateTime;
@@ -102,6 +103,13 @@ class PaymentVoucherController extends Controller
                     return response()->json(["cheque" => "invalidChq"]);
                 }
             }
+            $full_amount = 0;
+            foreach ($collection as $i) {
+                $item = json_decode($i);
+              
+                $full_amount += $item->amount;
+               
+            }
             $transDate = $request->input('transDate');
             $date = new DateTime($transDate);
             $formattedDate = $date->format('Y-m-d');
@@ -120,7 +128,7 @@ class PaymentVoucherController extends Controller
             }
             $PaymentVoucher->payment_method_id = $request->input('cmbPaymentMethod');
             $PaymentVoucher->branch_id = $request->input('cmbBranch');
-            $PaymentVoucher->total_amount = 0;
+            $PaymentVoucher->total_amount = $full_amount;
             $PaymentVoucher->gl_account_id = $request->input('cmbGlAccount');
             $PaymentVoucher->document_number = 2750;
             $PaymentVoucher->remarks = $request->input('remarks');
@@ -128,6 +136,7 @@ class PaymentVoucherController extends Controller
             $PaymentVoucher->status = 0;
             $total_amount = 0;
             if ($PaymentVoucher->save()) {
+                GeneralLedgerController::saveGL($PaymentVoucher, null, "header");
 
                 foreach ($collection as $i) {
                     $item = json_decode($i);
@@ -142,6 +151,7 @@ class PaymentVoucherController extends Controller
                     $PaymentVoucherItems->save();
 
                     $total_amount += $item->amount;
+                    GeneralLedgerController::saveGL($PaymentVoucher,$PaymentVoucherItems , "item");
                 }
             }
             $PaymentVoucher->total_amount = $total_amount;
@@ -273,10 +283,14 @@ WHERE
             $collection = json_decode($request->input('collection'));
 
             $PaymentVoucher = PaymentVoucher::find($id);
-            // $PaymentVoucher->internal_number = IntenelNumberController::getNextID();
-            //  $PaymentVoucher->external_number =  $externalNumber;
-            //$PaymentVoucher->transaction_date = Carbon::now();
-
+            
+            $full_amount = 0;
+            foreach ($collection as $i) {
+                $item = json_decode($i);
+              
+                $full_amount += $item->amount;
+               
+            }
             $transDate = $request->input('transDate');
             $date = new DateTime($transDate);
             $formattedDate = $date->format('Y-m-d');
@@ -293,7 +307,7 @@ WHERE
             }
             $PaymentVoucher->payment_method_id = $request->input('cmbPaymentMethod');
             $PaymentVoucher->branch_id = $request->input('cmbBranch');
-            $PaymentVoucher->total_amount = 0;
+            $PaymentVoucher->total_amount = $full_amount;
             $PaymentVoucher->gl_account_id = $request->input('cmbGlAccount');
             $PaymentVoucher->document_number = 2750;
             $PaymentVoucher->remarks = $request->input('remarks');
@@ -302,6 +316,7 @@ WHERE
             $PaymentVoucher->transaction_date = $formattedDate;
             if ($PaymentVoucher->update()) {
                 $payment_voucher = PaymentVoucherItems::where("payment_voucher_id", "=", $id)->delete();
+                GeneralLedgerController::updateGL($PaymentVoucher, null, "header");
                 foreach ($collection as $i) {
                     $item = json_decode($i);
                     $PaymentVoucherItems = new PaymentVoucherItems();
@@ -313,6 +328,7 @@ WHERE
                     $PaymentVoucherItems->description = $item->description;
                     $PaymentVoucherItems->amount = $item->amount;
                     $PaymentVoucherItems->save();
+                    GeneralLedgerController::updateGL($PaymentVoucher, null, "item");
                 }
 
                 $existing_cheque = PaymentVoucherCheque::where("payment_voucher_id", "=", $id)->delete();

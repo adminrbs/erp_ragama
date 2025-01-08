@@ -175,7 +175,7 @@ class CustomerReceiptController extends Controller
             $query = "SELECT 
             A.internal_number ,
             A.internal_number AS reference_internal_number ,
-            A.external_number ,
+           CONCAT(A.external_number, CASE WHEN A.manual_number IS NOT NULL THEN CONCAT('/', A.manual_number) ELSE '' END) AS external_number,
             A.external_number AS reference_external_number ,
             A.document_number ,
             A.document_number AS reference_document_number ,

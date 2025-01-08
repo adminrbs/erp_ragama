@@ -29,7 +29,7 @@ class purchase_order_note extends Model
         $activity->causer_id = Auth::user()->id;
     }
 
-    protected static function boot()
+   /*  protected static function boot()
     {
         parent::boot();
 
@@ -49,7 +49,7 @@ class purchase_order_note extends Model
         });
 
       
-    }
+    } */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

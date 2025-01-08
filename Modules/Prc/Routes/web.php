@@ -158,7 +158,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     Route::get('/getPendingapprovalsPurchaseOrder',[PurchaseOrderController::class,'getPendingapprovalsPurchaseOrder']);
     Route::post('/approveRequestPO/{id}',[PurchaseOrderController::class,'approveRequestPO']);
     Route::post('/rejectRequestPO/{id}',[PurchaseOrderController::class,'rejectRequestPO']);
-
+    Route::get('/getItemInfo_purchase_order/{id}/{brnachId}',[PurchaseOrderController::class,'getItemInfo_purchase_order']);
     Route::get('/purchaseOrderView',function(){
         return view('prc::purchase_order_view');
     });

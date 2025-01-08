@@ -182,12 +182,12 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-11 mb-0 mt-0">
-                                                <label style="font-weight: bold;">Branch</label>
+                                                <label style="font-weight: bold;">Account</label>
                                                 <!--<select class="form-control validate select2" id="cmbBranch"></select>-->
-                                                <select multiple="multiple" class="select  form-select" id="cmbBranch" data-placeholder="Select Branch"></select>
+                                                <select multiple="multiple" class="select  form-select" id="cmbAccount" data-placeholder="Select Account"></select>
                                             </div>
                                             <div class="col-md-1 mt-0">
-                                                <input id="chkBranch" type="checkbox" style="margin-top: 30px;">
+                                                <input id="chkAccount" type="checkbox" style="margin-top: 30px;">
                                             </div>
                                         </div>
                                         <div class="row">

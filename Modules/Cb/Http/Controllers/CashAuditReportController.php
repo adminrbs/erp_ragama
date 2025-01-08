@@ -82,7 +82,7 @@ class CashAuditReportController extends Controller
         if ($fromDate && $toDate) {
             $title .= " From : " . $fromDate . " To : " . $toDate;
         }
-
+        $totalCash = 0;
         $reportViwer->addParameter("title", $title);
         foreach ($resulcustomer as $customerid) {
             $table = [];
@@ -92,7 +92,7 @@ class CashAuditReportController extends Controller
                 //dd($result);
                 if ($customerdata->customer_id == $customerid->customer_id) {
 
-
+                    $totalCash += $customerdata->set_off_amount;
                     array_push($table, $customerdata);
                 }
             }
@@ -108,8 +108,9 @@ class CashAuditReportController extends Controller
 
                 $reportViwer->addParameter('abc', $titel);
             }
+            $formatted_balance = number_format($totalCash, 2, '.', ',');
         }
-
+        $reportViwer->addParameter("balance", "Total Cash Amount :" . $formatted_balance);
         $reportViwer->addParameter("cash_audit_tabaledata", [$customerablearray]);
         $reportViwer->addParameter('companyName', CompanyDetailsController::CompanyName());
 

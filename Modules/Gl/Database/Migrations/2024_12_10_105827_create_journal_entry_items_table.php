@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('gl_account_id')->index();
             $table->integer('gl_account_analyse_id')->index();
             $table->decimal('amount', 15, 2); 
-            $table->string('descriptions')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

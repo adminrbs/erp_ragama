@@ -120,6 +120,13 @@
                                         Bank Transfer Report
                                     </label>
                                 </li>
+                                <li class="list-group-item">
+                                    <label style="display: flex; align-items: center;">
+                                        <input class="form-check-input" type="radio" name="option1" value="supplier_transaction_allocation" id="supplier_transaction_allocation" style="margin-right: 10px;">
+                                        <i class="bi bi-folder2 fa-lg"></i>&nbsp;
+                                        Supplier Transaction Allocation Report
+                                    </label>
+                                </li>
                             </ul>
 
                         </div>

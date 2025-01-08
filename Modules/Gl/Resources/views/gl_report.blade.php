@@ -70,22 +70,22 @@
                         <div class="card-body">
                             <h5 class="card-title">Reports</h5>
                             <ul class="list-group">
-                            
+
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
-                                        <input class="form-check-input" type="radio" name="option1" value="debtorleger" id="debtorleger" style="margin-right: 10px;">
+                                        <input class="form-check-input" type="radio" name="option1" value="debtorleger" id="ledger" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Ledger 
+                                        Ledger
                                     </label>
                                 </li>
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
-                                        <input class="form-check-input" type="radio" name="option1" value="Customer's Ledger" id="Customer_Ledger" style="margin-right: 10px;">
+                                        <input class="form-check-input" type="radio" name="option1" value="Trail Balance" id="trail_balance" style="margin-right: 10px;">
                                         <i class="bi bi-folder2 fa-lg"></i>&nbsp;
-                                        Trial Balance 
+                                        Trial Balance
                                     </label>
                                 </li>
-                                
+
 
 
                                 <br>
@@ -132,17 +132,17 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <!-- <div class="col-md-11 mb-0 mt-0">
-                                                <label style="font-weight: bold;">Branch</label>
+                                            <div class="col-md-11 mb-0 mt-0">
+                                                <label style="font-weight: bold;">Account</label>
                                                
-                                                <select multiple="multiple" class="select  form-select" id="cmbBranch" data-placeholder="Select Branch"></select>
+                                                <select multiple="multiple" class="select  form-select" id="cmbAccount" data-placeholder="Select Account"></select>
                                             </div>
                                             <div class="col-md-1 mt-0">
-                                                <input id="chkBranch" type="checkbox" style="margin-top: 30px;">
-                                            </div> -->
+                                                <input id="chkAccount" type="checkbox" style="margin-top: 30px;">
+                                            </div>
                                         </div>
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 mt-0">
+                                            <!--  <div class="col-md-11 mb-0 mt-0">
                                                 <label style="font-weight: bold;">Customer</label>
                                                
                                                 <select multiple="multiple" class="form-select select" id="cmbCustomer" data-placeholder="Select customer" style="height: 100%"></select>
@@ -162,7 +162,7 @@
                                             </div> -->
                                         </div>
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 mt-0">
+                                            <!--  <div class="col-md-11 mb-0 mt-0">
                                                 <label style="font-weight: bold;">Collector</label>
                                                
                                                 <select multiple="multiple" class="form-select select" id="cmbCollector" data-placeholder="Select collector" style="height: 100%"></select>
@@ -172,7 +172,7 @@
                                             </div> -->
                                         </div>
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 ">
+                                            <!--  <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Customer Group</label>
                                              
                                                 <select multiple="multiple" class="form-select select " id="cmbcustomergroup" data-placeholder="Select customer Group"></select>
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 ">
+                                            <!--  <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Customer Grade</label>
                                                
                                                 <select multiple="multiple" class="form-select select " id="cmbCustomerGrade" data-placeholder="Select customer Grade"></select>
@@ -194,17 +194,17 @@
                                             </div> -->
                                         </div>
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 ">
+                                            <!--  <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Routs</label>
                                                
                                                 <select multiple="multiple" class="form-select select " id="cmbRoute" data-placeholder="Select Routs"></select>
                                             </div> -->
-                                           <!--  <div class="col-md-1 mt-0">
+                                            <!--  <div class="col-md-1 mt-0">
                                                 <input id="chkRoute" type="checkbox" style="margin-top: 30px;">
                                             </div> -->
                                         </div>
                                         <div class="row">
-                                           <!--  <div class="col-md-11 mb-0 ">
+                                            <!--  <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Greater Than(Age)</label>
                                                 <input type="number" class="form-control validate number" id="cmbgreaterthan">
                                             </div>
@@ -227,8 +227,9 @@
 
                                                 <input id="chkfromtoAge" type="checkbox" style="margin-top: 30px;">
                                             </div> -->
-                                        </div><div class="row">
-                                           <!--  <div class="col-md-11 mb-0 ">
+                                        </div>
+                                        <div class="row">
+                                            <!--  <div class="col-md-11 mb-0 ">
                                                 <label style="font-weight: bold;"> Supply Group</label>
                                                 <select multiple="multiple" class="form-select select " id="cmbSupplyGroup" data-placeholder="Select customer Group"></select>
                                             </div>
@@ -323,6 +324,6 @@
 @endsection
 @section('scripts')
 <script src="{{URL::asset('assets/js/web-rd-fromValidation.js')}}"></script>
-<script src="{{Module::asset('sc:js/debtor_reports.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('gl:js/gl_reports.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/components_modals.js')}}"></script>
 @endsection

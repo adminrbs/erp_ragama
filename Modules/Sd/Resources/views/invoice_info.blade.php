@@ -420,6 +420,39 @@
 
 
                                 <div class="row">
+
+                                <div class="col-6">
+                                        <div class="card border-secondary mb-3" style="max-width: 100%">
+                                            <div class="card-header custom-header-style">Customer Transaction Allocation</div>
+                                            <div class="card-body text-secondary">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm table-striped val_table" id="allocation_table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Reference#</th>
+                                                                <th>Date</th>
+                                                                <th>Set Off From</th>
+                                                                <th>Amount</th>
+                                                               
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
                                     <div class="col-6">
                                         <div class="card border-secondary mb-3" style="max-width: 100%">
                                             <div class="card-header custom-header-style">Delivery Plan</div>
@@ -447,7 +480,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    
+                                </div>
+
+
+                                <div class="row">
+
+                                <div class="col-6">
                                         <div class="card border-secondary mb-3" style="max-width: 100%">
                                             <div class="card-header custom-header-style">Picking List</div>
                                             <div class="card-body text-secondary">
@@ -473,10 +512,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-
-                                <div class="row">
                                     <div class="col-6">
                                         <div class="card border-secondary mb-3" style="max-width: 100%">
                                             <div class="card-header custom-header-style">Delivery Confirmation</div>

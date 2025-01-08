@@ -955,20 +955,20 @@ function receiptSaveRequest(amount, discount, round_up, total_set_off_Amount, ad
     } */
 }
 
-function getSlip() {
+/* function getSlip() {
     if ($('#cmbReceiptMethod').val() == '4') {
         if ($('#txtSlipRef').val() == '') {
             showWarningMessage('Please enter reference details');
         } else {
             return {
-                "cheque_referenceNo": $('#txtSlipRef').val(),
+                "slip_referenceNo": $('#txtSlipRef').val(),
                 "slip_time": $('#tmSliptime').val(),
                 "slip_date": $('#dtSLipDate').val(),
             }
         }
     }
 
-}
+} */
 
 function updateReceipt() {
 
@@ -1693,12 +1693,12 @@ function getSingleCheque() {
 
 
 function getSlip() {
-    if ($('#cmbReceiptMethod').val() == 7) {
+    if ($('#cmbReceiptMethod').val() == 4) {
         if ($('#txtSlipRef').val() == '') {
             showWarningMessage('Please enter reference details');
         } else {
             return {
-                "cheque_referenceNo": $('#txtSlipRef').val(),
+                "slip_referenceNo": $('#txtSlipRef').val(),
                 "slip_time": $('#tmSliptime').val(),
                 "slip_date": $('#dtSLipDate').val(),
             }

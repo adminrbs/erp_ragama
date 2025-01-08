@@ -154,12 +154,19 @@ var referanceID;
 var ItemList;
 
 $(document).ready(function () {
-    getLocation()
-    getBranches()
+
+    $('#tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    getLocation();
+    getBranches();
     
-    loademployees()
-loadPamentTerm()
-getPaymentMethods()
+    loademployees();
+loadPamentTerm();
+getPaymentMethods();
+getBank();
 
 if (window.location.search.length > 0) {
     var sPageURL = window.location.search.substring(1);
@@ -172,7 +179,8 @@ if (window.location.search.length > 0) {
     }
 
     getEachSalesInvoice(Invoice_id, status);
-        getEachproduct(Invoice_id, status);
+    getEachproduct(Invoice_id, status);
+    getInvoicePaymentDetails(Invoice_id);
 
         $('#btnBack').on('click',function(){
             if(task == "approval"){
@@ -461,4 +469,164 @@ function getPaymentMethods() {
         },
 
     })
+}
+
+//get payment details
+function getInvoicePaymentDetails(invoice_id) {
+    var table = $('#salesReturnTable');
+    var tableBody = $('#salesReturnTable tbody');
+    tableBody.empty();
+
+    $.ajax({
+        url: '/sd/getInvoicePaymentDetails/' + invoice_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            
+            var payments = response.payment;
+            var returns = response.return;
+            console.log(returns);
+            
+            $('#txtcash').val(parseFloat(payments[0].cash_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "");    
+            $('#txtcheque').val(parseFloat(payments[0].cheque_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "");
+            $('#chequeNo').val(payments[0].cheque_no || "");
+            $('#chqDate').val(payments[0].cheque_date || "");
+            //$('#txtbank').val(payments[0].cheque_bank || "");
+            $('#cmbBank').val(payments[0].cheque_Bank_id || "");
+            $('#cmbBankBranch').val(payments[0].cheque_bank_branch_id || "");
+
+            $('#txtcredit').val(parseFloat(payments[0].credit_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "");
+           
+            $('#txtcard').val(parseFloat(payments[0].card_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "");
+            $('#txtcardNo').val(payments[0].card_no || "");
+            $('#cmbCardIssueBank').val(payments[0].card_bank_id || "");
+            $('#type').val(payments[0].cardType || "");
+
+            $('#txtBankTransferAmount').val(parseFloat(payments[0].bank_transfer_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "");
+            $('#txtBankReference').val(payments[0].bank_transfer_reference || "");
+            $('#dtBankTransferDate').val(payments[0].bank_transfer_date || "");
+
+           /*  $.each(returns, function (index, value) {
+                row.append($('<td>').text(value.created_at));
+                row.append($('<td>').text(value.external_number));
+                row.append($('<td style="text-align:right">').text(parseFloat(value.total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                row.append($('<td style="text-align:right">').text(parseFloat(value.setoff_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+                table.append(row);
+
+            }); */
+            $.each(returns, function (_, value) {
+                // Create a new row element
+                const row = $('<tr>');
+            
+                // Append the created_at column
+                row.append($('<td>').text(value.created_at));
+            
+                // Append the external_number column
+                row.append($('<td>').text(value.external_number));
+            
+                // Safely handle null or undefined total_amount
+                const totalAmount = value.total_amount ? parseFloat(value.total_amount).toLocaleString('en-US', { 
+                    minimumFractionDigits: 2, 
+                    maximumFractionDigits: 2 
+                }) : '0.00';
+            
+                // Append the total_amount column
+                row.append($('<td style="text-align:right">').text(totalAmount));
+            
+                // Append the setoff_amount column
+                const setoffAmount = value.setoff_amount ? parseFloat(value.setoff_amount).toLocaleString('en-US', { 
+                    minimumFractionDigits: 2, 
+                    maximumFractionDigits: 2 
+                }) : '0.00';
+            
+                row.append($('<td style="text-align:right">').text(setoffAmount));
+            
+                // Append the row to the table body
+                tableBody.append(row);
+            });
+            
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log(xhr.responseText);
+        }
+    });
+   
+}
+
+function getBank() {
+
+    $.ajax({
+        type: "GET",
+        url: '/cb/customer_receipt/getBank',
+        async: false,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function () {
+
+        },
+        success: function (response) {
+            if (response.status) {
+                var banks = response.data;
+                $('#cmbCardIssueBank').empty();
+                $('#txtbank').empty();
+                for (var i = 0; i < banks.length; i++) {
+                    var id = banks[i].bank_id;
+                    var name = banks[i].bank_name;
+                    $('#cmbCardIssueBank').append('<option value="' + id + '">' + name + '</option>');
+                    $('#cmbBank').append('<option value="' + id + '">' + name + '</option>');
+                }
+
+                //getBankBranch($('#cmbBank').val());
+            }
+
+        },
+        error: function (error) {
+            console.log(error);
+
+        },
+        complete: function () {
+
+        }
+
+    });
+
+
+}
+
+function getBankBranch(bank_id) {
+
+    $.ajax({
+        type: "GET",
+        url: '/cb/customer_receipt/getBankBranch/' + bank_id,
+        async: false,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function () {
+
+        },
+        success: function (response) {
+            if (response.status) {
+                var banks = response.data;
+                $('#cmbBankBranch').empty();
+                for (var i = 0; i < banks.length; i++) {
+                    var id = banks[i].bank_branch_id;
+                    var name = banks[i].bank_branch_name;
+                    $('#cmbBankBranch').append('<option value="' + id + '">' + name + '</option>');
+                }
+            }
+
+        },
+        error: function (error) {
+            console.log(error);
+
+        },
+        complete: function () {
+
+        }
+
+    });
+
+
 }

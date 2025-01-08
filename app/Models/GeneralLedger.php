@@ -9,6 +9,6 @@ class GeneralLedger extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'general_ledger_id';
     protected $table = "general_ledger";
 }

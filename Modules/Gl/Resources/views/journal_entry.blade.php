@@ -54,7 +54,7 @@
 
                                 <div class="col-md-4">
                                     <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Reference No</span></label>
-                                    <input type="text" class="form-control" id="txtReferanceNo">
+                                    <input type="text" class="form-control" id="txtReferanceNo" disabled value="New Journal Entry">
                                 </div>
 
                                 <div class="col-md-4">

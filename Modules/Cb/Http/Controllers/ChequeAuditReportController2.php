@@ -183,7 +183,7 @@ GROUP BY
             }
             //dd($titel);
             $reportViwer->addParameter("no_of_cheques", "No of cheques :" . $no_of_cheques);
-            $reportViwer->addParameter("balance", "Balance :" . $formatted_balance);
+            $reportViwer->addParameter("balance", "Total Cheque Amount :" . $formatted_balance);
             $rep_name_qry = DB::select("SELECT CONCAT(employee_name,' - ',employee_code) as employee_name FROM employees WHERE employees.employee_id = 2");
             $rep_name = $rep_name_qry[0]->employee_name;
 

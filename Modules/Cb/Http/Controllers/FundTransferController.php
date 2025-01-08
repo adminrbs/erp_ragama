@@ -2,6 +2,7 @@
 
 namespace Modules\Cb\Http\Controllers;
 
+use App\Http\Controllers\IntenelNumberController;
 use App\Models\branch;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -81,7 +82,7 @@ class FundTransferController extends Controller
     public function saveFundTransfer(Request $request)
     {
         try {
-            //$reference_no = $request->get("reference_no");
+            $external_number = $request->get("external_number");
             $date = $request->get("date");
             $amount = $request->get("amount");
             $source_account = $request->get("source_account");
@@ -96,8 +97,17 @@ class FundTransferController extends Controller
             $approved_by = $request->get("approved_by");
             $approval_status = $request->get("approval_status");
 
+            $data = DB::table('branches')->where('branch_id', $source_branch)->get();
+            $EXPLODE_ID = explode("-", $external_number);
+            if ($data->count() > 0) {
+                $documentPrefix = $data[0]->prefix;
+                $external_number  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+            }
+
             $fundTransfer = new FundTransfer();
-            //$fundTransfer->reference_no = $reference_no;
+            $fundTransfer->external_number = $external_number;
+            $fundTransfer->internal_number = IntenelNumberController::getNextID();
+            $fundTransfer->document_number = 2900;
             $fundTransfer->transaction_date = $date;
             $fundTransfer->amount = $amount;
             $fundTransfer->source_account_id = $source_account;
@@ -124,7 +134,7 @@ class FundTransferController extends Controller
     public function updateFundTransfer(Request $request, $id)
     {
         try {
-            //$reference_no = $request->get("reference_no");
+            $external_number = $request->get("external_number");
             $date = $request->get("date");
             $amount = $request->get("amount");
             $source_account = $request->get("source_account");
@@ -139,8 +149,15 @@ class FundTransferController extends Controller
             $approved_by = $request->get("approved_by");
             $approval_status = $request->get("approval_status");
 
+            $branch_data = DB::table('branches')->where('branch_id', $source_branch)->get();
+            $EXPLODE_ID = explode("-", $external_number);
+            if ($branch_data->count() > 0) {
+                $documentPrefix = $branch_data[0]->prefix;
+                $external_number  = $documentPrefix . "-" . $EXPLODE_ID[1] . "-" . $EXPLODE_ID[2];
+            }
+
             $fundTransfer =  FundTransfer::find($id);
-            //$fundTransfer->reference_no = $reference_no;
+            $fundTransfer->external_number = $external_number;
             $fundTransfer->transaction_date = $date;
             $fundTransfer->amount = $amount;
             $fundTransfer->source_account_id = $source_account;

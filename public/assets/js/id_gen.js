@@ -55,10 +55,14 @@ console.log(new_id);
 function generateID(id) {
 
     let pattern = {
-        1: "0000",
-        2: "000",
-        3: "00",
-        4: "0",
+
+        1: "0000000",
+        2: "000000",
+        3: "00000",
+        4: "0000",
+        5: "000",
+        6: "00",
+        7: "0",
     };
     var length = Math.ceil(Math.log(id + 1) / Math.LN10);
     return pattern[length] + id;

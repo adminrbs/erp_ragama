@@ -1629,6 +1629,8 @@ function getEachSalesInvoice(id, status) {
             $('#lblCustomerName').attr('data-id', res[0].customer_id);
             $('#txtYourReference').val(res[0].your_reference_number);
             $('#lblCustomerName').val(cusFulName);
+
+           
         },
         error: function (xhr, status, error) {
             console.log(xhr.responseText);

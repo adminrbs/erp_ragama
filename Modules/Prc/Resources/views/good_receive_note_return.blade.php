@@ -243,7 +243,7 @@
                         </div>
                         <br>
                         <div>
-                        <div class="form-check">
+                        <div class="form-check" style="display: none;">
                                 <input class="form-check-input" type="checkbox" value="" id="chkPrintReport">
                                 <label class="form-check-label" for="chkPrintReport">
                                     Print

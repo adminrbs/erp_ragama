@@ -50,7 +50,7 @@ const DatatableFixedColumns = function () {
                     targets: 1
                 },
                 {
-                    width: 200,
+                    width: '100%',
                     targets: 2
                 },
                 {

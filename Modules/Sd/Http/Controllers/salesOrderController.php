@@ -34,7 +34,7 @@ class salesOrderController extends Controller
         'sales_orders.external_number',
         'sales_orders.expected_date_time',
         'branches.branch_name',
-        DB::raw("FORMAT(total_amount, 0) as total_amount"),
+        DB::raw("FORMAT(total_amount, 2) as total_amount"),
         DB::raw('IF(sales_orders.order_type = 0,"ERP", IF(sales_orders.order_type = 1,"Customer App", IF(sales_orders.order_type = 2,"Customer App", IF(sales_orders.order_type = 3,"SFA", IF(sales_orders.order_type = 4,"SFA Web App", IF(sales_orders.order_type = 5,"API","Unknown")))))) AS Sales_order_type'),
         DB::raw("SUBSTRING(customers.customer_name, 1, 15) as customer_name"), 
         DB::raw("SUBSTRING(employees.employee_name, 1, 10) as employee_name"),

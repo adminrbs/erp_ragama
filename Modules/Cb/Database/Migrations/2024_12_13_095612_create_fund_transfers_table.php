@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('fund_transfers', function (Blueprint $table) {
             $table->id('fund_transfer_id');
             //$table->string('reference_no')->nullable();
+            $table->integer('internal_number');
+            $table->string('external_number', 200);
+            $table->integer('document_number')->nullable();
             $table->date('transaction_date');
             $table->decimal('amount', 15, 2);
             $table->integer('source_account_id')->index();

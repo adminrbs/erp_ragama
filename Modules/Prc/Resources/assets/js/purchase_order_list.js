@@ -197,7 +197,7 @@ function getPOData(){
                     disc_amount = parseFloat((dt[i].total_sum).replace(/,/g, '')) * (disc / 100);
                 }
                
-                var total_amount = parseFloat((dt[i].total_sum).replace(/,/g, '')) - disc_amount;
+                var total_amount = parseFloat((dt[i].total_sum).replace(/,/g, ''));
                 data.push({
                    
                     "reference": dt[i].external_number,

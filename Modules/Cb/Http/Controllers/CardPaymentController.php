@@ -73,6 +73,7 @@ class CardPaymentController extends Controller
 
 
 
+        //$resulcustomer = DB::select('select customer_id,customer_name from customers');
         $resulcustomer = DB::select('select customer_id,customer_name from customers');
 
         $customerablearray = [];
@@ -90,7 +91,7 @@ class CardPaymentController extends Controller
 
             foreach ($result as $customerdata) {
                 //dd($result);
-                if ($customerdata->customer_id == $customerid->customer_id) {
+                if ($customerdata->customer_id == $customerid->customer_id && $customerdata->customer_receipt_id == $customerid->customer_receipt_id) {
 
 
                     array_push($table, $customerdata);

@@ -12,7 +12,9 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Gl\Http\Controllers\GlAccountReportController;
 use Modules\Gl\Http\Controllers\JournalEntryController;
+use Modules\Gl\Http\Controllers\TrailBalanceReportController;
 
 Route::prefix('gl')->group(function () {
     Route::get('/', 'GlController@index');
@@ -21,38 +23,40 @@ Route::prefix('gl')->group(function () {
     Route::get('/gl_reports', function () {
         return view('gl::gl_report');
     });
+    Route::get('/loadGLAccounts', [GlAccountReportController::class, 'loadGLAccounts']);
+    Route::get('/ledger/{filters}', [GlAccountReportController::class, 'ledger']);
+    Route::get('/trial_balance/{filters}', [TrailBalanceReportController::class, 'trial_balance']);
 
 
+   /**GL Journal Entry */
+   Route::get('/journal_entry', function () {
+    $id = null;
+    $action = "create";
+    return view('gl::journal_entry', compact('id', 'action'));
+});
 
-    /**GL Journal Entry */
-    Route::get('/journal_entry', function () {
-        $id = null;
-        $action = "create";
-        return view('gl::journal_entry', compact('id', 'action'));
-    });
-
-    Route::get('/journal_entry/{id}/{action}', function ($id,$action) {
-        return view('gl::journal_entry', compact('id', 'action'));
-    });
-
-
-    Route::get('/journal_entry_view/{id}', function ($id) {
-        $action = "view";
-        return view('gl::journal_entry_view', compact('id', 'action'));
-    });
+Route::get('/journal_entry/{id}/{action}', function ($id,$action) {
+    return view('gl::journal_entry', compact('id', 'action'));
+});
 
 
-    Route::get('/journal_entries', function () {
-        return view('gl::journal_entry_list');
-    });
+Route::get('/journal_entry_view/{id}', function ($id) {
+    $action = "view";
+    return view('gl::journal_entry_view', compact('id', 'action'));
+});
 
-    Route::post('/saveJournal', [JournalEntryController::class, 'saveJournal']);
-    Route::post('/updateJournal/{id}', [JournalEntryController::class, 'updateJournal']);
-    Route::put('/approvalJournal/{id}', [JournalEntryController::class, 'approvalJournal']);
-    Route::delete('/deleteJournal/{id}', [JournalEntryController::class, 'deleteJournal']);
-    Route::get('/getJournalEntry/{id}', [JournalEntryController::class, 'getJournalEntry']);
-    Route::get('/getJournalEntries', [JournalEntryController::class, 'getJournalEntries']);
-    Route::get('/loadAccounts',[JournalEntryController::class,'loadAccounts']);
-    Route::get('/get_gl_account_name/{id}',[JournalEntryController::class,'get_gl_account_name']);
-    Route::get('/loadAccountAnalysisData/{id}',[JournalEntryController::class,'loadAccountAnalysisData']);
+
+Route::get('/journal_entries', function () {
+    return view('gl::journal_entry_list');
+});
+
+Route::post('/saveJournal', [JournalEntryController::class, 'saveJournal']);
+Route::post('/updateJournal/{id}', [JournalEntryController::class, 'updateJournal']);
+Route::put('/approvalJournal/{id}', [JournalEntryController::class, 'approvalJournal']);
+Route::delete('/deleteJournal/{id}', [JournalEntryController::class, 'deleteJournal']);
+Route::get('/getJournalEntry/{id}', [JournalEntryController::class, 'getJournalEntry']);
+Route::get('/getJournalEntries', [JournalEntryController::class, 'getJournalEntries']);
+Route::get('/loadAccounts',[JournalEntryController::class,'loadAccounts']);
+Route::get('/get_gl_account_name/{id}',[JournalEntryController::class,'get_gl_account_name']);
+Route::get('/loadAccountAnalysisData/{id}',[JournalEntryController::class,'loadAccountAnalysisData']);
 });

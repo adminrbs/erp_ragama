@@ -162,7 +162,7 @@
                                     <input type="text" id="txtYourReference" class="form-control">
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display: none;">
                                     <label class="transaction-lbl mb-0 compulsory-field" style="width: 100%;text-align: left;"><span>Sales Analysist</span></label>
                                     <select class="form-select" id="cmbSalesAnalysist"></select>
                                 </div>

@@ -138,15 +138,16 @@
 
                                                         <th>Item Code</th>
                                                         <th>Name</th>
-                                                        <th>QTY</th>
-                                                        <th>FOC</th>
+                                                        <th style="text-align:right;">QTY</th>
+                                                        <th style="text-align:right;">FOC</th>
+                                                        <th style="text-align:right;">Add. Bonus</th>
                                                         <th>U.O.M</th>
                                                        <!-- <th>Package Size</th>-->
                                                       <!--   <th>Pack Size</th> -->
-                                                        <th>Price</th>
-                                                        <th>Disc. %</th>
+                                                        <th style="text-align:right;">Price</th>
+                                                        <th style="text-align:right;">Disc. %</th>
                                                         <!--<th>Disc. Amount</th>-->
-                                                        <th>Value</th>
+                                                        <th style="text-align:right;">Value</th>
                                                        
                                                     </tr>
                                                 </thead>

@@ -26,6 +26,12 @@
             <div class="card-body border-top">
                 <div class="row mb-3">
                     <div class="col-md-6">
+                        <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Reference No</span></label>
+                        <input type="text" class="form-control" id="txtReferanceNo" disabled value="New Fund Transfer">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
                         <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
                         <input type="date" class="form-control" id="txtDate">
                     </div>
@@ -105,6 +111,7 @@
 
 @endsection
 @section('scripts')
+<script src="{{URL::asset('assets/js/id_gen.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/form_validation_library.js')}}"></script>
 <script src="{{Module::asset('cb:js/fund_transfer.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/components_modals.js')}}"></script>

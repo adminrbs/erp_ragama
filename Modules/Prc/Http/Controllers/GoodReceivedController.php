@@ -4,6 +4,7 @@ namespace Modules\Prc\Http\Controllers;
 
 use App\Http\Controllers\IntenelNumberController;
 use App\Http\Controllers\price_status_controller;
+use App\Models\global_setting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -107,17 +108,16 @@ class GoodReceivedController extends Controller
                         $Itm_ID = $item->item_id;
                         $item_ = item::find($Itm_ID);
                         $minimum_margin_ =  $item_->minimum_margin;
-                       
+
                         if (floatval($minimum_margin_) > 0) {
 
                             $cost = floatval($item->price) - (((floatval($item->price)) / 100) * floatval($item->discount_percentage));
                             $margin = ((floatval($item->whole_sale_price) - $cost) / floatval($item->whole_sale_price)) * 100;
-                           
+
                             if (floatval($minimum_margin_) > floatval($margin)) {
                                 $item_code_ = $item_->Item_code;
                                 array_push($margin_gaps, $item_code_);
                             }
-                          
                         }
                     }
                     if (count($margin_gaps) > 0) {
@@ -169,7 +169,7 @@ class GoodReceivedController extends Controller
 
                     if ($GRN->save()) {
 
- 
+
 
                         //looping first array
                         foreach ($collection as $i) {
@@ -193,7 +193,7 @@ class GoodReceivedController extends Controller
                             $GRN_item->external_number = $GRN->external_number; // need to change
                             $GRN_item->item_id = $item->item_id;
                             $GRN_item->item_name = $item->item_name;
-                           // $GRN_item->quantity = $item->qty;
+                            // $GRN_item->quantity = $item->qty;
                             if ($item->qty) {
                                 $GRN_item->quantity = $item->qty;
                             } else {
@@ -271,16 +271,25 @@ class GoodReceivedController extends Controller
                                 $GRN_item->expire_date = null;
                             }
 
-                            if($item->cost_price){
+                            if ($item->cost_price) {
                                 $GRN_item->cost_price = $item->cost_price;
-                            }else{
+                            } else {
                                 $GRN_item->cost_price = 0;
                             }
-                           
+
                             $GRN_item->purchase_order_item_id = $item->purchase_order_item_id;
                             $GRN_item->is_new_price = $item->is_new_price;
                             $GRN_item->save();
                         }
+                        $setting = global_setting::first();
+                        if($setting->approved == 0){
+                            if($PO_id_ > 0){
+                                $PO = purchase_order_note::find($PO_id_);
+                                $PO->approval_status = "Approved";
+                                $PO->update();
+                            }
+                        }
+                       
                         DB::commit();
                         return response()->json(["status" => true, "primaryKey" => $GRN->goods_received_Id, "PO_id" => $GRN->purchase_order_id]);
                     } else {
@@ -668,31 +677,31 @@ class GoodReceivedController extends Controller
 
             if ($request->update()) {
 
-                 //save creditors ledger
-                 $creditors_ledger = new creditors_ledger();
-                 $creditors_ledger->internal_number = $request->internal_number;
-                 $creditors_ledger->external_number = $request->external_number;
-                 $creditors_ledger->document_number = $request->document_number;
-                 $creditors_ledger->trans_date = $request->goods_received_date_time;
-                 $creditors_ledger->description = "Goods Received From ".$request->supplier_name;
-                 $creditors_ledger->branch_id = $request->branch_id;
-                 $creditors_ledger->supplier_id = $request->supplier_id;
-                 $creditors_ledger->supplier_code = $sup_obj->supplier_code;
-                 $creditors_ledger->amount = -$request->total_amount;
-                 $creditors_ledger->save();
+                //save creditors ledger
+                $creditors_ledger = new creditors_ledger();
+                $creditors_ledger->internal_number = $request->internal_number;
+                $creditors_ledger->external_number = $request->external_number;
+                $creditors_ledger->document_number = $request->document_number;
+                $creditors_ledger->trans_date = $request->goods_received_date_time;
+                $creditors_ledger->description = "Goods Received From " . $request->supplier_name;
+                $creditors_ledger->branch_id = $request->branch_id;
+                $creditors_ledger->supplier_id = $request->supplier_id;
+                $creditors_ledger->supplier_code = $sup_obj->supplier_code;
+                $creditors_ledger->amount = -$request->total_amount;
+                $creditors_ledger->save();
 
-                 //save creditors ledger set off
-                 $creditors_ledger_setoff = new creditors_ledger_setoff();
-                 $creditors_ledger_setoff->internal_number = $creditors_ledger->internal_number;
-                 $creditors_ledger_setoff->external_number = $creditors_ledger->external_number;
-                 $creditors_ledger_setoff->document_number = $creditors_ledger->document_number;
-                 $creditors_ledger_setoff->trans_date = $creditors_ledger->trans_date;
-                 $creditors_ledger_setoff->description = $creditors_ledger->description;
-                 $creditors_ledger_setoff->branch_id = $creditors_ledger->branch_id;
-                 $creditors_ledger_setoff->supplier_id = $creditors_ledger->supplier_id;
-                 $creditors_ledger_setoff->supplier_code = $creditors_ledger->supplier_code;
-                 $creditors_ledger_setoff->amount = $creditors_ledger->amount;
-                 $creditors_ledger_setoff->save();
+                //save creditors ledger set off
+                $creditors_ledger_setoff = new creditors_ledger_setoff();
+                $creditors_ledger_setoff->internal_number = $creditors_ledger->internal_number;
+                $creditors_ledger_setoff->external_number = $creditors_ledger->external_number;
+                $creditors_ledger_setoff->document_number = $creditors_ledger->document_number;
+                $creditors_ledger_setoff->trans_date = $creditors_ledger->trans_date;
+                $creditors_ledger_setoff->description = $creditors_ledger->description;
+                $creditors_ledger_setoff->branch_id = $creditors_ledger->branch_id;
+                $creditors_ledger_setoff->supplier_id = $creditors_ledger->supplier_id;
+                $creditors_ledger_setoff->supplier_code = $creditors_ledger->supplier_code;
+                $creditors_ledger_setoff->amount = $creditors_ledger->amount;
+                $creditors_ledger_setoff->save();
 
                 //item historys
                 foreach ($grn_items as $item) {
@@ -741,18 +750,15 @@ class GoodReceivedController extends Controller
                 }
 
                 //purchase order items recived qty update
-                  foreach($grn_items as $item){
-                    
+                foreach ($grn_items as $item) {
+
                     $po_item = purchase_order_note_item::find($item->purchase_order_item_id);
-                    if($po_item){
+                    if ($po_item) {
                         $po_item->quantity_received = floatval($po_item->quantity_received) + floatval($item->quantity);
                         $po_item->free_received =  floatval($po_item->free_received) + floatval($item->free_quantity);
                         $po_item->update();
                         $this->completeOrderstatus_auto_new($po_item->purchase_order_Id);
                     }
-                    
-
-                    
                 }
 
                 //update previouse purchase price
@@ -760,8 +766,6 @@ class GoodReceivedController extends Controller
                     $items = item::find($item->item_id);
                     $items->previouse_purchase_price = $item->price;
                     $items->update();
-
-                   
                 }
 
                 DB::commit();
@@ -791,20 +795,20 @@ class GoodReceivedController extends Controller
             $totalCount = $result[0]->TotalCount;
 
             if ($totalCount > 0) {
-               // return response()->json(['status' => false, 'message' => 'Yes']);
+                // return response()->json(['status' => false, 'message' => 'Yes']);
             } else if ($totalCount == 0) {
                 $PO = purchase_order_note::find($id);
                 $PO->status = 1;
                 if ($PO->update()) {
-                 //   return response()->json(['status' => true]);
+                    //   return response()->json(['status' => true]);
                 } else {
-                  //  return response()->json(['status' => false]);
+                    //  return response()->json(['status' => false]);
                 }
             } else {
-             //  return response()->json(['status' => $totalCount]);
+                //  return response()->json(['status' => $totalCount]);
             }
         } catch (Exception $ex) {
-          //  return $ex;
+            //  return $ex;
         }
     }
 
@@ -860,8 +864,45 @@ class GoodReceivedController extends Controller
     public function getPendingPurchaseOrder($branch_id)
     {
         try {
+
+            $settings = global_setting::first();
+          //  dd($settings);
             /* FORMAT(SUM(I.quantity * I.price), 2) AS total_amount */
-            $query = "SELECT 
+            $query = "";
+            if ($settings->approved == 1) {
+                $query = "SELECT 
+                P.purchase_order_Id, 
+                P.purchase_order_date_time, 
+                P.external_number, 
+                P.supplier_name, 
+                P.deliver_date_time, 
+                U.name AS prepaired_by,
+               
+               
+               FORMAT(SUM(((I.quantity - I.quantity_received) * I.cost_price - (((I.quantity - I.quantity_received) * I.cost_price) * I.discount_percentage) / 100 )), 2) AS total_amount
+            FROM 
+                purchase_order_notes P
+            INNER JOIN 
+                users U ON P.prepaired_by = U.id 
+            LEFT JOIN 
+                purchase_order_note_items I ON P.purchase_order_Id = I.purchase_order_Id
+            WHERE 
+                P.approval_status = 'Approved'
+            AND
+                P.status = 0
+            AND
+                P.branch_id =   '" . $branch_id . "'
+            GROUP BY 
+                P.purchase_order_Id, 
+                P.purchase_order_date_time, 
+                P.external_number, 
+                P.supplier_name, 
+                P.deliver_date_time, 
+                U.name
+            ORDER BY
+                external_number DESC";
+            } else {
+                $query = "SELECT 
             P.purchase_order_Id, 
             P.purchase_order_date_time, 
             P.external_number, 
@@ -869,8 +910,8 @@ class GoodReceivedController extends Controller
             P.deliver_date_time, 
             U.name AS prepaired_by,
            
-            /* FORMAT(SUM(((I.quantity - I.quantity_received) * I.price - COALESCE(I.discount_amount, 0))), 2) AS total_amount */
-           FORMAT(SUM(((I.quantity - I.quantity_received) * I.price - (((I.quantity - I.quantity_received) * I.price) * I.discount_percentage) / 100 )), 2) AS total_amount
+           
+           FORMAT(SUM(((I.quantity - I.quantity_received) * I.cost_price - (((I.quantity - I.quantity_received) * I.cost_price) * I.discount_percentage) / 100 )), 2) AS total_amount
         FROM 
             purchase_order_notes P
         INNER JOIN 
@@ -878,7 +919,7 @@ class GoodReceivedController extends Controller
         LEFT JOIN 
             purchase_order_note_items I ON P.purchase_order_Id = I.purchase_order_Id
         WHERE 
-            P.approval_status = 'Approved'
+            P.approval_status = 'Pending'
         AND
             P.status = 0
         AND
@@ -892,6 +933,8 @@ class GoodReceivedController extends Controller
             U.name
         ORDER BY
             external_number DESC";
+            }
+
             $purchase_orders = DB::select($query);
             if ($purchase_orders) {
                 return response()->json((['success' => 'Data loaded', 'data' => $purchase_orders]));
@@ -913,7 +956,7 @@ class GoodReceivedController extends Controller
             items.Item_code,
             purchase_order_note_items.quantity AS PO_quantity,
             purchase_order_note_items.free_quantity AS PO_Foc,
-            FORMAT(((purchase_order_note_items.quantity - purchase_order_note_items.quantity_received) * purchase_order_note_items.price) - purchase_order_note_items.discount_amount, 2) AS Value,
+            FORMAT(((purchase_order_note_items.quantity - purchase_order_note_items.quantity_received) * purchase_order_note_items.cost_price) - purchase_order_note_items.discount_amount, 2) AS Value,
             FORMAT((purchase_order_note_items.quantity - purchase_order_note_items.quantity_received),2) AS quantity,
             FORMAT((purchase_order_note_items.free_quantity - purchase_order_note_items.free_received),2) AS free_quantity
         FROM
@@ -956,6 +999,7 @@ class GoodReceivedController extends Controller
             POI.item_id,
             FORMAT((POI.quantity - POI.quantity_received),2) AS quantity,
             FORMAT((POI.free_quantity - POI.free_received),2) AS free_quantity,
+            POI.additional_bonus,
             POI.unit_of_measure,
             POI.package_unit,
             POI.package_size,

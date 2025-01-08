@@ -153,7 +153,7 @@
                                                
                                                 <th>Value</th>
                                                 <th>Whole Sale</th>
-                                                <th>Retial Price</th>
+                                                <th>Retail Price</th>
                                                 <th>Batch#</th>
                                                 <th>Expired On</th>
                                                 <th>Cost Price</th>

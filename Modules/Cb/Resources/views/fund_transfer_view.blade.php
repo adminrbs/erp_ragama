@@ -26,6 +26,12 @@
             <div class="card-body border-top">
                 <div class="row mb-3">
                     <div class="col-md-6">
+                        <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Reference No</span></label>
+                        <input type="text" class="form-control" id="txtReferanceNo" disabled value="New Fund Transfer">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
                         <label class="transaction-lbl mb-0" style="width: 100%;text-align: left;"><span>Date</span></label>
                         <input type="date" class="form-control" id="txtDate" disabled>
                     </div>
