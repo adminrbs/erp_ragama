@@ -8,7 +8,7 @@
   <title>RBS</title>
   <link rel="icon" type="image/x-icon" href="{{URL::asset('assets/images/logo_icon.svg')}}">
   <link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="../assets/css/master.css">
+  <link rel="stylesheet" href="../assets/css/master.css?random=<?php echo uniqid(); ?>">
   <script src="{{URL::asset('assets/js/jquery/jquery.min.js')}}"></script>
   <script src="{{URL::asset('assets/js/components_progress.js')}}?random=<?php echo uniqid(); ?>"></script>
   <script src="{{URL::asset('assets/js/toast.min.js')}}?random=<?php echo uniqid(); ?>"></script>
