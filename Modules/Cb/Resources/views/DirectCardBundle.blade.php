@@ -58,11 +58,7 @@
                     <table class="table datatable-fixed-both table-striped" id="cash_collection_by_ho_table" style="table-layout:fixed">
                         <thead>
                             <tr>
-                                <!-- <th>Date</th>
-                                <th>Reference #</th>
-                                <th>Customer</th>
-                                <th>Amount</th>
-                                <th>Action</th> -->
+                               
                                 <th>Date</th>
                                 <th>Reference #</th>
                                 <th>Customer Name</th>
@@ -106,6 +102,6 @@
 @endsection
 @section('scripts')
 <script src="{{URL::asset('assets/js/id_gen.js')}}?random=<?php echo uniqid(); ?>"></script>
-<script src="{{Module::asset('cb:js/direct_bank_slip_bundle.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('cb:js/direct_card_bundle.js')}}?random=<?php echo uniqid(); ?>"></script>
 
 @endsection

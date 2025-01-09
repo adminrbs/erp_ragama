@@ -84,16 +84,16 @@
                                         <li class="nav-item">
                                             <a href="#tab_navbars_demo_cashBank" class="nav-link rounded" data-bs-toggle="tab">
                                                 <i class="ph-rows me-2"></i>
-                                                Cash Bank
+                                                Cash / Bank
                                                 <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
                                             </a>
                                         </li>
                                         @endif
 
                                         <li class="nav-item">
-                                            <a href="#tab_navbars_demo_cash_managment" class="nav-link rounded" data-bs-toggle="tab">
+                                            <a href="#tab_navbars_demo_collection_managment" class="nav-link rounded" data-bs-toggle="tab">
                                                 <i class="ph-rows me-2"></i>
-                                                Cash Managment
+                                                Collection Managment
                                                 <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
                                             </a>
                                         </li>
@@ -234,50 +234,48 @@
                                             <a href="/cb/customer_receipt_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Customer Receipt</a>
                                             @endif
 
-                                            @if(Auth::user()->can('cb_customer_receipt') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--  @if(Auth::user()->can('cb_customer_receipt') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/direct_cash_bundle_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct Cash Bundle</a>
-                                            @endif
+                                            @endif -->
 
-                                            @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <!-- @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/direcet_cash_bundle_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office</a>
-                                            @endif
+                                            @endif -->
 
-                                            <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct cheque bundle</a> <!-- direct check bulk create -->
+                                            
 
-                                            <a href="/cb/direct_cheque_collection_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office</a> <!-- direct check bulk recive from head office -->
+                                            
 
-                                            @if(Auth::user()->can('cb_cash_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
-                                            <a href="/cb/cash_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash from SR</a>
-                                            @endif
+                                            
 
-                                            @if(Auth::user()->can('cb_cheque_collected_by_branch_cashier_sfa') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--   @if(Auth::user()->can('cb_cheque_collected_by_branch_cashier_sfa') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_branch_to_collect_sfa" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque from SR</a>
-                                            @endif
+                                            @endif  -->
 
 
 
-                                            @if(Auth::user()->can('cb_receipt_for_cash_collected_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--  @if(Auth::user()->can('cb_receipt_for_cash_collected_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cus_rcpt_cash_bundle" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt For Cash(SR)</a>
-                                            @endif
+                                            @endif -->
 
 
 
 
 
-                                            @if(Auth::user()->can('cb_cheque_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <!--  @if(Auth::user()->can('cb_cheque_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt For Cheque (SR)</a>
-                                            @endif
+                                            @endif -->
 
 
 
-                                            @if(Auth::user()->can('cb_cheque_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--  @if(Auth::user()->can('cb_cheque_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office (SR)</a>
-                                            @endif
+                                            @endif -->
 
 
-                                            @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <!-- @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office (SR)</a>
-                                            @endif
+                                            @endif -->
 
 
                                             <a href="/cb/sfa_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>SFA Cheque Collection List</a>
@@ -340,7 +338,7 @@
                                             @if(Auth::user()->can('cb_payment_voucher') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/payment_voucher_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Payment Voucher</a>
                                             @endif
-                                            <a href="#" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Funds Transfer</a>
+                                            <a href="/cb/fund_transfer_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Funds Transfer</a>
 
 
                                         </div>
@@ -712,30 +710,30 @@
                                             @if(Auth::user()->can('cb_cheque_collected_by_branch_cashier_sfa') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_branch_to_collect_sfa" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Collected By Branch Cashier</a>
                                             @endif
-
-                                            @if(Auth::user()->can('cb_cash_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+ 
+                                           <!--  @if(Auth::user()->can('cb_cash_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cash_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Collected By Branch Cashier</a>
-                                            @endif
+                                            @endif -->
                                             @if(Auth::user()->can('cb_customer_receipt') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/customer_receipt_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Customer Receipt</a>
                                             @endif
 
-                                            @if(Auth::user()->can('cb_receipt_for_cash_collected_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <!-- @if(Auth::user()->can('cb_receipt_for_cash_collected_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cus_rcpt_cash_bundle" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt for Cash</a>
-                                            @endif
-                                            @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            @endif -->
+                                           <!--  @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Collection By Head Office</a>
-                                            @endif
+                                            @endif -->
 
-                                            @if(Auth::user()->can('cb_cheque_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--  @if(Auth::user()->can('cb_cheque_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt for Cheques</a>
-                                            @endif
+                                            @endif -->
 
 
 
-                                            @if(Auth::user()->can('cb_cheque_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                           <!--  @if(Auth::user()->can('cb_cheque_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
                                             <a href="/cb/cheque_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Collection By Head Office</a>
-                                            @endif
+                                            @endif -->
 
 
 
@@ -960,6 +958,68 @@
 
 
 
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane dropdown-scrollable-xl fade p-3" id="tab_navbars_demo_collection_managment">
+                                    <div class="row">
+                                        <div class="col-lg-3 mb-3 mb-lg-0">
+                                            <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Cash</div>
+                                            <!-- <a href="/st/user" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Users</a> -->
+                                            @if(Auth::user()->can('cb_customer_receipt') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/direct_cash_bundle_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct Cash Bundle</a>
+                                            @endif
+
+                                            @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/direcet_cash_bundle_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office</a>
+                                            @endif 
+
+                                            @if(Auth::user()->can('cb_cash_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cash_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash from SR</a>
+                                            @endif
+
+                                            @if(Auth::user()->can('cb_receipt_for_cash_collected_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cus_rcpt_cash_bundle" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt For Cash(SR)</a>
+                                            @endif
+
+                                             
+                                          <!--   @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/direcet_cash_bundle_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office</a>
+                                            @endif -->
+                                            
+
+                                            @if(Auth::user()->can('cb_cash_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cash_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cash Received From Office (SR)</a>
+                                            @endif
+                                        </div>
+
+                                        <div class="col-lg-3 mb-3 mb-lg-0">
+                                        <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Card</div>
+
+                                        </div>
+
+                                        <div class="col-lg-3 mb-3 mb-lg-0">
+                                        <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Cheque</div>
+                                        <a href="/cb/dirct_cheque_collection_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct cheque bundle</a> <!-- direct check bulk create -->
+                                        <a href="/cb/direct_cheque_collection_ho_recived_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office</a> <!-- direct check bulk recive from head office --> 
+                                        @if(Auth::user()->can('cb_cheque_collected_by_branch_cashier_sfa') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cheque_collection_by_branch_to_collect_sfa" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque from SR</a>
+                                            @endif   
+                                           
+                                              @if(Auth::user()->can('cb_cheque_collection_by_branch') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cheque_collection_by_branch" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Receipt for Cheques</a>
+                                            @endif
+                                            @if(Auth::user()->can('cb_cheque_collection_by_ho') && Auth::user()->hasModulePermission('Cash Bank'))
+                                            <a href="/cb/cheque_collection_by_ho" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Cheque Received From Office (SR)</a>
+                                            @endif
+                                    </div>
+
+                                        <div class="col-lg-3 mb-3 mb-lg-0">
+                                        <div class="fw-bold border-bottom pb-2 mb-2"><i class="fa fa-bars text-info" aria-hidden="true">&#160</i>Bank Transfers</div>
+                                        <a href="/cb/direct_bank_slip_bundle_list" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Direct Bank Slip Bundle</a> <!-- direct slip bulk create -->
+                                        
                                         </div>
                                     </div>
                                 </div>

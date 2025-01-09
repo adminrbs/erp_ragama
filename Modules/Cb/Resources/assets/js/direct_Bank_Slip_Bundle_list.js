@@ -101,10 +101,10 @@ $(document).ready(function(){
     //alert();
     $('#cmbBranch').on('change', function () {
        
-        load_direct_cash_bundles($('#cmbBranch').val())
+        load_direct_slip_bundles($('#cmbBranch').val())
     });
     getBranches();
-    load_direct_cash_bundles(0);
+    load_direct_slip_bundles(0);
 
 });
 function getBranches() {
@@ -131,11 +131,11 @@ function getBranches() {
 
 
 //load direct customer receipts for cash bundle - ho
-function load_direct_cash_bundles(br_id) {
+function load_direct_slip_bundles(br_id) {
    
 
     $.ajax({
-        url: '/cb/load_direct_cash_bundles/' + br_id,
+        url: '/cb/load_direct_slip_bundles/' + br_id,
         type: 'get',
         cache: false,
         timeout: 800000,
@@ -147,15 +147,15 @@ function load_direct_cash_bundles(br_id) {
             var data = [];
             for (var i = 0; i < dt.length; i++) {
                 console.log(dt[i].book);
-                btn_info = '<button class="btn btn-success btn-sm tooltip-target" title="Info" onclick="showModal(' +dt[i].direct_cash_bundle_id+')"><i class="fa fa-info-circle" aria-hidden="true"></i></button>';
-                btn_print = '<button class="btn btn-secondary btn-sm tooltip-target" title="Print" onclick="printBundle(' +dt[i].direct_cash_bundle_id+')"><i class="fa fa-print" aria-hidden="true"></i></button>'
+                btn_info = '<button class="btn btn-success btn-sm tooltip-target" title="Info" onclick="showModal(' +dt[i].direct_slip_bundles_id+')"><i class="fa fa-info-circle" aria-hidden="true"></i></button>';
+                btn_print = '<button class="btn btn-secondary btn-sm tooltip-target" title="Print" onclick="printBundle(' +dt[i].direct_slip_bundles_id+')"><i class="fa fa-print" aria-hidden="true"></i></button>'
                 data.push({
                     "date": '<div data-id="' + dt[i].direct_cash_bundle_id + '">' + dt[i].trans_date + '</div>',
                     "ref_number": '<div data-id="' + dt[i].direct_cash_bundle_id + '">' + dt[i].external_number + '</div>',
                     "amount": '<div style="text-align:right;">'+parseFloat(dt[i].amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+'</div>',
                     "collector":dt[i].collector,
                     "branch": dt[i].branch_name,
-                    "action": btn_info +' '+btn_print,
+                    "action": btn_info,
 
                 });
 
