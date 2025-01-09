@@ -824,7 +824,7 @@ class PurchaseOrderController extends Controller
                     LEFT JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                     LEFT JOIN suppliers SP ON SG.supply_group_id = SP.supply_group_id");
                 }else{
-                    $items = DB::select("SELECT DI it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
+                    $items = DB::select("SELECT DISTINCT it.item_id, it.Item_code, it.item_Name,SG.supply_group FROM items it 
                     INNER JOIN supply_groups SG ON it.supply_group_id = SG.supply_group_id 
                     INNER JOIN suppliers SP ON SG.supply_group_id = SP.supply_group_id 
                     WHERE SP.supplier_id = " . $sup_id);

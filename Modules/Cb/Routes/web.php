@@ -3,6 +3,7 @@
 use App\Http\Controllers\ReferenceIdController;
 use Illuminate\Support\Facades\Route;
 use Modules\Cb\Http\Controllers\AuditController;
+use Modules\Cb\Http\Controllers\BankSlipBundleController;
 use Modules\Cb\Http\Controllers\BanktransferController;
 use Modules\Cb\Http\Controllers\CardPaymentController;
 use Modules\Cb\Http\Controllers\CashAuditReportController;
@@ -352,6 +353,12 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
 
     /**Direct Bank Slip Bundle*/
     Route::get('/direct_bank_slip_bundle', function () {
-        return view('cb::DirectSlipBundle');
+        return view('cb::DirectBankSlipBundle');
     });
+    Route::get('/direct_bank_slip_bundle_list',function(){
+        return view('cb::direct_slip_bundle_list');
+    });
+    Route::get('/load_direct_bank_slips_to_create_to_bundle/{id}',[BankSlipBundleController::class,'load_direct_bank_slips_to_create_to_bundle']);
+    Route::post('/create_direct_slip_bundle',[BankSlipBundleController::class,'create_direct_slip_bundle']);
+    Route::get('/load_direct_slip_bundles/{id}',[BankSlipBundleController::class,'load_direct_slip_bundles']);
 });

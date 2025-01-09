@@ -135,7 +135,7 @@ $(document).ready(function () {
             callback: function (result) {
                 console.log(result);
                 if (result) {
-                    newReferanceID('direct_slip_bundles', '2800');
+                    newReferanceID('direct_slip_bundles', '2950');
                     create_direct_slip_bundle();
 
                 } else {
