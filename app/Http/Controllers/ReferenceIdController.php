@@ -1413,4 +1413,38 @@ LIMIT 1";  */
         }
 
     }
+
+    public function newReferenceNumber_direct_card_bundles(Request $request,$table, $doc_number){
+        try {
+
+            $branch_id = $request->input('id');
+            //dd($doc_number);
+            $prefix = GlobalDocument::where('document_number', '=', $doc_number)->get()[0]->prefix;
+          
+            $query = "SELECT IF(ISNULL(external_number),0,external_number) AS id FROM " . $table . "  WHERE document_number = '" . $doc_number . "' AND external_number LIKE '%" . $prefix . "%' AND branch_id = '" . $branch_id . "'  ORDER BY direct_card_bundles_id DESC LIMIT 1";
+            // dd($query);
+            $result = DB::select($query);
+
+            $id = 1;
+
+            if (count($result) == 1) {
+
+                $result = explode("-", $result[0]->id);
+                //dd($result);
+                if (count($result) >= 3) {
+
+                    $id = (int) $result[2] + 1;
+                    //dd($id); 
+                } else {
+                    $id = (int) $result[0] + 1;
+                }
+            }
+
+            return response()->json(["id" => $id, "prefix" => $prefix]);
+        } catch (Exception $ex) {
+            return $ex;
+        }
+
+    }
+    
 }
