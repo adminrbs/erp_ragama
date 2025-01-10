@@ -111,10 +111,10 @@ $(document).ready(function () {
 
     $('#cmbBranch').on('change', function () {
         //load_direct_cash_create_bundle( $('#cmbBranch').val());
-        load_direct_bank_slips_to_create_to_bundle($('#cmbBranch').val())
+        load_direct_credit_card_to_create_to_bundle($('#cmbBranch').val())
     });
 
-    load_direct_bank_slips_to_create_to_bundle(0);
+    load_direct_credit_card_to_create_to_bundle(0);
 
 
     $('#btn_cash_ho_save').on('click', function () {
@@ -135,8 +135,8 @@ $(document).ready(function () {
             callback: function (result) {
                 console.log(result);
                 if (result) {
-                    newReferanceID('direct_slip_bundles', '2950');
-                    create_direct_slip_bundle();
+                    newReferanceID('direct_card_bundles', '3000');
+                    create_direct_card_bundle();
 
                 } else {
 
@@ -162,7 +162,7 @@ $(document).ready(function () {
 });
 
 //load direct customer receipts for cash bundle - ho
-function load_direct_bank_slips_to_create_to_bundle(br_id) {
+function load_direct_credit_card_to_create_to_bundle(br_id) {
     if($('#cmbBranch').val() == 0){
         var table = $('#cash_collection_by_ho_table').DataTable();
         table.clear();
@@ -170,7 +170,7 @@ function load_direct_bank_slips_to_create_to_bundle(br_id) {
     }
 
     $.ajax({
-        url: '/cb/load_direct_bank_slips_to_create_to_bundle/' + br_id,
+        url: '/cb/load_direct_credit_card_to_create_to_bundle/' + br_id,
         type: 'get',
         cache: false,
         timeout: 800000,
@@ -287,8 +287,8 @@ function update_labels(event) {
 
 
 //create cash bund;e
-function create_direct_slip_bundle() {
-    console.log(referanceID);
+function create_direct_card_bundle() {
+    //console.log(referanceID);
     var slip_id_array = [];
     $('#cash_collection_by_ho_table tbody tr').each(function () {
         var checkbox = $(this).find('input[type="checkbox"]');
@@ -317,7 +317,7 @@ function create_direct_slip_bundle() {
     console.log(formData);
 
     $.ajax({
-        url: '/cb/create_direct_slip_bundle',
+        url: '/cb/create_direct_card_bundle',
         method: 'post',
         data: formData,
         processData: false,
@@ -351,7 +351,7 @@ function create_direct_slip_bundle() {
 }
 
 function newReferanceID(table, doc_number) {
-    referanceID = newID("../newReferenceNumber_direct_bank_slip_bundles", table, doc_number);
+    referanceID = newID("../newReferenceNumber_direct_card_bundles", table, doc_number);
     console.log(referanceID);
 
 }

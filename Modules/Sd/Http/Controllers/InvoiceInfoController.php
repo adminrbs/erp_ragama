@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Sd\Entities\DebtorsLedger;
 use Modules\Sd\Entities\sales_Invoice;
 
 class InvoiceInfoController extends Controller
@@ -223,12 +224,31 @@ WHERE
     LEFT JOIN users U ON deliveryconfirmations.created_by = U.id
     
     WHERE deliveryconfirmations.sales_invoice_Id =' . $inv_id);
+
         } else {
             $delivery_confirmation_data = [];
         }
+        //customer transaction allocation data
+        $debtors_ledger_obj = DebtorsLedger::where("external_number","=",$number)->first();
+        $debtor_id = $debtors_ledger_obj->debtors_ledger_id;
+        $transaction_allocation_qry = DB::select('
+        SELECT
+            CTA.external_number,
+            DATE(CTAS.created_at) AS created_date,
+            CTAS.reference_external_number,
+            CTAS.set_off_amount 
+        FROM
+            customer_transaction_alocations_setoffs CTAS
+        INNER JOIN
+            customer_transaction_alocations CTA 
+            ON CTAS.customer_transaction_alocation_id = CTA.customer_transaction_alocation_id 
+        WHERE
+            CTAS.debtor_ledger_id = :debtor_id', 
+        ['debtor_id' => $debtor_id]
+    );
+    
 
-
-        return response()->json(["header" => $result, "item" => $item_data, "return_data" => $return_data, "customer_receipt" => $cus, "sfa" => $sfa, "delivery_plan" => $delivery_plan, "picking_list" => $picking_list, "delivery_confirmation_data" => $delivery_confirmation_data]);
+        return response()->json(["header" => $result, "item" => $item_data, "return_data" => $return_data, "customer_receipt" => $cus, "sfa" => $sfa, "delivery_plan" => $delivery_plan, "picking_list" => $picking_list, "delivery_confirmation_data" => $delivery_confirmation_data,"transaction_allocation_data" => $transaction_allocation_qry]);
     }
 
 

@@ -25,6 +25,7 @@ use Modules\Cb\Http\Controllers\ReportController;
 use Modules\Cb\Http\Controllers\ChequesBankedController;
 use Modules\Cb\Http\Controllers\ChquesToBeBankedController;
 use Modules\Cb\Http\Controllers\DashboardDataController;
+use Modules\Cb\Http\Controllers\DirectCardBundleController;
 use Modules\Cb\Http\Controllers\DirectCashBundleReportController;
 use Modules\Cb\Http\Controllers\DirectChequeBundleReportController;
 use Modules\Cb\Http\Controllers\DirectChequeController;
@@ -361,4 +362,12 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     Route::get('/load_direct_bank_slips_to_create_to_bundle/{id}',[BankSlipBundleController::class,'load_direct_bank_slips_to_create_to_bundle']);
     Route::post('/create_direct_slip_bundle',[BankSlipBundleController::class,'create_direct_slip_bundle']);
     Route::get('/load_direct_slip_bundles/{id}',[BankSlipBundleController::class,'load_direct_slip_bundles']);
+
+
+    /**Direct credit card bundle */
+    Route::get('/direct_card_bundle',function(){
+        return view('cb::DirectCardBundle');
+    });
+    Route::get('/load_direct_credit_card_to_create_to_bundle/{id}',[DirectCardBundleController::class,'load_direct_credit_card_to_create_to_bundle']);
+    Route::post('/create_direct_card_bundle',[BankSlipBundleController::class,'create_direct_card_bundle']);
 });

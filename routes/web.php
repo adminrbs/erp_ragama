@@ -86,6 +86,7 @@ Auth::routes();
  Route::get('/newReferenceNumber_JournalEntry/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_JournalEntry']);
  Route::get('/newReferenceNumber_FundTransfer/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_FundTransfer']);
  Route::get('/newReferenceNumber_direct_bank_slip_bundles/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_direct_bank_slip_bundles']);
+ Route::get('/newReferenceNumber_direct_card_bundles/{table}/{doc_number}',[ReferenceIdController::class,'newReferenceNumber_direct_card_bundles']);
 
 /** Utility */
 Route::get('/contains_value/{table}/{column}/{value}',[UtilityController::class,'containsValue']);

@@ -594,8 +594,7 @@ class DeliveryPlanController extends Controller
             SELECT 1 
             FROM sales_returns 
             WHERE sales_returns.sales_invoice_id = sales_invoices.sales_invoice_Id
-        )
-        ";
+        )";
             $invoice = DB::select($query);
             return response()->json(["status" => true, "data" => $invoice]);
         } catch (Exception $ex) {
