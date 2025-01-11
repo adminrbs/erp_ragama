@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is.logged' => \App\Http\Middleware\EnsureUserSession::class,
+        'cookie.approvalConfirm' => \App\Http\Middleware\EnsureUserCookie::class,
     ];
 }

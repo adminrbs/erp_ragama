@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Permissions\HasModulesTrait;
 use App\Permissions\HasPermissionsTrait;
+use App\Traits\ApprovalRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait,HasModulesTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait,HasModulesTrait,ApprovalRequest;
 
     /**
      * The attributes that are mass assignable.

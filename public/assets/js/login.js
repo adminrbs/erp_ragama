@@ -55,6 +55,7 @@ function submit(){
 
     formData.append('txtEmail', $('#txtEmail').val());
     formData.append('txtPassword', $('#txtPassword').val());
+    formData.append('browser', getBrowser());
 
     console.log(formData);
 $.ajax({
@@ -76,7 +77,7 @@ $.ajax({
         success: function (response) {
             console.log(response);
            if(response.status == 200){
-            location.href = '/dashboard';
+            location.href = response.location;
            }else if(response == "201"){
             /* showWarningMessage('Incorrect user name or password'); */
             $('#txtEmail').addClass('is-invalid')
@@ -119,4 +120,24 @@ function loadImage(){
             console.error(error);
         }
     });
+}
+
+
+
+function getBrowser() {
+    const userAgent = navigator.userAgent;
+
+    if (userAgent.includes("Chrome")) {
+        return "Chrome";
+    } else if (userAgent.includes("Firefox")) {
+        return "Firefox";
+    } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+        return "Safari";
+    } else if (userAgent.includes("Edg")) {
+        return "Edg";
+    } else if (userAgent.includes("Trident") || userAgent.includes("MSIE")) {
+        return "InternetExplorer";
+    } else {
+        return undefined;
+    }
 }
