@@ -57,7 +57,7 @@ class DirectCardBundleController extends Controller
         DB::begintransaction();
         try {
             DB::beginTransaction();
-                $cash_id_array = json_decode($request->get('slip_id_array'));
+                $card_id_array = json_decode($request->get('card_id_array'));
                 $referencenumber = $request->input('LblexternalNumber');
                 //dd($referencenumber);
                 $bR_id = $request->input('br_id');
@@ -80,7 +80,7 @@ class DirectCardBundleController extends Controller
             
     
             if ($card_bundle->save()) {
-                foreach ($cash_id_array as $id) {
+                foreach ($card_id_array as $id) {
                     //dd($cash_id_array);
                     $customerReceipt = CustomerReceipt::find($id);
     
