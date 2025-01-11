@@ -1231,10 +1231,15 @@ function getDeliveryTypes() {
         type: 'get',
         async: false,
         success: function (data) {
+            var deliver_type_id;
             $.each(data, function (index, value) {
+                
                 $('#cmbDeliverType').append('<option value="' + value.delivery_type_id + '">' + value.delivery_type_name + '</option>');
-
-            })
+                if(value.delivery_type_name == "Deliver"){
+                    deliver_type_id = value.delivery_type_id;
+                }
+            });
+            $('#cmbDeliverType').change(deliver_type_id);
 
         },
     })

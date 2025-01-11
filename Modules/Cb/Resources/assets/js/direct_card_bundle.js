@@ -289,14 +289,14 @@ function update_labels(event) {
 //create cash bund;e
 function create_direct_card_bundle() {
     //console.log(referanceID);
-    var slip_id_array = [];
+    var card_id_array = [];
     $('#cash_collection_by_ho_table tbody tr').each(function () {
         var checkbox = $(this).find('input[type="checkbox"]');
         if (checkbox.is(':checked')) {
             var textbox = $(this).find('input[type="text"]');
 
             var chk_id = $(checkbox).attr('id')
-            slip_id_array.push(chk_id);
+            card_id_array.push(chk_id);
 
 
         }
@@ -304,14 +304,14 @@ function create_direct_card_bundle() {
 
     });
 
-    if (slip_id_array.length < 1) {
+    if (card_id_array.length < 1) {
         showWarningMessage('Please select a reocrd');
         return;
     }
-    console.log(slip_id_array);
+    console.log(card_id_array);
 
     var formData = new FormData();
-    formData.append('slip_id_array', JSON.stringify(slip_id_array));
+    formData.append('card_id_array', JSON.stringify(card_id_array));
     formData.append('LblexternalNumber', referanceID);
     formData.append('br_id', $('#cmbBranch').val());
     console.log(formData);
@@ -335,7 +335,7 @@ function create_direct_card_bundle() {
             var message = response.message;
             if (response.status) {
                 showSuccessMessage('Record updated');
-                load_direct_cash_create_to_bundle($('#cmbBranch').val());
+                load_direct_credit_card_to_create_to_bundle($('#cmbBranch').val());
                 $('#sum_label').text(0.00).addClass('h4');
                 $('#row_count').text(0);
             } else {

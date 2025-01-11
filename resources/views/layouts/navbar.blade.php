@@ -93,7 +93,7 @@
                                         <li class="nav-item">
                                             <a href="#tab_navbars_demo_collection_managment" class="nav-link rounded" data-bs-toggle="tab">
                                                 <i class="ph-rows me-2"></i>
-                                                Collection Managment
+                                                Collection Management
                                                 <i class="ph-arrow-right nav-item-active-indicator d-none d-xl-inline-block ms-auto"></i>
                                             </a>
                                         </li>
@@ -183,7 +183,7 @@
                                             <a href="/md/district" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Administrative District</a>
                                             @endif
                                             @if(Auth::user()->can('md_administrative_town_list') && Auth::user()->hasModulePermission('Master Data'))
-                                            <a href="/md/town" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Adinistrative Town</a>
+                                            <a href="/md/town" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Administrative Town</a>
                                             @endif
                                             @if(Auth::user()->can('md_town_list') && Auth::user()->hasModulePermission('Master Data'))
                                             <a href="/md/townNon" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Town</a>
