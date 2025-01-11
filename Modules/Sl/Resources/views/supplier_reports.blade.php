@@ -78,7 +78,7 @@
                                         Supplier's Ledger
                                     </label>
                                 </li>
-                                <br>
+
                                 <li class="list-group-item">
                                     <label style="align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="creditorleger" id="creditorlegerAge" style="margin-right: 10px;">
@@ -87,8 +87,6 @@
                                     </label>
                                 </li>
 
-
-                                <br>
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="Supplier's Outstanding Age Analysis" id="supplier_outstanding" style="margin-right: 10px;">
@@ -96,7 +94,7 @@
                                         Supplier's Outstanding
                                     </label>
                                 </li>
-                                <br>
+                              
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="supplier_cash_audit_report" id="supplier_cash_audit_report" style="margin-right: 10px;">
@@ -104,7 +102,7 @@
                                         Cash Audit
                                     </label>
                                 </li>
-                                <br>
+
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="supplier_cash_audit_report" id="supplier_cheque_audit_report" style="margin-right: 10px;">
@@ -112,7 +110,7 @@
                                         Cheque Audit
                                     </label>
                                 </li>
-                                <br>
+   
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="bank_transfer_report" id="bank_transfer_report" style="margin-right: 10px;">
@@ -120,6 +118,7 @@
                                         Bank Transfer Report
                                     </label>
                                 </li>
+                                
                                 <li class="list-group-item">
                                     <label style="display: flex; align-items: center;">
                                         <input class="form-check-input" type="radio" name="option1" value="supplier_transaction_allocation" id="supplier_transaction_allocation" style="margin-right: 10px;">

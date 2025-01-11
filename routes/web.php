@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\accountSettingsController;
+use App\Http\Controllers\ApprovalRequestListController;
 use App\Http\Controllers\dashBoardController;
 use App\Http\Controllers\deleteValidationController;
 use App\Http\Controllers\ExportController;
@@ -25,7 +26,18 @@ use App\Http\Controllers\UtilityController;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware('is.logged');
+})->middleware(['is.logged', 'cookie.approvalConfirm']);
+
+Route::get('/approval', function () {
+    return view('approval');
+});
+
+Route::get('/approval_request_list', function () {
+    return view('approval_request_list');
+});
+
+Route::get('/approvalRequestList',[ApprovalRequestListController::class,'approvalRequestList']);
+Route::post('/confirmRequest',[ApprovalRequestListController::class,'confirmRequest']);
 
 /** Login */
 Route::get('/', function () {
@@ -36,6 +48,9 @@ Route::post('/submitForm', [LoginController::class,'loginForm']);
 Route::get('/dashboardlogin', [LoginController::class,'dashboardlogin']); // dashboard loggin
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/sendRequest/{browser}/{id}', [LoginController::class, 'sendRequest']);
+Route::get('/getUserApprovalSecret/{username}/{password}/{browser}', [LoginController::class, 'getUserApprovalSecret']);
+Route::get('/getUserID/{username}/{password}', [LoginController::class, 'getUserID']);
 /** End Of Login */
 
 
