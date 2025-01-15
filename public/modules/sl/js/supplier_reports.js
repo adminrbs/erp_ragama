@@ -621,6 +621,38 @@ $(document).ready(function () {
             $('#pdfContainer').attr('src', '/sl/bank_transfer_report/' + JSON.stringify(requestData));
 
         }
+        if (report === "supplier_transaction_allocation") {
+
+
+
+            if (report == null || report == undefined || report == "") {
+                showWarningMessage("Select Filter Option");
+                console.log(report);
+            }
+
+
+            var requestData = [
+
+                //{ selected6: selected6 },
+                { selectSupplier: selectSupplier },
+                { selectSupplygroup: selectSupplygroup },
+                { selecteBranch: selecteBranch },
+                { cmbgreaterthan: cmbgreaterthan },
+                { fromdate: fromdate },
+                { todate: todate },
+                { fromAge: fromAge },
+                { toAge: toAge },
+
+            ];
+
+
+            console.log(requestData);
+
+
+            //getviewReport()
+            $('#pdfContainer').attr('src', '/sl/supplier_transaction_allocation/' + JSON.stringify(requestData));
+
+        }
         if (report == null || report == undefined) {
 
 

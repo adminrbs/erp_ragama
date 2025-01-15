@@ -80,221 +80,417 @@ class GoodReceivedController extends Controller
     {
         try {
             DB::beginTransaction();
-            $margin_gaps = [];
-            $PO_id_ = $request->input('txtPurchaseORder');
-            $query = "SELECT status FROM purchase_order_notes WHERE purchase_order_Id = " . $PO_id_;
-            $result = DB::select($query);
-            if ($result) {
-                $PO_status = $result[0]->status;
-                if ($PO_status != 0) {
-                    return response()->json(["status" => false, "message" => "completed"]);
-                } else {
+            $global_setting = global_setting::first();
 
-                    $collection = json_decode($request->input('collection'));
-                    //looping first array to check prices and margin
+            if ($global_setting->direct_grn == 1) {
+                $margin_gaps = [];
+
+                $collection = json_decode($request->input('collection'));
+                //looping first array to check prices and margin
+                foreach ($collection as $i) {
+
+                    $item = json_decode($i);
+
+                    if (is_null($item->whole_sale_price) || floatval($item->whole_sale_price) == 0) {
+                        return response()->json(["message" => "null"]);
+                    } /* else if (is_null($item->retial_price) || floatval($item->retial_price) == 0) {
+                                return response()->json(["message" => "null retail"]);
+                            } */ else if (is_null($item->cost_price) || floatval($item->cost_price) == 0) {
+                        //return response()->json(["message" => "null cost"]);
+                    } else if (is_null($item->price) || floatval($item->price) == 0) {
+                        return response()->json(["message" => "null price"]);
+                    }
+                    $Itm_ID = $item->item_id;
+                    $item_ = item::find($Itm_ID);
+                    $minimum_margin_ =  $item_->minimum_margin;
+
+                    if (floatval($minimum_margin_) > 0) {
+
+                        $cost = floatval($item->price) - (((floatval($item->price)) / 100) * floatval($item->discount_percentage));
+                        $margin = ((floatval($item->whole_sale_price) - $cost) / floatval($item->whole_sale_price)) * 100;
+
+                        if (floatval($minimum_margin_) > floatval($margin)) {
+                            $item_code_ = $item_->Item_code;
+                            array_push($margin_gaps, $item_code_);
+                        }
+                    }
+                }
+                if (count($margin_gaps) > 0) {
+                    return response()->json(["message" => "margin_gaps", "margin_gaps" => $margin_gaps]);
+                }
+
+
+
+                $referencenumber = $request->input('LblexternalNumber');
+                $bR_id = $request->input('cmbBranch');
+
+                $data = DB::table('branches')->where('branch_id', $bR_id)->get();
+
+                $EXPLODE_ID = explode("-", $referencenumber);
+                $externalNumber  = '';
+                if ($data->count() > 0) {
+                    $documentPrefix = $data[0]->prefix;
+                    $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+                }
+                $PreparedBy = Auth::user()->id;
+
+                $GRN = new goods_received_note();
+                $GRN->internal_number = IntenelNumberController::getNextID();
+                $GRN->external_number = $externalNumber; // need to change 
+                $GRN->goods_received_date_time = $request->input('goods_received_date_time');
+                $GRN->branch_id = $request->input('cmbBranch');
+                $GRN->location_id = $request->input('cmbLocation');
+                $GRN->supplier_id = $request->input('txtSupplier');
+                $GRN->supplier_name = $request->input('lblSupplierName');
+                $GRN->purchase_order_id = $request->input('txtPurchaseORder');
+                $GRN->supppier_invoice_number = $request->input('txtSupplierInvoiceNumber');
+                $GRN->invoice_amount = $request->input('txtInvoiceAmount');
+                $GRN->payment_due_date = $request->input('dtPaymentDueDate');
+                $GRN->payment_mode_id = $request->input('cmbPaymentType');
+                $GRN->discount_percentage = $request->input('txtDiscountPrecentage');
+                $GRN->discount_amount = $request->input('txtDiscountAmount');
+                $GRN->adjustment_amount = $request->input('txtAdjustmentAmount');
+                $GRN->remarks = $request->input('txtRemarks');
+                $GRN->document_number = 120;
+                $GRN->prepaired_by = $PreparedBy;
+                $GRN->your_reference_number = $request->input('txtYourReference');
+                $GRN->total_amount = $request->input('lblNetTotal');
+
+
+                if ($GRN->save()) {
+
+
+
+                    //looping first array
                     foreach ($collection as $i) {
 
                         $item = json_decode($i);
-
-                        if (is_null($item->whole_sale_price) || floatval($item->whole_sale_price) == 0) {
-                            return response()->json(["message" => "null"]);
-                        } /* else if (is_null($item->retial_price) || floatval($item->retial_price) == 0) {
-                            return response()->json(["message" => "null retail"]);
-                        } */ else if (is_null($item->cost_price) || floatval($item->cost_price) == 0) {
-                            //return response()->json(["message" => "null cost"]);
-                        } else if (is_null($item->price) || floatval($item->price) == 0) {
-                            return response()->json(["message" => "null price"]);
-                        }
-                        $Itm_ID = $item->item_id;
-                        $item_ = item::find($Itm_ID);
-                        $minimum_margin_ =  $item_->minimum_margin;
-
-                        if (floatval($minimum_margin_) > 0) {
-
-                            $cost = floatval($item->price) - (((floatval($item->price)) / 100) * floatval($item->discount_percentage));
-                            $margin = ((floatval($item->whole_sale_price) - $cost) / floatval($item->whole_sale_price)) * 100;
-
-                            if (floatval($minimum_margin_) > floatval($margin)) {
-                                $item_code_ = $item_->Item_code;
-                                array_push($margin_gaps, $item_code_);
+                        foreach ($item as $key => $value) {
+                            if (is_string($value) && empty($value)) {
+                                $item->$key = null;
                             }
                         }
+                        $itm_id = $item->item_id;
+                        $item_code = "";
+                        $query = DB::select("SELECT Item_code FROM items WHERE item_id = '" . $itm_id . "'");
+                        if ($query) {
+                            $item_code = $query[0]->Item_code;
+                        }
+
+                        $GRN_item = new goods_received_note_item();
+                        $GRN_item->goods_received_Id = $GRN->goods_received_Id;
+                        $GRN_item->internal_number = $GRN->internal_number;
+                        $GRN_item->external_number = $GRN->external_number; // need to change
+                        $GRN_item->item_id = $item->item_id;
+                        $GRN_item->item_name = $item->item_name;
+                        // $GRN_item->quantity = $item->qty;
+                        if ($item->qty) {
+                            $GRN_item->quantity = $item->qty;
+                        } else {
+                            $GRN_item->quantity = 0;
+                        }
+
+
+                        if ($item->free_quantity) {
+                            $GRN_item->free_quantity = $item->free_quantity;
+                        } else {
+                            $GRN_item->free_quantity = 0;
+                        }
+
+                        if ($item->addBonus) {
+                            $GRN_item->additional_bonus = $item->addBonus;
+                        } else {
+                            $GRN_item->additional_bonus = 0;
+                        }
+
+                        if ($item->PackUnit) {
+                            $GRN_item->package_unit = $item->PackUnit;
+                        } else {
+                            $GRN_item->package_unit = 0;
+                        }
+
+                        if ($item->PackSize) {
+                            $GRN_item->package_size = $item->PackSize;
+                        } else {
+                            $GRN_item->package_size = 0;
+                        }
+
+                        if ($item->price) {
+                            $GRN_item->price = $item->price;
+                        } else {
+                            $GRN_item->price = 0;
+                        }
+
+                        if ($item->discount_percentage) {
+                            $GRN_item->discount_percentage = $item->discount_percentage;
+                        } else {
+                            $GRN_item->discount_percentage = 0;
+                        }
+
+                        if ($item->discount_amount) {
+                            $GRN_item->discount_amount = $item->discount_amount;
+                        } else {
+                            $GRN_item->discount_amount = 0;
+                        }
+
+
+                        $GRN_item->whole_sale_price = $item->whole_sale_price;
+                        $GRN_item->retial_price = $item->retial_price;
+
+                        if ($item->previouse_whole_sale_price) {
+                            $GRN_item->previouse_whole_sale_price = $item->previouse_whole_sale_price;
+                        } else {
+                            $GRN_item->previouse_whole_sale_price = 0;
+                        }
+
+                        if ($item->previouse_retial_price) {
+                            $GRN_item->previouse_retail_price = $item->previouse_retial_price;
+                        } else {
+                            $GRN_item->previouse_retail_price = 0;
+                        }
+
+                        if ($item->batch_number) {
+                            $GRN_item->batch_number = $item->batch_number;
+                        } else {
+                            $GRN_item->batch_number = $item_code;
+                        }
+
+                        if ($item->expire_date) {
+                            $GRN_item->expire_date = $item->expire_date;
+                        } else {
+                            $GRN_item->expire_date = null;
+                        }
+
+                        if ($item->cost_price) {
+                            $GRN_item->cost_price = $item->cost_price;
+                        } else {
+                            $GRN_item->cost_price = 0;
+                        }
+
+                        $GRN_item->purchase_order_item_id = $item->purchase_order_item_id;
+                        $GRN_item->is_new_price = $item->is_new_price;
+                        $GRN_item->save();
                     }
-                    if (count($margin_gaps) > 0) {
-                        return response()->json(["message" => "margin_gaps", "margin_gaps" => $margin_gaps]);
-                    }
-
-                    /* if ($id != "null") {
-
-                        $GRNDraft = GoodsReceivedNoteDraft::find($id)->delete();
-                        $itemDraft =  GoodsReceivedNoteItemDraft::where("goods_received_Id", "=", $id)->delete();
-                    }
- */
-
-                    $referencenumber = $request->input('LblexternalNumber');
-                    $bR_id = $request->input('cmbBranch');
-
-                    $data = DB::table('branches')->where('branch_id', $bR_id)->get();
-
-                    $EXPLODE_ID = explode("-", $referencenumber);
-                    $externalNumber  = '';
-                    if ($data->count() > 0) {
-                        $documentPrefix = $data[0]->prefix;
-                        $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
-                    }
-                    $PreparedBy = Auth::user()->id;
-
-                    $GRN = new goods_received_note();
-                    $GRN->internal_number = IntenelNumberController::getNextID();
-                    $GRN->external_number = $externalNumber; // need to change 
-                    $GRN->goods_received_date_time = $request->input('goods_received_date_time');
-                    $GRN->branch_id = $request->input('cmbBranch');
-                    $GRN->location_id = $request->input('cmbLocation');
-                    $GRN->supplier_id = $request->input('txtSupplier');
-                    $GRN->supplier_name = $request->input('lblSupplierName');
-                    $GRN->purchase_order_id = $request->input('txtPurchaseORder');
-                    $GRN->supppier_invoice_number = $request->input('txtSupplierInvoiceNumber');
-                    $GRN->invoice_amount = $request->input('txtInvoiceAmount');
-                    $GRN->payment_due_date = $request->input('dtPaymentDueDate');
-                    $GRN->payment_mode_id = $request->input('cmbPaymentType');
-                    $GRN->discount_percentage = $request->input('txtDiscountPrecentage');
-                    $GRN->discount_amount = $request->input('txtDiscountAmount');
-                    $GRN->adjustment_amount = $request->input('txtAdjustmentAmount');
-                    $GRN->remarks = $request->input('txtRemarks');
-                    $GRN->document_number = 120;
-                    $GRN->prepaired_by = $PreparedBy;
-                    $GRN->your_reference_number = $request->input('txtYourReference');
-                    $GRN->total_amount = $request->input('lblNetTotal');
 
 
-                    if ($GRN->save()) {
+                    DB::commit();
+                    return response()->json(["status" => true, "primaryKey" => $GRN->goods_received_Id, "PO_id" => $GRN->purchase_order_id]);
+                } else {
+                    DB::rollBack();
+                    return response()->json(["status" => false]);
+                }
+            } else {
+                $margin_gaps = [];
+                $PO_id_ = $request->input('txtPurchaseORder');
+                $query = "SELECT status FROM purchase_order_notes WHERE purchase_order_Id = " . $PO_id_;
+                $result = DB::select($query);
+                if ($result) {
+                    $PO_status = $result[0]->status;
+                    if ($PO_status != 0) {
+                        return response()->json(["status" => false, "message" => "completed"]);
+                    } else {
 
-
-
-                        //looping first array
+                        $collection = json_decode($request->input('collection'));
+                        //looping first array to check prices and margin
                         foreach ($collection as $i) {
 
                             $item = json_decode($i);
-                            foreach ($item as $key => $value) {
-                                if (is_string($value) && empty($value)) {
-                                    $item->$key = null;
+
+                            if (is_null($item->whole_sale_price) || floatval($item->whole_sale_price) == 0) {
+                                return response()->json(["message" => "null"]);
+                            } /* else if (is_null($item->retial_price) || floatval($item->retial_price) == 0) {
+                                return response()->json(["message" => "null retail"]);
+                            } */ else if (is_null($item->cost_price) || floatval($item->cost_price) == 0) {
+                                //return response()->json(["message" => "null cost"]);
+                            } else if (is_null($item->price) || floatval($item->price) == 0) {
+                                return response()->json(["message" => "null price"]);
+                            }
+                            $Itm_ID = $item->item_id;
+                            $item_ = item::find($Itm_ID);
+                            $minimum_margin_ =  $item_->minimum_margin;
+
+                            if (floatval($minimum_margin_) > 0) {
+
+                                $cost = floatval($item->price) - (((floatval($item->price)) / 100) * floatval($item->discount_percentage));
+                                $margin = ((floatval($item->whole_sale_price) - $cost) / floatval($item->whole_sale_price)) * 100;
+
+                                if (floatval($minimum_margin_) > floatval($margin)) {
+                                    $item_code_ = $item_->Item_code;
+                                    array_push($margin_gaps, $item_code_);
                                 }
                             }
-                            $itm_id = $item->item_id;
-                            $item_code = "";
-                            $query = DB::select("SELECT Item_code FROM items WHERE item_id = '" . $itm_id . "'");
-                            if ($query) {
-                                $item_code = $query[0]->Item_code;
-                            }
-
-                            $GRN_item = new goods_received_note_item();
-                            $GRN_item->goods_received_Id = $GRN->goods_received_Id;
-                            $GRN_item->internal_number = $GRN->internal_number;
-                            $GRN_item->external_number = $GRN->external_number; // need to change
-                            $GRN_item->item_id = $item->item_id;
-                            $GRN_item->item_name = $item->item_name;
-                            // $GRN_item->quantity = $item->qty;
-                            if ($item->qty) {
-                                $GRN_item->quantity = $item->qty;
-                            } else {
-                                $GRN_item->quantity = 0;
-                            }
-
-
-                            if ($item->free_quantity) {
-                                $GRN_item->free_quantity = $item->free_quantity;
-                            } else {
-                                $GRN_item->free_quantity = 0;
-                            }
-
-                            if ($item->addBonus) {
-                                $GRN_item->additional_bonus = $item->addBonus;
-                            } else {
-                                $GRN_item->additional_bonus = 0;
-                            }
-
-                            if ($item->PackUnit) {
-                                $GRN_item->package_unit = $item->PackUnit;
-                            } else {
-                                $GRN_item->package_unit = 0;
-                            }
-
-                            if ($item->PackSize) {
-                                $GRN_item->package_size = $item->PackSize;
-                            } else {
-                                $GRN_item->package_size = 0;
-                            }
-
-                            if ($item->price) {
-                                $GRN_item->price = $item->price;
-                            } else {
-                                $GRN_item->price = 0;
-                            }
-
-                            if ($item->discount_percentage) {
-                                $GRN_item->discount_percentage = $item->discount_percentage;
-                            } else {
-                                $GRN_item->discount_percentage = 0;
-                            }
-
-                            if ($item->discount_amount) {
-                                $GRN_item->discount_amount = $item->discount_amount;
-                            } else {
-                                $GRN_item->discount_amount = 0;
-                            }
-
-
-                            $GRN_item->whole_sale_price = $item->whole_sale_price;
-                            $GRN_item->retial_price = $item->retial_price;
-
-                            if ($item->previouse_whole_sale_price) {
-                                $GRN_item->previouse_whole_sale_price = $item->previouse_whole_sale_price;
-                            } else {
-                                $GRN_item->previouse_whole_sale_price = 0;
-                            }
-
-                            if ($item->previouse_retial_price) {
-                                $GRN_item->previouse_retail_price = $item->previouse_retial_price;
-                            } else {
-                                $GRN_item->previouse_retail_price = 0;
-                            }
-
-                            if ($item->batch_number) {
-                                $GRN_item->batch_number = $item->batch_number;
-                            } else {
-                                $GRN_item->batch_number = $item_code;
-                            }
-
-                            if ($item->expire_date) {
-                                $GRN_item->expire_date = $item->expire_date;
-                            } else {
-                                $GRN_item->expire_date = null;
-                            }
-
-                            if ($item->cost_price) {
-                                $GRN_item->cost_price = $item->cost_price;
-                            } else {
-                                $GRN_item->cost_price = 0;
-                            }
-
-                            $GRN_item->purchase_order_item_id = $item->purchase_order_item_id;
-                            $GRN_item->is_new_price = $item->is_new_price;
-                            $GRN_item->save();
                         }
-                        $setting = global_setting::first();
-                        if($setting->approved == 0){
-                            if($PO_id_ > 0){
-                                $PO = purchase_order_note::find($PO_id_);
-                                $PO->approval_status = "Approved";
-                                $PO->update();
-                            }
+                        if (count($margin_gaps) > 0) {
+                            return response()->json(["message" => "margin_gaps", "margin_gaps" => $margin_gaps]);
                         }
-                       
-                        DB::commit();
-                        return response()->json(["status" => true, "primaryKey" => $GRN->goods_received_Id, "PO_id" => $GRN->purchase_order_id]);
-                    } else {
-                        DB::rollBack();
-                        return response()->json(["status" => false]);
+
+
+
+                        $referencenumber = $request->input('LblexternalNumber');
+                        $bR_id = $request->input('cmbBranch');
+
+                        $data = DB::table('branches')->where('branch_id', $bR_id)->get();
+
+                        $EXPLODE_ID = explode("-", $referencenumber);
+                        $externalNumber  = '';
+                        if ($data->count() > 0) {
+                            $documentPrefix = $data[0]->prefix;
+                            $externalNumber  = $documentPrefix . "-" . $EXPLODE_ID[0] . "-" . $EXPLODE_ID[1];
+                        }
+                        $PreparedBy = Auth::user()->id;
+
+                        $GRN = new goods_received_note();
+                        $GRN->internal_number = IntenelNumberController::getNextID();
+                        $GRN->external_number = $externalNumber; // need to change 
+                        $GRN->goods_received_date_time = $request->input('goods_received_date_time');
+                        $GRN->branch_id = $request->input('cmbBranch');
+                        $GRN->location_id = $request->input('cmbLocation');
+                        $GRN->supplier_id = $request->input('txtSupplier');
+                        $GRN->supplier_name = $request->input('lblSupplierName');
+                        $GRN->purchase_order_id = $request->input('txtPurchaseORder');
+                        $GRN->supppier_invoice_number = $request->input('txtSupplierInvoiceNumber');
+                        $GRN->invoice_amount = $request->input('txtInvoiceAmount');
+                        $GRN->payment_due_date = $request->input('dtPaymentDueDate');
+                        $GRN->payment_mode_id = $request->input('cmbPaymentType');
+                        $GRN->discount_percentage = $request->input('txtDiscountPrecentage');
+                        $GRN->discount_amount = $request->input('txtDiscountAmount');
+                        $GRN->adjustment_amount = $request->input('txtAdjustmentAmount');
+                        $GRN->remarks = $request->input('txtRemarks');
+                        $GRN->document_number = 120;
+                        $GRN->prepaired_by = $PreparedBy;
+                        $GRN->your_reference_number = $request->input('txtYourReference');
+                        $GRN->total_amount = $request->input('lblNetTotal');
+
+
+                        if ($GRN->save()) {
+
+
+
+                            //looping first array
+                            foreach ($collection as $i) {
+
+                                $item = json_decode($i);
+                                foreach ($item as $key => $value) {
+                                    if (is_string($value) && empty($value)) {
+                                        $item->$key = null;
+                                    }
+                                }
+                                $itm_id = $item->item_id;
+                                $item_code = "";
+                                $query = DB::select("SELECT Item_code FROM items WHERE item_id = '" . $itm_id . "'");
+                                if ($query) {
+                                    $item_code = $query[0]->Item_code;
+                                }
+
+                                $GRN_item = new goods_received_note_item();
+                                $GRN_item->goods_received_Id = $GRN->goods_received_Id;
+                                $GRN_item->internal_number = $GRN->internal_number;
+                                $GRN_item->external_number = $GRN->external_number; // need to change
+                                $GRN_item->item_id = $item->item_id;
+                                $GRN_item->item_name = $item->item_name;
+                                // $GRN_item->quantity = $item->qty;
+                                if ($item->qty) {
+                                    $GRN_item->quantity = $item->qty;
+                                } else {
+                                    $GRN_item->quantity = 0;
+                                }
+
+
+                                if ($item->free_quantity) {
+                                    $GRN_item->free_quantity = $item->free_quantity;
+                                } else {
+                                    $GRN_item->free_quantity = 0;
+                                }
+
+                                if ($item->addBonus) {
+                                    $GRN_item->additional_bonus = $item->addBonus;
+                                } else {
+                                    $GRN_item->additional_bonus = 0;
+                                }
+
+                                if ($item->PackUnit) {
+                                    $GRN_item->package_unit = $item->PackUnit;
+                                } else {
+                                    $GRN_item->package_unit = 0;
+                                }
+
+                                if ($item->PackSize) {
+                                    $GRN_item->package_size = $item->PackSize;
+                                } else {
+                                    $GRN_item->package_size = 0;
+                                }
+
+                                if ($item->price) {
+                                    $GRN_item->price = $item->price;
+                                } else {
+                                    $GRN_item->price = 0;
+                                }
+
+                                if ($item->discount_percentage) {
+                                    $GRN_item->discount_percentage = $item->discount_percentage;
+                                } else {
+                                    $GRN_item->discount_percentage = 0;
+                                }
+
+                                if ($item->discount_amount) {
+                                    $GRN_item->discount_amount = $item->discount_amount;
+                                } else {
+                                    $GRN_item->discount_amount = 0;
+                                }
+
+
+                                $GRN_item->whole_sale_price = $item->whole_sale_price;
+                                $GRN_item->retial_price = $item->retial_price;
+
+                                if ($item->previouse_whole_sale_price) {
+                                    $GRN_item->previouse_whole_sale_price = $item->previouse_whole_sale_price;
+                                } else {
+                                    $GRN_item->previouse_whole_sale_price = 0;
+                                }
+
+                                if ($item->previouse_retial_price) {
+                                    $GRN_item->previouse_retail_price = $item->previouse_retial_price;
+                                } else {
+                                    $GRN_item->previouse_retail_price = 0;
+                                }
+
+                                if ($item->batch_number) {
+                                    $GRN_item->batch_number = $item->batch_number;
+                                } else {
+                                    $GRN_item->batch_number = $item_code;
+                                }
+
+                                if ($item->expire_date) {
+                                    $GRN_item->expire_date = $item->expire_date;
+                                } else {
+                                    $GRN_item->expire_date = null;
+                                }
+
+                                if ($item->cost_price) {
+                                    $GRN_item->cost_price = $item->cost_price;
+                                } else {
+                                    $GRN_item->cost_price = 0;
+                                }
+
+                                $GRN_item->purchase_order_item_id = $item->purchase_order_item_id;
+                                $GRN_item->is_new_price = $item->is_new_price;
+                                $GRN_item->save();
+                            }
+                            $setting = global_setting::first();
+                            if ($setting->approved == 0) {
+                                if ($PO_id_ > 0) {
+                                    $PO = purchase_order_note::find($PO_id_);
+                                    $PO->approval_status = "Approved";
+                                    $PO->update();
+                                }
+                            }
+
+                            DB::commit();
+                            return response()->json(["status" => true, "primaryKey" => $GRN->goods_received_Id, "PO_id" => $GRN->purchase_order_id]);
+                        } else {
+                            DB::rollBack();
+                            return response()->json(["status" => false]);
+                        }
                     }
                 }
             }
@@ -866,7 +1062,7 @@ class GoodReceivedController extends Controller
         try {
 
             $settings = global_setting::first();
-          //  dd($settings);
+            //  dd($settings);
             /* FORMAT(SUM(I.quantity * I.price), 2) AS total_amount */
             $query = "";
             if ($settings->approved == 1) {

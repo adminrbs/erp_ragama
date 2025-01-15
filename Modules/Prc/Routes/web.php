@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\GlobalSettingController;
 use Illuminate\Support\Facades\Route;
 use Modules\Prc\Http\Controllers\BonusClaimController;
 use Modules\Prc\Http\Controllers\BonusClaimReportController;
@@ -96,7 +98,7 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     Route::get('/getheaderDetails/{orderID}',[GoodReceivedController::class,'getheaderDetails']);
     Route::post('/completeOrderstatus/{id}',[GoodReceivedController::class,'completeOrderstatus']);
     Route::post('/completeOrderstatus_auto/{id}',[GoodReceivedController::class,'completeOrderstatus_auto']);
-   
+    Route::get('/checkPOpickStatus',[GlobalSettingController::class,'checkPOpickStatus']);
 
 
     /**Good receive return */
@@ -201,6 +203,8 @@ Route::prefix('prc')->middleware(['is.logged'])->group(function() {
     
     
     Route::get('/printBonusClaimReportPdf/{id}',[BonusClaimReportController::class,'printBonusClaimReportPdf']);
+
+    
     
 });
 

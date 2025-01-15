@@ -12,6 +12,7 @@ var ItemList;
 var got_from_pickOrder = false;
 var value_for_radio_button = undefined;
 
+
 $(document).ready(function () {
 
     
@@ -359,6 +360,13 @@ $('#tblData').on('input', 'input[type="text"]', function () {
                    }
             
                     if ($('#btnSave').text() == 'Save and Send') {
+
+                     var is_direct =  checkPOpickStatus();
+
+                      if(is_direct == 1){
+                        newReferanceID('goods_received_notes',120);
+                        addGRN(collection, GRNID);
+                      }else{
                         if(got_from_pickOrder){
                             
                             newReferanceID('goods_received_notes',120);
@@ -368,6 +376,8 @@ $('#tblData').on('input', 'input[type="text"]', function () {
                             showWarningMessage('Kindly pick a PO from PO list');
                             return;
                         }
+                      }
+                        
                        
                     } else if ($('#btnSave').text() == 'Update') {
                         updateGRN(collection, GRNID);
@@ -1663,4 +1673,32 @@ function validate_table(ids){
     $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
+function checkPOpickStatus(){
+  
+    $.ajax({
+        url: '/prc/checkPOpickStatus',
+        type: 'get',
+        dataType: 'json',
+        success: function (response) {
+            
+            isDirectGrn = response
+           
+            
+           
+            
+            
+            
+            
+          
+
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    })
+
+    return isDirectGrn;
+    
+}
   

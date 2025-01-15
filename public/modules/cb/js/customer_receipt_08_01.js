@@ -1658,6 +1658,12 @@ function getSetoffTableData() {
             showWarningMessage('Invalied Setoff amount..');
             break;
         }
+
+        if(parseFloat($('#lblBalance' + i).val().replace(/,(?=.*\.\d+)/g, '')) < $('#txtSetoff' + i).val().replace(/,(?=.*\.\d+)/g, '')){
+            $('#txtSetoff' + i).focus();
+            showWarningMessage('Set Off amount is greater than balance amount');
+            break;
+        }
         setoffData.push(JSON.stringify({
             "internal_number": $('#lblDataID' + i).attr('data-internal_number'),
             "external_number": $('#lblDataID' + i).attr('data-external_number'),

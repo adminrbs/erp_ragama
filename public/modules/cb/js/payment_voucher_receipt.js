@@ -59,7 +59,7 @@ function reportHeader(header, items, data, flag) {
 
                 {
                     table: {
-                       
+
                         body: [
 
                             [{
@@ -206,41 +206,41 @@ function reportHeader(header, items, data, flag) {
                         { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, false, false, false], margin: [85, 10, 0, 0] },
 
                     ],
-                   /*  [
+                    /*  [
+ 
+                         { text: 'Received By Name: ...................................', fontSize: 9, bold: false, alignment: 'left', border: [true, true, false, false], margin: [10, 10, 0, 0] },
+                         { text: '' ,fontSize: 9, bold: false, alignment: 'left', border: [false, true, false, false], margin: [10, 10, 0, 0] },
+                         { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, true, true, false], margin: [85, 10, 0, 0] },
+ 
+                     ], */
+                    /*   [
+                          {
+                              text: 'Prepared By: ............',
+                              fontSize: 9,
+                              bold: false,
+                              alignment: 'left',
+                              border: [true, false, false, true],
+                              margin: [10, 5, -10, 0] // set top margin to 5
+                          },
+                          {
+                              text: 'Payment By: ............',
+                              fontSize: 9,
+                              bold: false,
+                              alignment: 'center',
+                              border: [false, false, false, true],
+                              margin: [5, 5, -10, 0] // set top margin to 5
+                          },
+                          {
+                              text: 'Approved By: ...........',
+                              fontSize: 9,
+                              bold: false,
+                              alignment: 'left',
+                              border: [false, false, true, true],
+                              margin: [75, 5, 0, 0] // set top margin to 5
+                          }
+                      ]
+                       */
 
-                        { text: 'Received By Name: ...................................', fontSize: 9, bold: false, alignment: 'left', border: [true, true, false, false], margin: [10, 10, 0, 0] },
-                        { text: '' ,fontSize: 9, bold: false, alignment: 'left', border: [false, true, false, false], margin: [10, 10, 0, 0] },
-                        { text: '', fontSize: 9, bold: false, alignment: 'left', border: [false, true, true, false], margin: [85, 10, 0, 0] },
-
-                    ], */
-                  /*   [
-                        {
-                            text: 'Prepared By: ............',
-                            fontSize: 9,
-                            bold: false,
-                            alignment: 'left',
-                            border: [true, false, false, true],
-                            margin: [10, 5, -10, 0] // set top margin to 5
-                        },
-                        {
-                            text: 'Payment By: ............',
-                            fontSize: 9,
-                            bold: false,
-                            alignment: 'center',
-                            border: [false, false, false, true],
-                            margin: [5, 5, -10, 0] // set top margin to 5
-                        },
-                        {
-                            text: 'Approved By: ...........',
-                            fontSize: 9,
-                            bold: false,
-                            alignment: 'left',
-                            border: [false, false, true, true],
-                            margin: [75, 5, 0, 0] // set top margin to 5
-                        }
-                    ]
-                     */
-                    
 
 
 
@@ -255,16 +255,16 @@ function reportHeader(header, items, data, flag) {
 
                 body: [
 
-                   
+
                     [
 
-                        { text: 'Received By Name: ...............................................................................................................................', fontSize: 9, bold: false, alignment: 'left', border: [true, true, true, false], margin: [10, 10, 0, 0] },
-                        
+                        { text: 'Received By Name: ..........................................................................................................................................................', fontSize: 9, bold: false, alignment: 'left', border: [true, true, true, false], margin: [10, 10, 0, 0] },
+
 
                     ],
-                   
-                    
-                    
+
+
+
 
 
 
@@ -275,40 +275,33 @@ function reportHeader(header, items, data, flag) {
         },
         {
             table: {
-                widths: [150, 150, '*'],
+                widths: [170, 343],
 
                 body: [
 
-                   
-                  
+
+
                     [
                         {
-                            text: 'Prepared By: ...............................',
+                            text: 'NIC: ...........................................................',
                             fontSize: 9,
                             bold: false,
                             alignment: 'left',
                             border: [true, false, false, true],
-                            margin: [10, 5, -10, 0] // set top margin to 5
+                            margin: [10, 20, -10, 0] // set top margin to 20
                         },
                         {
-                            text: 'Payment By: ...........................',
+                            text: 'SIGNATURE: .............................................................',
                             fontSize: 9,
                             bold: false,
                             alignment: 'center',
-                            border: [false, false, false, true],
-                            margin: [5, 5, -10, 0] // set top margin to 5
-                        },
-                        {
-                            text: 'Approved By: ...........................',
-                            fontSize: 9,
-                            bold: false,
-                            alignment: 'left',
                             border: [false, false, true, true],
-                            margin: [75, 5, 0, 0] // set top margin to 5
+                            margin: [5, 20, -10, 0] // set top margin to 20
                         }
+                        
                     ]
-                    
-                    
+
+
 
 
 
@@ -327,7 +320,6 @@ function reportHeader(header, items, data, flag) {
 
 
     var Footer = [
-
 
     ];
 
@@ -365,8 +357,8 @@ function reportitemBody(data) {
     ]);
 
     for (i = 0; i < data.length; i++) {
-       
-      
+
+
         body.push([
 
             { text: data[i].account_code, fontSize: font_size, alignment: 'left', border: [true, true, true, true] },
