@@ -83,10 +83,10 @@ function printGoodResiveReportPdf(id) {
         var csp = parseFloat(goodrecive_item[i].cost_price);
         var disprecentage = parseFloat(goodrecive_item[i].discount_percentage);
 
-        sub_Total += csp * qty;
-        Dis_Total += ((csp * qty)*disprecentage)/100;
+        sub_Total += wsp * qty;
+        Dis_Total += ((wsp * qty)*disprecentage)/100;
 
-        total_Amount += (csp * qty) - ((csp * qty)*disprecentage)/100
+        total_Amount += (wsp * qty) - ((wsp * qty)*disprecentage)/100
     }
     var subTotal = sub_Total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     var DisTotal = Dis_Total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -261,7 +261,7 @@ function printGoodResiveReportPdf(id) {
  
          {
              table: {
-                 widths: [270,'*','*','*',1],
+                 widths: [230,'*','*','*',1],
                  headerRows: 0,
  
  
@@ -452,7 +452,7 @@ function printGoodResiveReportPdf(id) {
  
      ]);
  
- 
+     var ful_Sub = 0;
      for (i = 0; i < data.length; i++) {
         var quantity = parseFloat(data[i].quantity);
     var price = parseFloat(data[i].price);
@@ -461,8 +461,13 @@ function printGoodResiveReportPdf(id) {
     var free_quantity = parseFloat(data[i].free_quantity);
 
     var amount = parseFloat(data[i].amount);
+    var dis = parseFloat(data[i].discount_amount);
     var cost = parseFloat(data[i].cost_price);
-
+    ful_Sub = ful_Sub + amount;
+    amount = amount - dis;
+    console.log(amount);
+    
+    console.log(dis);
     
 
     if (!isNaN(price) && !isNaN(quantity)) {

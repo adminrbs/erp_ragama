@@ -24,20 +24,15 @@ trait ApprovalRequest
         // Fetch the approval record for the user and browser
         $authRequest = AuthenticationRequest::where([
             ['user_id', '=', $userId],
-            ['browser', '=', $browser]
-        ])->first();
+            ['browser', '=', $browser],
+            ['is_confirm', '=', 1],
+        ])->get();
 
-        if (!$authRequest || $authRequest->approval != 1) {
-            return false;
-        }
-
-        // Check if the cookie matches the approval secret
-        $cookieValue = request()->cookie($authRequest->approvalSecret);
-
-        //dd($cookieValue);
-        // Use hash_equals for secure string comparison
-        if ($cookieValue !== null && hash_equals($cookieValue, $authRequest->approvalSecret)) {
-            return true;
+        foreach ($authRequest as $auth) {
+            $cookieValue = request()->cookie($auth->approvalSecret);
+            if ($auth->approval == 1 && $cookieValue != null) {
+                return true;
+            }
         }
 
         return false;
@@ -48,14 +43,14 @@ trait ApprovalRequest
 
 
         $cookieName = "RBS-user_" . $id;
-        AuthenticationRequest::where('user_id', $id)
+        /*AuthenticationRequest::where('user_id', $id)
             ->where('browser', $browser)
             ->where('approvalSecret', $cookieName)
-            ->delete();
+            ->delete();*/
 
 
-        $auth_request =  AuthenticationRequest::where('user_id', $id)->where('browser', $browser)->first();
-        //dd($auth_request);
+        $auth_request =  AuthenticationRequest::where('user_id', $id)->where('browser', $browser)->where('is_confirm', 0)->first();
+
         if ($auth_request == null) {
             if ($browser != null) {
                 $authRequest = new AuthenticationRequest();
@@ -64,10 +59,21 @@ trait ApprovalRequest
                 if ($authRequest->save()) {
                     $cookieTime = 1;
                     $cookie = cookie($cookieName, $cookieName, $cookieTime, '/', null, false, false, false)->withSameSite('Lax');
-
                     return response()->json()->cookie($cookie);
                 }
             }
+        }
+    }
+
+
+
+    public static function savedCookie($id)
+    {
+
+        $authRequest =  AuthenticationRequest::find($id);
+        if ($authRequest) {
+            $authRequest->is_confirm = 1;
+            $authRequest->update();
         }
     }
 }

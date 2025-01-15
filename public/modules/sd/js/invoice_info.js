@@ -304,6 +304,7 @@ function load_invoice_details(number){
             var delivery_plan = data.delivery_plan;
             var picking_list = data.picking_list;
             var delivery_confirmation_data = data.delivery_confirmation_data;
+            var customer_transaction_allocation_data = data.transaction_allocation_data;
             console.log(delivery_confirmation_data);
             //header
 
@@ -484,6 +485,20 @@ function load_invoice_details(number){
                 newRow.append("<td>" + cancel + "</td>");
                 newRow.append("<td>"+name+"</td>");
                 $('#delivery_confirmation_table tbody').append(newRow);
+            });
+
+            $.each(customer_transaction_allocation_data, function (index, value) {
+                var newRow = $("<tr>");
+
+           
+            newRow.append("<td data-id= '"+value.external_number+"'>" + value.external_number + "</td>");
+            newRow.append("<td>" + value.created_date + "</td>");
+            newRow.append("<td>"+value.reference_external_number+"</td>");
+            newRow.append("<td style='text-align: right;'>" + parseFloat(value.set_off_amount).toLocaleString() + "</td>");
+            
+            $("#allocation_table tbody").append(newRow);
+                
+                
             });
 
             
