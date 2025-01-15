@@ -5,7 +5,8 @@ var referanceID;
 var ItemList;
 
 $(document).ready(function () {
-
+    $('#btnReject').hide();
+    $('#btnApprove').hide();
     loadSalesRep();
     /*  $('#btnApprove').hide();
      $('#btnReject').hide(); */
@@ -92,6 +93,17 @@ $(document).ready(function () {
             $('#txtRemarks').prop('disabled', true);
             $('#txtNarration').prop('disabled', true);
             $('#txtAmount').prop('disabled', true);
+            $('#btnReject').hide();
+            $('#btnApprove').hide();
+        }else if(action == "approve"){
+            $('#btnSave').hide();
+            $('#cmbBranch').prop('disabled', true);
+            $('#txtCustomerID').prop('disabled', true);
+            $('#txtRemarks').prop('disabled', true);
+            $('#txtNarration').prop('disabled', true);
+            $('#txtAmount').prop('disabled', true);
+            $('#btnReject').show();
+            $('#btnApprove').show();
         }
 
         getEachcreditNote(credit_note_id);
@@ -159,7 +171,8 @@ $(document).ready(function () {
             callback: function (result) {
                 //console.log('Confirmation result:', result);
                 if (result) {
-                    approveSalesOrder(sales_order_Id);
+                   var cr_id = $('#LblexternalNumber').attr('data-id');
+                    approveCreditNote(cr_id);
 
                 } else {
 
@@ -197,7 +210,8 @@ $(document).ready(function () {
             callback: function (result) {
                 console.log(result);
                 if (result) {
-                    rejectSalesOrder(Invoice_id);
+                    var cr_id = $('#LblexternalNumber').attr('data-id');
+                    rejectCreditNote(cr_id);
                 } else {
 
                 }
@@ -414,6 +428,7 @@ function getEachcreditNote(id) {
             var res = response.data;
             console.log(res.external_number);
             $('#LblexternalNumber').val(res.external_number);
+            $('#LblexternalNumber').attr('data-id',res.credit_notes_id);
             $('#order_date_time').val(res.trans_date);
             $('#cmbBranch').val(res.branch_id);
             $('#cmbSalesRep').val(res.employee_id);
@@ -439,9 +454,9 @@ function getEachcreditNote(id) {
 
 
 //approve
-function approveSalesOrder(id) {
+function approveCreditNote(id) {
     $.ajax({
-        url: '/sd/approveSalesOrder/' + id,
+        url: '/dl/approveCreditNote/' + id,
         type: 'post',
         enctype: 'multipart/form-data',
         data: formData,
@@ -464,8 +479,9 @@ function approveSalesOrder(id) {
 
                 $('#btnApprove').prop('disabled', true);
                 $('#btnReject').prop('disabled', true);
-                closeCurrentTab();
-                window.opener.location.reload();
+                url = "/dl/credit_note_approval_list";
+                window.location.href = url;
+               
 
             } else {
 
@@ -482,9 +498,9 @@ function approveSalesOrder(id) {
 }
 
 //reject
-function rejectSalesOrder(id) {
+function rejectCreditNote(id) {
     $.ajax({
-        url: '/sd/rejectSalesOrder/' + id,
+        url: '/sd/rejectCreditNote/' + id,
         type: 'post',
         enctype: 'multipart/form-data',
         data: formData,
@@ -507,8 +523,9 @@ function rejectSalesOrder(id) {
 
                 $('#btnApprove').prop('disabled', true);
                 $('#btnReject').prop('disabled', true);
-                closeCurrentTab();
-                window.opener.location.reload();
+              
+                url = "/dl/credit_note_approval_list";
+                window.location.href = url;
 
             } else {
 
