@@ -37,7 +37,7 @@ function _validation(code,id){
     }
 
     //checking purchasing order txt box and validate
-    if ($("input#txtPurchaseORder").length > 0) {
+    /* if ($("input#txtPurchaseORder").length > 0) {
         
         var PO_id = $('#txtPurchaseORder').val().length;
        if(PO_id <= 0){
@@ -45,7 +45,7 @@ function _validation(code,id){
             bool = true;
 
        } 
-    }
+    } */
 
     //checking supplier invoice txt box and validate
     if ($("input#txtSupplierInvoiceNumber").length > 0) {

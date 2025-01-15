@@ -1401,6 +1401,7 @@ function loadPOInfoData(id) {
             var dt = data.data;
             var all = dt.all;
             $('#history_table tbody').empty(); // Clear existing data from the table
+            $('#pending_table tbody').empty();
             for (var i = 0; i < all.length; i++) {
                 $('#history_table').append(
                     '<tr>' +
