@@ -243,7 +243,7 @@ class DebitNoteController extends Controller
     }
 
 
-    public function getPendings(Request $request)
+    public function get_pending_debit_note_details(Request $request)
     {
         try {
             $pageNumber = ($request->start / $request->length) + 1;
@@ -293,7 +293,7 @@ class DebitNoteController extends Controller
                 //  $disabled = "disabled";
                 //   $buttons = '<button class="btn btn-primary btn-sm" id="btnEdit_' . $item->debit_notes_id . '" onclick="btnEdit_(' . $item->sales_order_Id . ', \'' . $status . '\')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>&#160';
                 $buttons = '<button class="btn btn-success btn-sm" onclick="view(' . $item->debit_notes_id . ')"><i class="fa fa-eye" aria-hidden="true"></i></button>&#160';
-                $buttons .= '<button class="btn btn-secondary btn-sm" onclick="print(' . $item->debit_notes_id . ')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                $buttons .= '<button class="btn btn-secondary btn-sm" onclick="print(' . $item->debit_notes_id . ')"><i class="fa fa-print" aria-hidden="true"></i></button>&#160';
                 $buttons .= '<button class="btn btn-success btn-sm" onclick="approve(' . $item->debit_notes_id . ')"><i class="fa fa-check" aria-hidden="true"></i></button>&#160';
                 $buttons .= '<button class="btn btn-danger btn-sm" onclick="reject(' . $item->debit_notes_id . ')"><i class="fa fa-times" aria-hidden="true"></i></button>&#160';
                 $buttons .= '<button class="btn btn-secondary btn-sm" onclick="revise(' . $item->debit_notes_id . ')"><i class="fa fa-refresh" aria-hidden="true"></i></button>'; 

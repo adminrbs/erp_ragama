@@ -41,10 +41,16 @@ Route::prefix('dl')->middleware(['is.logged','cookie.approvalConfirm'])->group(f
     Route::get('/debit_note_list',function(){
         return view('dl::debit_note_list');
     })->middleware(['is.logged','can:dl_debit_note']);
+
+    Route::get('/debit_note_approval_list',function(){
+        return view('dl::pending_debit_note_list');
+    });
+
     Route::post('/addDebitNote',[DebitNoteController::class,'addDebitNote']);
     Route::get('/get_debit_note_details',[DebitNoteController::class,'get_debit_note_details']);
     Route::get('/getEachDebitNote/{id}',[DebitNoteController::class,'getEachDebitNote']);
     Route::get('/print_dl/{id}',[DebitNoteReceiptController::class,'print_dl']);
+    Route::get('/get_pending_debit_note_details',[DebitNoteController::class,'get_pending_debit_note_details']);
 
 
     /** credit note */

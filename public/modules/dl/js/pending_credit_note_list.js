@@ -26,7 +26,7 @@ const DatatableFixedColumns = function () {
         });
 
         // Left and right fixed columns
-        $('#debit_note_list').DataTable({
+        $('#credit_note_list').DataTable({
             "createdRow": function (row, data, dataIndex) {
                 $(row).css("height", "55px");
             },
@@ -36,7 +36,7 @@ const DatatableFixedColumns = function () {
             },
             serverSide: true,
             ajax: {
-                url : '/dl/get_pending_debit_note_details',
+                url : '/dl/get_credit_note_pending_details',
                
             },
             columnDefs: [
@@ -46,7 +46,7 @@ const DatatableFixedColumns = function () {
                     targets: 0
                 },
                 {
-                    width: 100,
+                    width: 80,
                     targets: 1
                 },
                 {
@@ -58,6 +58,10 @@ const DatatableFixedColumns = function () {
                 {
                     width: 300,
                     targets: 3
+                },
+                {
+                    width: 50,
+                    targets: 5
                 },
 
             ],
@@ -76,7 +80,7 @@ const DatatableFixedColumns = function () {
                 { "data":"amount" },
                 { "data":"customer_name" },
                 { "data":"employee_name" },
-                { "data":"narration_for_account"},
+                { "data":"narration_for_account" },
                 { "data":"name" },
                 { "data":"branch_name"},
                 { "data": "buttons" }
@@ -111,22 +115,21 @@ $(document).ready(function () {
 
 
 function view(id){
-    url = "/dl/debit_note?id=" + id + "&action=view";
+    url = "/dl/credit_note?id=" + id + "&action=view";
     window.location.href = url;
 }
 
 function print(id){
     
-    url = "/dl/print_dl/" + id;
+    url = "/dl/print_cr/" + id;
     window.location.href = url;
 }
+
 function approve(id){
 
-    url = "/dl/debit_note?id=" + id + "&action=approve";
+    url = "/dl/credit_note?id=" + id + "&action=approve";
     window.location.href = url;
 }
-
-
 
 
 

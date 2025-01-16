@@ -100,14 +100,18 @@
                                         </div>
 
 
-                                        <!--  <div class="col-4">
-                                                    <button class="btn btn-danger" type="button" style="width: 100%;" id="btnReject">Reject</button>
-                                                </div>
+                                        <div class="col-4">
+                                            <button class="btn btn-danger" type="button" style="width: 100%;" id="btnReject">Reject</button>
+                                        </div>
 
 
-                                                <div class="col-4">
-                                                    <button class="btn btn-success" type="button" id="btnApprove" style="width: 100%;">Approve</button>
-                                                </div> -->
+                                        <div class="col-4">
+                                            <button class="btn btn-success" type="button" id="btnApprove" style="width: 100%;">Approve</button>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <button class="btn btn-secondary" type="button" id="btnRevise" style="width: 100%;">Revise</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
