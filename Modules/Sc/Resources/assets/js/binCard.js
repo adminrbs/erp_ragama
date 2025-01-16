@@ -124,7 +124,8 @@ const DatatableFixedColumns = function () {
                 { "data": "balance", className: "rightAlign" },
                 { "data": "whole_sale_price", className: "rightAlign" },
                 { "data": "retial_price", className: "rightAlign" },
-                { "data": "user" }
+                { "data": "referance_external" },
+                // { "data": "user" }
 
 
             ],
@@ -356,7 +357,8 @@ function loadItemMovementHistoryData(branch, item, locationid) {
                     "balance": parseInt(value.running_total),
                     "whole_sale_price": parseFloat(wh_).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     "retial_price": parseFloat(ret_).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                    "user": "",
+                    "referance_external": value.reference_external_number,
+                    // "user": "",
                 });
 
                 /* { "data": "itemcode" },
