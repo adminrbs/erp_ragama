@@ -79,6 +79,7 @@ const DatatableFixedColumns = function () {
                 { "data":"narration_for_account" },
                 { "data":"name" },
                 { "data":"branch_name"},
+                { "data": "status_badge" },
                 { "data": "buttons" }
 
             ],

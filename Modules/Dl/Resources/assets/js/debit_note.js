@@ -93,6 +93,19 @@ $(document).ready(function () {
             $('#txtRemarks').prop('disabled',true);
             $('#txtNarration').prop('disabled',true);
             $('#txtAmount').prop('disabled',true);
+            $('#btnReject').hide();
+            $('#btnApprove').hide();
+            $('#btnRevise').hide();
+        }else if(action == "approve"){
+            $('#btnSave').hide();
+            $('#cmbBranch').prop('disabled',true);
+            $('#txtCustomerID').prop('disabled',true);
+            $('#txtRemarks').prop('disabled',true);
+            $('#txtNarration').prop('disabled',true);
+            $('#txtAmount').prop('disabled',true);
+            $('#btnReject').show();
+            $('#btnApprove').show();
+            $('#btnRevise').show();
         }
         
         getEachDebitNote(debit_note_id);

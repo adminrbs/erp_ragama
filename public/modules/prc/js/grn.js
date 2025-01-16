@@ -351,6 +351,7 @@ $('#tblData').on('input', 'input[type="text"]', function () {
             callback: function (result) {
                 //console.log('Confirmation result:', result);
                 if (result) {
+                    var is_direct =  checkPOpickStatus();
                     var inv_amount = parseFloat($('#txtInvoiceAmount').val().replace(/,/g, ''));
                     var lbl_amount = parseFloat($('#lblNetTotal').text().replace(/,/g, ''));
                    if(inv_amount != lbl_amount){
@@ -361,7 +362,7 @@ $('#tblData').on('input', 'input[type="text"]', function () {
             
                     if ($('#btnSave').text() == 'Save and Send') {
 
-                     var is_direct =  checkPOpickStatus();
+                     
 
                       if(is_direct == 1){
                         newReferanceID('goods_received_notes',120);
@@ -1674,15 +1675,17 @@ function validate_table(ids){
 }
 
 function checkPOpickStatus(){
-  
+  var isDirectGrn;
     $.ajax({
         url: '/prc/checkPOpickStatus',
         type: 'get',
         dataType: 'json',
+        async:false,
         success: function (response) {
             
             isDirectGrn = response
            
+            console.log(isDirectGrn);
             
            
             
