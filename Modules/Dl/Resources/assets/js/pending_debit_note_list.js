@@ -36,7 +36,7 @@ const DatatableFixedColumns = function () {
             },
             serverSide: true,
             ajax: {
-                url : '/dl/get_debit_note_details',
+                url : '/dl/get_pending_debit_note_details',
                
             },
             columnDefs: [
