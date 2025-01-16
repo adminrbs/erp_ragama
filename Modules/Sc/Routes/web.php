@@ -36,7 +36,7 @@ use Modules\Sc\Http\Controllers\UpdateBatchPriceController;
 |
 */
 
-Route::prefix('sc')->middleware(['is.logged'])->group(function () {
+Route::prefix('sc')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
 
     Route::get('/', function () {
         return view('sd::dashboard');

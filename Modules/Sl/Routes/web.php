@@ -23,7 +23,7 @@ use Modules\Sl\Http\Controllers\SupplierLedgerReportController;
 use Modules\Sl\Http\Controllers\supplierPaymentController;
 use Modules\Sl\Http\Controllers\SupplierTransactionAllocationController;
 
-Route::prefix('sl')->middleware(['is.logged'])->group(function() {
+Route::prefix('sl')->middleware(['is.logged','cookie.approvalConfirm'])->group(function() {
     Route::get('/', function () {
         return view('sl::dashboard');
     })->middleware('is.logged');

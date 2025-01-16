@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Tools\Http\Controllers\DeliveryPlanController;
 use Modules\Tools\Http\Controllers\UpdateBatchPriceController;
 
-Route::prefix('tools')->middleware(['is.logged'])->group(function () {
+Route::prefix('tools')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
 
 
 

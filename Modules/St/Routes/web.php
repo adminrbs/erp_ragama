@@ -18,7 +18,7 @@ use Modules\St\Http\Controllers\PermissionController;
 use Modules\St\Http\Controllers\roleController;
 use Modules\St\Http\Controllers\UserController;
 
-Route::prefix('st')->middleware(['is.logged'])->group(function () {
+Route::prefix('st')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
     Route::get('/', function () {
         return view('st::dashboard');
     })->middleware('is.logged');

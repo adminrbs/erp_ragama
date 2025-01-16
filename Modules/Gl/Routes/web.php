@@ -16,7 +16,7 @@ use Modules\Gl\Http\Controllers\GlAccountReportController;
 use Modules\Gl\Http\Controllers\JournalEntryController;
 use Modules\Gl\Http\Controllers\TrailBalanceReportController;
 
-Route::prefix('gl')->group(function () {
+Route::prefix('gl')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
     Route::get('/', 'GlController@index');
 
     /**GL Reports */

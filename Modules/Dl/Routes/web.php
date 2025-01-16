@@ -18,7 +18,7 @@ use Modules\Dl\Http\Controllers\DebitNoteController;
 use Modules\Dl\Http\Controllers\DebitNoteReceiptController;
 use Modules\Dl\Http\Controllers\TransactionAllocationController;
 
-Route::prefix('dl')->middleware(['is.logged'])->group(function() {
+Route::prefix('dl')->middleware(['is.logged','cookie.approvalConfirm'])->group(function() {
 
     /** transaction allocation */
     Route::get('/transaction_allocation_list', function () {

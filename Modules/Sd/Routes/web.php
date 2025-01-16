@@ -58,7 +58,7 @@ use Modules\Sd\Http\Controllers\OrdersController;
 use Modules\Sd\Http\Controllers\PendingOrderController;
 use Modules\Sd\Http\Controllers\SalesInvoiceCoppyIssuedController;
 
-Route::prefix('sd')->middleware(['is.logged'])->group(function () {
+Route::prefix('sd')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
 
 
     Route::get('/', function () {
