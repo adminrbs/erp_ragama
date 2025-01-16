@@ -36,7 +36,7 @@ const DatatableFixedColumns = function () {
             },
             serverSide: true,
             ajax: {
-                url : '/dl/get_credit_note_details',
+                url : '/dl/get_credit_note_pending_details',
                
             },
             columnDefs: [
@@ -59,6 +59,10 @@ const DatatableFixedColumns = function () {
                     width: 300,
                     targets: 3
                 },
+                {
+                    width: 50,
+                    targets: 5
+                },
 
             ],
             scrollX: true,
@@ -79,7 +83,6 @@ const DatatableFixedColumns = function () {
                 { "data":"narration_for_account" },
                 { "data":"name" },
                 { "data":"branch_name"},
-                { "data": "status_badge" },
                 { "data": "buttons" }
 
             ],
@@ -122,7 +125,11 @@ function print(id){
     window.location.href = url;
 }
 
+function approve(id){
 
+    url = "/dl/credit_note?id=" + id + "&action=approve";
+    window.location.href = url;
+}
 
 
 

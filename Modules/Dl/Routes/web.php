@@ -55,9 +55,16 @@ Route::prefix('dl')->middleware(['is.logged'])->group(function() {
     Route::get('/credit_note_list',function(){
         return view('dl::credit_note_list');
     })->middleware(['is.logged','can:dl_credit_note']);
+    Route::get('/credit_note_approval_list',function(){
+        return view('dl::pending_credit_note_list');
+    });
     Route::post('/addCreditNote',[CreditNoteController::class,'addCreditNote']);
     Route::get('/get_credit_note_details',[CreditNoteController::class,'get_credit_note_details']);
     Route::get('/getEachcreditNote/{id}',[CreditNoteController::class,'getEachcreditNote']);
     Route::get('/getSalesRep',[CreditNoteController::class,'getSalesRep']);
     Route::get('/print_cr/{id}',[CreditNoteReceiptController::class,'print_cr']);
+    Route::post('/approveCreditNote/{id}',[CreditNoteController::class,'approveCreditNote']);
+    Route::post('/rejectCreditNote/{id}',[CreditNoteController::class,'rejectCreditNote']);
+    Route::post('/reviseCreditNote/{id}',[CreditNoteController::class,'reviseCreditNote']);
+    Route::get('/get_credit_note_pending_details',[CreditNoteController::class,'get_credit_note_pending_details']);
 });

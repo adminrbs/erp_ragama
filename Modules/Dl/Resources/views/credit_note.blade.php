@@ -97,15 +97,15 @@
                                             <button class="btn btn-info" type="button" style="width: 100%;" id="btnSave">Save</button>
                                         </div>
 
-
-                                        <!--  <div class="col-4">
+    <br>
+                                         <div class="col-4">
                                                     <button class="btn btn-danger" type="button" style="width: 100%;" id="btnReject">Reject</button>
                                                 </div>
 
 
                                                 <div class="col-4">
                                                     <button class="btn btn-success" type="button" id="btnApprove" style="width: 100%;">Approve</button>
-                                                </div> -->
+                                                </div>
                                     </div>
 
                                 </div>

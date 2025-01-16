@@ -684,6 +684,10 @@
                                             @if(Auth::user()->can('dl_credit_note') && Auth::user()->hasModulePermission('Debtor Ledger'))
                                             <a href="{{url('dl/credit_note_list')}}" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Credit Note</a>
                                             @endif
+
+                                           
+                                            <a href="{{url('dl/credit_note_approval_list')}}" class="dropdown-item rounded"><i class="fa fa-chevron-circle-down  text-info" aria-hidden="true">&#160</i>Credit Note Approval List</a>
+                                            
                                         </div>
                                         <div class="col-lg-6 mb-3 mb-lg-0">
                                             <div class="fw-bold border-bottom pb-2 mb-2">Reports</div>

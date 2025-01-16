@@ -45,7 +45,6 @@
                                 <th>Narration</th>
                                 <th>Created By</th>
                                 <th>Branch</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -75,6 +74,6 @@
 @section('scripts')
 <script src="{{URL::asset('assets/demo/pages/form_validation_library.js')}}"></script>
 <!--  <script src="{{URL::asset('assets/js/customerList.js')}}"></script>  -->
-<script src="{{Module::asset('dl:js/credit_note_list.js')}}?random=<?php echo uniqid(); ?>"></script>
+<script src="{{Module::asset('dl:js/pending_credit_note_list.js')}}?random=<?php echo uniqid(); ?>"></script>
 <script src="{{URL::asset('assets/demo/pages/components_modals.js')}}"></script>
 @endsection

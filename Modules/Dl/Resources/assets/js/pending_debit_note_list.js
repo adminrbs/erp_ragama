@@ -26,7 +26,7 @@ const DatatableFixedColumns = function () {
         });
 
         // Left and right fixed columns
-        $('#credit_note_list').DataTable({
+        $('#debit_note_list').DataTable({
             "createdRow": function (row, data, dataIndex) {
                 $(row).css("height", "55px");
             },
@@ -36,7 +36,7 @@ const DatatableFixedColumns = function () {
             },
             serverSide: true,
             ajax: {
-                url : '/dl/get_credit_note_details',
+                url : '/dl/get_debit_note_details',
                
             },
             columnDefs: [
@@ -46,7 +46,7 @@ const DatatableFixedColumns = function () {
                     targets: 0
                 },
                 {
-                    width: 80,
+                    width: 100,
                     targets: 1
                 },
                 {
@@ -76,10 +76,9 @@ const DatatableFixedColumns = function () {
                 { "data":"amount" },
                 { "data":"customer_name" },
                 { "data":"employee_name" },
-                { "data":"narration_for_account" },
+                { "data":"narration_for_account"},
                 { "data":"name" },
                 { "data":"branch_name"},
-                { "data": "status_badge" },
                 { "data": "buttons" }
 
             ],
@@ -112,16 +111,15 @@ $(document).ready(function () {
 
 
 function view(id){
-    url = "/dl/credit_note?id=" + id + "&action=view";
+    url = "/dl/debit_note?id=" + id + "&action=view";
     window.location.href = url;
 }
 
 function print(id){
     
-    url = "/dl/print_cr/" + id;
+    url = "/dl/print_dl/" + id;
     window.location.href = url;
 }
-
 
 
 
