@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx\AutoFilter;
 
 class LoginController extends Controller
 {
@@ -29,9 +30,9 @@ class LoginController extends Controller
         $browser = $request->browser;
 
         if (Auth::attempt(['email' => $email, 'password' => $password], true)) {
-           
+
             if (Auth::user()->status == '1') {
-                $authRequest = AuthenticationRequest::where([['user_id', '=', Auth::user()->id], ['browser', '=', $browser]])->first();
+                $authRequest = AuthenticationRequest::where([['user_id', '=', Auth::user()->id], ['browser', '=', $browser], ['is_confirm', '=', 0]])->first();
                 if ($authRequest && $authRequest->approval == 1) {
                     $cookieName = $authRequest->approvalSecret;
                     $cookieValue = $authRequest->approvalSecret;
@@ -53,6 +54,7 @@ class LoginController extends Controller
                     Session::put('empID', $empId);
                     Session::put('branch_id_array', $branch_id_array);
 
+                    $this->savedCookie($authRequest->id);
 
                     return response()->json([
                         "status" => "200",
@@ -215,5 +217,16 @@ class LoginController extends Controller
         }
 
         return $id;
+    }
+
+
+    public function savedCookie($id)
+    {
+
+        $authRequest =  AuthenticationRequest::find($id);
+        if ($authRequest) {
+            $authRequest->is_confirm = 1;
+            $authRequest->update();
+        }
     }
 }

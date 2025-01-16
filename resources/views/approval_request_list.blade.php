@@ -29,17 +29,19 @@
                     <div class="row">
                     </div>
                     <div class="col-md-12">
-                        <table class="table">
+                        <table class="table datatable-fixed-both" id="tbl_request">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>UserName</th>
                                     <th>Browser</th>
+                                    <th>Remark</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbl_request"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -60,14 +62,19 @@
                                         <label>Status</label>
                                         <select class="select form-control" id="cmbRequest">
                                             <option value="1">Active</option>
-                                            <option value="0">Deactive</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row" id="div_num_time">
+                                <!--<div class="row" id="div_num_time">
                                     <div class="col-md-12 mb-3">
                                         <label>Time(MM)</label>
                                         <input type="number" class="number form-control" value="1" id="num_time">
+                                    </div>
+                                </div>!-->
+                                <div class="row" id="div_num_time">
+                                    <div class="col-md-12 mb-3">
+                                        <label>Remark</label>
+                                        <input type="text" class="form-control" id="txtRemark">
                                     </div>
                                 </div>
                             </div>
@@ -92,6 +99,8 @@
 <!-- Theme JS files -->
 <script src="{{URL::asset('assets/js/vendor/visualization/d3/d3.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/vendor/visualization/d3/d3_tooltip.js')}}"></script>
+<script src="{{URL::asset('assets/js/vendor/tables/datatables/datatables.min.js')}}"></script>
+<script src="{{URL::asset('assets/js/vendor/tables/datatables/extensions/fixed_columns.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/approval_request_list.js')}}?random=<?php echo uniqid(); ?>"></script>
 
 @endsection

@@ -38,6 +38,7 @@ Route::get('/approval_request_list', function () {
 
 Route::get('/approvalRequestList',[ApprovalRequestListController::class,'approvalRequestList']);
 Route::post('/confirmRequest',[ApprovalRequestListController::class,'confirmRequest']);
+Route::get('/inactiveRequest/{id}',[ApprovalRequestListController::class,'inactiveRequest']);
 
 /** Login */
 Route::get('/', function () {
