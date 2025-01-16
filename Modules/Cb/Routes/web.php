@@ -49,7 +49,7 @@ use Modules\Cb\Http\Controllers\SfaReceiptsManageController;
 |
 */
 
-Route::prefix('cb')->middleware(['is.logged'])->group(function () {
+Route::prefix('cb')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
 
 
 
@@ -373,4 +373,4 @@ Route::prefix('cb')->middleware(['is.logged'])->group(function () {
     });
     Route::get('/load_direct_credit_card_to_create_to_bundle/{id}',[DirectCardBundleController::class,'load_direct_credit_card_to_create_to_bundle']);
     Route::post('/create_direct_card_bundle',[DirectCardBundleController::class,'create_direct_card_bundle']);
-})->middleware(['is.logged', 'cookie.approvalConfirm']);
+});

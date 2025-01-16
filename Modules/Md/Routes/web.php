@@ -42,7 +42,7 @@ use Modules\Md\Http\Controllers\TownNonadministrativeController;
 use Modules\Md\Http\Controllers\VehicleController;
 use Modules\Sd\Http\Controllers\dataController as ControllersDataController;
 
-Route::prefix('md')->middleware(['is.logged'])->group(function () {
+Route::prefix('md')->middleware(['is.logged','cookie.approvalConfirm'])->group(function () {
 
     Route::get('/', function () {
         return view('md::dashboard');

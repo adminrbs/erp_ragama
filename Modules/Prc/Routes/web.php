@@ -30,7 +30,7 @@ use Modules\Prc\Http\Controllers\PoHelpNewReport;
 |
 */
 
-Route::prefix('prc')->middleware(['is.logged'])->group(function() {
+Route::prefix('prc')->middleware(['is.logged','cookie.approvalConfirm'])->group(function() {
     Route::get('/', function () {
         return view('prc::dashboard');
     })->middleware('is.logged');
