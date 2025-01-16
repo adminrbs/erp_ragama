@@ -62,6 +62,7 @@ class BinCardController extends Controller
         D.whole_sale_price,
         D.retial_price,
         D.cost_price,
+D.reference_external_number,
         'Opening Balance' AS description,
         IF(D.quantity > 0, D.quantity, 0) AS in_quantity,
         ABS(IF(D.quantity < 0, D.quantity, 0)) AS out_quantity,
@@ -72,7 +73,8 @@ class BinCardController extends Controller
         IH.external_number AS reference_number,
         IH.whole_sale_price,
         IH.retial_price,
-        IH.cost_price
+        IH.cost_price,
+ IH.reference_external_number
         FROM item_historys IH
         LEFT JOIN items I ON I.item_id = IH.item_id
         WHERE IH.transaction_date < '" . $new_from_date->toDateString() . "' AND IH.item_id = '" . $item_id . "' AND IH.branch_id = '" . $branch_id . "' AND IH.location_id = '" . $loca_id . "'
@@ -84,6 +86,7 @@ class BinCardController extends Controller
         IH.whole_sale_price,
         IH.retial_price,
         IH.cost_price,
+ IH.reference_external_number,
         IH.description AS description,
         IF(IH.quantity > 0, IH.quantity, 0) AS in_quantity,
         ABS(IF(IH.quantity < 0, IH.quantity, 0)) AS out_quantity,
@@ -105,6 +108,7 @@ class BinCardController extends Controller
                 D.whole_sale_price,
                 D.retial_price,
                 D.cost_price,
+ D.reference_external_number,
                 'Opening Balance' AS description,
                 IF(D.quantity > 0, D.quantity, 0) AS in_quantity,
                 ABS(IF(D.quantity < 0, D.quantity, 0)) AS out_quantity,
@@ -115,7 +119,8 @@ class BinCardController extends Controller
                 IFNULL(IH.manual_number, IH.external_number) AS reference_number,
                 IH.whole_sale_price,
                 IH.retial_price,
-                IH.cost_price
+                IH.cost_price,
+ IH.reference_external_number
                 FROM item_historys IH
                 LEFT JOIN items I ON I.item_id = IH.item_id
                 WHERE IH.transaction_date < '" . $new_from_date->toDateString() . "' AND IH.item_id = '" . $item_id . "'
@@ -127,6 +132,7 @@ class BinCardController extends Controller
                 IH.whole_sale_price,
                 IH.retial_price,
                 IH.cost_price,
+ IH.reference_external_number,
                 IH.description AS description,
                 IF(IH.quantity > 0, IH.quantity, 0) AS in_quantity,
                 ABS(IF(IH.quantity < 0, IH.quantity, 0)) AS out_quantity,

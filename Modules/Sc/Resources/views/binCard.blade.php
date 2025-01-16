@@ -114,7 +114,8 @@
                                 <th>Balance</th>
                                 <th>W.Price</th>
                                 <th>Retial Price</th>
-                                <th>User</th>
+                                <th>Reference External No</th>
+                                {{-- <th>User</th> --}}
                                 
                             </tr>
                         </thead>
